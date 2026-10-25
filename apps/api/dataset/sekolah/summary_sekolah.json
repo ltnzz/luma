@@ -1,0 +1,117 @@
+{
+  "total_sekolah": 8875,
+  "total_siswa": 1670411,
+  "total_guru": 94244,
+  "rasio_siswa_guru_dki": 17.7,
+  "by_jenjang": {
+    "PAUD": 4116,
+    "SD": 2231,
+    "SMP": 1075,
+    "SMK": 557,
+    "SMA": 507,
+    "PKBM": 302,
+    "SLB": 87
+  },
+  "by_status": {
+    "SWASTA": 6868,
+    "NEGERI": 2007
+  },
+  "jenjang_status_breakdown": {
+    "PAUD": {
+      "NEGERI": 167,
+      "SWASTA": 3949
+    },
+    "SD": {
+      "NEGERI": 1305,
+      "SWASTA": 926
+    },
+    "SMP": {
+      "NEGERI": 293,
+      "SWASTA": 782
+    },
+    "SMK": {
+      "NEGERI": 73,
+      "SWASTA": 484
+    },
+    "SMA": {
+      "NEGERI": 117,
+      "SWASTA": 390
+    },
+    "PKBM": {
+      "NEGERI": 39,
+      "SWASTA": 263
+    },
+    "SLB": {
+      "NEGERI": 13,
+      "SWASTA": 74
+    }
+  },
+  "by_wilayah": [
+    {
+      "wilayah": "JAKARTA TIMUR",
+      "total_sekolah": 2582,
+      "total_siswa": 509684,
+      "total_guru": 28291,
+      "rasio_siswa_guru": 18.0,
+      "ruang_kelas": 22963,
+      "perpus": 1523,
+      "lab_komputer": 1070
+    },
+    {
+      "wilayah": "JAKARTA BARAT",
+      "total_sekolah": 1976,
+      "total_siswa": 361133,
+      "total_guru": 19938,
+      "rasio_siswa_guru": 18.1,
+      "ruang_kelas": 17464,
+      "perpus": 1353,
+      "lab_komputer": 886
+    },
+    {
+      "wilayah": "JAKARTA SELATAN",
+      "total_sekolah": 1908,
+      "total_siswa": 357034,
+      "total_guru": 21152,
+      "rasio_siswa_guru": 16.9,
+      "ruang_kelas": 17517,
+      "perpus": 1228,
+      "lab_komputer": 840
+    },
+    {
+      "wilayah": "JAKARTA UTARA",
+      "total_sekolah": 1398,
+      "total_siswa": 264253,
+      "total_guru": 14731,
+      "rasio_siswa_guru": 17.9,
+      "ruang_kelas": 12675,
+      "perpus": 937,
+      "lab_komputer": 643
+    },
+    {
+      "wilayah": "JAKARTA PUSAT",
+      "total_sekolah": 959,
+      "total_siswa": 172160,
+      "total_guru": 9729,
+      "rasio_siswa_guru": 17.7,
+      "ruang_kelas": 7916,
+      "perpus": 606,
+      "lab_komputer": 424
+    },
+    {
+      "wilayah": "KEP. SERIBU",
+      "total_sekolah": 52,
+      "total_siswa": 6147,
+      "total_guru": 403,
+      "rasio_siswa_guru": 15.3,
+      "ruang_kelas": 309,
+      "perpus": 34,
+      "lab_komputer": 18
+    }
+  ],
+  "akreditasi": {
+    "Akreditasi A": 3164,
+    "Akreditasi B": 1301,
+    "Belum / Lainnya": 275,
+    "Akreditasi C": 53
+  }
+}

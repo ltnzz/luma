@@ -1,0 +1,1190 @@
+{
+  "generated_at": "2026-10-24",
+  "catalog": [
+    {
+      "category": "air",
+      "title": "Data Kualitas Air Sungai di Provinsi DKI Jakarta",
+      "description": "Pengukuran parameter kualitas fisika, kimia, dan mikrobiologi air sungai di seluruh titik pantau sungai DKI Jakarta.",
+      "record_count": 19200,
+      "source": "Dinas Lingkungan Hidup",
+      "formats": [
+        "XLS",
+        "JSON"
+      ]
+    },
+    {
+      "category": "rth",
+      "title": "Data Ruang Terbuka Hijau (RTH) Provinsi DKI Jakarta 2022-2023",
+      "description": "Sebaran lokasi, jenis (Taman, Hutan Kota, Jalur Hijau), kecamatan, dan kelurahan RTH di DKI Jakarta.",
+      "record_count": 5482,
+      "source": "Dinas Pertamanan dan Hutan Kota",
+      "formats": [
+        "XLS",
+        "JSON"
+      ]
+    },
+    {
+      "category": "transum",
+      "title": "Data Layanan dan Infrastruktur Transportasi Umum",
+      "description": "Cakupan layanan angkutan umum (luas & populasi terlayani), sebaran halte Transjakarta per koridor, stasiun MRT, dan perkeretaapian.",
+      "record_count": 212,
+      "source": "Dinas Perhubungan & PT MRT Jakarta",
+      "formats": [
+        "XLS",
+        "JSON"
+      ]
+    },
+    {
+      "category": "udara",
+      "title": "Data Indeks Standar Pencemar Udara (ISPU) DKI Jakarta 2022-2023",
+      "description": "Pemantauan stasiun SPKU DKI Jakarta terhadap parameter pencemaran udara (PM2.5, PM10, SO2, CO, O3, NO2).",
+      "record_count": 730,
+      "source": "Dinas Lingkungan Hidup",
+      "formats": [
+        "JSON"
+      ]
+    },
+    {
+      "category": "kesehatan",
+      "title": "Data Sarana dan Fasilitas Kesehatan Provinsi DKI Jakarta",
+      "description": "Keberadaan dan persebaran fasilitas kesehatan (Rumah Sakit, Puskesmas, Klinik, Apotek, Praktek Dokter) menurut kecamatan.",
+      "record_count": 350,
+      "source": "Dinas Kesehatan",
+      "formats": [
+        "JSON"
+      ]
+    },
+    {
+      "category": "sekolah",
+      "title": "Data Sarana Pendidikan dan Sekolah",
+      "description": "Basis data induk sekolah, profil jenjang (SD, SMP, SMA, SMK), rasio siswa-guru, dan sebaran akreditasi se-DKI Jakarta.",
+      "record_count": 8875,
+      "source": "Dinas Pendidikan",
+      "formats": [
+        "XLS",
+        "XLSX",
+        "JSON"
+      ]
+    }
+  ],
+  "air": {
+    "total_records": 19200,
+    "rivers": [
+      {
+        "nama_sungai": "PETUKANGAN",
+        "total_sampel": 160,
+        "pelanggaran_baku_mutu": 71,
+        "persen_pelanggaran": 44.4,
+        "avg_bod": 31.51,
+        "avg_cod": 132.73,
+        "avg_do": 1.28,
+        "avg_ph": 7.27,
+        "lat": -6.211444,
+        "lng": 106.911778
+      },
+      {
+        "nama_sungai": "SEKERTARIS",
+        "total_sampel": 640,
+        "pelanggaran_baku_mutu": 265,
+        "persen_pelanggaran": 41.4,
+        "avg_bod": 21.39,
+        "avg_cod": 94.17,
+        "avg_do": 1.36,
+        "avg_ph": 7.22,
+        "lat": -6.216278,
+        "lng": 106.773667
+      },
+      {
+        "nama_sungai": "BUARAN",
+        "total_sampel": 800,
+        "pelanggaran_baku_mutu": 330,
+        "persen_pelanggaran": 41.2,
+        "avg_bod": 33.97,
+        "avg_cod": 144.52,
+        "avg_do": 1.64,
+        "avg_ph": 7.15,
+        "lat": -6.220358,
+        "lng": 106.92413
+      },
+      {
+        "nama_sungai": "CAKUNG",
+        "total_sampel": 1120,
+        "pelanggaran_baku_mutu": 457,
+        "persen_pelanggaran": 40.8,
+        "avg_bod": 24.67,
+        "avg_cod": 115.54,
+        "avg_do": 1.48,
+        "avg_ph": 7.31,
+        "lat": -6.100666,
+        "lng": 106.940614
+      },
+      {
+        "nama_sungai": "MOOKERVART",
+        "total_sampel": 800,
+        "pelanggaran_baku_mutu": 321,
+        "persen_pelanggaran": 40.1,
+        "avg_bod": 17.42,
+        "avg_cod": 81.33,
+        "avg_do": 1.49,
+        "avg_ph": 7.28,
+        "lat": -6.155361944,
+        "lng": 106.7309639
+      },
+      {
+        "nama_sungai": "JATI KRAMAT",
+        "total_sampel": 320,
+        "pelanggaran_baku_mutu": 126,
+        "persen_pelanggaran": 39.4,
+        "avg_bod": 14.66,
+        "avg_cod": 61.2,
+        "avg_do": 2.28,
+        "avg_ph": 7.16,
+        "lat": -6.248469,
+        "lng": 106.932627
+      },
+      {
+        "nama_sungai": "KALIBARU TIMUR",
+        "total_sampel": 1600,
+        "pelanggaran_baku_mutu": 629,
+        "persen_pelanggaran": 39.3,
+        "avg_bod": 20.38,
+        "avg_cod": 106.88,
+        "avg_do": 3.15,
+        "avg_ph": 7.04,
+        "lat": -6.286182,
+        "lng": 106.870626
+      },
+      {
+        "nama_sungai": "CIDENG",
+        "total_sampel": 1120,
+        "pelanggaran_baku_mutu": 439,
+        "persen_pelanggaran": 39.2,
+        "avg_bod": 24.04,
+        "avg_cod": 134.61,
+        "avg_do": 2.16,
+        "avg_ph": 7.31,
+        "lat": -6.198247433,
+        "lng": 106.8395844
+      },
+      {
+        "nama_sungai": "SUNTER",
+        "total_sampel": 1280,
+        "pelanggaran_baku_mutu": 498,
+        "persen_pelanggaran": 38.9,
+        "avg_bod": 21.33,
+        "avg_cod": 106.55,
+        "avg_do": 1.9,
+        "avg_ph": 7.18,
+        "lat": -6.345091,
+        "lng": 106.917216
+      },
+      {
+        "nama_sungai": "KAMAL",
+        "total_sampel": 480,
+        "pelanggaran_baku_mutu": 183,
+        "persen_pelanggaran": 38.1,
+        "avg_bod": 18.23,
+        "avg_cod": 79.99,
+        "avg_do": 1.79,
+        "avg_ph": 7.08,
+        "lat": -6.136194,
+        "lng": 106.702389
+      },
+      {
+        "nama_sungai": "BLENCONG",
+        "total_sampel": 160,
+        "pelanggaran_baku_mutu": 60,
+        "persen_pelanggaran": 37.5,
+        "avg_bod": 14.72,
+        "avg_cod": 83.94,
+        "avg_do": 1.97,
+        "avg_ph": 7.49,
+        "lat": -6.118484,
+        "lng": 106.95644
+      },
+      {
+        "nama_sungai": "CENGKARENG",
+        "total_sampel": 320,
+        "pelanggaran_baku_mutu": 119,
+        "persen_pelanggaran": 37.2,
+        "avg_bod": 11.68,
+        "avg_cod": 62.96,
+        "avg_do": 2.19,
+        "avg_ph": 7.07,
+        "lat": -6.162556,
+        "lng": 106.748139
+      },
+      {
+        "nama_sungai": "ANGKE",
+        "total_sampel": 480,
+        "pelanggaran_baku_mutu": 177,
+        "persen_pelanggaran": 36.9,
+        "avg_bod": 14.58,
+        "avg_cod": 63.5,
+        "avg_do": 1.69,
+        "avg_ph": 7.07,
+        "lat": -6.158863,
+        "lng": 106.763746
+      },
+      {
+        "nama_sungai": "CIPINANG",
+        "total_sampel": 1120,
+        "pelanggaran_baku_mutu": 408,
+        "persen_pelanggaran": 36.4,
+        "avg_bod": 17.5,
+        "avg_cod": 77.43,
+        "avg_do": 1.75,
+        "avg_ph": 7.25,
+        "lat": -6.287361,
+        "lng": 106.872111
+      },
+      {
+        "nama_sungai": "GROGOL",
+        "total_sampel": 960,
+        "pelanggaran_baku_mutu": 346,
+        "persen_pelanggaran": 36.0,
+        "avg_bod": 15.17,
+        "avg_cod": 65.21,
+        "avg_do": 2.03,
+        "avg_ph": 7.2,
+        "lat": -6.209111,
+        "lng": 106.791944
+      },
+      {
+        "nama_sungai": "MAMPANG",
+        "total_sampel": 960,
+        "pelanggaran_baku_mutu": 341,
+        "persen_pelanggaran": 35.5,
+        "avg_bod": 17.76,
+        "avg_cod": 87.15,
+        "avg_do": 1.83,
+        "avg_ph": 6.99,
+        "lat": -6.240477048,
+        "lng": 106.8211559
+      },
+      {
+        "nama_sungai": "SEPAK",
+        "total_sampel": 480,
+        "pelanggaran_baku_mutu": 170,
+        "persen_pelanggaran": 35.4,
+        "avg_bod": 16.94,
+        "avg_cod": 77.13,
+        "avg_do": 1.37,
+        "avg_ph": 7.2,
+        "lat": -6.166694,
+        "lng": 106.747964
+      },
+      {
+        "nama_sungai": "KALIBARU BARAT",
+        "total_sampel": 960,
+        "pelanggaran_baku_mutu": 333,
+        "persen_pelanggaran": 34.7,
+        "avg_bod": 14.35,
+        "avg_cod": 63.7,
+        "avg_do": 3.23,
+        "avg_ph": 7.09,
+        "lat": -6.2461274,
+        "lng": 106.8427061
+      },
+      {
+        "nama_sungai": "CILIWUNG",
+        "total_sampel": 2880,
+        "pelanggaran_baku_mutu": 985,
+        "persen_pelanggaran": 34.2,
+        "avg_bod": 12.83,
+        "avg_cod": 64.93,
+        "avg_do": 2.82,
+        "avg_ph": 7.1,
+        "lat": -6.204944,
+        "lng": 106.833889
+      },
+      {
+        "nama_sungai": "KANAL TIMUR",
+        "total_sampel": 480,
+        "pelanggaran_baku_mutu": 162,
+        "persen_pelanggaran": 33.8,
+        "avg_bod": 11.05,
+        "avg_cod": 52.9,
+        "avg_do": 2.96,
+        "avg_ph": 7.28,
+        "lat": -6.109212794,
+        "lng": 106.9694954
+      },
+      {
+        "nama_sungai": "KRUKUT",
+        "total_sampel": 800,
+        "pelanggaran_baku_mutu": 269,
+        "persen_pelanggaran": 33.6,
+        "avg_bod": 8.84,
+        "avg_cod": 43.15,
+        "avg_do": 2.54,
+        "avg_ph": 7.21,
+        "lat": -6.297483,
+        "lng": 106.805385
+      },
+      {
+        "nama_sungai": "PESANGGRAHAN",
+        "total_sampel": 800,
+        "pelanggaran_baku_mutu": 256,
+        "persen_pelanggaran": 32.0,
+        "avg_bod": 8.95,
+        "avg_cod": 39.18,
+        "avg_do": 3.11,
+        "avg_ph": 7.07,
+        "lat": -6.208616,
+        "lng": 106.764814
+      },
+      {
+        "nama_sungai": "TARUM BARAT",
+        "total_sampel": 480,
+        "pelanggaran_baku_mutu": 139,
+        "persen_pelanggaran": 29.0,
+        "avg_bod": 10.86,
+        "avg_cod": 46.29,
+        "avg_do": 3.77,
+        "avg_ph": 7.22,
+        "lat": -6.249899493,
+        "lng": 106.9529476
+      }
+    ],
+    "parameters": [
+      {
+        "parameter": "PH",
+        "total_pengujian": 960,
+        "baku_mutu": 6.9,
+        "avg_nilai": 7.16,
+        "min_nilai": 5.585,
+        "max_nilai": 8.655,
+        "pelanggaran_count": 3,
+        "persen_pelanggaran": 0.3
+      },
+      {
+        "parameter": "BOD",
+        "total_pengujian": 960,
+        "baku_mutu": 3.0,
+        "avg_nilai": 17.48,
+        "min_nilai": 1.33,
+        "max_nilai": 93.0,
+        "pelanggaran_count": 927,
+        "persen_pelanggaran": 96.6
+      },
+      {
+        "parameter": "COD",
+        "total_pengujian": 960,
+        "baku_mutu": 25.0,
+        "avg_nilai": 83.51,
+        "min_nilai": 3.9,
+        "max_nilai": 1500.0,
+        "pelanggaran_count": 841,
+        "persen_pelanggaran": 87.6
+      },
+      {
+        "parameter": "DO",
+        "total_pengujian": 960,
+        "baku_mutu": 4.0,
+        "avg_nilai": 2.28,
+        "min_nilai": 0.05,
+        "max_nilai": 7.405,
+        "pelanggaran_count": 838,
+        "persen_pelanggaran": 87.3
+      },
+      {
+        "parameter": "MINYAK DAN LEMAK",
+        "total_pengujian": 960,
+        "baku_mutu": 1.0,
+        "avg_nilai": 0.73,
+        "min_nilai": 0.2,
+        "max_nilai": 11.67,
+        "pelanggaran_count": 143,
+        "persen_pelanggaran": 14.9
+      },
+      {
+        "parameter": "TOTAL COLIFORM",
+        "total_pengujian": 960,
+        "baku_mutu": 5000.0,
+        "avg_nilai": 3375321.16,
+        "min_nilai": 200.0,
+        "max_nilai": 50000000.0,
+        "pelanggaran_count": 918,
+        "persen_pelanggaran": 95.6
+      },
+      {
+        "parameter": "FECAL COLIFORM",
+        "total_pengujian": 960,
+        "baku_mutu": 1000.0,
+        "avg_nilai": 1908580.28,
+        "min_nilai": 100.0,
+        "max_nilai": 50000000.0,
+        "pelanggaran_count": 932,
+        "persen_pelanggaran": 97.1
+      },
+      {
+        "parameter": "TDS",
+        "total_pengujian": 960,
+        "baku_mutu": 1000.0,
+        "avg_nilai": 408.12,
+        "min_nilai": 53.55,
+        "max_nilai": 14630.0,
+        "pelanggaran_count": 36,
+        "persen_pelanggaran": 3.8
+      },
+      {
+        "parameter": "TSS",
+        "total_pengujian": 960,
+        "baku_mutu": 50.0,
+        "avg_nilai": 55.09,
+        "min_nilai": 7.0,
+        "max_nilai": 1505.0,
+        "pelanggaran_count": 307,
+        "persen_pelanggaran": 32.0
+      },
+      {
+        "parameter": "KLORIN BEBAS",
+        "total_pengujian": 622,
+        "baku_mutu": 0.03,
+        "avg_nilai": 0.03,
+        "min_nilai": 0.0,
+        "max_nilai": 0.2,
+        "pelanggaran_count": 155,
+        "persen_pelanggaran": 24.9
+      },
+      {
+        "parameter": "NITRAT",
+        "total_pengujian": 480,
+        "baku_mutu": 10.0,
+        "avg_nilai": 0.94,
+        "min_nilai": 0.004,
+        "max_nilai": 11.0,
+        "pelanggaran_count": 1,
+        "persen_pelanggaran": 0.2
+      },
+      {
+        "parameter": "NITRIT",
+        "total_pengujian": 480,
+        "baku_mutu": 0.06,
+        "avg_nilai": 0.08,
+        "min_nilai": 0.004,
+        "max_nilai": 0.65,
+        "pelanggaran_count": 193,
+        "persen_pelanggaran": 40.2
+      },
+      {
+        "parameter": "TOTAL P",
+        "total_pengujian": 480,
+        "baku_mutu": 0.2,
+        "avg_nilai": 0.98,
+        "min_nilai": 0.036,
+        "max_nilai": 2.4176,
+        "pelanggaran_count": 434,
+        "persen_pelanggaran": 90.4
+      },
+      {
+        "parameter": "F",
+        "total_pengujian": 480,
+        "baku_mutu": 1.5,
+        "avg_nilai": 0.22,
+        "min_nilai": 0.003,
+        "max_nilai": 1.237,
+        "pelanggaran_count": 0,
+        "persen_pelanggaran": 0.0
+      },
+      {
+        "parameter": "H2S",
+        "total_pengujian": 480,
+        "baku_mutu": 0.002,
+        "avg_nilai": 0.05,
+        "min_nilai": 0.0009,
+        "max_nilai": 1.661,
+        "pelanggaran_count": 322,
+        "persen_pelanggaran": 67.1
+      },
+      {
+        "parameter": "FENOL",
+        "total_pengujian": 480,
+        "baku_mutu": 0.005,
+        "avg_nilai": 0.0,
+        "min_nilai": 0.0004,
+        "max_nilai": 0.078,
+        "pelanggaran_count": 64,
+        "persen_pelanggaran": 13.3
+      },
+      {
+        "parameter": "CD",
+        "total_pengujian": 480,
+        "baku_mutu": 0.01,
+        "avg_nilai": 0.0,
+        "min_nilai": 0.0009,
+        "max_nilai": 0.017,
+        "pelanggaran_count": 3,
+        "persen_pelanggaran": 0.6
+      },
+      {
+        "parameter": "ZN",
+        "total_pengujian": 480,
+        "baku_mutu": 0.05,
+        "avg_nilai": 0.02,
+        "min_nilai": 0.004,
+        "max_nilai": 1.2,
+        "pelanggaran_count": 16,
+        "persen_pelanggaran": 3.3
+      },
+      {
+        "parameter": "CU",
+        "total_pengujian": 480,
+        "baku_mutu": 0.02,
+        "avg_nilai": 0.01,
+        "min_nilai": 0.001,
+        "max_nilai": 0.07,
+        "pelanggaran_count": 17,
+        "persen_pelanggaran": 3.5
+      },
+      {
+        "parameter": "PB",
+        "total_pengujian": 480,
+        "baku_mutu": 0.03,
+        "avg_nilai": 0.01,
+        "min_nilai": 0.002,
+        "max_nilai": 0.03,
+        "pelanggaran_count": 0,
+        "persen_pelanggaran": 0.0
+      },
+      {
+        "parameter": "CR6",
+        "total_pengujian": 480,
+        "baku_mutu": 0.05,
+        "avg_nilai": 0.02,
+        "min_nilai": 0.0009,
+        "max_nilai": 0.168,
+        "pelanggaran_count": 92,
+        "persen_pelanggaran": 19.2
+      },
+      {
+        "parameter": "MBAS",
+        "total_pengujian": 480,
+        "baku_mutu": 0.2,
+        "avg_nilai": 0.17,
+        "min_nilai": 0.01,
+        "max_nilai": 1.16,
+        "pelanggaran_count": 114,
+        "persen_pelanggaran": 23.8
+      },
+      {
+        "parameter": "WARNA",
+        "total_pengujian": 480,
+        "baku_mutu": 50.0,
+        "avg_nilai": 20.8,
+        "min_nilai": 0.9,
+        "max_nilai": 237.0,
+        "pelanggaran_count": 24,
+        "persen_pelanggaran": 5.0
+      },
+      {
+        "parameter": "SULFAT",
+        "total_pengujian": 480,
+        "baku_mutu": 300.0,
+        "avg_nilai": 30.17,
+        "min_nilai": 0.02,
+        "max_nilai": 803.0,
+        "pelanggaran_count": 2,
+        "persen_pelanggaran": 0.4
+      },
+      {
+        "parameter": "KLORIDA",
+        "total_pengujian": 480,
+        "baku_mutu": 300.0,
+        "avg_nilai": 123.17,
+        "min_nilai": 1.0,
+        "max_nilai": 12171.71,
+        "pelanggaran_count": 18,
+        "persen_pelanggaran": 3.8
+      },
+      {
+        "parameter": "AMONIAK",
+        "total_pengujian": 480,
+        "baku_mutu": 0.2,
+        "avg_nilai": 7.72,
+        "min_nilai": 0.006,
+        "max_nilai": 34.1,
+        "pelanggaran_count": 452,
+        "persen_pelanggaran": 94.2
+      },
+      {
+        "parameter": "TOTAL N",
+        "total_pengujian": 480,
+        "baku_mutu": 15.0,
+        "avg_nilai": 11.5,
+        "min_nilai": 0.7776,
+        "max_nilai": 41.66,
+        "pelanggaran_count": 117,
+        "persen_pelanggaran": 24.4
+      },
+      {
+        "parameter": "NI",
+        "total_pengujian": 480,
+        "baku_mutu": 0.05,
+        "avg_nilai": 0.02,
+        "min_nilai": 0.004,
+        "max_nilai": 0.25,
+        "pelanggaran_count": 7,
+        "persen_pelanggaran": 1.5
+      },
+      {
+        "parameter": "SIANIDA",
+        "total_pengujian": 480,
+        "baku_mutu": 0.02,
+        "avg_nilai": 0.01,
+        "min_nilai": 0.0009,
+        "max_nilai": 0.067,
+        "pelanggaran_count": 105,
+        "persen_pelanggaran": 21.9
+      },
+      {
+        "parameter": "HG",
+        "total_pengujian": 480,
+        "baku_mutu": 0.002,
+        "avg_nilai": 0.0,
+        "min_nilai": 0.0001,
+        "max_nilai": 0.0026,
+        "pelanggaran_count": 3,
+        "persen_pelanggaran": 0.6
+      },
+      {
+        "parameter": "KLORIN BEBAS N  IN SITU",
+        "total_pengujian": 338,
+        "baku_mutu": 0.03,
+        "avg_nilai": 0.01,
+        "min_nilai": 0.0,
+        "max_nilai": 0.0261,
+        "pelanggaran_count": 0,
+        "persen_pelanggaran": 0.0
+      }
+    ],
+    "trend_sample": [
+      {
+        "periode": "Periode 1",
+        "avg_bod": 14.8,
+        "avg_cod": 42.1,
+        "avg_do": 3.9,
+        "avg_ph": 7.32
+      },
+      {
+        "periode": "Periode 2",
+        "avg_bod": 17.2,
+        "avg_cod": 48.6,
+        "avg_do": 3.2,
+        "avg_ph": 7.28
+      },
+      {
+        "periode": "Periode 3",
+        "avg_bod": 15.6,
+        "avg_cod": 44.3,
+        "avg_do": 3.5,
+        "avg_ph": 7.35
+      },
+      {
+        "periode": "Periode 4",
+        "avg_bod": 13.9,
+        "avg_cod": 39.7,
+        "avg_do": 4.1,
+        "avg_ph": 7.4
+      }
+    ]
+  },
+  "rth": {
+    "total_rth": 5482,
+    "by_wilayah": {
+      "JAKARTA SELATAN": 1907,
+      "JAKARTA BARAT": 1058,
+      "JAKARTA TIMUR": 975,
+      "JAKARTA PUSAT": 796,
+      "JAKARTA UTARA": 742,
+      ";TAMAN": 2,
+      ";JALUR HIJAU": 1,
+      "PROVINSI: JAKARTA\" TAMAN": 1
+    },
+    "by_jenis": {
+      "TAMAN": 3222,
+      "JALUR HIJAU": 1950,
+      "TPU": 164,
+      "HUTAN KOTA": 96,
+      "LAINNYA": 36,
+      "KEBUN BIBIT": 14
+    },
+    "by_periode": {
+      "2023": 2741,
+      "2022": 2741
+    },
+    "top_kecamatan": [
+      {
+        "kecamatan": "KEBAYORAN BARU (JAKARTA SELATAN)",
+        "count": 345
+      },
+      {
+        "kecamatan": "JAGAKARSA (JAKARTA SELATAN)",
+        "count": 239
+      },
+      {
+        "kecamatan": "KEMBANGAN (JAKARTA BARAT)",
+        "count": 218
+      },
+      {
+        "kecamatan": "DUREN SAWIT (JAKARTA TIMUR)",
+        "count": 217
+      },
+      {
+        "kecamatan": "PASAR MINGGU (JAKARTA SELATAN)",
+        "count": 212
+      },
+      {
+        "kecamatan": "CILINCING (JAKARTA UTARA)",
+        "count": 185
+      },
+      {
+        "kecamatan": "TEBET (JAKARTA SELATAN)",
+        "count": 180
+      },
+      {
+        "kecamatan": "TANJUNG PRIOK (JAKARTA UTARA)",
+        "count": 180
+      },
+      {
+        "kecamatan": "CILANDAK (JAKARTA SELATAN)",
+        "count": 179
+      },
+      {
+        "kecamatan": "GROGOL PETAMBURAN (JAKARTA BARAT)",
+        "count": 176
+      },
+      {
+        "kecamatan": "CIPAYUNG (JAKARTA TIMUR)",
+        "count": 161
+      },
+      {
+        "kecamatan": "KELAPA GADING (JAKARTA UTARA)",
+        "count": 160
+      },
+      {
+        "kecamatan": "MENTENG (JAKARTA PUSAT)",
+        "count": 157
+      },
+      {
+        "kecamatan": "GAMBIR (JAKARTA PUSAT)",
+        "count": 151
+      },
+      {
+        "kecamatan": "TANAH ABANG (JAKARTA PUSAT)",
+        "count": 138
+      },
+      {
+        "kecamatan": "PANCORAN (JAKARTA SELATAN)",
+        "count": 137
+      },
+      {
+        "kecamatan": "CENGKARENG (JAKARTA BARAT)",
+        "count": 130
+      },
+      {
+        "kecamatan": "PESANGGRAHAN (JAKARTA SELATAN)",
+        "count": 129
+      },
+      {
+        "kecamatan": "KEBAYORAN LAMA (JAKARTA SELATAN)",
+        "count": 125
+      },
+      {
+        "kecamatan": "KALIDERES (JAKARTA BARAT)",
+        "count": 123
+      }
+    ]
+  },
+  "transum": {
+    "total_halte": 210,
+    "cakupan": [
+      {
+        "periode": "2024",
+        "populasi_terlayani_pct": 91.7,
+        "luas_area_terlayani_pct": 85.4
+      },
+      {
+        "periode": "2025",
+        "populasi_terlayani_pct": 92.4,
+        "luas_area_terlayani_pct": 86.4
+      }
+    ],
+    "halte_per_koridor": [
+      {
+        "koridor": "KORIDOR 1",
+        "count": 20
+      },
+      {
+        "koridor": "KORIDOR 2",
+        "count": 23
+      },
+      {
+        "koridor": "KORIDOR 3",
+        "count": 13
+      },
+      {
+        "koridor": "KORIDOR 4",
+        "count": 17
+      },
+      {
+        "koridor": "KORIDOR 5",
+        "count": 17
+      },
+      {
+        "koridor": "KORIDOR 6",
+        "count": 18
+      },
+      {
+        "koridor": "KORIDOR 7",
+        "count": 13
+      },
+      {
+        "koridor": "KORIDOR 8",
+        "count": 20
+      },
+      {
+        "koridor": "KORIDOR 9",
+        "count": 23
+      },
+      {
+        "koridor": "KORIDOR 10",
+        "count": 18
+      },
+      {
+        "koridor": "KORIDOR 11",
+        "count": 15
+      },
+      {
+        "koridor": "KORIDOR 12",
+        "count": 13
+      }
+    ],
+    "tipe_akses": {
+      "PELICAN": 50,
+      "JPO BAJA / EKSISTING ( TANGGA SEMUA )": 18,
+      "JPO BAJA / EKSISTING ( RAMP SEMUA )": 16,
+      "JPO BAJA / PEMBANGUNAN BARU ( RAMP SEMUA )": 15,
+      "JPO BAJA / EKSISTING ( RAMP, TANGGA )": 11,
+      "JPO EKSISTING (TANGGA SEMUA)": 11,
+      "JPO BETON / EKSISTING ( RAMP SEMUA )": 10,
+      "JPO BARU BAJA (TANGGA-RAMP-TANGGA)": 10,
+      "JPO BARU BAJA (RAMP SEMUA)": 9,
+      "JPO EKSISTING (TANGGA-RAMP-TANGGA)": 6,
+      "JPO BARU BAJA (RAMP-RAMP-TANGGA)": 6,
+      "JPO BARU BAJA (TANGGA-RAMP-RAMP)": 6,
+      "JPO BETON / EKSISTING ( TANGGA SEMUA )": 5,
+      "JPO BAJA / PEMBANGUNAN BARU ( TANGGA SEMUA )": 4,
+      "JPO BAJA / PEMBANGUNAN BARU ( RAMP, TANGGA )": 3,
+      "JPO BETON / EKSISTING ( TANGGA BETON SEMUA )": 3,
+      "JPO BETON / EKSISTING ( RAMP, TANGGA )": 3,
+      "JPO BETON / EKSISTING ( HALTE BANGUN THN 2007 )": 2,
+      "JPO BAJA ( BANGUN THN 2007 ) RAMP SEMUA": 2,
+      "JPO BETON EKSISTING (TANGGA-RAMP-TANGGA)": 2,
+      "JPO BAJA / PEMB BARU TH 2010 ( RAMP, TANGGA )": 1,
+      "JPO BAJA / PEMBANGUNAN BARU ( RAMP, SEMUA )": 1,
+      "SKY WOLK / PEMABNGUNAN BARU/PELICAN": 1,
+      "SKY WOLK / PELICAN": 1,
+      "JPO BAJA  BARU ( BANGUN THN 2007 ) RAMP SEMUA": 1,
+      "JPO BAJA ( BANGUN THN 2007 ) PELICAN": 1,
+      "SKY WOLK, JPO / PEMABNGUNAN BARU ( RAMP, TANGGA )": 1,
+      "SKY WOLK / PEMBANGUNAN BARU": 1,
+      "JPO BARU BAJA (TANGGA-RAMP-RAMP) SKYWORK": 1,
+      "JPO BARU BAJA (TANGGA-FLOATING-TANGGA)": 1,
+      "JPO BARU BAJA (RAMP-TANGGA-RAMP)": 1,
+      "JPO EKSISTING (TANGGA-FLOATING RAMP-TANGGA)": 1,
+      "JPO BARU BAJA (TANGGA-BORDES-TANGGA)": 1,
+      "JPO BARU BAJA (TANGGA)": 1,
+      "JPO BARU BAJA (TANGGA-TANGGA-TANGGA)": 1,
+      "JPO BARU BAJA (TANGGA SEMUA)": 1,
+      "JPO BETON / EKSISTING ( RAMP,TANGGA )": 1,
+      "JPO BAJA / PEMB BARU SPONSOR ( RAMP SEMUA )": 1
+    }
+  },
+  "udara": {
+    "spku_locations": [
+      {
+        "station": "DKI1 - Bunderan HI",
+        "avg_ispu": 82,
+        "kategori": "Sedang",
+        "critical_param": "PM2.5"
+      },
+      {
+        "station": "DKI2 - Kelapa Gading",
+        "avg_ispu": 89,
+        "kategori": "Sedang",
+        "critical_param": "PM2.5"
+      },
+      {
+        "station": "DKI3 - Jagakarsa",
+        "avg_ispu": 74,
+        "kategori": "Sedang",
+        "critical_param": "O3"
+      },
+      {
+        "station": "DKI4 - Lubang Buaya",
+        "avg_ispu": 94,
+        "kategori": "Sedang",
+        "critical_param": "PM2.5"
+      },
+      {
+        "station": "DKI5 - Kebon Jeruk",
+        "avg_ispu": 79,
+        "kategori": "Sedang",
+        "critical_param": "PM2.5"
+      }
+    ],
+    "category_distribution": {
+      "Baik (0-50)": 48,
+      "Sedang (51-100)": 215,
+      "Tidak Sehat (101-200)": 98,
+      "Sangat Tidak Sehat (201-300)": 4,
+      "Berbahaya (>300)": 0
+    },
+    "monthly_trend": [
+      {
+        "bulan": "Jan",
+        "pm25": 65,
+        "pm10": 48,
+        "so2": 32,
+        "co": 18,
+        "o3": 42,
+        "no2": 24
+      },
+      {
+        "bulan": "Feb",
+        "pm25": 62,
+        "pm10": 45,
+        "so2": 30,
+        "co": 16,
+        "o3": 40,
+        "no2": 22
+      },
+      {
+        "bulan": "Mar",
+        "pm25": 71,
+        "pm10": 52,
+        "so2": 34,
+        "co": 21,
+        "o3": 46,
+        "no2": 27
+      },
+      {
+        "bulan": "Apr",
+        "pm25": 84,
+        "pm10": 60,
+        "so2": 37,
+        "co": 25,
+        "o3": 51,
+        "no2": 31
+      },
+      {
+        "bulan": "Mei",
+        "pm25": 96,
+        "pm10": 72,
+        "so2": 41,
+        "co": 29,
+        "o3": 58,
+        "no2": 36
+      },
+      {
+        "bulan": "Jun",
+        "pm25": 118,
+        "pm10": 85,
+        "so2": 44,
+        "co": 33,
+        "o3": 64,
+        "no2": 42
+      },
+      {
+        "bulan": "Jul",
+        "pm25": 132,
+        "pm10": 92,
+        "so2": 48,
+        "co": 37,
+        "o3": 69,
+        "no2": 45
+      },
+      {
+        "bulan": "Agu",
+        "pm25": 138,
+        "pm10": 97,
+        "so2": 50,
+        "co": 39,
+        "o3": 72,
+        "no2": 48
+      },
+      {
+        "bulan": "Sep",
+        "pm25": 124,
+        "pm10": 88,
+        "so2": 46,
+        "co": 35,
+        "o3": 66,
+        "no2": 43
+      },
+      {
+        "bulan": "Okt",
+        "pm25": 99,
+        "pm10": 71,
+        "so2": 40,
+        "co": 28,
+        "o3": 57,
+        "no2": 35
+      },
+      {
+        "bulan": "Nov",
+        "pm25": 78,
+        "pm10": 58,
+        "so2": 35,
+        "co": 22,
+        "o3": 48,
+        "no2": 29
+      },
+      {
+        "bulan": "Des",
+        "pm25": 68,
+        "pm10": 50,
+        "so2": 31,
+        "co": 19,
+        "o3": 43,
+        "no2": 25
+      }
+    ]
+  },
+  "kesehatan": {
+    "facility_types": {
+      "Rumah Sakit Umum / Khusus": 194,
+      "Puskesmas (Kecamatan / Kelurahan)": 340,
+      "Klinik Pratama & Utama": 1280,
+      "Apotek & Toko Obat": 2450,
+      "Praktek Dokter Mandiri": 1820
+    },
+    "by_wilayah": {
+      "Jakarta Timur": 1850,
+      "Jakarta Selatan": 1640,
+      "Jakarta Barat": 1420,
+      "Jakarta Utara": 980,
+      "Jakarta Pusat": 730,
+      "Kep. Seribu": 28
+    }
+  },
+  "sekolah": {
+    "total_sekolah": 8875,
+    "total_siswa": 1670411,
+    "total_guru": 94244,
+    "rasio_siswa_guru_dki": 17.7,
+    "by_jenjang": {
+      "PAUD": 4116,
+      "SD": 2231,
+      "SMP": 1075,
+      "SMK": 557,
+      "SMA": 507,
+      "PKBM": 302,
+      "SLB": 87
+    },
+    "by_status": {
+      "SWASTA": 6868,
+      "NEGERI": 2007
+    },
+    "jenjang_status_breakdown": {
+      "PAUD": {
+        "NEGERI": 167,
+        "SWASTA": 3949
+      },
+      "SD": {
+        "NEGERI": 1305,
+        "SWASTA": 926
+      },
+      "SMP": {
+        "NEGERI": 293,
+        "SWASTA": 782
+      },
+      "SMK": {
+        "NEGERI": 73,
+        "SWASTA": 484
+      },
+      "SMA": {
+        "NEGERI": 117,
+        "SWASTA": 390
+      },
+      "PKBM": {
+        "NEGERI": 39,
+        "SWASTA": 263
+      },
+      "SLB": {
+        "NEGERI": 13,
+        "SWASTA": 74
+      }
+    },
+    "by_wilayah": [
+      {
+        "wilayah": "JAKARTA TIMUR",
+        "total_sekolah": 2582,
+        "total_siswa": 509684,
+        "total_guru": 28291,
+        "rasio_siswa_guru": 18.0,
+        "ruang_kelas": 22963,
+        "perpus": 1523,
+        "lab_komputer": 1070
+      },
+      {
+        "wilayah": "JAKARTA BARAT",
+        "total_sekolah": 1976,
+        "total_siswa": 361133,
+        "total_guru": 19938,
+        "rasio_siswa_guru": 18.1,
+        "ruang_kelas": 17464,
+        "perpus": 1353,
+        "lab_komputer": 886
+      },
+      {
+        "wilayah": "JAKARTA SELATAN",
+        "total_sekolah": 1908,
+        "total_siswa": 357034,
+        "total_guru": 21152,
+        "rasio_siswa_guru": 16.9,
+        "ruang_kelas": 17517,
+        "perpus": 1228,
+        "lab_komputer": 840
+      },
+      {
+        "wilayah": "JAKARTA UTARA",
+        "total_sekolah": 1398,
+        "total_siswa": 264253,
+        "total_guru": 14731,
+        "rasio_siswa_guru": 17.9,
+        "ruang_kelas": 12675,
+        "perpus": 937,
+        "lab_komputer": 643
+      },
+      {
+        "wilayah": "JAKARTA PUSAT",
+        "total_sekolah": 959,
+        "total_siswa": 172160,
+        "total_guru": 9729,
+        "rasio_siswa_guru": 17.7,
+        "ruang_kelas": 7916,
+        "perpus": 606,
+        "lab_komputer": 424
+      },
+      {
+        "wilayah": "KEP. SERIBU",
+        "total_sekolah": 52,
+        "total_siswa": 6147,
+        "total_guru": 403,
+        "rasio_siswa_guru": 15.3,
+        "ruang_kelas": 309,
+        "perpus": 34,
+        "lab_komputer": 18
+      }
+    ],
+    "akreditasi": {
+      "Akreditasi A": 3164,
+      "Akreditasi B": 1301,
+      "Belum / Lainnya": 275,
+      "Akreditasi C": 53
+    }
+  }
+}

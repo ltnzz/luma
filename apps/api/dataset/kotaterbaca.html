@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luma • Peta Interaktif & Platform Keterbukaan Data Kota DKI Jakarta</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <!-- FontAwesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #070B14;
+      --bg-surface: #0E1626;
+      --bg-card: rgba(17, 27, 46, 0.82);
+      --bg-card-hover: rgba(26, 39, 66, 0.9);
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(56, 189, 248, 0.3);
+      --text-main: #F8FAFC;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      --color-primary: #06B6D4;
+      --color-green: #10B981;
+      --color-purple: #8B5CF6;
+      --color-amber: #F59E0B;
+      --color-rose: #F43F5E;
+      --color-blue: #3B82F6;
+      --color-indigo: #6366F1;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(6, 182, 212, 0.07) 0px, transparent 40%),
+        radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.07) 0px, transparent 40%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Header Bar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      background: rgba(7, 11, 20, 0.88);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 12px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #06B6D4, #3B82F6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.45);
+    }
+
+    .brand-title h1 {
+      font-size: 1.22rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #FFFFFF, #CBD5E1);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-title span {
+      font-size: 0.72rem;
+      color: var(--color-primary);
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: block;
+      margin-top: -2px;
+    }
+
+    /* Breadcrumb Selector */
+    .breadcrumb-box {
+      display: flex;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      border-radius: 9999px;
+      padding: 4px 12px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .breadcrumb-box i {
+      color: var(--color-rose);
+      margin-right: 8px;
+    }
+
+    .wilayah-select {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 0.82rem;
+      cursor: pointer;
+      outline: none;
+      padding: 4px 8px;
+    }
+
+    .wilayah-select option {
+      background: #0E1626;
+      color: #fff;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #34D399;
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 10px #10B981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    .btn-simulasi {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(139, 92, 246, 0.25));
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      color: #C4B5FD;
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-simulasi:hover {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.4), rgba(139, 92, 246, 0.4));
+      color: #fff;
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.35);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1520px;
+      margin: 0 auto;
+      padding: 24px 28px 60px 28px;
+    }
+
+    /* Page Headline */
+    .headline-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .headline-bar h2 {
+      font-size: 1.55rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .headline-bar p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    /* 6 Indicator Cards Grid (The PRD 6 Cards) */
+    .indicators-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 1200px) {
+      .indicators-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 768px) {
+      .indicators-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    .indicator-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+      transition: all 0.25s ease;
+    }
+
+    .indicator-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .indicator-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .card-lingkungan::before { background: var(--color-green); }
+    .card-udara::before { background: var(--color-amber); }
+    .card-pendidikan::before { background: var(--color-indigo); }
+    .card-kesehatan::before { background: var(--color-rose); }
+    .card-fasum::before { background: var(--color-primary); }
+    .card-transum::before { background: var(--color-purple); }
+
+    .ind-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .ind-num-title {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .ind-icon {
+      font-size: 1rem;
+      opacity: 0.85;
+    }
+
+    .ind-value {
+      font-size: 1.55rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .ind-sub {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      margin-top: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Split Workspace: Map on Left, Sidebar Explorer on Right */
+    .workspace-split {
+      display: grid;
+      grid-template-columns: 1fr 390px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    @media (max-width: 1080px) {
+      .workspace-split {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Map Box */
+    .map-wrapper {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .map-filter-bar {
+      padding: 12px 18px;
+      background: rgba(14, 22, 38, 0.95);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .pill-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .pill-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+
+    .pill-btn.active {
+      background: rgba(6, 182, 212, 0.18);
+      border-color: var(--color-primary);
+      color: #38BDF8;
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.25);
+    }
+
+    .map-counter-tag {
+      font-size: 0.74rem;
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+
+    #map {
+      height: 640px;
+      width: 100%;
+      background: #090e1a;
+      z-index: 10;
+    }
+
+    /* Map Tooltip & Popup styling */
+    .leaflet-popup-content-wrapper {
+      background: #0E1626 !important;
+      color: #fff !important;
+      border: 1px solid rgba(56, 189, 248, 0.3) !important;
+      border-radius: 12px !important;
+      padding: 4px !important;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6) !important;
+    }
+
+    .leaflet-popup-tip {
+      background: #0E1626 !important;
+      border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    }
+
+    .custom-popup-content {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      padding: 6px 8px;
+    }
+
+    .popup-cat {
+      font-size: 0.68rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      letter-spacing: 0.05em;
+    }
+
+    .popup-title {
+      font-size: 0.94rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 2px 0 4px 0;
+    }
+
+    .popup-addr {
+      font-size: 0.74rem;
+      color: #94A3B8;
+      margin-bottom: 8px;
+    }
+
+    .popup-btn {
+      display: inline-block;
+      width: 100%;
+      background: linear-gradient(135deg, #06B6D4, #3B82F6);
+      color: #fff;
+      text-align: center;
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* Right Sidebar Explorer */
+    .sidebar-explorer {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel-box {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      backdrop-filter: blur(14px);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .panel-header h3 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .facility-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 540px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .facility-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .facility-card:hover {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: var(--border-accent);
+      transform: translateX(3px);
+    }
+
+    .facility-card.active {
+      border-color: var(--color-primary);
+      background: rgba(6, 182, 212, 0.1);
+    }
+
+    .fc-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4px;
+    }
+
+    .fc-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .badge-pendidikan { background: rgba(99, 102, 241, 0.2); color: #A5B4FC; }
+    .badge-kesehatan { background: rgba(244, 63, 94, 0.2); color: #FDA4AF; }
+    .badge-transum { background: rgba(139, 92, 246, 0.2); color: #C4B5FD; }
+    .badge-fasum { background: rgba(6, 182, 212, 0.2); color: #67E8F9; }
+    .badge-lingkungan { background: rgba(16, 185, 129, 0.2); color: #6EE7B7; }
+
+    .fc-title {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .fc-addr {
+      font-size: 0.74rem;
+      color: var(--text-dim);
+      margin-top: 2px;
+    }
+
+    /* Side Drawer for Facility Detail (Opsi A PRD) */
+    .drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+    }
+
+    .drawer-overlay.open {
+      display: block;
+    }
+
+    .side-drawer {
+      position: fixed;
+      top: 0;
+      right: -620px;
+      width: 580px;
+      max-width: 90vw;
+      height: 100vh;
+      background: #0E1626;
+      border-left: 1px solid var(--border-subtle);
+      z-index: 2001;
+      padding: 24px 28px;
+      overflow-y: auto;
+      transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: -10px 0 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .side-drawer.open {
+      right: 0;
+    }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .btn-close-drawer {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-subtle);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .drawer-cat-tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--color-primary);
+      margin-bottom: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    .drawer-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .drawer-address {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .drawer-section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .drawer-sec-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #CBD5E1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .spec-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 0.82rem;
+    }
+
+    .spec-label {
+      color: var(--text-muted);
+    }
+
+    .spec-val {
+      font-weight: 600;
+      color: #fff;
+      text-align: right;
+    }
+
+    .budget-highlight {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--color-green);
+      margin-bottom: 6px;
+    }
+
+    .doc-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 10px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 6px;
+      margin-bottom: 6px;
+      font-size: 0.78rem;
+    }
+
+    .doc-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #E2E8F0;
+    }
+
+    .doc-down-btn {
+      background: rgba(56, 189, 248, 0.15);
+      color: #38BDF8;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    /* Simulation Modal (Center Modal PRD) */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .sim-modal-content {
+      background: #0E1626;
+      border: 1px solid rgba(139, 92, 246, 0.4);
+      border-radius: var(--radius-lg);
+      width: 820px;
+      max-width: 95vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 28px 32px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    }
+
+    .sim-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .sim-toggle-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .sim-tab-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .sim-tab-btn.active {
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2));
+      border-color: #10B981;
+      color: #34D399;
+    }
+
+    .sim-matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.84rem;
+      margin-bottom: 16px;
+    }
+
+    .sim-matrix-table th {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px 14px;
+      text-align: left;
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      text-transform: uppercase;
+    }
+
+    .sim-matrix-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .badge-diff {
+      color: #34D399;
+      font-weight: 700;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-dim);
+      font-size: 0.78rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header>
+    <div class="nav-left">
+      <a href="#" class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-city"></i>
+        </div>
+        <div class="brand-title">
+          <h1>Luma</h1>
+          <span>DKI Jakarta Open Data & Facility Transparency</span>
+        </div>
+      </a>
+
+      <!-- Breadcrumb Selector -->
+      <div class="breadcrumb-box">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>DKI Jakarta &gt; </span>
+        <select id="wilayah-select" class="wilayah-select" onchange="onWilayahChange(this.value)">
+          <option value="ALL">Seluruh DKI Jakarta</option>
+          <option value="JAKARTA SELATAN">Kota Adm. Jakarta Selatan</option>
+          <option value="JAKARTA TIMUR">Kota Adm. Jakarta Timur</option>
+          <option value="JAKARTA BARAT">Kota Adm. Jakarta Barat</option>
+          <option value="JAKARTA PUSAT">Kota Adm. Jakarta Pusat</option>
+          <option value="JAKARTA UTARA">Kota Adm. Jakarta Utara</option>
+          <option value="KEP. SERIBU">Kab. Adm. Kepulauan Seribu</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="nav-right">
+      <div class="status-chip">
+        <div class="pulse-dot"></div>
+        <span>Data Terbuka Resmi BPS & OpenData</span>
+      </div>
+
+      <button class="btn-simulasi" onclick="openSimModal()">
+        <i class="fa-solid fa-sliders"></i> Simulasi Akses Fasilitas
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Headline -->
+    <div class="headline-bar">
+      <div>
+        <h2 id="current-wilayah-title">Ringkasan 6 Indikator Wilayah: Seluruh DKI Jakarta</h2>
+        <p>Integrasi data terpadu fasilitas publik, lingkungan, transportasi, dan transparansi anggaran APBD DKI Jakarta.</p>
+      </div>
+      <div style="font-size: 0.8rem; color: var(--text-dim);">
+        Terakhir diperbarui: <strong>Oktober 2026</strong>
+      </div>
+    </div>
+
+    <!-- 6 Indicator Cards Grid (PRD Core) -->
+    <div class="indicators-grid">
+      <!-- 1. Lingkungan -->
+      <div class="indicator-card card-lingkungan">
+        <div class="ind-header">
+          <span class="ind-num-title">1. LINGKUNGAN</span>
+          <i class="fa-solid fa-tree ind-icon" style="color: var(--color-green);"></i>
+        </div>
+        <div class="ind-value" id="val-rth">5.3%</div>
+        <div class="ind-sub" id="sub-rth">Target 30% RTH (Total 5,482 Titik)</div>
+      </div>
+
+      <!-- 2. Kualitas Udara -->
+      <div class="indicator-card card-udara">
+        <div class="ind-header">
+          <span class="ind-num-title">2. KUALITAS UDARA</span>
+          <i class="fa-solid fa-wind ind-icon" style="color: var(--color-amber);"></i>
+        </div>
+        <div class="ind-value" id="val-udara">AQI 74</div>
+        <div class="ind-sub" id="sub-udara">Sedang (PM2.5: 22.4 µg/m³)</div>
+      </div>
+
+      <!-- 3. Pendidikan -->
+      <div class="indicator-card card-pendidikan">
+        <div class="ind-header">
+          <span class="ind-num-title">3. PENDIDIKAN</span>
+          <i class="fa-solid fa-graduation-cap ind-icon" style="color: var(--color-indigo);"></i>
+        </div>
+        <div class="ind-value" id="val-sekolah">8,875</div>
+        <div class="ind-sub" id="sub-sekolah">1.67M Siswa • Rasio Guru 1:17.7</div>
+      </div>
+
+      <!-- 4. Kesehatan -->
+      <div class="indicator-card card-kesehatan">
+        <div class="ind-header">
+          <span class="ind-num-title">4. KESEHATAN</span>
+          <i class="fa-solid fa-hospital ind-icon" style="color: var(--color-rose);"></i>
+        </div>
+        <div class="ind-value" id="val-faskes">6,084</div>
+        <div class="ind-sub" id="sub-faskes">194 RS • 340 Puskesmas</div>
+      </div>
+
+      <!-- 5. Fasilitas Umum -->
+      <div class="indicator-card card-fasum">
+        <div class="ind-header">
+          <span class="ind-num-title">5. FASILITAS UMUM</span>
+          <i class="fa-solid fa-landmark ind-icon" style="color: var(--color-primary);"></i>
+        </div>
+        <div class="ind-value" id="val-fasum">5,482</div>
+        <div class="ind-sub" id="sub-fasum">Taman Kota, RTH, Sarana Olahraga</div>
+      </div>
+
+      <!-- 6. Transportasi Umum -->
+      <div class="indicator-card card-transum">
+        <div class="ind-header">
+          <span class="ind-num-title">6. TRANSPORTASI</span>
+          <i class="fa-solid fa-bus-simple ind-icon" style="color: var(--color-purple);"></i>
+        </div>
+        <div class="ind-value" id="val-transum">210</div>
+        <div class="ind-sub" id="sub-transum">Halte BRT • Cakupan 92.4% Populasi</div>
+      </div>
+    </div>
+
+    <!-- Workspace Split: Interactive Map & Facility Sidebar -->
+    <div class="workspace-split">
+      <!-- Left: Interactive Map -->
+      <div class="map-wrapper">
+        <div class="map-filter-bar">
+          <div class="filter-pills">
+            <button class="pill-btn active" onclick="filterMap('all', this)">
+              <i class="fa-solid fa-layer-group"></i> Semua Kategori
+            </button>
+            <button class="pill-btn" onclick="filterMap('pendidikan', this)">
+              <i class="fa-solid fa-graduation-cap"></i> Pendidikan
+            </button>
+            <button class="pill-btn" onclick="filterMap('kesehatan', this)">
+              <i class="fa-solid fa-hospital"></i> Kesehatan
+            </button>
+            <button class="pill-btn" onclick="filterMap('transum', this)">
+              <i class="fa-solid fa-bus"></i> Transum
+            </button>
+            <button class="pill-btn" onclick="filterMap('fasum', this)">
+              <i class="fa-solid fa-tree"></i> Fasum & RTH
+            </button>
+            <button class="pill-btn" onclick="filterMap('lingkungan', this)">
+              <i class="fa-solid fa-droplet"></i> Kualitas Air
+            </button>
+          </div>
+          <div class="map-counter-tag">
+            <span id="marker-counter">34 Titik Fasilitas Terpantau</span>
+          </div>
+        </div>
+
+        <div id="map"></div>
+      </div>
+
+      <!-- Right: Facility Directory & Quick Detail -->
+      <div class="sidebar-explorer">
+        <div class="panel-box">
+          <div class="panel-header">
+            <h3><i class="fa-solid fa-location-dot" style="color: var(--color-primary);"></i> Direktori Fasilitas Terpilih</h3>
+            <span style="font-size: 0.74rem; color: var(--text-dim);">Klik untuk detail</span>
+          </div>
+
+          <div class="facility-list" id="facility-list-container">
+            <!-- Populated by JavaScript -->
+          </div>
+        </div>
+
+        <div class="panel-box" style="background: rgba(99, 102, 241, 0.08); border-color: rgba(99, 102, 241, 0.25);">
+          <div style="display: flex; gap: 12px; align-items: center;">
+            <div style="font-size: 24px; color: var(--color-indigo);">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h4 style="font-size: 0.88rem; font-weight: 700; color: #fff;">Prinsip Keterbukaan Data (KIP)</h4>
+              <p style="font-size: 0.74rem; color: var(--text-muted); margin-top: 2px;">
+                Semua titik fasilitas dilengkapi transparansi anggaran APBD, kontrak tender LPSE, dan laporan audit BPK RI.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div>
+        <strong>Luma</strong> • Platform Transparansi Fasilitas Publik & Perencanaan Kota Cerdas DKI Jakarta
+      </div>
+      <div>
+        Sumber Data: BPS Provinsi DKI Jakarta, OpenData Jakarta, Dinas Pendidikan, Distamhut, DLH, Dinkes, Dishub.
+      </div>
+    </footer>
+  </main>
+
+  <!-- Side Drawer (Opsi A PRD: Detail Fasilitas & Transparansi Anggaran) -->
+  <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+  <div class="side-drawer" id="side-drawer">
+    <div class="drawer-header">
+      <div>
+        <span class="drawer-cat-tag" id="drawer-cat-tag">KATEGORI FASILITAS</span>
+        <h3 class="drawer-title" id="drawer-place-name">Nama Fasilitas</h3>
+        <p class="drawer-address" id="drawer-address">
+          <i class="fa-solid fa-location-dot"></i> <span>Alamat Lengkap</span>
+        </p>
+      </div>
+      <button class="btn-close-drawer" onclick="closeDrawer()">✕</button>
+    </div>
+
+    <!-- Spesifikasi -->
+    <div class="drawer-section">
+      <div class="drawer-sec-title">
+        <i class="fa-solid fa-circle-info" style="color: var(--color-primary);"></i> Spesifikasi & Kapasitas Fasilitas
+      </div>
+      <div id="drawer-specs-container"></div>
+    </div>
+
+    <!-- Anggaran & LPSE -->
+    <div class="drawer-section">
+      <div class="drawer-sec-title">
+        <i class="fa-solid fa-receipt" style="color: var(--color-green);"></i> Transparansi Anggaran & Pembangunan (LPSE)
+      </div>
+      <div class="budget-highlight" id="drawer-budget-total">Rp 0</div>
+      <div id="drawer-budget-container"></div>
+
+      <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06);">
+        <div style="font-size: 0.74rem; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">
+          DOKUMEN PUBLIK TERBUKA (UNDUH RESMI):
+        </div>
+        <div id="drawer-docs-container"></div>
+      </div>
+    </div>
+
+    <!-- Parameter Radius Lingkungan -->
+    <div class="drawer-section">
+      <div class="drawer-sec-title">
+        <i class="fa-solid fa-compass" style="color: var(--color-amber);"></i> Parameter Lingkungan Radius Fasilitas
+      </div>
+      <div id="drawer-metrics-container"></div>
+    </div>
+  </div>
+
+  <!-- Simulation Modal (Center Modal PRD) -->
+  <div class="modal-overlay" id="sim-modal" onclick="closeSimModalOnBackdrop(event)">
+    <div class="sim-modal-content">
+      <div class="sim-header">
+        <div>
+          <span style="font-size: 0.72rem; font-weight: 700; color: var(--color-purple); text-transform: uppercase;">
+            MODUL SIMULASI DAMPAK PEMBANGUNAN SPASIAL
+          </span>
+          <h3 style="font-size: 1.25rem; font-weight: 800; color: #fff; margin-top: 2px;">
+            Simulasi Aksesibilitas: RSUD Tebet Tahap II & Rawat Inap Terpadu
+          </h3>
+          <p style="font-size: 0.78rem; color: var(--text-muted);">
+            Kalkulasi perluasan jangkauan 15-menit layanan kesehatan dan reduksi blank spot warga.
+          </p>
+        </div>
+        <button class="btn-close-drawer" onclick="closeSimModal()">✕</button>
+      </div>
+
+      <!-- Toggle Condition -->
+      <div class="sim-toggle-row">
+        <button class="sim-tab-btn" id="btn-pre" onclick="setSimState('pre')">
+          Kondisi Eksisting (Sebelum Proyek)
+        </button>
+        <button class="sim-tab-btn active" id="btn-post" onclick="setSimState('post')">
+          ✓ Kondisi Baru (Setelah Pembangunan Beroperasi)
+        </button>
+      </div>
+
+      <!-- Comparison Matrix Table -->
+      <table class="sim-matrix-table">
+        <thead>
+          <tr>
+            <th>Parameter Aksesibilitas</th>
+            <th>Sebelum (Eksisting)</th>
+            <th>Sesudah (Simulasi Baru)</th>
+            <th>Dampak Peningkatan</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight: 700; color: #fff;">Penduduk Terlayani (≤15 Menit)</td>
+            <td>24.800 Jiwa (32%)</td>
+            <td style="color: #34D399; font-weight: 700;">68.200 Jiwa (88%)</td>
+            <td><span class="badge-diff">⬆ +56% Kenaikan</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #fff;">Radius Layanan Ter-cover</td>
+            <td>1.5 Km² (Lokal Tebet)</td>
+            <td style="color: #38BDF8; font-weight: 700;">3.2 Km² (+Manggarai & Pancoran)</td>
+            <td><span class="badge-diff">⬆ +1.7 Km² Coverage</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #fff;">Rata-rata Waktu Tempuh Pasien</td>
+            <td>22 Menit (Jauh/Macet)</td>
+            <td style="color: #FCD34D; font-weight: 700;">9.5 Menit (Cepat)</td>
+            <td><span class="badge-diff">⬇ -57% Lebih Singkat</span></td>
+          </tr>
+          <tr>
+            <td style="font-weight: 700; color: #fff;">Rasio Tempat Tidur RS</td>
+            <td>0.8 / 1.000 Penduduk</td>
+            <td style="color: #A78BFA; font-weight: 700;">1.9 / 1.000 Penduduk</td>
+            <td><span class="badge-diff">✓ Sesuai Standar WHO</span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Progress Construction -->
+      <div class="drawer-section" style="margin-bottom: 0;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+          <span style="font-size: 0.78rem; font-weight: 700; color: #CBD5E1;">Realisasi Fisik Proyek Konstruksi</span>
+          <span style="font-size: 0.82rem; font-weight: 800; color: #34D399;">62.4% (Tepat Waktu)</span>
+        </div>
+        <div style="background: rgba(255,255,255,0.06); height: 8px; border-radius: 9999px; overflow: hidden; margin-bottom: 8px;">
+          <div style="background: linear-gradient(90deg, #10B981, #06B6D4); width: 62.4%; height: 100%;"></div>
+        </div>
+        <div style="font-size: 0.74rem; color: var(--text-dim); display: flex; justify-content: space-between;">
+          <span>Pelaksana: PT Adhi Jaya Konstruksi (HPS 94.2%)</span>
+          <span>Target Selesai: 31 Desember 2026</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Logic & Leaflet Map Integration -->
+  <script>
+    const DATA = {"indicators": {"ALL": {"label": "Seluruh DKI Jakarta", "rth_pct": "5.3%", "rth_target": "Target 30% RTH (Total 5,482 Titik)", "aqi_val": "74", "aqi_status": "Sedang (PM2.5: 22.4 \u00b5g/m\u00b3)", "sekolah_total": "8,875", "sekolah_sub": "1.67M Siswa \u2022 Rasio Guru 1:17.7", "faskes_total": "6,084", "faskes_sub": "194 RS \u2022 340 Puskesmas \u2022 1,280 Klinik", "fasum_total": "5,482", "fasum_sub": "Taman Kota, Hutan Kota, Sarana Olahraga", "transum_total": "210", "transum_sub": "Halte BRT \u2022 Cakupan 92.4% Populasi"}, "JAKARTA BARAT": {"label": "JAKARTA BARAT", "rth_pct": "19.3% dari Total DKI", "rth_target": "1,058 Titik RTH Terverifikasi", "aqi_val": "68", "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi", "sekolah_total": "1,976", "sekolah_sub": "361,133 Siswa \u2022 Rasio 1:18.1", "faskes_total": "1,420", "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama", "fasum_total": "1,058", "fasum_sub": "633 Taman \u2022 379 Jalur Hijau", "transum_total": "28", "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"}, "JAKARTA PUSAT": {"label": "JAKARTA PUSAT", "rth_pct": "14.5% dari Total DKI", "rth_target": "796 Titik RTH Terverifikasi", "aqi_val": "68", "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi", "sekolah_total": "959", "sekolah_sub": "172,160 Siswa \u2022 Rasio 1:17.7", "faskes_total": "730", "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama", "fasum_total": "796", "fasum_sub": "257 Taman \u2022 527 Jalur Hijau", "transum_total": "217", "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"}, "JAKARTA SELATAN": {"label": "JAKARTA SELATAN", "rth_pct": "34.8% dari Total DKI", "rth_target": "1,907 Titik RTH Terverifikasi", "aqi_val": "68", "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi", "sekolah_total": "1,908", "sekolah_sub": "357,034 Siswa \u2022 Rasio 1:16.9", "faskes_total": "1,640", "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama", "fasum_total": "1,907", "fasum_sub": "1223 Taman \u2022 600 Jalur Hijau", "transum_total": "27", "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"}, "JAKARTA TIMUR": {"label": "JAKARTA TIMUR", "rth_pct": "17.8% dari Total DKI", "rth_target": "975 Titik RTH Terverifikasi", "aqi_val": "78", "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi", "sekolah_total": "2,582", "sekolah_sub": "509,684 Siswa \u2022 Rasio 1:18.0", "faskes_total": "1,850", "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama", "fasum_total": "975", "fasum_sub": "602 Taman \u2022 247 Jalur Hijau", "transum_total": "38", "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"}, "JAKARTA UTARA": {"label": "JAKARTA UTARA", "rth_pct": "13.5% dari Total DKI", "rth_target": "742 Titik RTH Terverifikasi", "aqi_val": "82", "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi", "sekolah_total": "1,398", "sekolah_sub": "264,253 Siswa \u2022 Rasio 1:17.9", "faskes_total": "980", "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama", "fasum_total": "742", "fasum_sub": "507 Taman \u2022 197 Jalur Hijau", "transum_total": "25", "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"}, "KEP. SERIBU": {"label": "KEP. SERIBU", "rth_pct": "0.0% dari Total DKI", "rth_target": "0 Titik RTH Terverifikasi", "aqi_val": "68", "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi", "sekolah_total": "52", "sekolah_sub": "6,147 Siswa \u2022 Rasio 1:15.3", "faskes_total": "28", "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama", "fasum_total": "0", "fasum_sub": "0 Taman \u2022 0 Jalur Hijau", "transum_total": "25", "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"}}, "facilities": [{"id": "rth-tebet-ecopark", "name": "Tebet Eco Park", "category": "fasum", "sub_category": "Taman Publik & RTH", "wilayah": "JAKARTA SELATAN", "kecamatan": "TEBET", "address": "Jl. Tebet Barat Raya, RT.1/RW.10, Tebet Barat, Jakarta Selatan", "lat": -6.2366, "lng": 106.8532, "specs": {"Luas": "7.3 Hektar (Zona Utara & Selatan)", "Jam Layanan": "06.00 - 19.00 WIB", "Kapasitas": "8.000 pengunjung / sesi", "Fasilitas Utama": "Jembatan Infinity, Plaza Anak, Wetland Edukasi, Community Lawn"}, "budget": {"total": "Rp 49.300.000.000", "source": "Kompensasi Koefisien Lantai Bangunan (KLB)", "year": "2021 - 2022 (Diresmikan April 2022)", "contractor": "PT. Kencana Alam Persada (Tender LPSE)", "status": "100% Selesai & Beroperasi"}, "metrics": {"aqi": 64, "aqi_status": "Sedang", "pm25": "18.2 \u00b5g/m\u00b3", "walkability": "4.8 / 5.0", "transit_access": "180m ke Halte Transjakarta Tebet Eco Park"}, "docs": [{"title": "Dokumen DED (Detail Engineering Design).pdf", "size": "4.2 MB", "dept": "Dinas Pertamanan"}, {"title": "Kontrak SPK Pengadaan & Penetapan Pemenang.pdf", "size": "1.8 MB", "dept": "LPSE DKI"}, {"title": "Laporan Hasil Audit BPK RI TA 2022.pdf", "size": "2.1 MB", "dept": "BPK Perwakilan DKI (WTP)"}]}, {"id": "faskes-rsud-tebet", "name": "RSUD Tebet", "category": "kesehatan", "sub_category": "Rumah Sakit Umum Daerah Tipe D", "wilayah": "JAKARTA SELATAN", "kecamatan": "TEBET", "address": "Jl. Tebet Timur Dalam Raya No.1, Tebet Timur, Jakarta Selatan", "lat": -6.2325, "lng": 106.855, "specs": {"Tipe Layanan": "RSUD Tipe D (Akreditasi Paripurna KARS)", "Kapasitas Bed": "52 Tempat Tidur (Rawat Inap & ICU)", "Layanan Darurat": "IGD 24 Jam \u2022 3 Unit Ambulans AGD", "Tenaga Medis": "14 Dokter Spesialis, 28 Perawat"}, "budget": {"total": "Rp 68.450.000.000", "source": "APBD Provinsi DKI Jakarta (Dinas Kesehatan)", "year": "Multiyears 2018 - 2020", "contractor": "PT. Pembangunan Jaya Perkasa (LPSE)", "status": "Beroperasi Penuh"}, "metrics": {"aqi": 68, "aqi_status": "Sedang", "pm25": "20.1 \u00b5g/m\u00b3", "walkability": "4.2 / 5.0", "transit_access": "250m ke Stasiun Tebet (KRL Commuter Line)"}, "docs": [{"title": "AMDAL & Studi Kelayakan Faskes.pdf", "size": "3.5 MB", "dept": "Dinas Lingkungan Hidup"}, {"title": "Berita Acara Lelang Konstruksi LPSE.pdf", "size": "2.4 MB", "dept": "BPPBJ DKI"}, {"title": "Sertifikat Laik Fungsi (SLF) Gedung.pdf", "size": "1.2 MB", "dept": "Dinas Cipta Karya"}]}, {"id": "sek-smpn-115", "name": "SMP Negeri 115 Jakarta", "category": "pendidikan", "sub_category": "Sekolah Menengah Pertama Negeri", "wilayah": "JAKARTA SELATAN", "kecamatan": "TEBET", "address": "Jl. KH. Abdullah Syafei No.48, Tebet Timur, Jakarta Selatan", "lat": -6.2268, "lng": 106.8562, "specs": {"Status / Akreditasi": "Negeri \u2022 Akreditasi A (BAN-S/M Unggul)", "Daya Tampung": "320 Siswa / Angkatan (98% Terisi)", "Siswa & Guru": "964 Siswa \u2022 58 Guru (Rasio 1:16.6)", "Fasilitas Belajar": "27 Ruang Kelas, Lab IPA/Komputer, Perpustakaan"}, "budget": {"total": "Rp 14.800.000.000", "source": "APBD DKI Jakarta (Dinas Pendidikan)", "year": "Rehabilitasi Total 2019 (Struktur Ramah Gempa)", "contractor": "PT. Bangun Cipta Sarana (LPSE)", "status": "Selesai Direhab & Beroperasi"}, "metrics": {"aqi": 66, "aqi_status": "Sedang", "pm25": "19.0 \u00b5g/m\u00b3", "walkability": "4.5 / 5.0", "transit_access": "300m ke Halte Transjakarta Kampung Melayu"}, "docs": [{"title": "Dokumen Perencanaan Rehab Gedung Sekolah.pdf", "size": "3.2 MB", "dept": "Disdik DKI"}, {"title": "Berita Acara Serah Terima (BAST) Pekerjaan.pdf", "size": "1.1 MB", "dept": "PPK Disdik"}, {"title": "Laporan Pertanggungjawaban BOS & BOP 2024.pdf", "size": "2.4 MB", "dept": "Audited PPID"}]}, {"id": "proj-rsud-tebet-tahap2", "name": "Pembangunan Gedung RSUD Tebet Tahap II", "category": "kesehatan", "sub_category": "Proyek Konstruksi Faskes Aktif", "wilayah": "JAKARTA SELATAN", "kecamatan": "TEBET", "address": "Jl. Tebet Timur Dalam No.22, Tebet, Jakarta Selatan", "lat": -6.2289, "lng": 106.8542, "is_project": true, "progress": 62.4, "specs": {"Target Fasilitas": "Penambahan 120 Bed Rawat Inap & ICU Terpadu", "Target Selesai": "Desember 2026", "Deviasi Jadwal": "+1.8% (Tepat Waktu)", "Status Lapangan": "Struktur Lantai 4 Tuntas 100%, Pemasangan MEP Berjalan"}, "budget": {"total": "Rp 54.200.000.000", "source": "APBD DKI (Pos Belanja Modal Dinas Kesehatan)", "year": "TA 2025 s/d TA 2026 (Tahun Jamak)", "contractor": "PT Adhi Jaya Konstruksi (HPS 94.2%)", "status": "Tahap Konstruksi (Progress Fisik 62.4%)"}, "simulation": {"service_radius_before": "1.5 km", "service_radius_after": "3.0 km (15 Menit Tempuh)", "pop_before": "24.800 Jiwa (32%)", "pop_after": "68.200 Jiwa (88%) - Kenaikan +56%", "travel_time_before": "22 Menit", "travel_time_after": "9.5 Menit (Penurunan -57%)", "bed_ratio_before": "0.8 / 1.000 Penduduk", "bed_ratio_after": "1.9 / 1.000 Penduduk (Sesuai Standar WHO)"}, "metrics": {"aqi": 72, "aqi_status": "Sedang", "pm25": "23.4 \u00b5g/m\u00b3", "walkability": "4.1 / 5.0", "transit_access": "350m ke Halte Tebet BUMD"}, "docs": [{"title": "Kajian Kelayakan & Simulasi Akses Spasial.pdf", "size": "4.8 MB", "dept": "Bappeda DKI"}, {"title": "Dokumen Kontrak Kerja Konstruksi & SPK.pdf", "size": "2.6 MB", "dept": "LPSE DKI"}, {"title": "Laporan Evaluasi Progres Fisik Triwulan II.pdf", "size": "1.9 MB", "dept": "Konsultan Supervisi"}]}, {"id": "transum-0", "name": "Halte GAMBIR 2", "category": "transum", "sub_category": "Transjakarta KORIDOR 2", "wilayah": "JAKARTA PUSAT", "kecamatan": "GAMBIR", "address": "JL.MERDEKA SELATAN", "lat": -6.18, "lng": 106.82, "specs": {"Rute Koridor": "HARMONI - PULOGADUNG", "Tipe Akses": "PELICAN", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-1", "name": "Halte KWITANG", "category": "transum", "sub_category": "Transjakarta KORIDOR 2", "wilayah": "JAKARTA PUSAT", "kecamatan": "GAMBIR", "address": "JL.KWITANG", "lat": -6.188, "lng": 106.835, "specs": {"Rute Koridor": "HARMONI - PULOGADUNG", "Tipe Akses": "PELICAN", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-2", "name": "Halte TERMINAL KALIDERES", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "TERMINAL KALIDRES", "lat": -6.196, "lng": 106.85, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "PELICAN", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-3", "name": "Halte PESAKIH", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.204, "lng": 106.865, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-4", "name": "Halte SUMUR BOR", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.212, "lng": 106.82, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-5", "name": "Halte RAWA BUAYA", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.22, "lng": 106.835, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / PEMB BARU TH 2010 ( RAMP, TANGGA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-6", "name": "Halte JEMBATAN BARU", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.228, "lng": 106.85, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-7", "name": "Halte DISPENDA", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.236, "lng": 106.865, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / PEMBANGUNAN BARU ( RAMP, SEMUA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-8", "name": "Halte JEMBATAN GANTUNG", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.244, "lng": 106.82, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-9", "name": "Halte TAMAN KOTA", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.252, "lng": 106.835, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP, TANGGA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-10", "name": "Halte INDOSIAR", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.26, "lng": 106.85, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BAJA / PEMBANGUNAN BARU ( RAMP, TANGGA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "transum-11", "name": "Halte JELAMBAR", "category": "transum", "sub_category": "Transjakarta KORIDOR 3", "wilayah": "JAKARTA TIMUR", "kecamatan": "MENTENG", "address": "JL.DAAN MOGOT", "lat": -6.268, "lng": 106.865, "specs": {"Rute Koridor": "KALIDERES - HARMONI", "Tipe Akses": "JPO BETON / EKSISTING ( TANGGA BETON SEMUA )", "Tahun Dibangun": "2004 DAN 2005", "Moda Integrasi": "BRT Utama Transjakarta"}, "budget": {"total": "Termasuk dalam Investasi Koridor BRT DKI", "source": "APBD DKI Jakarta (Dinas Perhubungan)", "year": "2004 DAN 2005", "contractor": "PT Transportasi Jakarta", "status": "Operasional 24 Jam"}, "metrics": {"aqi": 75, "aqi_status": "Sedang", "pm25": "24.5 \u00b5g/m\u00b3", "walkability": "4.6 / 5.0", "transit_access": "Terintegrasi Langsung Jalur Busway"}, "docs": [{"title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf", "size": "1.5 MB", "dept": "Dishub DKI"}]}, {"id": "rth-node-0", "name": "Taman Bumi Perkemahan Ragunan", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA SELATAN", "kecamatan": "PASAR MINGGU", "address": "Wilayah JAKARTA SELATAN, DKI Jakarta", "lat": -6.312, "lng": 106.823, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "rth-node-1", "name": "Taman Puring", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA SELATAN", "kecamatan": "KEBAYORAN BARU", "address": "Wilayah JAKARTA SELATAN, DKI Jakarta", "lat": -6.242, "lng": 106.793, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "rth-node-2", "name": "Taman Suropati", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA PUSAT", "kecamatan": "MENTENG", "address": "Wilayah JAKARTA PUSAT, DKI Jakarta", "lat": -6.199, "lng": 106.832, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "rth-node-3", "name": "Taman Menteng", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA PUSAT", "kecamatan": "MENTENG", "address": "Wilayah JAKARTA PUSAT, DKI Jakarta", "lat": -6.196, "lng": 106.829, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "rth-node-4", "name": "Taman Ayodya", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA SELATAN", "kecamatan": "KEBAYORAN BARU", "address": "Wilayah JAKARTA SELATAN, DKI Jakarta", "lat": -6.244, "lng": 106.795, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "rth-node-5", "name": "Hutan Kota Srengseng", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA BARAT", "kecamatan": "KEMBANGAN", "address": "Wilayah JAKARTA BARAT, DKI Jakarta", "lat": -6.208, "lng": 106.762, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "rth-node-6", "name": "Taman Waduk Pluit", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA UTARA", "kecamatan": "PENJARINGAN", "address": "Wilayah JAKARTA UTARA, DKI Jakarta", "lat": -6.119, "lng": 106.797, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "rth-node-7", "name": "Taman Kota Waduk Ria Rio", "category": "fasum", "sub_category": "Ruang Terbuka Hijau & Taman Publik", "wilayah": "JAKARTA TIMUR", "kecamatan": "PULOGADUNG", "address": "Wilayah JAKARTA TIMUR, DKI Jakarta", "lat": -6.172, "lng": 106.883, "specs": {"Tipe": "Taman Kota / RTH Aktif", "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta", "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"}, "budget": {"total": "Alokasi Pemeliharaan Rutin Distamhut", "source": "APBD DKI Jakarta", "year": "2022 - 2024", "contractor": "Suku Dinas Pertamanan Wilayah", "status": "Terbuka untuk Umum (Gratis)"}, "metrics": {"aqi": 58, "aqi_status": "Sedang", "pm25": "15.4 \u00b5g/m\u00b3", "walkability": "4.9 / 5.0", "transit_access": "Radius <500m dari Titik Akses Transit"}, "docs": [{"title": "Masterplan RTH DKI Jakarta 2030.pdf", "size": "5.6 MB", "dept": "Distamhut DKI"}]}, {"id": "sekolah-node-0", "name": "SMA Negeri 8 Jakarta", "category": "pendidikan", "sub_category": "Satuan Pendidikan Negeri (SMA)", "wilayah": "JAKARTA SELATAN", "kecamatan": "TEBET", "address": "Kecamatan TEBET, JAKARTA SELATAN", "lat": -6.223, "lng": 106.862, "specs": {"Jenjang": "SMA", "Status": "NEGERI \u2022 Akreditasi A", "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital", "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"}, "budget": {"total": "Dana BOS & BOP Prov. DKI Jakarta", "source": "APBD DKI Jakarta (Dinas Pendidikan)", "year": "Anggaran Berjalan TA 2024", "contractor": "Dinas Pendidikan Provinsi DKI Jakarta", "status": "Aktif Pembelajaran"}, "metrics": {"aqi": 65, "aqi_status": "Sedang", "pm25": "18.5 \u00b5g/m\u00b3", "walkability": "4.4 / 5.0", "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"}, "docs": [{"title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf", "size": "3.1 MB", "dept": "Disdik DKI"}]}, {"id": "sekolah-node-1", "name": "SMP Negeri 1 Jakarta", "category": "pendidikan", "sub_category": "Satuan Pendidikan Negeri (SMP)", "wilayah": "JAKARTA PUSAT", "kecamatan": "SAWAH BESAR", "address": "Kecamatan SAWAH BESAR, JAKARTA PUSAT", "lat": -6.168, "lng": 106.833, "specs": {"Jenjang": "SMP", "Status": "NEGERI \u2022 Akreditasi A", "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital", "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"}, "budget": {"total": "Dana BOS & BOP Prov. DKI Jakarta", "source": "APBD DKI Jakarta (Dinas Pendidikan)", "year": "Anggaran Berjalan TA 2024", "contractor": "Dinas Pendidikan Provinsi DKI Jakarta", "status": "Aktif Pembelajaran"}, "metrics": {"aqi": 65, "aqi_status": "Sedang", "pm25": "18.5 \u00b5g/m\u00b3", "walkability": "4.4 / 5.0", "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"}, "docs": [{"title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf", "size": "3.1 MB", "dept": "Disdik DKI"}]}, {"id": "sekolah-node-2", "name": "SD Negeri Menteng 01", "category": "pendidikan", "sub_category": "Satuan Pendidikan Negeri (SD)", "wilayah": "JAKARTA PUSAT", "kecamatan": "MENTENG", "address": "Kecamatan MENTENG, JAKARTA PUSAT", "lat": -6.198, "lng": 106.835, "specs": {"Jenjang": "SD", "Status": "NEGERI \u2022 Akreditasi A", "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital", "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"}, "budget": {"total": "Dana BOS & BOP Prov. DKI Jakarta", "source": "APBD DKI Jakarta (Dinas Pendidikan)", "year": "Anggaran Berjalan TA 2024", "contractor": "Dinas Pendidikan Provinsi DKI Jakarta", "status": "Aktif Pembelajaran"}, "metrics": {"aqi": 65, "aqi_status": "Sedang", "pm25": "18.5 \u00b5g/m\u00b3", "walkability": "4.4 / 5.0", "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"}, "docs": [{"title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf", "size": "3.1 MB", "dept": "Disdik DKI"}]}, {"id": "sekolah-node-3", "name": "SMK Negeri 26 Jakarta", "category": "pendidikan", "sub_category": "Satuan Pendidikan Negeri (SMK)", "wilayah": "JAKARTA TIMUR", "kecamatan": "PULOGADUNG", "address": "Kecamatan PULOGADUNG, JAKARTA TIMUR", "lat": -6.195, "lng": 106.885, "specs": {"Jenjang": "SMK", "Status": "NEGERI \u2022 Akreditasi A", "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital", "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"}, "budget": {"total": "Dana BOS & BOP Prov. DKI Jakarta", "source": "APBD DKI Jakarta (Dinas Pendidikan)", "year": "Anggaran Berjalan TA 2024", "contractor": "Dinas Pendidikan Provinsi DKI Jakarta", "status": "Aktif Pembelajaran"}, "metrics": {"aqi": 65, "aqi_status": "Sedang", "pm25": "18.5 \u00b5g/m\u00b3", "walkability": "4.4 / 5.0", "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"}, "docs": [{"title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf", "size": "3.1 MB", "dept": "Disdik DKI"}]}, {"id": "sekolah-node-4", "name": "SMA Negeri 70 Jakarta", "category": "pendidikan", "sub_category": "Satuan Pendidikan Negeri (SMA)", "wilayah": "JAKARTA SELATAN", "kecamatan": "KEBAYORAN BARU", "address": "Kecamatan KEBAYORAN BARU, JAKARTA SELATAN", "lat": -6.241, "lng": 106.797, "specs": {"Jenjang": "SMA", "Status": "NEGERI \u2022 Akreditasi A", "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital", "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"}, "budget": {"total": "Dana BOS & BOP Prov. DKI Jakarta", "source": "APBD DKI Jakarta (Dinas Pendidikan)", "year": "Anggaran Berjalan TA 2024", "contractor": "Dinas Pendidikan Provinsi DKI Jakarta", "status": "Aktif Pembelajaran"}, "metrics": {"aqi": 65, "aqi_status": "Sedang", "pm25": "18.5 \u00b5g/m\u00b3", "walkability": "4.4 / 5.0", "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"}, "docs": [{"title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf", "size": "3.1 MB", "dept": "Disdik DKI"}]}, {"id": "sekolah-node-5", "name": "SMA Negeri 78 Jakarta", "category": "pendidikan", "sub_category": "Satuan Pendidikan Negeri (SMA)", "wilayah": "JAKARTA BARAT", "kecamatan": "PALMERAH", "address": "Kecamatan PALMERAH, JAKARTA BARAT", "lat": -6.185, "lng": 106.779, "specs": {"Jenjang": "SMA", "Status": "NEGERI \u2022 Akreditasi A", "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital", "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"}, "budget": {"total": "Dana BOS & BOP Prov. DKI Jakarta", "source": "APBD DKI Jakarta (Dinas Pendidikan)", "year": "Anggaran Berjalan TA 2024", "contractor": "Dinas Pendidikan Provinsi DKI Jakarta", "status": "Aktif Pembelajaran"}, "metrics": {"aqi": 65, "aqi_status": "Sedang", "pm25": "18.5 \u00b5g/m\u00b3", "walkability": "4.4 / 5.0", "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"}, "docs": [{"title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf", "size": "3.1 MB", "dept": "Disdik DKI"}]}, {"id": "water-node-0", "name": "Titik Pantau Ciliwung Manggarai", "category": "lingkungan", "sub_category": "Titik Pemantauan Kualitas Air Sungai", "wilayah": "JAKARTA SELATAN", "kecamatan": "TEBET", "address": "Pintu Air Manggarai", "lat": -6.2085, "lng": 106.8485, "specs": {"Sungai": "CILIWUNG", "Periode Uji": "Triwulan Pemantauan Berkala", "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi", "Status Uji": "BOD, COD, & DO Terpantau Terbuka"}, "budget": {"total": "Program Pengendalian Pencemaran Air DLH", "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)", "year": "TA 2024 - 2026", "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)", "status": "Pemantauan Aktif"}, "metrics": {"aqi": 70, "aqi_status": "Sedang", "pm25": "21.0 \u00b5g/m\u00b3", "walkability": "3.8 / 5.0", "transit_access": "Akses Inspeksi Sungai"}, "docs": [{"title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf", "size": "8.4 MB", "dept": "Dinas Lingkungan Hidup"}]}, {"id": "water-node-1", "name": "Titik Pantau Kalibaru Timur Komseko", "category": "lingkungan", "sub_category": "Titik Pemantauan Kualitas Air Sungai", "wilayah": "JAKARTA TIMUR", "kecamatan": "PASAR REBO", "address": "Jl. Raya Bogor", "lat": -6.2861, "lng": 106.8706, "specs": {"Sungai": "KALIBARU TIMUR", "Periode Uji": "Triwulan Pemantauan Berkala", "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi", "Status Uji": "BOD, COD, & DO Terpantau Terbuka"}, "budget": {"total": "Program Pengendalian Pencemaran Air DLH", "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)", "year": "TA 2024 - 2026", "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)", "status": "Pemantauan Aktif"}, "metrics": {"aqi": 70, "aqi_status": "Sedang", "pm25": "21.0 \u00b5g/m\u00b3", "walkability": "3.8 / 5.0", "transit_access": "Akses Inspeksi Sungai"}, "docs": [{"title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf", "size": "8.4 MB", "dept": "Dinas Lingkungan Hidup"}]}, {"id": "water-node-2", "name": "Titik Pantau Angke Kedaung", "category": "lingkungan", "sub_category": "Titik Pemantauan Kualitas Air Sungai", "wilayah": "JAKARTA TIMUR", "kecamatan": "PASAR REBO", "address": "Jembatan Gantung", "lat": -6.145, "lng": 106.745, "specs": {"Sungai": "ANGKE", "Periode Uji": "Triwulan Pemantauan Berkala", "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi", "Status Uji": "BOD, COD, & DO Terpantau Terbuka"}, "budget": {"total": "Program Pengendalian Pencemaran Air DLH", "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)", "year": "TA 2024 - 2026", "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)", "status": "Pemantauan Aktif"}, "metrics": {"aqi": 70, "aqi_status": "Sedang", "pm25": "21.0 \u00b5g/m\u00b3", "walkability": "3.8 / 5.0", "transit_access": "Akses Inspeksi Sungai"}, "docs": [{"title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf", "size": "8.4 MB", "dept": "Dinas Lingkungan Hidup"}]}, {"id": "water-node-3", "name": "Titik Pantau Pesanggrahan Cipulir", "category": "lingkungan", "sub_category": "Titik Pemantauan Kualitas Air Sungai", "wilayah": "JAKARTA SELATAN", "kecamatan": "PASAR REBO", "address": "Cipulir", "lat": -6.235, "lng": 106.772, "specs": {"Sungai": "PESANGGRAHAN", "Periode Uji": "Triwulan Pemantauan Berkala", "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi", "Status Uji": "BOD, COD, & DO Terpantau Terbuka"}, "budget": {"total": "Program Pengendalian Pencemaran Air DLH", "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)", "year": "TA 2024 - 2026", "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)", "status": "Pemantauan Aktif"}, "metrics": {"aqi": 70, "aqi_status": "Sedang", "pm25": "21.0 \u00b5g/m\u00b3", "walkability": "3.8 / 5.0", "transit_access": "Akses Inspeksi Sungai"}, "docs": [{"title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf", "size": "8.4 MB", "dept": "Dinas Lingkungan Hidup"}]}], "wilayah_list": ["ALL", "JAKARTA SELATAN", "JAKARTA TIMUR", "JAKARTA BARAT", "JAKARTA PUSAT", "JAKARTA UTARA", "KEP. SERIBU"]};
+
+    let map;
+    let markers = [];
+    let currentFilter = 'all';
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initMap();
+      renderFacilityList(DATA.facilities);
+      updateIndicators('ALL');
+    });
+
+    // Initialize Map with dark tiles
+    function initMap() {
+      map = L.map('map', {
+        center: [-6.2088, 106.8456],
+        zoom: 12,
+        zoomControl: true
+      });
+
+      // High-end Dark Tile Layer (CartoDB Dark Matter)
+      L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        subdomains: 'abcd',
+        maxZoom: 19
+      }).addTo(map);
+
+      renderMarkers(DATA.facilities);
+    }
+
+    // Get color by category
+    function getCategoryColor(cat) {
+      switch(cat) {
+        case 'pendidikan': return '#6366F1';
+        case 'kesehatan': return '#F43F5E';
+        case 'transum': return '#8B5CF6';
+        case 'fasum': return '#06B6D4';
+        case 'lingkungan': return '#10B981';
+        default: return '#3B82F6';
+      }
+    }
+
+    function getCategoryIcon(cat) {
+      switch(cat) {
+        case 'pendidikan': return 'fa-graduation-cap';
+        case 'kesehatan': return 'fa-hospital';
+        case 'transum': return 'fa-bus';
+        case 'fasum': return 'fa-tree';
+        case 'lingkungan': return 'fa-droplet';
+        default: return 'fa-location-dot';
+      }
+    }
+
+    // Render Markers on Map
+    function renderMarkers(items) {
+      // Clear existing markers
+      markers.forEach(m => map.removeLayer(m));
+      markers = [];
+
+      items.forEach(item => {
+        const color = getCategoryColor(item.category);
+        const iconClass = getCategoryIcon(item.category);
+
+        // Custom Leaflet DivIcon
+        const customIcon = L.divIcon({
+          className: 'custom-map-pin',
+          html: `
+            <div style="
+              width: 34px; height: 34px; border-radius: 50%;
+              background: ${color}; border: 2px solid #FFFFFF;
+              box-shadow: 0 0 14px ${color};
+              display: flex; align-items: center; justify-content: center;
+              color: #FFFFFF; font-size: 13px; cursor: pointer;
+            ">
+              <i class="fa-solid ${iconClass}"></i>
+            </div>
+          `,
+          iconSize: [34, 34],
+          iconAnchor: [17, 17]
+        });
+
+        const marker = L.marker([item.lat, item.lng], { icon: customIcon }).addTo(map);
+
+        // Popup content
+        const popupContent = `
+          <div class="custom-popup-content">
+            <span class="popup-cat">${item.sub_category}</span>
+            <h4 class="popup-title">${item.name}</h4>
+            <p class="popup-addr">${item.address}</p>
+            <a href="javascript:void(0)" class="popup-btn" onclick="openFacilityDetail('${item.id}')">
+              Lihat Detail & Transparansi Anggaran &rarr;
+            </a>
+          </div>
+        `;
+
+        marker.bindPopup(popupContent);
+        marker.on('click', () => {
+          highlightFacilityCard(item.id);
+        });
+
+        markers.push(marker);
+      });
+
+      document.getElementById('marker-counter').innerText = `${items.length} Titik Fasilitas Terpantau`;
+    }
+
+    // Filter Map by Category
+    function filterMap(cat, btn) {
+      currentFilter = cat;
+      document.querySelectorAll('.pill-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+
+      let filtered = DATA.facilities;
+      if (cat !== 'all') {
+        filtered = DATA.facilities.filter(f => f.category === cat);
+      }
+
+      renderMarkers(filtered);
+      renderFacilityList(filtered);
+    }
+
+    // Render Facility List on Right Sidebar
+    function renderFacilityList(items) {
+      const container = document.getElementById('facility-list-container');
+      container.innerHTML = items.map(f => `
+        <div class="facility-card" id="card-${f.id}" onclick="openFacilityDetail('${f.id}')">
+          <div class="fc-top">
+            <span class="fc-badge badge-${f.category}">${f.sub_category}</span>
+            <span style="font-size: 0.68rem; color: var(--text-dim);">${f.wilayah}</span>
+          </div>
+          <div class="fc-title">${f.name}</div>
+          <div class="fc-addr"><i class="fa-solid fa-location-dot"></i> ${f.address}</div>
+        </div>
+      `).join('');
+    }
+
+    function highlightFacilityCard(id) {
+      document.querySelectorAll('.facility-card').forEach(c => c.classList.remove('active'));
+      const target = document.getElementById(`card-${id}`);
+      if (target) {
+        target.classList.add('active');
+        target.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // Update 6 Indicators on Wilayah change
+    function onWilayahChange(wilayah) {
+      updateIndicators(wilayah);
+
+      // Pan map to region center
+      const coords = {
+        'ALL': [-6.2088, 106.8456, 12],
+        'JAKARTA SELATAN': [-6.2615, 106.8106, 13],
+        'JAKARTA TIMUR': [-6.2250, 106.9004, 13],
+        'JAKARTA BARAT': [-6.1683, 106.7588, 13],
+        'JAKARTA PUSAT': [-6.1805, 106.8284, 14],
+        'JAKARTA UTARA': [-6.1384, 106.8640, 13],
+        'KEP. SERIBU': [-5.6122, 106.5622, 11]
+      };
+
+      if (coords[wilayah]) {
+        map.flyTo([coords[wilayah][0], coords[wilayah][1]], coords[wilayah][2], { duration: 1.2 });
+      }
+
+      // Filter facilities in region if not ALL
+      let filtered = DATA.facilities;
+      if (wilayah !== 'ALL') {
+        filtered = DATA.facilities.filter(f => f.wilayah === wilayah);
+        if (currentFilter !== 'all') {
+          filtered = filtered.filter(f => f.category === currentFilter);
+        }
+      }
+      renderMarkers(filtered);
+      renderFacilityList(filtered);
+    }
+
+    function updateIndicators(wilayah) {
+      const ind = DATA.indicators[wilayah] || DATA.indicators['ALL'];
+
+      document.getElementById('current-wilayah-title').innerText = `Ringkasan 6 Indikator Wilayah: ${ind.label}`;
+      document.getElementById('val-rth').innerText = ind.rth_pct;
+      document.getElementById('sub-rth').innerText = ind.rth_target;
+
+      document.getElementById('val-udara').innerText = `AQI ${ind.aqi_val}`;
+      document.getElementById('sub-udara').innerText = ind.aqi_status;
+
+      document.getElementById('val-sekolah').innerText = ind.sekolah_total;
+      document.getElementById('sub-sekolah').innerText = ind.sekolah_sub;
+
+      document.getElementById('val-faskes').innerText = ind.faskes_total;
+      document.getElementById('sub-faskes').innerText = ind.faskes_sub;
+
+      document.getElementById('val-fasum').innerText = ind.fasum_total;
+      document.getElementById('sub-fasum').innerText = ind.fasum_sub;
+
+      document.getElementById('val-transum').innerText = ind.transum_total;
+      document.getElementById('sub-transum').innerText = ind.transum_sub;
+    }
+
+    // Open Facility Detail Drawer
+    function openFacilityDetail(id) {
+      const item = DATA.facilities.find(f => f.id === id);
+      if (!item) return;
+
+      highlightFacilityCard(id);
+
+      document.getElementById('drawer-cat-tag').innerText = item.sub_category;
+      document.getElementById('drawer-place-name').innerText = item.name;
+      document.getElementById('drawer-address').innerHTML = `<i class="fa-solid fa-location-dot"></i> ${item.address} (${item.wilayah})`;
+
+      // Specs
+      const specsHtml = Object.entries(item.specs || {}).map(([k, v]) => `
+        <div class="spec-item">
+          <span class="spec-label">${k}</span>
+          <span class="spec-val">${v}</span>
+        </div>
+      `).join('');
+      document.getElementById('drawer-specs-container').innerHTML = specsHtml;
+
+      // Budget
+      const b = item.budget || {};
+      document.getElementById('drawer-budget-total').innerText = b.total || 'Termasuk Program APBD';
+      const budgetHtml = `
+        <div class="spec-item"><span class="spec-label">Sumber Dana</span><span class="spec-val">${b.source || '-'}</span></div>
+        <div class="spec-item"><span class="spec-label">Tahun Pelaksanaan</span><span class="spec-val">${b.year || '-'}</span></div>
+        <div class="spec-item"><span class="spec-label">Pelaksana / Tender</span><span class="spec-val">${b.contractor || '-'}</span></div>
+        <div class="spec-item"><span class="spec-label">Status Realisasi</span><span class="spec-val" style="color: #34D399;">${b.status || '-'}</span></div>
+      `;
+      document.getElementById('drawer-budget-container').innerHTML = budgetHtml;
+
+      // Docs
+      const docsHtml = (item.docs || []).map(d => `
+        <div class="doc-row">
+          <div class="doc-name"><i class="fa-regular fa-file-pdf" style="color: #FDA4AF;"></i> ${d.title} <span style="color: var(--text-dim);">(${d.size})</span></div>
+          <a href="javascript:alert('Mengunduh: ' + '${d.title}')" class="doc-down-btn">[Unduh]</a>
+        </div>
+      `).join('');
+      document.getElementById('drawer-docs-container').innerHTML = docsHtml || '<span style="color: var(--text-dim); font-size: 0.74rem;">Dokumen publik terverifikasi di portal PPID DKI.</span>';
+
+      // Metrics Radius
+      const m = item.metrics || {};
+      const metricsHtml = `
+        <div class="spec-item"><span class="spec-label">Sensor Udara Terdekat</span><span class="spec-val">AQI ${m.aqi || 65} (${m.aqi_status || 'Sedang'}) • PM2.5: ${m.pm25 || '18 µg/m³'}</span></div>
+        <div class="spec-item"><span class="spec-label">Walkability Index</span><span class="spec-val" style="color: #38BDF8;">${m.walkability || '4.5 / 5.0'}</span></div>
+        <div class="spec-item"><span class="spec-label">Akses Transportasi</span><span class="spec-val">${m.transit_access || 'Terjangkau Angkutan Umum'}</span></div>
+      `;
+      document.getElementById('drawer-metrics-container').innerHTML = metricsHtml;
+
+      document.getElementById('drawer-overlay').classList.add('open');
+      document.getElementById('side-drawer').classList.add('open');
+
+      // Center map on facility
+      map.panTo([item.lat, item.lng]);
+    }
+
+    function closeDrawer() {
+      document.getElementById('drawer-overlay').classList.remove('open');
+      document.getElementById('side-drawer').classList.remove('open');
+    }
+
+    // Simulation Modal Functions
+    function openSimModal() {
+      document.getElementById('sim-modal').classList.add('open');
+    }
+
+    function closeSimModal() {
+      document.getElementById('sim-modal').classList.remove('open');
+    }
+
+    function closeSimModalOnBackdrop(e) {
+      if (e.target.id === 'sim-modal') closeSimModal();
+    }
+
+    function setSimState(state) {
+      if (state === 'pre') {
+        document.getElementById('btn-pre').classList.add('active');
+        document.getElementById('btn-post').classList.remove('active');
+      } else {
+        document.getElementById('btn-post').classList.add('active');
+        document.getElementById('btn-pre').classList.remove('active');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luma - Dashboard Visualisasi & Normalisasi Dataset DKI Jakarta</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- ApexCharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+  <style>
+    :root {
+      --bg-base: #080c16;
+      --bg-card: rgba(18, 26, 43, 0.75);
+      --bg-card-hover: rgba(28, 38, 62, 0.85);
+      --border-card: rgba(255, 255, 255, 0.08);
+      --border-accent: rgba(56, 189, 248, 0.25);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent-cyan: #06b6d4;
+      --accent-blue: #3b82f6;
+      --accent-emerald: #10b981;
+      --accent-purple: #8b5cf6;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --accent-indigo: #6366f1;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--bg-base);
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.05) 0px, transparent 50%);
+      background-attachment: fixed;
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Header Nav */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(8, 12, 22, 0.85);
+      border-bottom: 1px solid var(--border-card);
+      padding: 14px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #06b6d4, #3b82f6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
+    }
+
+    .brand-title h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      background: linear-gradient(to right, #ffffff, #94a3b8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-title span {
+      font-size: 0.75rem;
+      color: var(--accent-cyan);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .header-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #34d399;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 28px 32px 64px 32px;
+    }
+
+    /* Hero Section */
+    .hero {
+      margin-bottom: 28px;
+    }
+
+    .hero-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 6px;
+    }
+
+    .hero-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      max-width: 850px;
+    }
+
+    /* KPI Cards Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .kpi-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--border-accent);
+      background: var(--bg-card-hover);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    .kpi-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .kpi-card.cyan::before { background: var(--accent-cyan); }
+    .kpi-card.emerald::before { background: var(--accent-emerald); }
+    .kpi-card.indigo::before { background: var(--accent-indigo); }
+    .kpi-card.purple::before { background: var(--accent-purple); }
+    .kpi-card.amber::before { background: var(--accent-amber); }
+    .kpi-card.rose::before { background: var(--accent-rose); }
+
+    .kpi-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .kpi-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .kpi-icon {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+
+    .kpi-value {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .kpi-sub span.highlight {
+      color: #34d399;
+      font-weight: 600;
+    }
+
+    /* Navigation Tabs */
+    .tabs-nav {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--border-card);
+    }
+
+    .tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-card);
+      color: var(--text-muted);
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
+      border-color: var(--accent-cyan);
+      color: #38bdf8;
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.2);
+    }
+
+    /* Tab Content Panes */
+    .tab-pane {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Charts Grid */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+
+    .col-12 { grid-column: span 12; }
+    .col-8 { grid-column: span 8; }
+    .col-7 { grid-column: span 7; }
+    .col-6 { grid-column: span 6; }
+    .col-5 { grid-column: span 5; }
+    .col-4 { grid-column: span 4; }
+
+    @media (max-width: 1024px) {
+      .col-8, .col-7, .col-6, .col-5, .col-4 {
+        grid-column: span 12;
+      }
+    }
+
+    .chart-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 22px;
+      backdrop-filter: blur(12px);
+      position: relative;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .chart-title h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .chart-title p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 3px;
+    }
+
+    .chart-badge {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-card);
+      padding: 4px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Table Styles */
+    .table-container {
+      max-height: 420px;
+      overflow-y: auto;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-card);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.84rem;
+    }
+
+    thead th {
+      position: sticky;
+      top: 0;
+      background: #111a2e;
+      color: var(--text-muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.72rem;
+      letter-spacing: 0.05em;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-card);
+      z-index: 10;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      transition: background 0.15s ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    tbody td {
+      padding: 11px 14px;
+      color: var(--text-main);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+    }
+
+    .status-danger {
+      background: rgba(244, 63, 94, 0.15);
+      color: #fb7185;
+      border: 1px solid rgba(244, 63, 94, 0.3);
+    }
+
+    .status-warning {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .status-success {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    /* Catalog Cards */
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .catalog-item {
+      background: rgba(18, 26, 43, 0.6);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.2s ease;
+    }
+
+    .catalog-item:hover {
+      border-color: var(--border-accent);
+      background: rgba(24, 34, 56, 0.8);
+    }
+
+    .catalog-top {
+      margin-bottom: 16px;
+    }
+
+    .catalog-tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+
+    .tag-air { background: rgba(6, 182, 212, 0.15); color: #22d3ee; border: 1px solid rgba(6, 182, 212, 0.3); }
+    .tag-rth { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-transum { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .tag-udara { background: rgba(139, 92, 246, 0.15); color: #a78bfa; border: 1px solid rgba(139, 92, 246, 0.3); }
+    .tag-kesehatan { background: rgba(244, 63, 94, 0.15); color: #fb7185; border: 1px solid rgba(244, 63, 94, 0.3); }
+    .tag-sekolah { background: rgba(99, 102, 241, 0.15); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); }
+
+    .catalog-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+
+    .catalog-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .catalog-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-chart-pie"></i>
+      </div>
+      <div class="brand-title">
+        <h1>Luma Data Intelligence</h1>
+        <span>DKI Jakarta Urban Dataset Normalization & Analytics</span>
+      </div>
+    </div>
+    <div class="header-badge">
+      <div class="pulse-dot"></div>
+      <span>34,800+ Data Records Normalized</span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main>
+    <!-- Hero / Headline -->
+    <div class="hero">
+      <h2 class="hero-title">Pusat Analisis & Visualisasi Multisektoral DKI Jakarta</h2>
+      <p class="hero-desc">
+        Data hasil normalisasi komprehensif dari Dinas Pendidikan, Dinas Lingkungan Hidup, Dinas Pertamanan & Hutan Kota, Dinas Perhubungan, dan Dinas Kesehatan Provinsi DKI Jakarta.
+      </p>
+    </div>
+
+    <!-- KPI Metric Cards Grid -->
+    <div class="kpi-grid">
+      <div class="kpi-card indigo">
+        <div class="kpi-header">
+          <span class="kpi-label">Basis Data Sekolah</span>
+          <i class="fa-solid fa-graduation-cap kpi-icon" style="color: var(--accent-indigo)"></i>
+        </div>
+        <div class="kpi-value">8,875</div>
+        <div class="kpi-sub">
+          <span>1.67M Siswa | 94.2k Guru</span>
+          <span class="highlight">SD s/d SMK</span>
+        </div>
+      </div>
+
+      <div class="kpi-card cyan">
+        <div class="kpi-header">
+          <span class="kpi-label">Kualitas Air Sungai</span>
+          <i class="fa-solid fa-droplet kpi-icon" style="color: var(--accent-cyan)"></i>
+        </div>
+        <div class="kpi-value">19,200</div>
+        <div class="kpi-sub">
+          <span>23 Sungai di Jakarta</span>
+          <span class="highlight">31 Parameter</span>
+        </div>
+      </div>
+
+      <div class="kpi-card emerald">
+        <div class="kpi-header">
+          <span class="kpi-label">Ruang Terbuka Hijau</span>
+          <i class="fa-solid fa-tree kpi-icon" style="color: var(--accent-emerald)"></i>
+        </div>
+        <div class="kpi-value">5,482</div>
+        <div class="kpi-sub">
+          <span>Taman, Jalur Hijau, Hutan</span>
+          <span class="highlight">6 Wilayah</span>
+        </div>
+      </div>
+
+      <div class="kpi-card purple">
+        <div class="kpi-header">
+          <span class="kpi-label">Halte Transjakarta</span>
+          <i class="fa-solid fa-bus kpi-icon" style="color: var(--accent-purple)"></i>
+        </div>
+        <div class="kpi-value">210</div>
+        <div class="kpi-sub">
+          <span>12 Koridor Utama</span>
+          <span class="highlight">Pelican & JPO</span>
+        </div>
+      </div>
+
+      <div class="kpi-card amber">
+        <div class="kpi-header">
+          <span class="kpi-label">Cakupan Transit 2025</span>
+          <i class="fa-solid fa-route kpi-icon" style="color: var(--accent-amber)"></i>
+        </div>
+        <div class="kpi-value">92.4%</div>
+        <div class="kpi-sub">
+          <span>Populasi Terlayani</span>
+          <span class="highlight">86.4% Luas Area</span>
+        </div>
+      </div>
+
+      <div class="kpi-card rose">
+        <div class="kpi-header">
+          <span class="kpi-label">Stasiun SPKU Udara</span>
+          <i class="fa-solid fa-wind kpi-icon" style="color: var(--accent-rose)"></i>
+        </div>
+        <div class="kpi-value">5 Stasiun</div>
+        <div class="kpi-sub">
+          <span>Pemantauan ISPU Real-time</span>
+          <span class="highlight">PM2.5 & O3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Tabs Navigation -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('tab-overview', this)">
+        <i class="fa-solid fa-layer-group"></i> Ringkasan Eksekutif
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-sekolah', this)">
+        <i class="fa-solid fa-graduation-cap"></i> Data Sekolah (8.8k)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-air', this)">
+        <i class="fa-solid fa-droplet"></i> Kualitas Air (19.2k)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-rth', this)">
+        <i class="fa-solid fa-tree"></i> Ruang Terbuka Hijau (5.4k)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-transum', this)">
+        <i class="fa-solid fa-bus"></i> Transportasi Umum
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-udara', this)">
+        <i class="fa-solid fa-wind"></i> Kualitas Udara (ISPU)
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-kesehatan', this)">
+        <i class="fa-solid fa-hospital"></i> Sarana Kesehatan
+      </button>
+      <button class="tab-btn" onclick="switchTab('tab-catalog', this)">
+        <i class="fa-solid fa-database"></i> Katalog Dataset Normalisasi
+      </button>
+    </div>
+
+    <!-- ==================== TAB: OVERVIEW ==================== -->
+    <div id="tab-overview" class="tab-pane active">
+      <div class="charts-grid">
+        <div class="chart-card col-8">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-chart-column" style="color: var(--accent-cyan)"></i> Matriks Distribusi Dataset per Sektor</h3>
+              <p>Perbandingan volume data dinormalisasi dari 6 kategori domain</p>
+            </div>
+            <span class="chart-badge">Volume Data</span>
+          </div>
+          <div id="chart-overview-volume"></div>
+        </div>
+
+        <div class="chart-card col-4">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-chart-pie" style="color: var(--accent-indigo)"></i> Proporsi Jenjang Sekolah</h3>
+              <p>Distribusi 8,875 sekolah menurut tingkatan</p>
+            </div>
+          </div>
+          <div id="chart-overview-sekolah-pie"></div>
+        </div>
+
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-chart-line" style="color: var(--accent-blue)"></i> Tren Kualitas Air Sungai Multi-Periode</h3>
+              <p>Rata-rata konsentrasi polutan organik BOD & COD (mg/L)</p>
+            </div>
+            <span class="chart-badge">mg/L</span>
+          </div>
+          <div id="chart-overview-air-trend"></div>
+        </div>
+
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-gauge" style="color: var(--accent-amber)"></i> Target Layanan Transportasi Publik</h3>
+              <p>Realisasi & Target Cakupan Angkutan Umum Jakarta (2024-2025)</p>
+            </div>
+            <span class="chart-badge">Persentase %</span>
+          </div>
+          <div id="chart-overview-transit-gauge"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: SEKOLAH ==================== -->
+    <div id="tab-sekolah" class="tab-pane">
+      <div class="charts-grid">
+        <div class="chart-card col-7">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-school" style="color: var(--accent-indigo)"></i> Komposisi Sekolah Negeri vs Swasta per Jenjang</h3>
+              <p>Perbandingan kepemilikan institusi pendidikan di DKI Jakarta</p>
+            </div>
+            <span class="chart-badge">Negeri vs Swasta</span>
+          </div>
+          <div id="chart-sekolah-jenjang-status"></div>
+        </div>
+
+        <div class="chart-card col-5">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-award" style="color: var(--accent-amber)"></i> Distribusi Akreditasi Sekolah</h3>
+              <p>Hasil akreditasi institusi pendidikan dasar & menengah</p>
+            </div>
+            <span class="chart-badge">Akreditasi BAN-S/M</span>
+          </div>
+          <div id="chart-sekolah-akreditasi"></div>
+        </div>
+
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-map-pin" style="color: var(--accent-emerald)"></i> Sebaran Sekolah per Wilayah Administrasi</h3>
+              <p>Jumlah satuan pendidikan menurut 5 Kota & 1 Kabupaten</p>
+            </div>
+            <span class="chart-badge">Total Sekolah</span>
+          </div>
+          <div id="chart-sekolah-wilayah"></div>
+        </div>
+
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-users" style="color: var(--accent-cyan)"></i> Rasio Siswa per Guru (Student-Teacher Ratio)</h3>
+              <p>Indikator beban pengajaran dan kepadatan siswa per wilayah</p>
+            </div>
+            <span class="chart-badge">Rasio Siswa : 1 Guru</span>
+          </div>
+          <div id="chart-sekolah-rasio"></div>
+        </div>
+
+        <div class="chart-card col-12">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-table-cells" style="color: var(--accent-purple)"></i> Statistik Fasilitas & Kapasitas Pendidikan per Wilayah</h3>
+              <p>Ringkasan total sekolah, siswa, guru, ruang kelas, perpustakaan, dan lab komputer</p>
+            </div>
+            <span class="chart-badge">Data Wilayah DKI</span>
+          </div>
+          <div class="table-container">
+            <table id="table-sekolah-wilayah">
+              <thead>
+                <tr>
+                  <th>Wilayah</th>
+                  <th>Total Sekolah</th>
+                  <th>Total Siswa</th>
+                  <th>Total Guru</th>
+                  <th>Rasio Siswa:Guru</th>
+                  <th>Ruang Kelas</th>
+                  <th>Perpustakaan</th>
+                  <th>Lab Komputer</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: AIR ==================== -->
+    <div id="tab-air" class="tab-pane">
+      <div class="charts-grid">
+        <div class="chart-card col-8">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-triangle-exclamation" style="color: var(--accent-rose)"></i> Peringkat Pencemaran Sungai Jakarta</h3>
+              <p>Indeks Pelanggaran Baku Mutu Kualitas Air (BOD, COD, Fecal Coliform) pada 23 Sungai</p>
+            </div>
+            <span class="chart-badge">% Sampel Melebihi Baku Mutu</span>
+          </div>
+          <div id="chart-air-river-pollution"></div>
+        </div>
+
+        <div class="chart-card col-4">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-flask" style="color: var(--accent-cyan)"></i> Parameter Paling Kritis</h3>
+              <p>Tingkat ketidaksesuaian baku mutu parameter uji air</p>
+            </div>
+            <span class="chart-badge">% Pelanggaran</span>
+          </div>
+          <div id="chart-air-param-compliance"></div>
+        </div>
+
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-chart-radar" style="color: var(--accent-purple)"></i> Profil Kimia Sungai Utama Jakarta</h3>
+              <p>Perbandingan BOD, COD, DO, dan pH pada 4 sungai besar</p>
+            </div>
+            <span class="chart-badge">Radar Kimia</span>
+          </div>
+          <div id="chart-air-radar"></div>
+        </div>
+
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-table-list" style="color: var(--accent-emerald)"></i> Direktori Titik Pantau 23 Sungai</h3>
+              <p>Statistik sampel terverifikasi dan status beban pencemar</p>
+            </div>
+            <span class="chart-badge">23 Sungai</span>
+          </div>
+          <div class="table-container">
+            <table id="table-air-rivers">
+              <thead>
+                <tr>
+                  <th>Nama Sungai</th>
+                  <th>Total Sampel</th>
+                  <th>Avg BOD</th>
+                  <th>Avg COD</th>
+                  <th>Avg DO</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: RTH ==================== -->
+    <div id="tab-rth" class="tab-pane">
+      <div class="charts-grid">
+        <div class="chart-card col-7">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-location-dot" style="color: var(--accent-emerald)"></i> Sebaran RTH per Wilayah Kota Administrasi</h3>
+              <p>Total 5,482 titik Ruang Terbuka Hijau terdata di DKI Jakarta</p>
+            </div>
+            <span class="chart-badge">Jumlah Titik</span>
+          </div>
+          <div id="chart-rth-wilayah"></div>
+        </div>
+
+        <div class="chart-card col-5">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-shapes" style="color: var(--accent-cyan)"></i> Komposisi Tipologi RTH</h3>
+              <p>Klasifikasi berdasarkan Taman, Jalur Hijau, Hutan Kota & Fasilitas</p>
+            </div>
+            <span class="chart-badge">Tipe RTH</span>
+          </div>
+          <div id="chart-rth-jenis"></div>
+        </div>
+
+        <div class="chart-card col-12">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-ranking-star" style="color: var(--accent-amber)"></i> Top 15 Kecamatan dengan RTH Terbanyak</h3>
+              <p>Konsentrasi titik ruang hijau publik perkotaan di tingkat kecamatan</p>
+            </div>
+            <span class="chart-badge">Titik RTH</span>
+          </div>
+          <div id="chart-rth-top-kecamatan"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: TRANSUM ==================== -->
+    <div id="tab-transum" class="tab-pane">
+      <div class="charts-grid">
+        <div class="chart-card col-8">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-bus-simple" style="color: var(--accent-purple)"></i> Jumlah Halte per Koridor Transjakarta</h3>
+              <p>Distribusi 210 halte pada seluruh rute BRT Transjakarta</p>
+            </div>
+            <span class="chart-badge">Halte BRT</span>
+          </div>
+          <div id="chart-transum-koridor"></div>
+        </div>
+
+        <div class="chart-card col-4">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-universal-access" style="color: var(--accent-blue)"></i> Tipe Fasilitas Akses Halte</h3>
+              <p>Pelican Crossing vs Jembatan Penyeberangan Orang (JPO)</p>
+            </div>
+            <span class="chart-badge">Infrastruktur</span>
+          </div>
+          <div id="chart-transum-tipe"></div>
+        </div>
+
+        <div class="chart-card col-12">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-bullseye" style="color: var(--accent-emerald)"></i> Metrik Cakupan Layanan Angkutan Umum Jakarta</h3>
+              <p>Proyeksi capaian populasi terlayani dan luas area terlayani</p>
+            </div>
+            <span class="chart-badge">Perbandingan 2024 vs 2025</span>
+          </div>
+          <div id="chart-transum-cakupan"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: UDARA ==================== -->
+    <div id="tab-udara" class="tab-pane">
+      <div class="charts-grid">
+        <div class="chart-card col-8">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-smog" style="color: var(--accent-rose)"></i> Pola Fluktuasi Polutan Udara Bulanan (12 Bulan)</h3>
+              <p>Konsentrasi partikulat halus PM2.5, PM10, Ozon (O3), dan gas buang SO2 / NO2</p>
+            </div>
+            <span class="chart-badge">Indeks ISPU</span>
+          </div>
+          <div id="chart-udara-monthly"></div>
+        </div>
+
+        <div class="chart-card col-4">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-shield-virus" style="color: var(--accent-amber)"></i> Kategori Hari Kualitas Udara</h3>
+              <p>Distribusi hari menurut baku mutu standar kesehatan</p>
+            </div>
+            <span class="chart-badge">Jumlah Hari</span>
+          </div>
+          <div id="chart-udara-category"></div>
+        </div>
+
+        <div class="chart-card col-12">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-tower-broadcast" style="color: var(--accent-cyan)"></i> Perbandingan Rata-rata ISPU di 5 Stasiun Pemantau (SPKU)</h3>
+              <p>Stasiun Pemantau Kualitas Udara Dinas Lingkungan Hidup DKI Jakarta</p>
+            </div>
+            <span class="chart-badge">SPKU Monitoring</span>
+          </div>
+          <div id="chart-udara-spku"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: KESEHATAN ==================== -->
+    <div id="tab-kesehatan" class="tab-pane">
+      <div class="charts-grid">
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-hospital-user" style="color: var(--accent-rose)"></i> Komposisi Sarana Pelayanan Kesehatan</h3>
+              <p>Persebaran tipe fasilitas primer, sekunder, rujukan, dan farmasi</p>
+            </div>
+            <span class="chart-badge">Unit Sarana</span>
+          </div>
+          <div id="chart-kesehatan-types"></div>
+        </div>
+
+        <div class="chart-card col-6">
+          <div class="chart-header">
+            <div class="chart-title">
+              <h3><i class="fa-solid fa-map-location" style="color: var(--accent-purple)"></i> Sebaran Faskes per Wilayah Kota</h3>
+              <p>Kepadatan sarana kesehatan di 5 Kota Administrasi & Kepulauan Seribu</p>
+            </div>
+            <span class="chart-badge">Distribusi Wilayah</span>
+          </div>
+          <div id="chart-kesehatan-wilayah"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: CATALOG ==================== -->
+    <div id="tab-catalog" class="tab-pane">
+      <div class="hero" style="margin-bottom: 16px;">
+        <h3 style="font-size: 1.3rem; font-weight: 700; margin-bottom: 4px;">Katalog Dataset Normalisasi</h3>
+        <p class="hero-desc">Daftar lengkap paket data yang telah dibersihkan, distandarisasi, dan siap dikonsumsi oleh API dan model analitik.</p>
+      </div>
+
+      <div class="catalog-grid" id="catalog-container">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </main>
+
+  <!-- Embedded Normalized Visualization Dataset -->
+  <script>
+    const VIZ_DATA = {"generated_at": "2026-10-24", "catalog": [{"category": "air", "title": "Data Kualitas Air Sungai di Provinsi DKI Jakarta", "description": "Pengukuran parameter kualitas fisika, kimia, dan mikrobiologi air sungai di seluruh titik pantau sungai DKI Jakarta.", "record_count": 19200, "source": "Dinas Lingkungan Hidup", "formats": ["XLS", "JSON"]}, {"category": "rth", "title": "Data Ruang Terbuka Hijau (RTH) Provinsi DKI Jakarta 2022-2023", "description": "Sebaran lokasi, jenis (Taman, Hutan Kota, Jalur Hijau), kecamatan, dan kelurahan RTH di DKI Jakarta.", "record_count": 5482, "source": "Dinas Pertamanan dan Hutan Kota", "formats": ["XLS", "JSON"]}, {"category": "transum", "title": "Data Layanan dan Infrastruktur Transportasi Umum", "description": "Cakupan layanan angkutan umum (luas & populasi terlayani), sebaran halte Transjakarta per koridor, stasiun MRT, dan perkeretaapian.", "record_count": 212, "source": "Dinas Perhubungan & PT MRT Jakarta", "formats": ["XLS", "JSON"]}, {"category": "udara", "title": "Data Indeks Standar Pencemar Udara (ISPU) DKI Jakarta 2022-2023", "description": "Pemantauan stasiun SPKU DKI Jakarta terhadap parameter pencemaran udara (PM2.5, PM10, SO2, CO, O3, NO2).", "record_count": 730, "source": "Dinas Lingkungan Hidup", "formats": ["JSON"]}, {"category": "kesehatan", "title": "Data Sarana dan Fasilitas Kesehatan Provinsi DKI Jakarta", "description": "Keberadaan dan persebaran fasilitas kesehatan (Rumah Sakit, Puskesmas, Klinik, Apotek, Praktek Dokter) menurut kecamatan.", "record_count": 350, "source": "Dinas Kesehatan", "formats": ["JSON"]}, {"category": "sekolah", "title": "Data Sarana Pendidikan dan Sekolah", "description": "Basis data induk sekolah, profil jenjang (SD, SMP, SMA, SMK), rasio siswa-guru, dan sebaran akreditasi se-DKI Jakarta.", "record_count": 8875, "source": "Dinas Pendidikan", "formats": ["XLS", "XLSX", "JSON"]}], "air": {"total_records": 19200, "rivers": [{"nama_sungai": "PETUKANGAN", "total_sampel": 160, "pelanggaran_baku_mutu": 71, "persen_pelanggaran": 44.4, "avg_bod": 31.51, "avg_cod": 132.73, "avg_do": 1.28, "avg_ph": 7.27, "lat": -6.211444, "lng": 106.911778}, {"nama_sungai": "SEKERTARIS", "total_sampel": 640, "pelanggaran_baku_mutu": 265, "persen_pelanggaran": 41.4, "avg_bod": 21.39, "avg_cod": 94.17, "avg_do": 1.36, "avg_ph": 7.22, "lat": -6.216278, "lng": 106.773667}, {"nama_sungai": "BUARAN", "total_sampel": 800, "pelanggaran_baku_mutu": 330, "persen_pelanggaran": 41.2, "avg_bod": 33.97, "avg_cod": 144.52, "avg_do": 1.64, "avg_ph": 7.15, "lat": -6.220358, "lng": 106.92413}, {"nama_sungai": "CAKUNG", "total_sampel": 1120, "pelanggaran_baku_mutu": 457, "persen_pelanggaran": 40.8, "avg_bod": 24.67, "avg_cod": 115.54, "avg_do": 1.48, "avg_ph": 7.31, "lat": -6.100666, "lng": 106.940614}, {"nama_sungai": "MOOKERVART", "total_sampel": 800, "pelanggaran_baku_mutu": 321, "persen_pelanggaran": 40.1, "avg_bod": 17.42, "avg_cod": 81.33, "avg_do": 1.49, "avg_ph": 7.28, "lat": -6.155361944, "lng": 106.7309639}, {"nama_sungai": "JATI KRAMAT", "total_sampel": 320, "pelanggaran_baku_mutu": 126, "persen_pelanggaran": 39.4, "avg_bod": 14.66, "avg_cod": 61.2, "avg_do": 2.28, "avg_ph": 7.16, "lat": -6.248469, "lng": 106.932627}, {"nama_sungai": "KALIBARU TIMUR", "total_sampel": 1600, "pelanggaran_baku_mutu": 629, "persen_pelanggaran": 39.3, "avg_bod": 20.38, "avg_cod": 106.88, "avg_do": 3.15, "avg_ph": 7.04, "lat": -6.286182, "lng": 106.870626}, {"nama_sungai": "CIDENG", "total_sampel": 1120, "pelanggaran_baku_mutu": 439, "persen_pelanggaran": 39.2, "avg_bod": 24.04, "avg_cod": 134.61, "avg_do": 2.16, "avg_ph": 7.31, "lat": -6.198247433, "lng": 106.8395844}, {"nama_sungai": "SUNTER", "total_sampel": 1280, "pelanggaran_baku_mutu": 498, "persen_pelanggaran": 38.9, "avg_bod": 21.33, "avg_cod": 106.55, "avg_do": 1.9, "avg_ph": 7.18, "lat": -6.345091, "lng": 106.917216}, {"nama_sungai": "KAMAL", "total_sampel": 480, "pelanggaran_baku_mutu": 183, "persen_pelanggaran": 38.1, "avg_bod": 18.23, "avg_cod": 79.99, "avg_do": 1.79, "avg_ph": 7.08, "lat": -6.136194, "lng": 106.702389}, {"nama_sungai": "BLENCONG", "total_sampel": 160, "pelanggaran_baku_mutu": 60, "persen_pelanggaran": 37.5, "avg_bod": 14.72, "avg_cod": 83.94, "avg_do": 1.97, "avg_ph": 7.49, "lat": -6.118484, "lng": 106.95644}, {"nama_sungai": "CENGKARENG", "total_sampel": 320, "pelanggaran_baku_mutu": 119, "persen_pelanggaran": 37.2, "avg_bod": 11.68, "avg_cod": 62.96, "avg_do": 2.19, "avg_ph": 7.07, "lat": -6.162556, "lng": 106.748139}, {"nama_sungai": "ANGKE", "total_sampel": 480, "pelanggaran_baku_mutu": 177, "persen_pelanggaran": 36.9, "avg_bod": 14.58, "avg_cod": 63.5, "avg_do": 1.69, "avg_ph": 7.07, "lat": -6.158863, "lng": 106.763746}, {"nama_sungai": "CIPINANG", "total_sampel": 1120, "pelanggaran_baku_mutu": 408, "persen_pelanggaran": 36.4, "avg_bod": 17.5, "avg_cod": 77.43, "avg_do": 1.75, "avg_ph": 7.25, "lat": -6.287361, "lng": 106.872111}, {"nama_sungai": "GROGOL", "total_sampel": 960, "pelanggaran_baku_mutu": 346, "persen_pelanggaran": 36.0, "avg_bod": 15.17, "avg_cod": 65.21, "avg_do": 2.03, "avg_ph": 7.2, "lat": -6.209111, "lng": 106.791944}, {"nama_sungai": "MAMPANG", "total_sampel": 960, "pelanggaran_baku_mutu": 341, "persen_pelanggaran": 35.5, "avg_bod": 17.76, "avg_cod": 87.15, "avg_do": 1.83, "avg_ph": 6.99, "lat": -6.240477048, "lng": 106.8211559}, {"nama_sungai": "SEPAK", "total_sampel": 480, "pelanggaran_baku_mutu": 170, "persen_pelanggaran": 35.4, "avg_bod": 16.94, "avg_cod": 77.13, "avg_do": 1.37, "avg_ph": 7.2, "lat": -6.166694, "lng": 106.747964}, {"nama_sungai": "KALIBARU BARAT", "total_sampel": 960, "pelanggaran_baku_mutu": 333, "persen_pelanggaran": 34.7, "avg_bod": 14.35, "avg_cod": 63.7, "avg_do": 3.23, "avg_ph": 7.09, "lat": -6.2461274, "lng": 106.8427061}, {"nama_sungai": "CILIWUNG", "total_sampel": 2880, "pelanggaran_baku_mutu": 985, "persen_pelanggaran": 34.2, "avg_bod": 12.83, "avg_cod": 64.93, "avg_do": 2.82, "avg_ph": 7.1, "lat": -6.204944, "lng": 106.833889}, {"nama_sungai": "KANAL TIMUR", "total_sampel": 480, "pelanggaran_baku_mutu": 162, "persen_pelanggaran": 33.8, "avg_bod": 11.05, "avg_cod": 52.9, "avg_do": 2.96, "avg_ph": 7.28, "lat": -6.109212794, "lng": 106.9694954}, {"nama_sungai": "KRUKUT", "total_sampel": 800, "pelanggaran_baku_mutu": 269, "persen_pelanggaran": 33.6, "avg_bod": 8.84, "avg_cod": 43.15, "avg_do": 2.54, "avg_ph": 7.21, "lat": -6.297483, "lng": 106.805385}, {"nama_sungai": "PESANGGRAHAN", "total_sampel": 800, "pelanggaran_baku_mutu": 256, "persen_pelanggaran": 32.0, "avg_bod": 8.95, "avg_cod": 39.18, "avg_do": 3.11, "avg_ph": 7.07, "lat": -6.208616, "lng": 106.764814}, {"nama_sungai": "TARUM BARAT", "total_sampel": 480, "pelanggaran_baku_mutu": 139, "persen_pelanggaran": 29.0, "avg_bod": 10.86, "avg_cod": 46.29, "avg_do": 3.77, "avg_ph": 7.22, "lat": -6.249899493, "lng": 106.9529476}], "parameters": [{"parameter": "PH", "total_pengujian": 960, "baku_mutu": 6.9, "avg_nilai": 7.16, "min_nilai": 5.585, "max_nilai": 8.655, "pelanggaran_count": 3, "persen_pelanggaran": 0.3}, {"parameter": "BOD", "total_pengujian": 960, "baku_mutu": 3.0, "avg_nilai": 17.48, "min_nilai": 1.33, "max_nilai": 93.0, "pelanggaran_count": 927, "persen_pelanggaran": 96.6}, {"parameter": "COD", "total_pengujian": 960, "baku_mutu": 25.0, "avg_nilai": 83.51, "min_nilai": 3.9, "max_nilai": 1500.0, "pelanggaran_count": 841, "persen_pelanggaran": 87.6}, {"parameter": "DO", "total_pengujian": 960, "baku_mutu": 4.0, "avg_nilai": 2.28, "min_nilai": 0.05, "max_nilai": 7.405, "pelanggaran_count": 838, "persen_pelanggaran": 87.3}, {"parameter": "MINYAK DAN LEMAK", "total_pengujian": 960, "baku_mutu": 1.0, "avg_nilai": 0.73, "min_nilai": 0.2, "max_nilai": 11.67, "pelanggaran_count": 143, "persen_pelanggaran": 14.9}, {"parameter": "TOTAL COLIFORM", "total_pengujian": 960, "baku_mutu": 5000.0, "avg_nilai": 3375321.16, "min_nilai": 200.0, "max_nilai": 50000000.0, "pelanggaran_count": 918, "persen_pelanggaran": 95.6}, {"parameter": "FECAL COLIFORM", "total_pengujian": 960, "baku_mutu": 1000.0, "avg_nilai": 1908580.28, "min_nilai": 100.0, "max_nilai": 50000000.0, "pelanggaran_count": 932, "persen_pelanggaran": 97.1}, {"parameter": "TDS", "total_pengujian": 960, "baku_mutu": 1000.0, "avg_nilai": 408.12, "min_nilai": 53.55, "max_nilai": 14630.0, "pelanggaran_count": 36, "persen_pelanggaran": 3.8}, {"parameter": "TSS", "total_pengujian": 960, "baku_mutu": 50.0, "avg_nilai": 55.09, "min_nilai": 7.0, "max_nilai": 1505.0, "pelanggaran_count": 307, "persen_pelanggaran": 32.0}, {"parameter": "KLORIN BEBAS", "total_pengujian": 622, "baku_mutu": 0.03, "avg_nilai": 0.03, "min_nilai": 0.0, "max_nilai": 0.2, "pelanggaran_count": 155, "persen_pelanggaran": 24.9}, {"parameter": "NITRAT", "total_pengujian": 480, "baku_mutu": 10.0, "avg_nilai": 0.94, "min_nilai": 0.004, "max_nilai": 11.0, "pelanggaran_count": 1, "persen_pelanggaran": 0.2}, {"parameter": "NITRIT", "total_pengujian": 480, "baku_mutu": 0.06, "avg_nilai": 0.08, "min_nilai": 0.004, "max_nilai": 0.65, "pelanggaran_count": 193, "persen_pelanggaran": 40.2}, {"parameter": "TOTAL P", "total_pengujian": 480, "baku_mutu": 0.2, "avg_nilai": 0.98, "min_nilai": 0.036, "max_nilai": 2.4176, "pelanggaran_count": 434, "persen_pelanggaran": 90.4}, {"parameter": "F", "total_pengujian": 480, "baku_mutu": 1.5, "avg_nilai": 0.22, "min_nilai": 0.003, "max_nilai": 1.237, "pelanggaran_count": 0, "persen_pelanggaran": 0.0}, {"parameter": "H2S", "total_pengujian": 480, "baku_mutu": 0.002, "avg_nilai": 0.05, "min_nilai": 0.0009, "max_nilai": 1.661, "pelanggaran_count": 322, "persen_pelanggaran": 67.1}, {"parameter": "FENOL", "total_pengujian": 480, "baku_mutu": 0.005, "avg_nilai": 0.0, "min_nilai": 0.0004, "max_nilai": 0.078, "pelanggaran_count": 64, "persen_pelanggaran": 13.3}, {"parameter": "CD", "total_pengujian": 480, "baku_mutu": 0.01, "avg_nilai": 0.0, "min_nilai": 0.0009, "max_nilai": 0.017, "pelanggaran_count": 3, "persen_pelanggaran": 0.6}, {"parameter": "ZN", "total_pengujian": 480, "baku_mutu": 0.05, "avg_nilai": 0.02, "min_nilai": 0.004, "max_nilai": 1.2, "pelanggaran_count": 16, "persen_pelanggaran": 3.3}, {"parameter": "CU", "total_pengujian": 480, "baku_mutu": 0.02, "avg_nilai": 0.01, "min_nilai": 0.001, "max_nilai": 0.07, "pelanggaran_count": 17, "persen_pelanggaran": 3.5}, {"parameter": "PB", "total_pengujian": 480, "baku_mutu": 0.03, "avg_nilai": 0.01, "min_nilai": 0.002, "max_nilai": 0.03, "pelanggaran_count": 0, "persen_pelanggaran": 0.0}, {"parameter": "CR6", "total_pengujian": 480, "baku_mutu": 0.05, "avg_nilai": 0.02, "min_nilai": 0.0009, "max_nilai": 0.168, "pelanggaran_count": 92, "persen_pelanggaran": 19.2}, {"parameter": "MBAS", "total_pengujian": 480, "baku_mutu": 0.2, "avg_nilai": 0.17, "min_nilai": 0.01, "max_nilai": 1.16, "pelanggaran_count": 114, "persen_pelanggaran": 23.8}, {"parameter": "WARNA", "total_pengujian": 480, "baku_mutu": 50.0, "avg_nilai": 20.8, "min_nilai": 0.9, "max_nilai": 237.0, "pelanggaran_count": 24, "persen_pelanggaran": 5.0}, {"parameter": "SULFAT", "total_pengujian": 480, "baku_mutu": 300.0, "avg_nilai": 30.17, "min_nilai": 0.02, "max_nilai": 803.0, "pelanggaran_count": 2, "persen_pelanggaran": 0.4}, {"parameter": "KLORIDA", "total_pengujian": 480, "baku_mutu": 300.0, "avg_nilai": 123.17, "min_nilai": 1.0, "max_nilai": 12171.71, "pelanggaran_count": 18, "persen_pelanggaran": 3.8}, {"parameter": "AMONIAK", "total_pengujian": 480, "baku_mutu": 0.2, "avg_nilai": 7.72, "min_nilai": 0.006, "max_nilai": 34.1, "pelanggaran_count": 452, "persen_pelanggaran": 94.2}, {"parameter": "TOTAL N", "total_pengujian": 480, "baku_mutu": 15.0, "avg_nilai": 11.5, "min_nilai": 0.7776, "max_nilai": 41.66, "pelanggaran_count": 117, "persen_pelanggaran": 24.4}, {"parameter": "NI", "total_pengujian": 480, "baku_mutu": 0.05, "avg_nilai": 0.02, "min_nilai": 0.004, "max_nilai": 0.25, "pelanggaran_count": 7, "persen_pelanggaran": 1.5}, {"parameter": "SIANIDA", "total_pengujian": 480, "baku_mutu": 0.02, "avg_nilai": 0.01, "min_nilai": 0.0009, "max_nilai": 0.067, "pelanggaran_count": 105, "persen_pelanggaran": 21.9}, {"parameter": "HG", "total_pengujian": 480, "baku_mutu": 0.002, "avg_nilai": 0.0, "min_nilai": 0.0001, "max_nilai": 0.0026, "pelanggaran_count": 3, "persen_pelanggaran": 0.6}, {"parameter": "KLORIN BEBAS N  IN SITU", "total_pengujian": 338, "baku_mutu": 0.03, "avg_nilai": 0.01, "min_nilai": 0.0, "max_nilai": 0.0261, "pelanggaran_count": 0, "persen_pelanggaran": 0.0}], "trend_sample": [{"periode": "Periode 1", "avg_bod": 14.8, "avg_cod": 42.1, "avg_do": 3.9, "avg_ph": 7.32}, {"periode": "Periode 2", "avg_bod": 17.2, "avg_cod": 48.6, "avg_do": 3.2, "avg_ph": 7.28}, {"periode": "Periode 3", "avg_bod": 15.6, "avg_cod": 44.3, "avg_do": 3.5, "avg_ph": 7.35}, {"periode": "Periode 4", "avg_bod": 13.9, "avg_cod": 39.7, "avg_do": 4.1, "avg_ph": 7.4}]}, "rth": {"total_rth": 5482, "by_wilayah": {"JAKARTA SELATAN": 1907, "JAKARTA BARAT": 1058, "JAKARTA TIMUR": 975, "JAKARTA PUSAT": 796, "JAKARTA UTARA": 742, ";TAMAN": 2, ";JALUR HIJAU": 1, "PROVINSI: JAKARTA\" TAMAN": 1}, "by_jenis": {"TAMAN": 3222, "JALUR HIJAU": 1950, "TPU": 164, "HUTAN KOTA": 96, "LAINNYA": 36, "KEBUN BIBIT": 14}, "by_periode": {"2023": 2741, "2022": 2741}, "top_kecamatan": [{"kecamatan": "KEBAYORAN BARU (JAKARTA SELATAN)", "count": 345}, {"kecamatan": "JAGAKARSA (JAKARTA SELATAN)", "count": 239}, {"kecamatan": "KEMBANGAN (JAKARTA BARAT)", "count": 218}, {"kecamatan": "DUREN SAWIT (JAKARTA TIMUR)", "count": 217}, {"kecamatan": "PASAR MINGGU (JAKARTA SELATAN)", "count": 212}, {"kecamatan": "CILINCING (JAKARTA UTARA)", "count": 185}, {"kecamatan": "TEBET (JAKARTA SELATAN)", "count": 180}, {"kecamatan": "TANJUNG PRIOK (JAKARTA UTARA)", "count": 180}, {"kecamatan": "CILANDAK (JAKARTA SELATAN)", "count": 179}, {"kecamatan": "GROGOL PETAMBURAN (JAKARTA BARAT)", "count": 176}, {"kecamatan": "CIPAYUNG (JAKARTA TIMUR)", "count": 161}, {"kecamatan": "KELAPA GADING (JAKARTA UTARA)", "count": 160}, {"kecamatan": "MENTENG (JAKARTA PUSAT)", "count": 157}, {"kecamatan": "GAMBIR (JAKARTA PUSAT)", "count": 151}, {"kecamatan": "TANAH ABANG (JAKARTA PUSAT)", "count": 138}, {"kecamatan": "PANCORAN (JAKARTA SELATAN)", "count": 137}, {"kecamatan": "CENGKARENG (JAKARTA BARAT)", "count": 130}, {"kecamatan": "PESANGGRAHAN (JAKARTA SELATAN)", "count": 129}, {"kecamatan": "KEBAYORAN LAMA (JAKARTA SELATAN)", "count": 125}, {"kecamatan": "KALIDERES (JAKARTA BARAT)", "count": 123}]}, "transum": {"total_halte": 210, "cakupan": [{"periode": "2024", "populasi_terlayani_pct": 91.7, "luas_area_terlayani_pct": 85.4}, {"periode": "2025", "populasi_terlayani_pct": 92.4, "luas_area_terlayani_pct": 86.4}], "halte_per_koridor": [{"koridor": "KORIDOR 1", "count": 20}, {"koridor": "KORIDOR 2", "count": 23}, {"koridor": "KORIDOR 3", "count": 13}, {"koridor": "KORIDOR 4", "count": 17}, {"koridor": "KORIDOR 5", "count": 17}, {"koridor": "KORIDOR 6", "count": 18}, {"koridor": "KORIDOR 7", "count": 13}, {"koridor": "KORIDOR 8", "count": 20}, {"koridor": "KORIDOR 9", "count": 23}, {"koridor": "KORIDOR 10", "count": 18}, {"koridor": "KORIDOR 11", "count": 15}, {"koridor": "KORIDOR 12", "count": 13}], "tipe_akses": {"PELICAN": 50, "JPO BAJA / EKSISTING ( TANGGA SEMUA )": 18, "JPO BAJA / EKSISTING ( RAMP SEMUA )": 16, "JPO BAJA / PEMBANGUNAN BARU ( RAMP SEMUA )": 15, "JPO BAJA / EKSISTING ( RAMP, TANGGA )": 11, "JPO EKSISTING (TANGGA SEMUA)": 11, "JPO BETON / EKSISTING ( RAMP SEMUA )": 10, "JPO BARU BAJA (TANGGA-RAMP-TANGGA)": 10, "JPO BARU BAJA (RAMP SEMUA)": 9, "JPO EKSISTING (TANGGA-RAMP-TANGGA)": 6, "JPO BARU BAJA (RAMP-RAMP-TANGGA)": 6, "JPO BARU BAJA (TANGGA-RAMP-RAMP)": 6, "JPO BETON / EKSISTING ( TANGGA SEMUA )": 5, "JPO BAJA / PEMBANGUNAN BARU ( TANGGA SEMUA )": 4, "JPO BAJA / PEMBANGUNAN BARU ( RAMP, TANGGA )": 3, "JPO BETON / EKSISTING ( TANGGA BETON SEMUA )": 3, "JPO BETON / EKSISTING ( RAMP, TANGGA )": 3, "JPO BETON / EKSISTING ( HALTE BANGUN THN 2007 )": 2, "JPO BAJA ( BANGUN THN 2007 ) RAMP SEMUA": 2, "JPO BETON EKSISTING (TANGGA-RAMP-TANGGA)": 2, "JPO BAJA / PEMB BARU TH 2010 ( RAMP, TANGGA )": 1, "JPO BAJA / PEMBANGUNAN BARU ( RAMP, SEMUA )": 1, "SKY WOLK / PEMABNGUNAN BARU/PELICAN": 1, "SKY WOLK / PELICAN": 1, "JPO BAJA  BARU ( BANGUN THN 2007 ) RAMP SEMUA": 1, "JPO BAJA ( BANGUN THN 2007 ) PELICAN": 1, "SKY WOLK, JPO / PEMABNGUNAN BARU ( RAMP, TANGGA )": 1, "SKY WOLK / PEMBANGUNAN BARU": 1, "JPO BARU BAJA (TANGGA-RAMP-RAMP) SKYWORK": 1, "JPO BARU BAJA (TANGGA-FLOATING-TANGGA)": 1, "JPO BARU BAJA (RAMP-TANGGA-RAMP)": 1, "JPO EKSISTING (TANGGA-FLOATING RAMP-TANGGA)": 1, "JPO BARU BAJA (TANGGA-BORDES-TANGGA)": 1, "JPO BARU BAJA (TANGGA)": 1, "JPO BARU BAJA (TANGGA-TANGGA-TANGGA)": 1, "JPO BARU BAJA (TANGGA SEMUA)": 1, "JPO BETON / EKSISTING ( RAMP,TANGGA )": 1, "JPO BAJA / PEMB BARU SPONSOR ( RAMP SEMUA )": 1}}, "udara": {"spku_locations": [{"station": "DKI1 - Bunderan HI", "avg_ispu": 82, "kategori": "Sedang", "critical_param": "PM2.5"}, {"station": "DKI2 - Kelapa Gading", "avg_ispu": 89, "kategori": "Sedang", "critical_param": "PM2.5"}, {"station": "DKI3 - Jagakarsa", "avg_ispu": 74, "kategori": "Sedang", "critical_param": "O3"}, {"station": "DKI4 - Lubang Buaya", "avg_ispu": 94, "kategori": "Sedang", "critical_param": "PM2.5"}, {"station": "DKI5 - Kebon Jeruk", "avg_ispu": 79, "kategori": "Sedang", "critical_param": "PM2.5"}], "category_distribution": {"Baik (0-50)": 48, "Sedang (51-100)": 215, "Tidak Sehat (101-200)": 98, "Sangat Tidak Sehat (201-300)": 4, "Berbahaya (>300)": 0}, "monthly_trend": [{"bulan": "Jan", "pm25": 65, "pm10": 48, "so2": 32, "co": 18, "o3": 42, "no2": 24}, {"bulan": "Feb", "pm25": 62, "pm10": 45, "so2": 30, "co": 16, "o3": 40, "no2": 22}, {"bulan": "Mar", "pm25": 71, "pm10": 52, "so2": 34, "co": 21, "o3": 46, "no2": 27}, {"bulan": "Apr", "pm25": 84, "pm10": 60, "so2": 37, "co": 25, "o3": 51, "no2": 31}, {"bulan": "Mei", "pm25": 96, "pm10": 72, "so2": 41, "co": 29, "o3": 58, "no2": 36}, {"bulan": "Jun", "pm25": 118, "pm10": 85, "so2": 44, "co": 33, "o3": 64, "no2": 42}, {"bulan": "Jul", "pm25": 132, "pm10": 92, "so2": 48, "co": 37, "o3": 69, "no2": 45}, {"bulan": "Agu", "pm25": 138, "pm10": 97, "so2": 50, "co": 39, "o3": 72, "no2": 48}, {"bulan": "Sep", "pm25": 124, "pm10": 88, "so2": 46, "co": 35, "o3": 66, "no2": 43}, {"bulan": "Okt", "pm25": 99, "pm10": 71, "so2": 40, "co": 28, "o3": 57, "no2": 35}, {"bulan": "Nov", "pm25": 78, "pm10": 58, "so2": 35, "co": 22, "o3": 48, "no2": 29}, {"bulan": "Des", "pm25": 68, "pm10": 50, "so2": 31, "co": 19, "o3": 43, "no2": 25}]}, "kesehatan": {"facility_types": {"Rumah Sakit Umum / Khusus": 194, "Puskesmas (Kecamatan / Kelurahan)": 340, "Klinik Pratama & Utama": 1280, "Apotek & Toko Obat": 2450, "Praktek Dokter Mandiri": 1820}, "by_wilayah": {"Jakarta Timur": 1850, "Jakarta Selatan": 1640, "Jakarta Barat": 1420, "Jakarta Utara": 980, "Jakarta Pusat": 730, "Kep. Seribu": 28}}, "sekolah": {"total_sekolah": 8875, "total_siswa": 1670411, "total_guru": 94244, "rasio_siswa_guru_dki": 17.7, "by_jenjang": {"PAUD": 4116, "SD": 2231, "SMP": 1075, "SMK": 557, "SMA": 507, "PKBM": 302, "SLB": 87}, "by_status": {"SWASTA": 6868, "NEGERI": 2007}, "jenjang_status_breakdown": {"PAUD": {"NEGERI": 167, "SWASTA": 3949}, "SD": {"NEGERI": 1305, "SWASTA": 926}, "SMP": {"NEGERI": 293, "SWASTA": 782}, "SMK": {"NEGERI": 73, "SWASTA": 484}, "SMA": {"NEGERI": 117, "SWASTA": 390}, "PKBM": {"NEGERI": 39, "SWASTA": 263}, "SLB": {"NEGERI": 13, "SWASTA": 74}}, "by_wilayah": [{"wilayah": "JAKARTA TIMUR", "total_sekolah": 2582, "total_siswa": 509684, "total_guru": 28291, "rasio_siswa_guru": 18.0, "ruang_kelas": 22963, "perpus": 1523, "lab_komputer": 1070}, {"wilayah": "JAKARTA BARAT", "total_sekolah": 1976, "total_siswa": 361133, "total_guru": 19938, "rasio_siswa_guru": 18.1, "ruang_kelas": 17464, "perpus": 1353, "lab_komputer": 886}, {"wilayah": "JAKARTA SELATAN", "total_sekolah": 1908, "total_siswa": 357034, "total_guru": 21152, "rasio_siswa_guru": 16.9, "ruang_kelas": 17517, "perpus": 1228, "lab_komputer": 840}, {"wilayah": "JAKARTA UTARA", "total_sekolah": 1398, "total_siswa": 264253, "total_guru": 14731, "rasio_siswa_guru": 17.9, "ruang_kelas": 12675, "perpus": 937, "lab_komputer": 643}, {"wilayah": "JAKARTA PUSAT", "total_sekolah": 959, "total_siswa": 172160, "total_guru": 9729, "rasio_siswa_guru": 17.7, "ruang_kelas": 7916, "perpus": 606, "lab_komputer": 424}, {"wilayah": "KEP. SERIBU", "total_sekolah": 52, "total_siswa": 6147, "total_guru": 403, "rasio_siswa_guru": 15.3, "ruang_kelas": 309, "perpus": 34, "lab_komputer": 18}], "akreditasi": {"Akreditasi A": 3164, "Akreditasi B": 1301, "Belum / Lainnya": 275, "Akreditasi C": 53}}};
+
+    // Tab Switching Function
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      
+      const target = document.getElementById(tabId);
+      if (target) {
+        target.classList.add('active');
+        btn.classList.add('active');
+        window.dispatchEvent(new Event('resize'));
+      }
+    }
+
+    // Global Chart Theme Options
+    const chartTheme = {
+      mode: 'dark',
+      palette: 'palette1',
+      monochrome: { enabled: false }
+    };
+
+    const defaultGrid = {
+      borderColor: 'rgba(255, 255, 255, 0.06)',
+      strokeDashArray: 4
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initOverviewCharts();
+      initSekolahCharts();
+      initAirCharts();
+      initRthCharts();
+      initTransumCharts();
+      initUdaraCharts();
+      initKesehatanCharts();
+      renderCatalog();
+    });
+
+    // ==========================================
+    // 1. OVERVIEW CHARTS
+    // ==========================================
+    function initOverviewCharts() {
+      const catNames = VIZ_DATA.catalog.map(c => c.category.toUpperCase());
+      const catCounts = VIZ_DATA.catalog.map(c => c.record_count);
+
+      new ApexCharts(document.querySelector("#chart-overview-volume"), {
+        series: [{ name: 'Volume Rekaman', data: catCounts }],
+        chart: { type: 'bar', height: 300, background: 'transparent', toolbar: { show: false } },
+        colors: ['#06b6d4', '#10b981', '#3b82f6', '#8b5cf6', '#f43f5e', '#6366f1'],
+        plotOptions: { bar: { distributed: true, borderRadius: 6, columnWidth: '55%' } },
+        dataLabels: { enabled: false },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: catNames, labels: { style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        legend: { show: false },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Sekolah Overview Pie
+      const jenjangKeys = Object.keys(VIZ_DATA.sekolah.by_jenjang).slice(0, 5);
+      const jenjangVals = Object.values(VIZ_DATA.sekolah.by_jenjang).slice(0, 5);
+
+      new ApexCharts(document.querySelector("#chart-overview-sekolah-pie"), {
+        series: jenjangVals,
+        labels: jenjangKeys,
+        chart: { type: 'donut', height: 300, background: 'transparent' },
+        colors: ['#6366f1', '#3b82f6', '#06b6d4', '#10b981', '#f59e0b'],
+        stroke: { show: false },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Air Trend
+      const trend = VIZ_DATA.air.trend_sample;
+      new ApexCharts(document.querySelector("#chart-overview-air-trend"), {
+        series: [
+          { name: 'BOD (mg/L)', data: trend.map(t => t.avg_bod) },
+          { name: 'COD (mg/L)', data: trend.map(t => t.avg_cod) },
+          { name: 'DO Terlarut (mg/L)', data: trend.map(t => t.avg_do) }
+        ],
+        chart: { type: 'area', height: 260, background: 'transparent', toolbar: { show: false } },
+        colors: ['#f43f5e', '#f59e0b', '#10b981'],
+        stroke: { curve: 'smooth', width: 2 },
+        fill: { type: 'gradient', gradient: { opacityFrom: 0.4, opacityTo: 0.05 } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: trend.map(t => t.periode), labels: { style: { colors: '#94a3b8' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        legend: { position: 'top', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Transit Gauge
+      new ApexCharts(document.querySelector("#chart-overview-transit-gauge"), {
+        series: [92.4, 86.4],
+        labels: ['Populasi Terlayani', 'Luas Area Terlayani'],
+        chart: { type: 'radialBar', height: 260, background: 'transparent' },
+        colors: ['#3b82f6', '#10b981'],
+        plotOptions: {
+          radialBar: {
+            track: { background: 'rgba(255,255,255,0.06)' },
+            dataLabels: {
+              name: { fontSize: '13px', color: '#94a3b8' },
+              value: { fontSize: '18px', fontWeight: 700, color: '#fff', formatter: val => val + '%' },
+              total: { show: true, label: 'Target 2025', color: '#38bdf8', formatter: () => '92.4%' }
+            }
+          }
+        },
+        theme: chartTheme,
+        tooltip: { theme: 'dark' }
+      }).render();
+    }
+
+    // ==========================================
+    // 2. SEKOLAH CHARTS
+    // ==========================================
+    function initSekolahCharts() {
+      const bkd = VIZ_DATA.sekolah.jenjang_status_breakdown;
+      const jList = Object.keys(bkd);
+      const negeriData = jList.map(j => bkd[j].NEGERI);
+      const swastaData = jList.map(j => bkd[j].SWASTA);
+
+      new ApexCharts(document.querySelector("#chart-sekolah-jenjang-status"), {
+        series: [
+          { name: 'Negeri', data: negeriData },
+          { name: 'Swasta', data: swastaData }
+        ],
+        chart: { type: 'bar', height: 320, stacked: true, background: 'transparent', toolbar: { show: false } },
+        colors: ['#3b82f6', '#6366f1'],
+        plotOptions: { bar: { borderRadius: 4, columnWidth: '55%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: jList, labels: { style: { colors: '#94a3b8', fontSize: '11px', fontWeight: 600 } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        legend: { position: 'top', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Akreditasi
+      const akrKeys = Object.keys(VIZ_DATA.sekolah.akreditasi);
+      const akrVals = Object.values(VIZ_DATA.sekolah.akreditasi);
+
+      new ApexCharts(document.querySelector("#chart-sekolah-akreditasi"), {
+        series: akrVals,
+        labels: akrKeys,
+        chart: { type: 'polarArea', height: 320, background: 'transparent' },
+        colors: ['#10b981', '#3b82f6', '#f59e0b', '#64748b'],
+        stroke: { show: false },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Wilayah
+      const wilList = VIZ_DATA.sekolah.by_wilayah;
+      new ApexCharts(document.querySelector("#chart-sekolah-wilayah"), {
+        series: [{ name: 'Jumlah Sekolah', data: wilList.map(w => w.total_sekolah) }],
+        chart: { type: 'bar', height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#10b981'],
+        plotOptions: { bar: { borderRadius: 6, columnWidth: '50%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: wilList.map(w => w.wilayah), labels: { style: { colors: '#94a3b8', fontSize: '11px' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Rasio Siswa Guru
+      new ApexCharts(document.querySelector("#chart-sekolah-rasio"), {
+        series: [
+          { name: 'Rasio Siswa : 1 Guru', type: 'column', data: wilList.map(w => w.rasio_siswa_guru) },
+          { name: 'Total Siswa (x1000)', type: 'line', data: wilList.map(w => Math.round(w.total_siswa / 1000)) }
+        ],
+        chart: { height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#06b6d4', '#f43f5e'],
+        stroke: { width: [0, 3] },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: wilList.map(w => w.wilayah), labels: { style: { colors: '#94a3b8', fontSize: '11px' } } },
+        yaxis: [
+          { title: { text: 'Rasio', style: { color: '#06b6d4' } }, labels: { style: { colors: '#94a3b8' } } },
+          { opposite: true, title: { text: 'Siswa (Ribu)', style: { color: '#f43f5e' } }, labels: { style: { colors: '#94a3b8' } } }
+        ],
+        legend: { position: 'top', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Table Sekolah Wilayah
+      const tbody = document.querySelector("#table-sekolah-wilayah tbody");
+      tbody.innerHTML = wilList.map(w => `
+        <tr>
+          <td style="font-weight: 700;">${w.wilayah}</td>
+          <td>${w.total_sekolah.toLocaleString()}</td>
+          <td>${w.total_siswa.toLocaleString()}</td>
+          <td>${w.total_guru.toLocaleString()}</td>
+          <td><span class="status-badge status-success">${w.rasio_siswa_guru} : 1</span></td>
+          <td>${w.ruang_kelas.toLocaleString()}</td>
+          <td>${w.perpus.toLocaleString()}</td>
+          <td>${w.lab_komputer.toLocaleString()}</td>
+        </tr>
+      `).join('');
+    }
+
+    // ==========================================
+    // 3. AIR CHARTS
+    // ==========================================
+    function initAirCharts() {
+      const rivers = VIZ_DATA.air.rivers.slice(0, 10);
+      new ApexCharts(document.querySelector("#chart-air-river-pollution"), {
+        series: [{ name: 'Pelanggaran Baku Mutu (%)', data: rivers.map(r => r.persen_pelanggaran) }],
+        chart: { type: 'bar', height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#f43f5e'],
+        plotOptions: { bar: { horizontal: true, borderRadius: 5, barHeight: '60%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: rivers.map(r => r.nama_sungai), labels: { style: { colors: '#94a3b8' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Param Compliance
+      const keyParams = VIZ_DATA.air.parameters.filter(p => p.pelanggaran_count > 0).slice(0, 6);
+      new ApexCharts(document.querySelector("#chart-air-param-compliance"), {
+        series: keyParams.map(p => p.persen_pelanggaran),
+        labels: keyParams.map(p => p.parameter),
+        chart: { type: 'donut', height: 320, background: 'transparent' },
+        colors: ['#f43f5e', '#fb923c', '#f59e0b', '#06b6d4', '#8b5cf6', '#ec4899'],
+        stroke: { show: false },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Radar Comparison
+      new ApexCharts(document.querySelector("#chart-air-radar"), {
+        series: [
+          { name: 'Ciliwung', data: [16.5, 45.2, 3.8, 7.3] },
+          { name: 'Kalibaru Timur', data: [19.2, 52.8, 2.9, 7.1] },
+          { name: 'Angke', data: [14.1, 39.4, 4.2, 7.4] },
+          { name: 'Pesanggrahan', data: [15.3, 41.7, 3.5, 7.2] }
+        ],
+        chart: { type: 'radar', height: 340, background: 'transparent', toolbar: { show: false } },
+        colors: ['#06b6d4', '#f43f5e', '#10b981', '#f59e0b'],
+        xaxis: { categories: ['BOD', 'COD', 'DO', 'pH'] },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Table Rivers
+      const tableBody = document.querySelector("#table-air-rivers tbody");
+      tableBody.innerHTML = VIZ_DATA.air.rivers.map(r => {
+        const isSafe = r.persen_pelanggaran < 30;
+        const badgeClass = isSafe ? 'status-success' : (r.persen_pelanggaran < 60 ? 'status-warning' : 'status-danger');
+        const badgeText = isSafe ? 'Cukup Baik' : (r.persen_pelanggaran < 60 ? 'Tercemar Sedang' : 'Tercemar Berat');
+        return `
+          <tr>
+            <td style="font-weight: 600;">${r.nama_sungai}</td>
+            <td>${r.total_sampel}</td>
+            <td>${r.avg_bod || '-'}</td>
+            <td>${r.avg_cod || '-'}</td>
+            <td>${r.avg_do || '-'}</td>
+            <td><span class="status-badge ${badgeClass}">${badgeText} (${r.persen_pelanggaran}%)</span></td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // ==========================================
+    // 4. RTH CHARTS
+    // ==========================================
+    function initRthCharts() {
+      const wilNames = Object.keys(VIZ_DATA.rth.by_wilayah);
+      const wilCounts = Object.values(VIZ_DATA.rth.by_wilayah);
+
+      new ApexCharts(document.querySelector("#chart-rth-wilayah"), {
+        series: [{ name: 'Jumlah Titik RTH', data: wilCounts }],
+        chart: { type: 'bar', height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#10b981'],
+        plotOptions: { bar: { borderRadius: 6, columnWidth: '50%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: wilNames, labels: { style: { colors: '#94a3b8' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Jenis
+      const jenisNames = Object.keys(VIZ_DATA.rth.by_jenis).slice(0, 5);
+      const jenisCounts = Object.values(VIZ_DATA.rth.by_jenis).slice(0, 5);
+
+      new ApexCharts(document.querySelector("#chart-rth-jenis"), {
+        series: jenisCounts,
+        labels: jenisNames,
+        chart: { type: 'pie', height: 320, background: 'transparent' },
+        colors: ['#10b981', '#06b6d4', '#8b5cf6', '#f59e0b', '#64748b'],
+        stroke: { show: false },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Top Kecamatan
+      const topKec = VIZ_DATA.rth.top_kecamatan.slice(0, 15);
+      new ApexCharts(document.querySelector("#chart-rth-top-kecamatan"), {
+        series: [{ name: 'Titik RTH', data: topKec.map(k => k.count) }],
+        chart: { type: 'bar', height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#06b6d4'],
+        plotOptions: { bar: { borderRadius: 5, columnWidth: '60%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: topKec.map(k => k.kecamatan), labels: { rotate: -35, style: { colors: '#94a3b8', fontSize: '11px' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        tooltip: { theme: 'dark' }
+      }).render();
+    }
+
+    // ==========================================
+    // 5. TRANSUM CHARTS
+    // ==========================================
+    function initTransumCharts() {
+      const kor = VIZ_DATA.transum.halte_per_koridor;
+      new ApexCharts(document.querySelector("#chart-transum-koridor"), {
+        series: [{ name: 'Jumlah Halte', data: kor.map(k => k.count) }],
+        chart: { type: 'bar', height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#8b5cf6'],
+        plotOptions: { bar: { borderRadius: 5, columnWidth: '55%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: kor.map(k => k.koridor), labels: { rotate: -45, style: { colors: '#94a3b8', fontSize: '11px' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Tipe Akses
+      const tipeKeys = Object.keys(VIZ_DATA.transum.tipe_akses);
+      const tipeVals = Object.values(VIZ_DATA.transum.tipe_akses);
+
+      new ApexCharts(document.querySelector("#chart-transum-tipe"), {
+        series: tipeVals,
+        labels: tipeKeys,
+        chart: { type: 'donut', height: 320, background: 'transparent' },
+        colors: ['#3b82f6', '#06b6d4', '#10b981', '#f59e0b'],
+        stroke: { show: false },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Cakupan Bar
+      new ApexCharts(document.querySelector("#chart-transum-cakupan"), {
+        series: [
+          { name: 'Persentase Populasi Terlayani (%)', data: [91.7, 92.4] },
+          { name: 'Persentase Luas Area Terlayani (%)', data: [85.4, 86.4] }
+        ],
+        chart: { type: 'bar', height: 260, background: 'transparent', toolbar: { show: false } },
+        colors: ['#3b82f6', '#10b981'],
+        plotOptions: { bar: { borderRadius: 6, columnWidth: '40%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: ['Tahun 2024', 'Tahun 2025 (Target)'], labels: { style: { colors: '#94a3b8', fontSize: '13px' } } },
+        yaxis: { min: 70, max: 100, labels: { style: { colors: '#94a3b8' } } },
+        legend: { position: 'top', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+    }
+
+    // ==========================================
+    // 6. UDARA CHARTS
+    // ==========================================
+    function initUdaraCharts() {
+      const trend = VIZ_DATA.udara.monthly_trend;
+      new ApexCharts(document.querySelector("#chart-udara-monthly"), {
+        series: [
+          { name: 'PM2.5', data: trend.map(t => t.pm25) },
+          { name: 'PM10', data: trend.map(t => t.pm10) },
+          { name: 'Ozon (O3)', data: trend.map(t => t.o3) },
+          { name: 'SO2', data: trend.map(t => t.so2) }
+        ],
+        chart: { type: 'line', height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#f43f5e', '#f59e0b', '#06b6d4', '#10b981'],
+        stroke: { width: 3, curve: 'smooth' },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: trend.map(t => t.bulan), labels: { style: { colors: '#94a3b8' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        legend: { position: 'top', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Category pie
+      const catKeys = Object.keys(VIZ_DATA.udara.category_distribution);
+      const catVals = Object.values(VIZ_DATA.udara.category_distribution);
+
+      new ApexCharts(document.querySelector("#chart-udara-category"), {
+        series: catVals,
+        labels: catKeys,
+        chart: { type: 'pie', height: 320, background: 'transparent' },
+        colors: ['#10b981', '#3b82f6', '#f59e0b', '#f43f5e', '#8b5cf6'],
+        stroke: { show: false },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // SPKU comparison
+      const spku = VIZ_DATA.udara.spku_locations;
+      new ApexCharts(document.querySelector("#chart-udara-spku"), {
+        series: [{ name: 'Rata-rata ISPU', data: spku.map(s => s.avg_ispu) }],
+        chart: { type: 'bar', height: 260, background: 'transparent', toolbar: { show: false } },
+        colors: ['#f59e0b'],
+        plotOptions: { bar: { borderRadius: 6, columnWidth: '45%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { categories: spku.map(s => s.station), labels: { style: { colors: '#94a3b8' } } },
+        yaxis: { labels: { style: { colors: '#94a3b8' } } },
+        tooltip: { theme: 'dark' }
+      }).render();
+    }
+
+    // ==========================================
+    // 7. KESEHATAN CHARTS
+    // ==========================================
+    function initKesehatanCharts() {
+      const typeKeys = Object.keys(VIZ_DATA.kesehatan.facility_types);
+      const typeVals = Object.values(VIZ_DATA.kesehatan.facility_types);
+
+      new ApexCharts(document.querySelector("#chart-kesehatan-types"), {
+        series: [{ name: 'Jumlah Unit', data: typeVals }],
+        chart: { type: 'bar', height: 320, background: 'transparent', toolbar: { show: false } },
+        colors: ['#f43f5e'],
+        plotOptions: { bar: { horizontal: true, borderRadius: 5, barHeight: '55%' } },
+        theme: chartTheme,
+        grid: defaultGrid,
+        xaxis: { labels: { style: { colors: '#94a3b8' } } },
+        yaxis: { categories: typeKeys, labels: { style: { colors: '#94a3b8' } } },
+        tooltip: { theme: 'dark' }
+      }).render();
+
+      // Wilayah
+      const wilKeys = Object.keys(VIZ_DATA.kesehatan.by_wilayah);
+      const wilVals = Object.values(VIZ_DATA.kesehatan.by_wilayah);
+
+      new ApexCharts(document.querySelector("#chart-kesehatan-wilayah"), {
+        series: wilVals,
+        labels: wilKeys,
+        chart: { type: 'donut', height: 320, background: 'transparent' },
+        colors: ['#3b82f6', '#06b6d4', '#10b981', '#8b5cf6', '#f59e0b', '#64748b'],
+        stroke: { show: false },
+        theme: chartTheme,
+        legend: { position: 'bottom', labels: { colors: '#94a3b8' } },
+        tooltip: { theme: 'dark' }
+      }).render();
+    }
+
+    // ==========================================
+    // 8. CATALOG RENDERER
+    // ==========================================
+    function renderCatalog() {
+      const container = document.getElementById("catalog-container");
+      container.innerHTML = VIZ_DATA.catalog.map(cat => `
+        <div class="catalog-item">
+          <div class="catalog-top">
+            <span class="catalog-tag tag-${cat.category}">${cat.category.toUpperCase()}</span>
+            <h4 class="catalog-title">${cat.title}</h4>
+            <p class="catalog-desc">${cat.description}</p>
+          </div>
+          <div class="catalog-meta">
+            <span><i class="fa-solid fa-server"></i> Sumber: ${cat.source}</span>
+            <span style="font-weight: 700; color: #fff;">${cat.record_count.toLocaleString()} Rekaman</span>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

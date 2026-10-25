@@ -1,0 +1,107 @@
+{
+  "total_rth": 5482,
+  "by_wilayah": {
+    "JAKARTA SELATAN": 1907,
+    "JAKARTA BARAT": 1058,
+    "JAKARTA TIMUR": 975,
+    "JAKARTA PUSAT": 796,
+    "JAKARTA UTARA": 742,
+    ";TAMAN": 2,
+    ";JALUR HIJAU": 1,
+    "PROVINSI: JAKARTA\" TAMAN": 1
+  },
+  "by_jenis": {
+    "TAMAN": 3222,
+    "JALUR HIJAU": 1950,
+    "TPU": 164,
+    "HUTAN KOTA": 96,
+    "LAINNYA": 36,
+    "KEBUN BIBIT": 14
+  },
+  "by_periode": {
+    "2023": 2741,
+    "2022": 2741
+  },
+  "top_kecamatan": [
+    {
+      "kecamatan": "KEBAYORAN BARU (JAKARTA SELATAN)",
+      "count": 345
+    },
+    {
+      "kecamatan": "JAGAKARSA (JAKARTA SELATAN)",
+      "count": 239
+    },
+    {
+      "kecamatan": "KEMBANGAN (JAKARTA BARAT)",
+      "count": 218
+    },
+    {
+      "kecamatan": "DUREN SAWIT (JAKARTA TIMUR)",
+      "count": 217
+    },
+    {
+      "kecamatan": "PASAR MINGGU (JAKARTA SELATAN)",
+      "count": 212
+    },
+    {
+      "kecamatan": "CILINCING (JAKARTA UTARA)",
+      "count": 185
+    },
+    {
+      "kecamatan": "TEBET (JAKARTA SELATAN)",
+      "count": 180
+    },
+    {
+      "kecamatan": "TANJUNG PRIOK (JAKARTA UTARA)",
+      "count": 180
+    },
+    {
+      "kecamatan": "CILANDAK (JAKARTA SELATAN)",
+      "count": 179
+    },
+    {
+      "kecamatan": "GROGOL PETAMBURAN (JAKARTA BARAT)",
+      "count": 176
+    },
+    {
+      "kecamatan": "CIPAYUNG (JAKARTA TIMUR)",
+      "count": 161
+    },
+    {
+      "kecamatan": "KELAPA GADING (JAKARTA UTARA)",
+      "count": 160
+    },
+    {
+      "kecamatan": "MENTENG (JAKARTA PUSAT)",
+      "count": 157
+    },
+    {
+      "kecamatan": "GAMBIR (JAKARTA PUSAT)",
+      "count": 151
+    },
+    {
+      "kecamatan": "TANAH ABANG (JAKARTA PUSAT)",
+      "count": 138
+    },
+    {
+      "kecamatan": "PANCORAN (JAKARTA SELATAN)",
+      "count": 137
+    },
+    {
+      "kecamatan": "CENGKARENG (JAKARTA BARAT)",
+      "count": 130
+    },
+    {
+      "kecamatan": "PESANGGRAHAN (JAKARTA SELATAN)",
+      "count": 129
+    },
+    {
+      "kecamatan": "KEBAYORAN LAMA (JAKARTA SELATAN)",
+      "count": 125
+    },
+    {
+      "kecamatan": "KALIDERES (JAKARTA BARAT)",
+      "count": 123
+    }
+  ]
+}
