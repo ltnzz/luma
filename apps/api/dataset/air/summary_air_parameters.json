@@ -1,0 +1,312 @@
+[
+  {
+    "parameter": "PH",
+    "total_pengujian": 960,
+    "baku_mutu": 6.9,
+    "avg_nilai": 7.16,
+    "min_nilai": 5.585,
+    "max_nilai": 8.655,
+    "pelanggaran_count": 3,
+    "persen_pelanggaran": 0.3
+  },
+  {
+    "parameter": "BOD",
+    "total_pengujian": 960,
+    "baku_mutu": 3.0,
+    "avg_nilai": 17.48,
+    "min_nilai": 1.33,
+    "max_nilai": 93.0,
+    "pelanggaran_count": 927,
+    "persen_pelanggaran": 96.6
+  },
+  {
+    "parameter": "COD",
+    "total_pengujian": 960,
+    "baku_mutu": 25.0,
+    "avg_nilai": 83.51,
+    "min_nilai": 3.9,
+    "max_nilai": 1500.0,
+    "pelanggaran_count": 841,
+    "persen_pelanggaran": 87.6
+  },
+  {
+    "parameter": "DO",
+    "total_pengujian": 960,
+    "baku_mutu": 4.0,
+    "avg_nilai": 2.28,
+    "min_nilai": 0.05,
+    "max_nilai": 7.405,
+    "pelanggaran_count": 838,
+    "persen_pelanggaran": 87.3
+  },
+  {
+    "parameter": "MINYAK DAN LEMAK",
+    "total_pengujian": 960,
+    "baku_mutu": 1.0,
+    "avg_nilai": 0.73,
+    "min_nilai": 0.2,
+    "max_nilai": 11.67,
+    "pelanggaran_count": 143,
+    "persen_pelanggaran": 14.9
+  },
+  {
+    "parameter": "TOTAL COLIFORM",
+    "total_pengujian": 960,
+    "baku_mutu": 5000.0,
+    "avg_nilai": 3375321.16,
+    "min_nilai": 200.0,
+    "max_nilai": 50000000.0,
+    "pelanggaran_count": 918,
+    "persen_pelanggaran": 95.6
+  },
+  {
+    "parameter": "FECAL COLIFORM",
+    "total_pengujian": 960,
+    "baku_mutu": 1000.0,
+    "avg_nilai": 1908580.28,
+    "min_nilai": 100.0,
+    "max_nilai": 50000000.0,
+    "pelanggaran_count": 932,
+    "persen_pelanggaran": 97.1
+  },
+  {
+    "parameter": "TDS",
+    "total_pengujian": 960,
+    "baku_mutu": 1000.0,
+    "avg_nilai": 408.12,
+    "min_nilai": 53.55,
+    "max_nilai": 14630.0,
+    "pelanggaran_count": 36,
+    "persen_pelanggaran": 3.8
+  },
+  {
+    "parameter": "TSS",
+    "total_pengujian": 960,
+    "baku_mutu": 50.0,
+    "avg_nilai": 55.09,
+    "min_nilai": 7.0,
+    "max_nilai": 1505.0,
+    "pelanggaran_count": 307,
+    "persen_pelanggaran": 32.0
+  },
+  {
+    "parameter": "KLORIN BEBAS",
+    "total_pengujian": 622,
+    "baku_mutu": 0.03,
+    "avg_nilai": 0.03,
+    "min_nilai": 0.0,
+    "max_nilai": 0.2,
+    "pelanggaran_count": 155,
+    "persen_pelanggaran": 24.9
+  },
+  {
+    "parameter": "NITRAT",
+    "total_pengujian": 480,
+    "baku_mutu": 10.0,
+    "avg_nilai": 0.94,
+    "min_nilai": 0.004,
+    "max_nilai": 11.0,
+    "pelanggaran_count": 1,
+    "persen_pelanggaran": 0.2
+  },
+  {
+    "parameter": "NITRIT",
+    "total_pengujian": 480,
+    "baku_mutu": 0.06,
+    "avg_nilai": 0.08,
+    "min_nilai": 0.004,
+    "max_nilai": 0.65,
+    "pelanggaran_count": 193,
+    "persen_pelanggaran": 40.2
+  },
+  {
+    "parameter": "TOTAL P",
+    "total_pengujian": 480,
+    "baku_mutu": 0.2,
+    "avg_nilai": 0.98,
+    "min_nilai": 0.036,
+    "max_nilai": 2.4176,
+    "pelanggaran_count": 434,
+    "persen_pelanggaran": 90.4
+  },
+  {
+    "parameter": "F",
+    "total_pengujian": 480,
+    "baku_mutu": 1.5,
+    "avg_nilai": 0.22,
+    "min_nilai": 0.003,
+    "max_nilai": 1.237,
+    "pelanggaran_count": 0,
+    "persen_pelanggaran": 0.0
+  },
+  {
+    "parameter": "H2S",
+    "total_pengujian": 480,
+    "baku_mutu": 0.002,
+    "avg_nilai": 0.05,
+    "min_nilai": 0.0009,
+    "max_nilai": 1.661,
+    "pelanggaran_count": 322,
+    "persen_pelanggaran": 67.1
+  },
+  {
+    "parameter": "FENOL",
+    "total_pengujian": 480,
+    "baku_mutu": 0.005,
+    "avg_nilai": 0.0,
+    "min_nilai": 0.0004,
+    "max_nilai": 0.078,
+    "pelanggaran_count": 64,
+    "persen_pelanggaran": 13.3
+  },
+  {
+    "parameter": "CD",
+    "total_pengujian": 480,
+    "baku_mutu": 0.01,
+    "avg_nilai": 0.0,
+    "min_nilai": 0.0009,
+    "max_nilai": 0.017,
+    "pelanggaran_count": 3,
+    "persen_pelanggaran": 0.6
+  },
+  {
+    "parameter": "ZN",
+    "total_pengujian": 480,
+    "baku_mutu": 0.05,
+    "avg_nilai": 0.02,
+    "min_nilai": 0.004,
+    "max_nilai": 1.2,
+    "pelanggaran_count": 16,
+    "persen_pelanggaran": 3.3
+  },
+  {
+    "parameter": "CU",
+    "total_pengujian": 480,
+    "baku_mutu": 0.02,
+    "avg_nilai": 0.01,
+    "min_nilai": 0.001,
+    "max_nilai": 0.07,
+    "pelanggaran_count": 17,
+    "persen_pelanggaran": 3.5
+  },
+  {
+    "parameter": "PB",
+    "total_pengujian": 480,
+    "baku_mutu": 0.03,
+    "avg_nilai": 0.01,
+    "min_nilai": 0.002,
+    "max_nilai": 0.03,
+    "pelanggaran_count": 0,
+    "persen_pelanggaran": 0.0
+  },
+  {
+    "parameter": "CR6",
+    "total_pengujian": 480,
+    "baku_mutu": 0.05,
+    "avg_nilai": 0.02,
+    "min_nilai": 0.0009,
+    "max_nilai": 0.168,
+    "pelanggaran_count": 92,
+    "persen_pelanggaran": 19.2
+  },
+  {
+    "parameter": "MBAS",
+    "total_pengujian": 480,
+    "baku_mutu": 0.2,
+    "avg_nilai": 0.17,
+    "min_nilai": 0.01,
+    "max_nilai": 1.16,
+    "pelanggaran_count": 114,
+    "persen_pelanggaran": 23.8
+  },
+  {
+    "parameter": "WARNA",
+    "total_pengujian": 480,
+    "baku_mutu": 50.0,
+    "avg_nilai": 20.8,
+    "min_nilai": 0.9,
+    "max_nilai": 237.0,
+    "pelanggaran_count": 24,
+    "persen_pelanggaran": 5.0
+  },
+  {
+    "parameter": "SULFAT",
+    "total_pengujian": 480,
+    "baku_mutu": 300.0,
+    "avg_nilai": 30.17,
+    "min_nilai": 0.02,
+    "max_nilai": 803.0,
+    "pelanggaran_count": 2,
+    "persen_pelanggaran": 0.4
+  },
+  {
+    "parameter": "KLORIDA",
+    "total_pengujian": 480,
+    "baku_mutu": 300.0,
+    "avg_nilai": 123.17,
+    "min_nilai": 1.0,
+    "max_nilai": 12171.71,
+    "pelanggaran_count": 18,
+    "persen_pelanggaran": 3.8
+  },
+  {
+    "parameter": "AMONIAK",
+    "total_pengujian": 480,
+    "baku_mutu": 0.2,
+    "avg_nilai": 7.72,
+    "min_nilai": 0.006,
+    "max_nilai": 34.1,
+    "pelanggaran_count": 452,
+    "persen_pelanggaran": 94.2
+  },
+  {
+    "parameter": "TOTAL N",
+    "total_pengujian": 480,
+    "baku_mutu": 15.0,
+    "avg_nilai": 11.5,
+    "min_nilai": 0.7776,
+    "max_nilai": 41.66,
+    "pelanggaran_count": 117,
+    "persen_pelanggaran": 24.4
+  },
+  {
+    "parameter": "NI",
+    "total_pengujian": 480,
+    "baku_mutu": 0.05,
+    "avg_nilai": 0.02,
+    "min_nilai": 0.004,
+    "max_nilai": 0.25,
+    "pelanggaran_count": 7,
+    "persen_pelanggaran": 1.5
+  },
+  {
+    "parameter": "SIANIDA",
+    "total_pengujian": 480,
+    "baku_mutu": 0.02,
+    "avg_nilai": 0.01,
+    "min_nilai": 0.0009,
+    "max_nilai": 0.067,
+    "pelanggaran_count": 105,
+    "persen_pelanggaran": 21.9
+  },
+  {
+    "parameter": "HG",
+    "total_pengujian": 480,
+    "baku_mutu": 0.002,
+    "avg_nilai": 0.0,
+    "min_nilai": 0.0001,
+    "max_nilai": 0.0026,
+    "pelanggaran_count": 3,
+    "persen_pelanggaran": 0.6
+  },
+  {
+    "parameter": "KLORIN BEBAS N  IN SITU",
+    "total_pengujian": 338,
+    "baku_mutu": 0.03,
+    "avg_nilai": 0.01,
+    "min_nilai": 0.0,
+    "max_nilai": 0.0261,
+    "pelanggaran_count": 0,
+    "persen_pelanggaran": 0.0
+  }
+]

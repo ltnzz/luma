@@ -1,0 +1,1456 @@
+{
+  "indicators": {
+    "ALL": {
+      "label": "Seluruh DKI Jakarta",
+      "rth_pct": "5.3%",
+      "rth_target": "Target 30% RTH (Total 5,482 Titik)",
+      "aqi_val": "74",
+      "aqi_status": "Sedang (PM2.5: 22.4 \u00b5g/m\u00b3)",
+      "sekolah_total": "8,875",
+      "sekolah_sub": "1.67M Siswa \u2022 Rasio Guru 1:17.7",
+      "faskes_total": "6,084",
+      "faskes_sub": "194 RS \u2022 340 Puskesmas \u2022 1,280 Klinik",
+      "fasum_total": "5,482",
+      "fasum_sub": "Taman Kota, Hutan Kota, Sarana Olahraga",
+      "transum_total": "210",
+      "transum_sub": "Halte BRT \u2022 Cakupan 92.4% Populasi"
+    },
+    "JAKARTA BARAT": {
+      "label": "JAKARTA BARAT",
+      "rth_pct": "19.3% dari Total DKI",
+      "rth_target": "1,058 Titik RTH Terverifikasi",
+      "aqi_val": "68",
+      "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi",
+      "sekolah_total": "1,976",
+      "sekolah_sub": "361,133 Siswa \u2022 Rasio 1:18.1",
+      "faskes_total": "1,420",
+      "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama",
+      "fasum_total": "1,058",
+      "fasum_sub": "633 Taman \u2022 379 Jalur Hijau",
+      "transum_total": "28",
+      "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"
+    },
+    "JAKARTA PUSAT": {
+      "label": "JAKARTA PUSAT",
+      "rth_pct": "14.5% dari Total DKI",
+      "rth_target": "796 Titik RTH Terverifikasi",
+      "aqi_val": "68",
+      "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi",
+      "sekolah_total": "959",
+      "sekolah_sub": "172,160 Siswa \u2022 Rasio 1:17.7",
+      "faskes_total": "730",
+      "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama",
+      "fasum_total": "796",
+      "fasum_sub": "257 Taman \u2022 527 Jalur Hijau",
+      "transum_total": "217",
+      "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"
+    },
+    "JAKARTA SELATAN": {
+      "label": "JAKARTA SELATAN",
+      "rth_pct": "34.8% dari Total DKI",
+      "rth_target": "1,907 Titik RTH Terverifikasi",
+      "aqi_val": "68",
+      "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi",
+      "sekolah_total": "1,908",
+      "sekolah_sub": "357,034 Siswa \u2022 Rasio 1:16.9",
+      "faskes_total": "1,640",
+      "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama",
+      "fasum_total": "1,907",
+      "fasum_sub": "1223 Taman \u2022 600 Jalur Hijau",
+      "transum_total": "27",
+      "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"
+    },
+    "JAKARTA TIMUR": {
+      "label": "JAKARTA TIMUR",
+      "rth_pct": "17.8% dari Total DKI",
+      "rth_target": "975 Titik RTH Terverifikasi",
+      "aqi_val": "78",
+      "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi",
+      "sekolah_total": "2,582",
+      "sekolah_sub": "509,684 Siswa \u2022 Rasio 1:18.0",
+      "faskes_total": "1,850",
+      "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama",
+      "fasum_total": "975",
+      "fasum_sub": "602 Taman \u2022 247 Jalur Hijau",
+      "transum_total": "38",
+      "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"
+    },
+    "JAKARTA UTARA": {
+      "label": "JAKARTA UTARA",
+      "rth_pct": "13.5% dari Total DKI",
+      "rth_target": "742 Titik RTH Terverifikasi",
+      "aqi_val": "82",
+      "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi",
+      "sekolah_total": "1,398",
+      "sekolah_sub": "264,253 Siswa \u2022 Rasio 1:17.9",
+      "faskes_total": "980",
+      "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama",
+      "fasum_total": "742",
+      "fasum_sub": "507 Taman \u2022 197 Jalur Hijau",
+      "transum_total": "25",
+      "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"
+    },
+    "KEP. SERIBU": {
+      "label": "KEP. SERIBU",
+      "rth_pct": "0.0% dari Total DKI",
+      "rth_target": "0 Titik RTH Terverifikasi",
+      "aqi_val": "68",
+      "aqi_status": "Sedang \u2022 5 SPKU Terkoneksi",
+      "sekolah_total": "52",
+      "sekolah_sub": "6,147 Siswa \u2022 Rasio 1:15.3",
+      "faskes_total": "28",
+      "faskes_sub": "RSUD, Puskesmas Kelurahan, Klinik Pratama",
+      "fasum_total": "0",
+      "fasum_sub": "0 Taman \u2022 0 Jalur Hijau",
+      "transum_total": "25",
+      "transum_sub": "Titik Akses Halte BRT & Feeder Transjakarta"
+    }
+  },
+  "facilities": [
+    {
+      "id": "rth-tebet-ecopark",
+      "name": "Tebet Eco Park",
+      "category": "fasum",
+      "sub_category": "Taman Publik & RTH",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "TEBET",
+      "address": "Jl. Tebet Barat Raya, RT.1/RW.10, Tebet Barat, Jakarta Selatan",
+      "lat": -6.2366,
+      "lng": 106.8532,
+      "specs": {
+        "Luas": "7.3 Hektar (Zona Utara & Selatan)",
+        "Jam Layanan": "06.00 - 19.00 WIB",
+        "Kapasitas": "8.000 pengunjung / sesi",
+        "Fasilitas Utama": "Jembatan Infinity, Plaza Anak, Wetland Edukasi, Community Lawn"
+      },
+      "budget": {
+        "total": "Rp 49.300.000.000",
+        "source": "Kompensasi Koefisien Lantai Bangunan (KLB)",
+        "year": "2021 - 2022 (Diresmikan April 2022)",
+        "contractor": "PT. Kencana Alam Persada (Tender LPSE)",
+        "status": "100% Selesai & Beroperasi"
+      },
+      "metrics": {
+        "aqi": 64,
+        "aqi_status": "Sedang",
+        "pm25": "18.2 \u00b5g/m\u00b3",
+        "walkability": "4.8 / 5.0",
+        "transit_access": "180m ke Halte Transjakarta Tebet Eco Park"
+      },
+      "docs": [
+        {
+          "title": "Dokumen DED (Detail Engineering Design).pdf",
+          "size": "4.2 MB",
+          "dept": "Dinas Pertamanan"
+        },
+        {
+          "title": "Kontrak SPK Pengadaan & Penetapan Pemenang.pdf",
+          "size": "1.8 MB",
+          "dept": "LPSE DKI"
+        },
+        {
+          "title": "Laporan Hasil Audit BPK RI TA 2022.pdf",
+          "size": "2.1 MB",
+          "dept": "BPK Perwakilan DKI (WTP)"
+        }
+      ]
+    },
+    {
+      "id": "faskes-rsud-tebet",
+      "name": "RSUD Tebet",
+      "category": "kesehatan",
+      "sub_category": "Rumah Sakit Umum Daerah Tipe D",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "TEBET",
+      "address": "Jl. Tebet Timur Dalam Raya No.1, Tebet Timur, Jakarta Selatan",
+      "lat": -6.2325,
+      "lng": 106.855,
+      "specs": {
+        "Tipe Layanan": "RSUD Tipe D (Akreditasi Paripurna KARS)",
+        "Kapasitas Bed": "52 Tempat Tidur (Rawat Inap & ICU)",
+        "Layanan Darurat": "IGD 24 Jam \u2022 3 Unit Ambulans AGD",
+        "Tenaga Medis": "14 Dokter Spesialis, 28 Perawat"
+      },
+      "budget": {
+        "total": "Rp 68.450.000.000",
+        "source": "APBD Provinsi DKI Jakarta (Dinas Kesehatan)",
+        "year": "Multiyears 2018 - 2020",
+        "contractor": "PT. Pembangunan Jaya Perkasa (LPSE)",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 68,
+        "aqi_status": "Sedang",
+        "pm25": "20.1 \u00b5g/m\u00b3",
+        "walkability": "4.2 / 5.0",
+        "transit_access": "250m ke Stasiun Tebet (KRL Commuter Line)"
+      },
+      "docs": [
+        {
+          "title": "AMDAL & Studi Kelayakan Faskes.pdf",
+          "size": "3.5 MB",
+          "dept": "Dinas Lingkungan Hidup"
+        },
+        {
+          "title": "Berita Acara Lelang Konstruksi LPSE.pdf",
+          "size": "2.4 MB",
+          "dept": "BPPBJ DKI"
+        },
+        {
+          "title": "Sertifikat Laik Fungsi (SLF) Gedung.pdf",
+          "size": "1.2 MB",
+          "dept": "Dinas Cipta Karya"
+        }
+      ]
+    },
+    {
+      "id": "sek-smpn-115",
+      "name": "SMP Negeri 115 Jakarta",
+      "category": "pendidikan",
+      "sub_category": "Sekolah Menengah Pertama Negeri",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "TEBET",
+      "address": "Jl. KH. Abdullah Syafei No.48, Tebet Timur, Jakarta Selatan",
+      "lat": -6.2268,
+      "lng": 106.8562,
+      "specs": {
+        "Status / Akreditasi": "Negeri \u2022 Akreditasi A (BAN-S/M Unggul)",
+        "Daya Tampung": "320 Siswa / Angkatan (98% Terisi)",
+        "Siswa & Guru": "964 Siswa \u2022 58 Guru (Rasio 1:16.6)",
+        "Fasilitas Belajar": "27 Ruang Kelas, Lab IPA/Komputer, Perpustakaan"
+      },
+      "budget": {
+        "total": "Rp 14.800.000.000",
+        "source": "APBD DKI Jakarta (Dinas Pendidikan)",
+        "year": "Rehabilitasi Total 2019 (Struktur Ramah Gempa)",
+        "contractor": "PT. Bangun Cipta Sarana (LPSE)",
+        "status": "Selesai Direhab & Beroperasi"
+      },
+      "metrics": {
+        "aqi": 66,
+        "aqi_status": "Sedang",
+        "pm25": "19.0 \u00b5g/m\u00b3",
+        "walkability": "4.5 / 5.0",
+        "transit_access": "300m ke Halte Transjakarta Kampung Melayu"
+      },
+      "docs": [
+        {
+          "title": "Dokumen Perencanaan Rehab Gedung Sekolah.pdf",
+          "size": "3.2 MB",
+          "dept": "Disdik DKI"
+        },
+        {
+          "title": "Berita Acara Serah Terima (BAST) Pekerjaan.pdf",
+          "size": "1.1 MB",
+          "dept": "PPK Disdik"
+        },
+        {
+          "title": "Laporan Pertanggungjawaban BOS & BOP 2024.pdf",
+          "size": "2.4 MB",
+          "dept": "Audited PPID"
+        }
+      ]
+    },
+    {
+      "id": "proj-rsud-tebet-tahap2",
+      "name": "Pembangunan Gedung RSUD Tebet Tahap II",
+      "category": "kesehatan",
+      "sub_category": "Proyek Konstruksi Faskes Aktif",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "TEBET",
+      "address": "Jl. Tebet Timur Dalam No.22, Tebet, Jakarta Selatan",
+      "lat": -6.2289,
+      "lng": 106.8542,
+      "is_project": true,
+      "progress": 62.4,
+      "specs": {
+        "Target Fasilitas": "Penambahan 120 Bed Rawat Inap & ICU Terpadu",
+        "Target Selesai": "Desember 2026",
+        "Deviasi Jadwal": "+1.8% (Tepat Waktu)",
+        "Status Lapangan": "Struktur Lantai 4 Tuntas 100%, Pemasangan MEP Berjalan"
+      },
+      "budget": {
+        "total": "Rp 54.200.000.000",
+        "source": "APBD DKI (Pos Belanja Modal Dinas Kesehatan)",
+        "year": "TA 2025 s/d TA 2026 (Tahun Jamak)",
+        "contractor": "PT Adhi Jaya Konstruksi (HPS 94.2%)",
+        "status": "Tahap Konstruksi (Progress Fisik 62.4%)"
+      },
+      "simulation": {
+        "service_radius_before": "1.5 km",
+        "service_radius_after": "3.0 km (15 Menit Tempuh)",
+        "pop_before": "24.800 Jiwa (32%)",
+        "pop_after": "68.200 Jiwa (88%) - Kenaikan +56%",
+        "travel_time_before": "22 Menit",
+        "travel_time_after": "9.5 Menit (Penurunan -57%)",
+        "bed_ratio_before": "0.8 / 1.000 Penduduk",
+        "bed_ratio_after": "1.9 / 1.000 Penduduk (Sesuai Standar WHO)"
+      },
+      "metrics": {
+        "aqi": 72,
+        "aqi_status": "Sedang",
+        "pm25": "23.4 \u00b5g/m\u00b3",
+        "walkability": "4.1 / 5.0",
+        "transit_access": "350m ke Halte Tebet BUMD"
+      },
+      "docs": [
+        {
+          "title": "Kajian Kelayakan & Simulasi Akses Spasial.pdf",
+          "size": "4.8 MB",
+          "dept": "Bappeda DKI"
+        },
+        {
+          "title": "Dokumen Kontrak Kerja Konstruksi & SPK.pdf",
+          "size": "2.6 MB",
+          "dept": "LPSE DKI"
+        },
+        {
+          "title": "Laporan Evaluasi Progres Fisik Triwulan II.pdf",
+          "size": "1.9 MB",
+          "dept": "Konsultan Supervisi"
+        }
+      ]
+    },
+    {
+      "id": "transum-0",
+      "name": "Halte GAMBIR 2",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 2",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "GAMBIR",
+      "address": "JL.MERDEKA SELATAN",
+      "lat": -6.18,
+      "lng": 106.82,
+      "specs": {
+        "Rute Koridor": "HARMONI - PULOGADUNG",
+        "Tipe Akses": "PELICAN",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-1",
+      "name": "Halte KWITANG",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 2",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "GAMBIR",
+      "address": "JL.KWITANG",
+      "lat": -6.188,
+      "lng": 106.835,
+      "specs": {
+        "Rute Koridor": "HARMONI - PULOGADUNG",
+        "Tipe Akses": "PELICAN",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-2",
+      "name": "Halte TERMINAL KALIDERES",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "TERMINAL KALIDRES",
+      "lat": -6.196,
+      "lng": 106.85,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "PELICAN",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-3",
+      "name": "Halte PESAKIH",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.204,
+      "lng": 106.865,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-4",
+      "name": "Halte SUMUR BOR",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.212,
+      "lng": 106.82,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-5",
+      "name": "Halte RAWA BUAYA",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.22,
+      "lng": 106.835,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / PEMB BARU TH 2010 ( RAMP, TANGGA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-6",
+      "name": "Halte JEMBATAN BARU",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.228,
+      "lng": 106.85,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-7",
+      "name": "Halte DISPENDA",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.236,
+      "lng": 106.865,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / PEMBANGUNAN BARU ( RAMP, SEMUA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-8",
+      "name": "Halte JEMBATAN GANTUNG",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.244,
+      "lng": 106.82,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP SEMUA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-9",
+      "name": "Halte TAMAN KOTA",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.252,
+      "lng": 106.835,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / EKSISTING ( RAMP, TANGGA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-10",
+      "name": "Halte INDOSIAR",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.26,
+      "lng": 106.85,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BAJA / PEMBANGUNAN BARU ( RAMP, TANGGA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "transum-11",
+      "name": "Halte JELAMBAR",
+      "category": "transum",
+      "sub_category": "Transjakarta KORIDOR 3",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MENTENG",
+      "address": "JL.DAAN MOGOT",
+      "lat": -6.268,
+      "lng": 106.865,
+      "specs": {
+        "Rute Koridor": "KALIDERES - HARMONI",
+        "Tipe Akses": "JPO BETON / EKSISTING ( TANGGA BETON SEMUA )",
+        "Tahun Dibangun": "2004 DAN 2005",
+        "Moda Integrasi": "BRT Utama Transjakarta"
+      },
+      "budget": {
+        "total": "Termasuk dalam Investasi Koridor BRT DKI",
+        "source": "APBD DKI Jakarta (Dinas Perhubungan)",
+        "year": "2004 DAN 2005",
+        "contractor": "PT Transportasi Jakarta",
+        "status": "Operasional 24 Jam"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 \u00b5g/m\u00b3",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "Terintegrasi Langsung Jalur Busway"
+      },
+      "docs": [
+        {
+          "title": "Standar Pelayanan Minimal (SPM) Halte Transjakarta.pdf",
+          "size": "1.5 MB",
+          "dept": "Dishub DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-0",
+      "name": "Taman Bumi Perkemahan Ragunan",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "PASAR MINGGU",
+      "address": "Wilayah JAKARTA SELATAN, DKI Jakarta",
+      "lat": -6.312,
+      "lng": 106.823,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-1",
+      "name": "Taman Puring",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "KEBAYORAN BARU",
+      "address": "Wilayah JAKARTA SELATAN, DKI Jakarta",
+      "lat": -6.242,
+      "lng": 106.793,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-2",
+      "name": "Taman Suropati",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "MENTENG",
+      "address": "Wilayah JAKARTA PUSAT, DKI Jakarta",
+      "lat": -6.199,
+      "lng": 106.832,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-3",
+      "name": "Taman Menteng",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "MENTENG",
+      "address": "Wilayah JAKARTA PUSAT, DKI Jakarta",
+      "lat": -6.196,
+      "lng": 106.829,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-4",
+      "name": "Taman Ayodya",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "KEBAYORAN BARU",
+      "address": "Wilayah JAKARTA SELATAN, DKI Jakarta",
+      "lat": -6.244,
+      "lng": 106.795,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-5",
+      "name": "Hutan Kota Srengseng",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA BARAT",
+      "kecamatan": "KEMBANGAN",
+      "address": "Wilayah JAKARTA BARAT, DKI Jakarta",
+      "lat": -6.208,
+      "lng": 106.762,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-6",
+      "name": "Taman Waduk Pluit",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA UTARA",
+      "kecamatan": "PENJARINGAN",
+      "address": "Wilayah JAKARTA UTARA, DKI Jakarta",
+      "lat": -6.119,
+      "lng": 106.797,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "rth-node-7",
+      "name": "Taman Kota Waduk Ria Rio",
+      "category": "fasum",
+      "sub_category": "Ruang Terbuka Hijau & Taman Publik",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "PULOGADUNG",
+      "address": "Wilayah JAKARTA TIMUR, DKI Jakarta",
+      "lat": -6.172,
+      "lng": 106.883,
+      "specs": {
+        "Tipe": "Taman Kota / RTH Aktif",
+        "Pengelola": "Dinas Pertamanan dan Hutan Kota DKI Jakarta",
+        "Aktivitas": "Jogging Track, Area Rekreasi Keluarga, Resapan Air"
+      },
+      "budget": {
+        "total": "Alokasi Pemeliharaan Rutin Distamhut",
+        "source": "APBD DKI Jakarta",
+        "year": "2022 - 2024",
+        "contractor": "Suku Dinas Pertamanan Wilayah",
+        "status": "Terbuka untuk Umum (Gratis)"
+      },
+      "metrics": {
+        "aqi": 58,
+        "aqi_status": "Sedang",
+        "pm25": "15.4 \u00b5g/m\u00b3",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "Radius <500m dari Titik Akses Transit"
+      },
+      "docs": [
+        {
+          "title": "Masterplan RTH DKI Jakarta 2030.pdf",
+          "size": "5.6 MB",
+          "dept": "Distamhut DKI"
+        }
+      ]
+    },
+    {
+      "id": "sekolah-node-0",
+      "name": "SMA Negeri 8 Jakarta",
+      "category": "pendidikan",
+      "sub_category": "Satuan Pendidikan Negeri (SMA)",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "TEBET",
+      "address": "Kecamatan TEBET, JAKARTA SELATAN",
+      "lat": -6.223,
+      "lng": 106.862,
+      "specs": {
+        "Jenjang": "SMA",
+        "Status": "NEGERI \u2022 Akreditasi A",
+        "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital",
+        "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"
+      },
+      "budget": {
+        "total": "Dana BOS & BOP Prov. DKI Jakarta",
+        "source": "APBD DKI Jakarta (Dinas Pendidikan)",
+        "year": "Anggaran Berjalan TA 2024",
+        "contractor": "Dinas Pendidikan Provinsi DKI Jakarta",
+        "status": "Aktif Pembelajaran"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "18.5 \u00b5g/m\u00b3",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"
+      },
+      "docs": [
+        {
+          "title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf",
+          "size": "3.1 MB",
+          "dept": "Disdik DKI"
+        }
+      ]
+    },
+    {
+      "id": "sekolah-node-1",
+      "name": "SMP Negeri 1 Jakarta",
+      "category": "pendidikan",
+      "sub_category": "Satuan Pendidikan Negeri (SMP)",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "SAWAH BESAR",
+      "address": "Kecamatan SAWAH BESAR, JAKARTA PUSAT",
+      "lat": -6.168,
+      "lng": 106.833,
+      "specs": {
+        "Jenjang": "SMP",
+        "Status": "NEGERI \u2022 Akreditasi A",
+        "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital",
+        "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"
+      },
+      "budget": {
+        "total": "Dana BOS & BOP Prov. DKI Jakarta",
+        "source": "APBD DKI Jakarta (Dinas Pendidikan)",
+        "year": "Anggaran Berjalan TA 2024",
+        "contractor": "Dinas Pendidikan Provinsi DKI Jakarta",
+        "status": "Aktif Pembelajaran"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "18.5 \u00b5g/m\u00b3",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"
+      },
+      "docs": [
+        {
+          "title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf",
+          "size": "3.1 MB",
+          "dept": "Disdik DKI"
+        }
+      ]
+    },
+    {
+      "id": "sekolah-node-2",
+      "name": "SD Negeri Menteng 01",
+      "category": "pendidikan",
+      "sub_category": "Satuan Pendidikan Negeri (SD)",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "MENTENG",
+      "address": "Kecamatan MENTENG, JAKARTA PUSAT",
+      "lat": -6.198,
+      "lng": 106.835,
+      "specs": {
+        "Jenjang": "SD",
+        "Status": "NEGERI \u2022 Akreditasi A",
+        "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital",
+        "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"
+      },
+      "budget": {
+        "total": "Dana BOS & BOP Prov. DKI Jakarta",
+        "source": "APBD DKI Jakarta (Dinas Pendidikan)",
+        "year": "Anggaran Berjalan TA 2024",
+        "contractor": "Dinas Pendidikan Provinsi DKI Jakarta",
+        "status": "Aktif Pembelajaran"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "18.5 \u00b5g/m\u00b3",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"
+      },
+      "docs": [
+        {
+          "title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf",
+          "size": "3.1 MB",
+          "dept": "Disdik DKI"
+        }
+      ]
+    },
+    {
+      "id": "sekolah-node-3",
+      "name": "SMK Negeri 26 Jakarta",
+      "category": "pendidikan",
+      "sub_category": "Satuan Pendidikan Negeri (SMK)",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "PULOGADUNG",
+      "address": "Kecamatan PULOGADUNG, JAKARTA TIMUR",
+      "lat": -6.195,
+      "lng": 106.885,
+      "specs": {
+        "Jenjang": "SMK",
+        "Status": "NEGERI \u2022 Akreditasi A",
+        "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital",
+        "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"
+      },
+      "budget": {
+        "total": "Dana BOS & BOP Prov. DKI Jakarta",
+        "source": "APBD DKI Jakarta (Dinas Pendidikan)",
+        "year": "Anggaran Berjalan TA 2024",
+        "contractor": "Dinas Pendidikan Provinsi DKI Jakarta",
+        "status": "Aktif Pembelajaran"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "18.5 \u00b5g/m\u00b3",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"
+      },
+      "docs": [
+        {
+          "title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf",
+          "size": "3.1 MB",
+          "dept": "Disdik DKI"
+        }
+      ]
+    },
+    {
+      "id": "sekolah-node-4",
+      "name": "SMA Negeri 70 Jakarta",
+      "category": "pendidikan",
+      "sub_category": "Satuan Pendidikan Negeri (SMA)",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "KEBAYORAN BARU",
+      "address": "Kecamatan KEBAYORAN BARU, JAKARTA SELATAN",
+      "lat": -6.241,
+      "lng": 106.797,
+      "specs": {
+        "Jenjang": "SMA",
+        "Status": "NEGERI \u2022 Akreditasi A",
+        "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital",
+        "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"
+      },
+      "budget": {
+        "total": "Dana BOS & BOP Prov. DKI Jakarta",
+        "source": "APBD DKI Jakarta (Dinas Pendidikan)",
+        "year": "Anggaran Berjalan TA 2024",
+        "contractor": "Dinas Pendidikan Provinsi DKI Jakarta",
+        "status": "Aktif Pembelajaran"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "18.5 \u00b5g/m\u00b3",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"
+      },
+      "docs": [
+        {
+          "title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf",
+          "size": "3.1 MB",
+          "dept": "Disdik DKI"
+        }
+      ]
+    },
+    {
+      "id": "sekolah-node-5",
+      "name": "SMA Negeri 78 Jakarta",
+      "category": "pendidikan",
+      "sub_category": "Satuan Pendidikan Negeri (SMA)",
+      "wilayah": "JAKARTA BARAT",
+      "kecamatan": "PALMERAH",
+      "address": "Kecamatan PALMERAH, JAKARTA BARAT",
+      "lat": -6.185,
+      "lng": 106.779,
+      "specs": {
+        "Jenjang": "SMA",
+        "Status": "NEGERI \u2022 Akreditasi A",
+        "Fasilitas": "Ruang Kelas Modern, Lab Komputer, Perpustakaan Digital",
+        "Daya Tampung": "Sistem PPDB Zonasi Provinsi DKI Jakarta"
+      },
+      "budget": {
+        "total": "Dana BOS & BOP Prov. DKI Jakarta",
+        "source": "APBD DKI Jakarta (Dinas Pendidikan)",
+        "year": "Anggaran Berjalan TA 2024",
+        "contractor": "Dinas Pendidikan Provinsi DKI Jakarta",
+        "status": "Aktif Pembelajaran"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "18.5 \u00b5g/m\u00b3",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "Dekat Jalur Feeder Mikrotrans / Busway"
+      },
+      "docs": [
+        {
+          "title": "Laporan Akuntabilitas Kinerja Instansi Disdik.pdf",
+          "size": "3.1 MB",
+          "dept": "Disdik DKI"
+        }
+      ]
+    },
+    {
+      "id": "water-node-0",
+      "name": "Titik Pantau Ciliwung Manggarai",
+      "category": "lingkungan",
+      "sub_category": "Titik Pemantauan Kualitas Air Sungai",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "TEBET",
+      "address": "Pintu Air Manggarai",
+      "lat": -6.2085,
+      "lng": 106.8485,
+      "specs": {
+        "Sungai": "CILIWUNG",
+        "Periode Uji": "Triwulan Pemantauan Berkala",
+        "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi",
+        "Status Uji": "BOD, COD, & DO Terpantau Terbuka"
+      },
+      "budget": {
+        "total": "Program Pengendalian Pencemaran Air DLH",
+        "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)",
+        "year": "TA 2024 - 2026",
+        "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)",
+        "status": "Pemantauan Aktif"
+      },
+      "metrics": {
+        "aqi": 70,
+        "aqi_status": "Sedang",
+        "pm25": "21.0 \u00b5g/m\u00b3",
+        "walkability": "3.8 / 5.0",
+        "transit_access": "Akses Inspeksi Sungai"
+      },
+      "docs": [
+        {
+          "title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf",
+          "size": "8.4 MB",
+          "dept": "Dinas Lingkungan Hidup"
+        }
+      ]
+    },
+    {
+      "id": "water-node-1",
+      "name": "Titik Pantau Kalibaru Timur Komseko",
+      "category": "lingkungan",
+      "sub_category": "Titik Pemantauan Kualitas Air Sungai",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "PASAR REBO",
+      "address": "Jl. Raya Bogor",
+      "lat": -6.2861,
+      "lng": 106.8706,
+      "specs": {
+        "Sungai": "KALIBARU TIMUR",
+        "Periode Uji": "Triwulan Pemantauan Berkala",
+        "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi",
+        "Status Uji": "BOD, COD, & DO Terpantau Terbuka"
+      },
+      "budget": {
+        "total": "Program Pengendalian Pencemaran Air DLH",
+        "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)",
+        "year": "TA 2024 - 2026",
+        "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)",
+        "status": "Pemantauan Aktif"
+      },
+      "metrics": {
+        "aqi": 70,
+        "aqi_status": "Sedang",
+        "pm25": "21.0 \u00b5g/m\u00b3",
+        "walkability": "3.8 / 5.0",
+        "transit_access": "Akses Inspeksi Sungai"
+      },
+      "docs": [
+        {
+          "title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf",
+          "size": "8.4 MB",
+          "dept": "Dinas Lingkungan Hidup"
+        }
+      ]
+    },
+    {
+      "id": "water-node-2",
+      "name": "Titik Pantau Angke Kedaung",
+      "category": "lingkungan",
+      "sub_category": "Titik Pemantauan Kualitas Air Sungai",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "PASAR REBO",
+      "address": "Jembatan Gantung",
+      "lat": -6.145,
+      "lng": 106.745,
+      "specs": {
+        "Sungai": "ANGKE",
+        "Periode Uji": "Triwulan Pemantauan Berkala",
+        "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi",
+        "Status Uji": "BOD, COD, & DO Terpantau Terbuka"
+      },
+      "budget": {
+        "total": "Program Pengendalian Pencemaran Air DLH",
+        "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)",
+        "year": "TA 2024 - 2026",
+        "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)",
+        "status": "Pemantauan Aktif"
+      },
+      "metrics": {
+        "aqi": 70,
+        "aqi_status": "Sedang",
+        "pm25": "21.0 \u00b5g/m\u00b3",
+        "walkability": "3.8 / 5.0",
+        "transit_access": "Akses Inspeksi Sungai"
+      },
+      "docs": [
+        {
+          "title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf",
+          "size": "8.4 MB",
+          "dept": "Dinas Lingkungan Hidup"
+        }
+      ]
+    },
+    {
+      "id": "water-node-3",
+      "name": "Titik Pantau Pesanggrahan Cipulir",
+      "category": "lingkungan",
+      "sub_category": "Titik Pemantauan Kualitas Air Sungai",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "PASAR REBO",
+      "address": "Cipulir",
+      "lat": -6.235,
+      "lng": 106.772,
+      "specs": {
+        "Sungai": "PESANGGRAHAN",
+        "Periode Uji": "Triwulan Pemantauan Berkala",
+        "Parameter Diuji": "31 Parameter Fisika, Kimia, & Mikrobiologi",
+        "Status Uji": "BOD, COD, & DO Terpantau Terbuka"
+      },
+      "budget": {
+        "total": "Program Pengendalian Pencemaran Air DLH",
+        "source": "APBD DKI Jakarta (Dinas Lingkungan Hidup)",
+        "year": "TA 2024 - 2026",
+        "contractor": "Laboratorium Lingkungan Hidup Daerah (LLHD)",
+        "status": "Pemantauan Aktif"
+      },
+      "metrics": {
+        "aqi": 70,
+        "aqi_status": "Sedang",
+        "pm25": "21.0 \u00b5g/m\u00b3",
+        "walkability": "3.8 / 5.0",
+        "transit_access": "Akses Inspeksi Sungai"
+      },
+      "docs": [
+        {
+          "title": "Buku Profil Kualitas Air Sungai DKI Jakarta.pdf",
+          "size": "8.4 MB",
+          "dept": "Dinas Lingkungan Hidup"
+        }
+      ]
+    }
+  ],
+  "wilayah_list": [
+    "ALL",
+    "JAKARTA SELATAN",
+    "JAKARTA TIMUR",
+    "JAKARTA BARAT",
+    "JAKARTA PUSAT",
+    "JAKARTA UTARA",
+    "KEP. SERIBU"
+  ]
+}

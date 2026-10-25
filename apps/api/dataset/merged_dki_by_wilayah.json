@@ -1,0 +1,237 @@
+[
+  {
+    "wilayah": "JAKARTA BARAT",
+    "sekolah": {
+      "total_unit": 1976,
+      "total_siswa": 361133,
+      "total_guru": 19938,
+      "ruang_kelas": 17464,
+      "jenjang": {
+        "SMP": 279,
+        "PAUD": 798,
+        "SD": 562,
+        "SMK": 121,
+        "PKBM": 73,
+        "SMA": 122,
+        "SLB": 21
+      },
+      "status": {
+        "SWASTA": 1544,
+        "NEGERI": 432
+      },
+      "rasio_siswa_guru": 18.1
+    },
+    "rth": {
+      "total_titik": 1058,
+      "jenis": {
+        "TAMAN": 633,
+        "LAINNYA": 5,
+        "HUTAN KOTA": 8,
+        "TPU": 31,
+        "KEBUN BIBIT": 2,
+        "JALUR HIJAU": 379
+      }
+    },
+    "air": {
+      "total_sampel": 0,
+      "pelanggaran_baku_mutu": 0
+    },
+    "transum": {
+      "total_halte": 3
+    }
+  },
+  {
+    "wilayah": "JAKARTA PUSAT",
+    "sekolah": {
+      "total_unit": 959,
+      "total_siswa": 172160,
+      "total_guru": 9729,
+      "ruang_kelas": 7916,
+      "jenjang": {
+        "PAUD": 444,
+        "PKBM": 30,
+        "SD": 255,
+        "SLB": 6,
+        "SMA": 56,
+        "SMK": 57,
+        "SMP": 111
+      },
+      "status": {
+        "SWASTA": 702,
+        "NEGERI": 257
+      },
+      "rasio_siswa_guru": 17.7
+    },
+    "rth": {
+      "total_titik": 796,
+      "jenis": {
+        "LAINNYA": 3,
+        "TAMAN": 257,
+        "JALUR HIJAU": 527,
+        "TPU": 9
+      }
+    },
+    "air": {
+      "total_sampel": 0,
+      "pelanggaran_baku_mutu": 0
+    },
+    "transum": {
+      "total_halte": 192
+    }
+  },
+  {
+    "wilayah": "JAKARTA SELATAN",
+    "sekolah": {
+      "total_unit": 1908,
+      "total_siswa": 357034,
+      "total_guru": 21152,
+      "ruang_kelas": 17517,
+      "jenjang": {
+        "SD": 456,
+        "SMA": 106,
+        "SMK": 121,
+        "SMP": 221,
+        "PAUD": 922,
+        "SLB": 26,
+        "PKBM": 56
+      },
+      "status": {
+        "NEGERI": 438,
+        "SWASTA": 1470
+      },
+      "rasio_siswa_guru": 16.9
+    },
+    "rth": {
+      "total_titik": 1907,
+      "jenis": {
+        "LAINNYA": 8,
+        "TAMAN": 1223,
+        "HUTAN KOTA": 28,
+        "JALUR HIJAU": 600,
+        "TPU": 38,
+        "KEBUN BIBIT": 10
+      }
+    },
+    "air": {
+      "total_sampel": 0,
+      "pelanggaran_baku_mutu": 0
+    },
+    "transum": {
+      "total_halte": 2
+    }
+  },
+  {
+    "wilayah": "JAKARTA TIMUR",
+    "sekolah": {
+      "total_unit": 2582,
+      "total_siswa": 509684,
+      "total_guru": 28291,
+      "ruang_kelas": 22963,
+      "jenjang": {
+        "SD": 607,
+        "SMA": 127,
+        "SMK": 182,
+        "SMP": 262,
+        "PAUD": 1293,
+        "PKBM": 87,
+        "SLB": 24
+      },
+      "status": {
+        "SWASTA": 1977,
+        "NEGERI": 605
+      },
+      "rasio_siswa_guru": 18.0
+    },
+    "rth": {
+      "total_titik": 975,
+      "jenis": {
+        "LAINNYA": 9,
+        "TAMAN": 602,
+        "HUTAN KOTA": 47,
+        "JALUR HIJAU": 247,
+        "TPU": 68,
+        "KEBUN BIBIT": 2
+      }
+    },
+    "air": {
+      "total_sampel": 0,
+      "pelanggaran_baku_mutu": 0
+    },
+    "transum": {
+      "total_halte": 13
+    }
+  },
+  {
+    "wilayah": "JAKARTA UTARA",
+    "sekolah": {
+      "total_unit": 1398,
+      "total_siswa": 264253,
+      "total_guru": 14731,
+      "ruang_kelas": 12675,
+      "jenjang": {
+        "PAUD": 632,
+        "PKBM": 54,
+        "SD": 337,
+        "SMA": 95,
+        "SMK": 75,
+        "SMP": 195,
+        "SLB": 10
+      },
+      "status": {
+        "SWASTA": 1167,
+        "NEGERI": 231
+      },
+      "rasio_siswa_guru": 17.9
+    },
+    "rth": {
+      "total_titik": 742,
+      "jenis": {
+        "LAINNYA": 7,
+        "TAMAN": 507,
+        "HUTAN KOTA": 13,
+        "TPU": 18,
+        "JALUR HIJAU": 197
+      }
+    },
+    "air": {
+      "total_sampel": 0,
+      "pelanggaran_baku_mutu": 0
+    },
+    "transum": {
+      "total_halte": 0
+    }
+  },
+  {
+    "wilayah": "KEP. SERIBU",
+    "sekolah": {
+      "total_unit": 52,
+      "total_siswa": 6147,
+      "total_guru": 403,
+      "ruang_kelas": 309,
+      "jenjang": {
+        "PAUD": 27,
+        "SD": 14,
+        "SMP": 7,
+        "SMK": 1,
+        "PKBM": 2,
+        "SMA": 1
+      },
+      "status": {
+        "NEGERI": 44,
+        "SWASTA": 8
+      },
+      "rasio_siswa_guru": 15.3
+    },
+    "rth": {
+      "total_titik": 0,
+      "jenis": {}
+    },
+    "air": {
+      "total_sampel": 0,
+      "pelanggaran_baku_mutu": 0
+    },
+    "transum": {
+      "total_halte": 0
+    }
+  }
+]

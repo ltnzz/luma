@@ -1,0 +1,4502 @@
+[
+  {
+    "periode": "2023",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "LAINNYA",
+    "kelurahan": "",
+    "nama_rth": "JL. ANDA RT. 010 RW. 003 KEL. CIGANJUR KEC. JAGAKARSA JAKARTA SELATAN",
+    "alamat": "HUTAN",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2023",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "LAINNYA",
+    "kelurahan": "",
+    "nama_rth": "RT 009 RW 003 KEL. PONDOK LABU KEC. CILANDAK JAKARTA SELATAN",
+    "alamat": "HUTAN",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2023",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "LAINNYA",
+    "kelurahan": "",
+    "nama_rth": "RT. 001 RW. 04 KEL. SETU KEC. CIPAYUNG JAKARTA TIMUR",
+    "alamat": "HUTAN",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2023",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "LAINNYA",
+    "kelurahan": "",
+    "nama_rth": "RT. 008 RW. 03 KEL. SETU KEC. CIPAYUNG JAKARTA TIMUR",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2023",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "LAINNYA",
+    "kelurahan": "",
+    "nama_rth": "SISI KANAN KIRI TIDAK TERMASUK PEDESTRIAN",
+    "alamat": "JL. DIPONEGORO, MENTENG, JAKARTA PUSAT",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2023",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "LAINNYA",
+    "kelurahan": "",
+    "nama_rth": "TAMARA (TAMAN MANUNGGAL RAKYAT)",
+    "alamat": "JL. MANUNGGAL 2 RT/RW 04/04 RAMBUTAN, CIRACAS JAKARTA TIMUR",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "RAGUNAN",
+    "nama_rth": "TAMAN BUMI PERKEMAHAN RAGUNAN",
+    "alamat": "JL. HR. HARSONO/JL. MARGASATWA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "BINTARO",
+    "nama_rth": "TAMAN MADRASAH BAWAH",
+    "alamat": "JL. MADRASAH BAWAH RW 012, KEL. BINTARO, KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "SETIA BUDI",
+    "kelurahan": "KUNINGAN TIMUR",
+    "nama_rth": "TAMAN RUMAH DINAS JABATAN WAKIL GUBERNUR",
+    "alamat": "JL. MEGA KUNINGAN BARAT III NO.E. 35, RT.1/RW.2, KUNINGAN, KUNINGAN TIM., KECAMATAN SETIABUDI, KOTA JAKARTA SELATAN, DAERAH KHUSUS IBUKOTA JAKARTA 12950",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "SETIA BUDI",
+    "kelurahan": "KUNINGAN TIMUR",
+    "nama_rth": "TAMAN RUMAH DINAS JABATAN SEKDA",
+    "alamat": "MEGA KUNINGAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "TEBET",
+    "kelurahan": "TEBET BARAT",
+    "nama_rth": "TAMAN TEBET (TAMAN TEBET ECOPARK)",
+    "alamat": "JL. TEBET BARAT RAYA, RT.1/RW.10, TEBET BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN BARU",
+    "kelurahan": "KRAMAT PELA",
+    "nama_rth": "TAMAN PURING",
+    "alamat": "JL. KYAI MAJA NO.7, RT.13/RW.1, KRAMAT PELA,",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "CILANDAK",
+    "kelurahan": "PONDOK LABU",
+    "nama_rth": "RTH JL. KELURAHAN",
+    "alamat": "JL. KELURAHAN NO. 5 RT 003 RW 007 KEL. PONDOK LABU KEC. CILANDAK, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "CIPEDAK",
+    "nama_rth": "RTH ANTARIKSA",
+    "alamat": "JL. ANTARIKSA NO. 369, KEL. CIPEDAK, KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "CIPEDAK",
+    "nama_rth": "RTH ANTARIKSA RT 09",
+    "alamat": "JL. ANTARIKSA RT 009 RW 002 KEL. CIPEDAK KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH GG. RUKUN",
+    "alamat": "JL. GANG RUKUN RT 004 RW 001, KEL. JAGAKARSA, KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH KRAMAT",
+    "alamat": "JL. KRAMAT, KEL. JAGAKARSA, KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH GG. WATES",
+    "alamat": "JL. KEBAGUSAN RAYA GG. WATES RT 011 RW 005 KEL. JAGAKARSA KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH NUSA INDAH",
+    "alamat": "JL. NUSA INDAH I RT 012 RW 002 KEL. JAGAKARSA KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH GG. SWAMAS",
+    "alamat": "GANG SWAMAS RT 009 RW 007 KEL. JAGAKARSA KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH GG. BATAS",
+    "alamat": "JL. GANG BATAS RT 002 RW 002 KEL. JAGAKARSA KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH JAGAKARSA RW 07",
+    "alamat": "JL. JAGAKARSA RT 001 RW 007 KEL. JAGAKARSA KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH KECAPI",
+    "alamat": "JL. KECAPI RT 013 RW 005 KEL. JAGAKARSA KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH LENTENG AGUNG RW 01",
+    "alamat": "JL. RAYA LENTENG AGUNG RT 006 RW 001 KEL. LENTENG AGUNG KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "LENTENG AGUNG",
+    "nama_rth": "RTH LENTENG AGUNG RT 04",
+    "alamat": "JL. LENTENG AGUNG RT 004 RW 001 KEL. LENTENG AGUNG KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "LENTANG AGUNG",
+    "nama_rth": "RTH LENTENG AGUNG RT 06",
+    "alamat": "JL. LENTENG AGUNG RT 006 RW 001, KEL. LENTENG AGUNG, KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "SRENGSENG SAWAH",
+    "nama_rth": "RTH KAMPUNG CIPEDAK",
+    "alamat": "KAMPUNG CIPEDAK RW 009, KEL. SRENGSENG SAWAH, KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "TANJUNG BARAT",
+    "nama_rth": "RTH GG. 100",
+    "alamat": "JL. GG. 100 KEL. TANJUNG BARAT KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN LAMA",
+    "kelurahan": "KEBAYORAN LAMA",
+    "nama_rth": "RTH TANAH KUSIR III",
+    "alamat": "JL. TANAH KUSIR III RT 004 RW 009 KEL. KEBAYORAN LAMA SELATAN KEC. KEBAYORAN LAMA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "CILANDAK TIMUR",
+    "nama_rth": "RTH JERUK PURUT",
+    "alamat": "JL. JERUK PURUT RT 009 RW 003 KEL. CILANDAK TIMUR KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "CILANDAK TIMUR",
+    "nama_rth": "RTH MARGASATWA",
+    "alamat": "JL. MARGASATWA KOMPLEK BUKIT INDAH RT 005 RW 007 KEL. CILANDAK TIMUR KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "CILANDAK TIMUR",
+    "nama_rth": "RTH NIS",
+    "alamat": "JL. NIS RT 004 RW 003 KEL. CILANDAK TIMUR KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "JATIPADANG",
+    "nama_rth": "RTH RAYA RAGUNAN",
+    "alamat": "JL. RAYA RAGUNAN RT 003 RW 005 KEL. JATI PADANG KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "JATIPADANG",
+    "nama_rth": "RTH AUP",
+    "alamat": "JL. AUP BARAT NO. 1 RT 009 RW 006 KEL. JATIPADANG KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "JATIPADANG",
+    "nama_rth": "RTH PONCOL VIII",
+    "alamat": "JL. PONCOL VIII RT 011 RW 006 KEL. JATIPADANG KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "JATIPADANG",
+    "nama_rth": "RTH JATI MURNI BUNTU",
+    "alamat": "JL. JATI MURNI BUNTU, KEL. JATI PADANG, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "JATIPADANG",
+    "nama_rth": "RTH JATIPADANG",
+    "alamat": "JL. JATIPADANG RAYA, KEL. JATIPADANG, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "KEBAGUSAN",
+    "nama_rth": "RTH KEBAGUSAN RAYA RW 06",
+    "alamat": "JL. KP. KEBAGUSAN BESAR RT 003 RW 006 KEL. KEBAGUSAN KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "KEBAGUSAN",
+    "nama_rth": "RTH KEBAGUSAN II",
+    "alamat": "JL. KEBAGUSAN II RT 007 RW 007, KEL. KEBAGUSAN, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "KEBAGUSAN",
+    "nama_rth": "RTH WARU 2",
+    "alamat": "JL. WARU RT 013 RW 003 KEL. KEBAGUSAN KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "KEBAGUSAN",
+    "nama_rth": "RTH KEBAGUSAN WATES",
+    "alamat": "KEBAGUSAN WATES RT 009 RW 004, KEL. KEBAGUSAN, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "PASAR MINGGU",
+    "nama_rth": "RTH RAWA BAMBU",
+    "alamat": "JL. RAWA BAMBU NO. 1 RT 013 RW 005, KEL. PASAR MINGGU, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "PEJATEN BARAT",
+    "nama_rth": "RTH PASAR MINGGU (TAMAN PEJATIAN)",
+    "alamat": "JL. PASAR MINGGU NO. 8/33A RT 002 RW 005 KEL. PEJATEN BARAT KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "RAGUNAN",
+    "nama_rth": "RTH SD 07 (TAMAN BENDUNGAN INDAH)",
+    "alamat": "JL. SD 07 PAGI RT 006 RW 009 KEL. RAGUNAN KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "CIBUBUR",
+    "nama_rth": "RTH JAMBORE",
+    "alamat": "JL. JAMBORE RT 003 RW 006, KEL. CIBUBUR, KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "CIRACAS",
+    "nama_rth": "RTH PKP 63 (TAMAN IMPIAN)",
+    "alamat": "JL. PKP NO. 63 RT 010 RW 004 KEL. CIRACAS KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "CIRACAS",
+    "nama_rth": "RTH KEC. CIRACAS",
+    "alamat": "RW 001 KEL. CIRACAS KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "CIRACAS",
+    "nama_rth": "RTH CENTEX GG. MEBEL",
+    "alamat": "JL. RAYA CENTEX NO. 76 RT 006 RW 003 KEL. CIRACAS KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "KELAPA DUA WETAN",
+    "nama_rth": "RTH DELIMA II",
+    "alamat": "JL. DELIMA II, KEL. KELAPA DUA WETAN, KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "KELAPA DUA WETAN",
+    "nama_rth": "RTH SETAPAK",
+    "alamat": "JL. SETAPAK RT 002 RW 007 KEL. KELAPA DUA WETAN KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "RAMBUTAN",
+    "nama_rth": "RTH SD INPRES",
+    "alamat": "JL. SD INPRES RT 004 RW 003, KEL. KAMPUNG RAMBUTAN, KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "SUSUKAN",
+    "nama_rth": "RTH LINGKAR LUAR (TB SIMATUPANG) (TAMAN SAMIN NEONG)",
+    "alamat": "JALAN TOL LINGKAR LUAR (TB SIMATUPANG), KEL. SUSUKAN, KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "RTH PRATAMA",
+    "alamat": "JL. PRATAMA RT 002 RW 008 KEL. PONDOK KELAPA KEC. DUREN SAWIT, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "KRAMAT JATI",
+    "kelurahan": "KRAMAT JATI",
+    "nama_rth": "RTH MAYJEN SOETOYO (TAMAN SUTOYO CERAH)",
+    "alamat": "JL. MAYJEN SOETOYO RT 004 RW 015, KEL. CILILITAN, KEC. KRAMAT JATI, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "KRAMAT JATI",
+    "kelurahan": "DUKUH",
+    "nama_rth": "RTH DUKUH RT 13",
+    "alamat": "RT 013 RW 004 KEL. DUKUH KEC. KRAMAT JATI, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "KRAMAT JATI",
+    "kelurahan": "TENGAH",
+    "nama_rth": "RTH TENGAH",
+    "alamat": "KEL. TENGAH, KEC. KRAMAT JATI, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "MAKASAR",
+    "kelurahan": "CIPINANG",
+    "nama_rth": "RTH MANUNGGAL II BAWAH",
+    "alamat": "JL. MANUNGGAL II BAWAH RW 006, KEL. CIPINANG, KEC. MAKASAR, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "MAKASAR",
+    "kelurahan": "PINANG RANTI",
+    "nama_rth": "RTH SETIA",
+    "alamat": "JL. KP. PULO KEL. PINANG RANTI KEC. MAKASAR, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "MAKASAR",
+    "kelurahan": "CIPINANG MELAYU",
+    "nama_rth": "RTH CURUG INDAH",
+    "alamat": "JL. CURUG INDAH RT 003 RW 008 KEL. CIPINANG MELAYU KEC. MAKASAR, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "DUKUH",
+    "nama_rth": "RTH PENGGILINGAN RW 05",
+    "alamat": "RW 05 KEL. DUKUH, KEC. KRAMAT JATI",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "MAKASAR",
+    "kelurahan": "PINANG RANTI",
+    "nama_rth": "RTH PINANG RANTI",
+    "alamat": "RT.006 DAN RT.008 RW.04 KEL. PINANG RANTI KEC. MAKASAR KOTA ADMINISTRASI JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "MARUNDA",
+    "nama_rth": "TAMAN KETAPANG",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "MARUNDA",
+    "nama_rth": "TAMAN SARANG BANGAU",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN LAMA",
+    "kelurahan": "MELAWAI",
+    "nama_rth": "TAMAN BHINEKA TUNGGAL IKA",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "KEBAGUSAN",
+    "nama_rth": "TAMAN PAPYRUS",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "CIPEDAK",
+    "nama_rth": "TAMAN PANJANG",
+    "alamat": "JL. MOH. KAHFI I, GG. PANJANG 13-H, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "CILANGKAP",
+    "nama_rth": "TAMAN SETAPAK",
+    "alamat": "JL. SETAPAK RT.003 RW.004, KELURAHAN CILANGKAP, KECAMATAN CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "CIBUBUR",
+    "nama_rth": "TAMAN POJOK CERIA",
+    "alamat": "JL. MAKAM BARAT, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "PASAR REBO",
+    "kelurahan": "PEKAYON",
+    "nama_rth": "TAMAN DELONIX",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "BAMBU APUS",
+    "nama_rth": "TAMAN KASIA",
+    "alamat": "JL. MANDOR HASAN, KELURAHAN BAMBU APUS, KECAMATAN CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "CIPAYUNG",
+    "nama_rth": "TAMAN PINANG",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "SEMPER BARAT",
+    "nama_rth": "TAMAN ONDEL-ONDEL",
+    "alamat": "JL. TIPAR TIMUR RT 009 RW 004",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "ROROTAN",
+    "nama_rth": "TAMAN MALAKA ASRI",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "CIPEDAK",
+    "nama_rth": "TAMAN DAFICI",
+    "alamat": "JL. M. KAHFI I RT 009 RW 04",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "TANJUNG BARAT",
+    "nama_rth": "TAMAN JANGGREK",
+    "alamat": "JL. TB SIMATUPANG RT.10/RW.4, TANJUNG BARAT, JAGAKARSA, SOUTH JAKARTA CITY, JAKARTA 12530",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "CILANDAK",
+    "kelurahan": "LEBAK BULUS",
+    "nama_rth": "RTH JL. LEBAK BULUS III RT. 010 RW. 07",
+    "alamat": "JL. LEBAK BULUS III RT. 010 RW. 07",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN BARU",
+    "kelurahan": "GANDARIA UTARA",
+    "nama_rth": "TAMAN GANTARA",
+    "alamat": "JL. H. RAYA NO. 7A RT 005 RW 010, KELURAHAN GANDARIA UTARA, KECAMATAN KEBAYORAN BARU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN LAMA",
+    "kelurahan": "GROGOL SELATAN",
+    "nama_rth": "TAMAN LPH",
+    "alamat": "JL. LINGKAR PUTERI HIJAU NO. 21 RT. 10 RW. 005, KELURAHAN GROGOL SELATAN, KECAMATAN KEBAYORAN LAMA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "BAMBU APUS",
+    "nama_rth": "RTH JL. DAMAI RAYA RT. 001 RW. 01 (TAMAN DAMAI RAYA)",
+    "alamat": "JL. DAMAI RAYA RT. 001 RW. 01",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "BAMBU APUS",
+    "nama_rth": "RTH JL. PALEM KARTIKA NO. 21 RT 001 RW 002 (TAMAN BAKOEN PARK)",
+    "alamat": "JL. PALEM KARTIKA NO. 21 RT 001 RW 002",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "KAMPUNG RAMBUTAN",
+    "nama_rth": "RTH JL. RAYA BOGOR/ JL. SABAR NO. 6B, RT.003 RW.01 (TAMAN SABAR INDAH)",
+    "alamat": "JL. RAYA BOGOR/ JL. SABAR NO. 6B, RT.003 RW.01 (",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "KAMPUNG RAMBUTAN",
+    "nama_rth": "RTH JL. MANUNGGAL",
+    "alamat": "",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN PUSPA RAYA",
+    "alamat": "JL. PUSPA III NO.19, RT.11/RW.4, KAPUK, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11720",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN SERUNI",
+    "alamat": "BLOK DAHLIA, JL. RUMAH SUSUN CENGKARENG INDAH NO.7, RT.7/RW.14, EAST CENGKARENG, CENGKARENG, WEST JAKARTA CITY, JAKARTA 11730",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN PUSPA I, III S/D V",
+    "alamat": "JL. PUSPA III NO.19, RT.11/RW.4, KAPUK, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11720",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "KAPUK",
+    "nama_rth": "TAMAN AKASIA",
+    "alamat": "JL. AKASIA RAYA, RT.14/RW.12, KAPUK, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11720",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "KAPUK",
+    "nama_rth": "TAMAN JATI RAYA",
+    "alamat": "JL. JATI RAYA 27, RT.9/RW.12, KAPUK, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11720",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN UTAMA RAYA (DEDICATED)",
+    "alamat": "JL. UTAMA RAYA NO.41-47, RT.9/RW.2, CENGKARENG BAR., KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11730",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN MASJID",
+    "alamat": "JL. MESJID VI, RT.9/RW.5, CENGKARENG BAR., KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11730",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN KOMPLEK KEBERSIHAN",
+    "alamat": "JL. KOMP. KEBERSIHAN 31-12, RT.8/RW.4, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN BERINGIN",
+    "alamat": "JL. BERINGIN I, RT.4/RW.5, WEST CENGKARENG, CENGKARENG, WEST JAKARTA CITY, JAKARTA 11730",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN MELATI",
+    "alamat": "JL. MELATI NO.10, RT.9/RW.1, CENGKARENG BAR., KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11730",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN AA",
+    "alamat": "JL. AA 2, RT.6/RW.2, CENGKARENG BAR., KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11730",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "CENGKARENG",
+    "nama_rth": "TAMAN ANGGREK",
+    "alamat": "JL. CENDRAWASIH RAYA 101-103, RT.6/RW.6, CENGKARENG BAR., KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11730",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "KAPUK",
+    "nama_rth": "TAMAN DAHLIA",
+    "alamat": "JL. DAHLIA RAYA 5-1, RT.9/RW.9, KAPUK, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11720",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "KAPUK",
+    "nama_rth": "TAMAN MELATI I",
+    "alamat": "JL. TAMAN NUSA INDAH, RT.10/RW.9, KAPUK, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11720",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "KAPUK",
+    "nama_rth": "TAMAN MELATI II (TAMAN KODOK)",
+    "alamat": "JL. TAMAN NUSA INDAH NO.58B, RT.5/RW.9, KAPUK, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11720",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN JERUK RAYA",
+    "alamat": "JL. TAMAN JERUK RAYA NO.10, RT.10/RW.6, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN BUNCIS",
+    "alamat": "JL. BUNCIS I 2-6, RT.4/RW.7, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN BELIMBING",
+    "alamat": "JL. BOJONG INDAH RAYA NO.RT.7, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN PAKIS RW. 07 (TAMAN PAKIS RAYA)",
+    "alamat": "JL. PAKIS RAYA 12-7, RT.16/RW.7, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN BAWANG MERAH",
+    "alamat": "JL. BAWANG MERAH III NO.6, RT.6/RW.7, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN HANOMAN",
+    "alamat": "JL. HANOMAN IV 17-15, RT.4/RW.9, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN PERUMAHAN CARINA SAYANG",
+    "alamat": "JL. KACANG TANAH RAYA, RT.17/RW.4, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN JERUK RAYA RW. 05",
+    "alamat": "JL. TAMAN JERUK RAYA RW.5, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN DEPAN PD. PASAR JAYA, BOJONG",
+    "alamat": "JL. CABE RAWIT RAYA, RT.9/RW.6, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KEPA",
+    "nama_rth": "TAMAN JERUK BALI. RW 06",
+    "alamat": "JL. JERUK BALI, RT.7/RW.6, DURI KEPA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11510",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN WADUK BOJONG",
+    "alamat": "JL. TELAGA BOJONG 19-21, RT.2/RW.6, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN SALAM",
+    "alamat": "JL. SALAM II, RT.14/RW.7, RAWA BUAYA, CENGKARENG, WEST JAKARTA CITY, JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN BAMBU BETUNG",
+    "alamat": "JL. BAMBU BETUNG 5 NO. 21 (BAMBU BETUNG 5) JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN SHINTA",
+    "alamat": "JL. SHINTA RAYA, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN SUGRIWA",
+    "alamat": "JL. SUGRIWA RAYA, RT.16/RW.4, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "RAWA BUAYA",
+    "nama_rth": "TAMAN WIBISANA",
+    "alamat": "JL. WIBISANA RAYA NO.6, RT.5/RW.9, RW. BUAYA, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11740",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "RAGUNAN",
+    "nama_rth": "RTH PUSDIKLAT PLN",
+    "alamat": "JL. PONCOL PUSDIKLAT PLN RT 011 RW 005, KEL. RAGUNAN, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "RAGUNAN",
+    "nama_rth": "RTH KEBAGUSAN RAYA",
+    "alamat": "JL. KEBAGUSAN RAYA, KEL. RAGUNAN, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "RAGUNAN",
+    "nama_rth": "RTH HANKAM",
+    "alamat": "JL. HANKAM NO 12 RT 005 RW 011 KEL. RAGUNAN KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "PESANGGRAHAN",
+    "nama_rth": "RTH ULUJAMI RAYA",
+    "alamat": "JL. ULUJAMI RAYA RT 001 RW 002 KEL. PESANGGRAHAN KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "PESANGGRAHAN",
+    "nama_rth": "RTH ULUJAMI RAYA",
+    "alamat": "JL. ULUJAMI RAYA RT 001 RW 002 KEL. PESANGGRAHAN KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "BINTARO",
+    "nama_rth": "RTH MADRASAH BAWAH RT 01",
+    "alamat": "JL. MADRASAH BAWAH RT 001 RW 012 KEL. BINTARO, KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "PETUKANGAN SELATAN",
+    "nama_rth": "RTH M. SAIDI (TAMAN M.SAIDI)",
+    "alamat": "JL. M. SAIDI RT 010 RW 006 KEL. PETUKANGAN SELATAN KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "PETUKANGAN UTARA",
+    "nama_rth": "RTH SWADARMA RAYA",
+    "alamat": "JL. SWADARMA RAYA KEL. PETUKANGAN UTARA KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "PETUKANGAN UTARA",
+    "nama_rth": "RTH REFORMASI",
+    "alamat": "JL. REFORMASI RT 001 RW 009 KEL. PETUKANGAN UTARA KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "PETUKANGAN UTARA",
+    "nama_rth": "RTH REFORMASI",
+    "alamat": "JL. SWADARMA RAYA (JL. REFORMASI) RT 001 RW 009 KEL. PETUKANGAN UTARA KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PESANGGRAHAN",
+    "kelurahan": "ULUJAMI",
+    "nama_rth": "RTH RAJAI (TAMAN YUDHISTIRA)",
+    "alamat": "JL. RAJAI RT 004 RW 004 KEL. ULUJAMI KEC. PESANGGRAHAN, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "SETIABUDI",
+    "kelurahan": "GUNTUR",
+    "nama_rth": "RTH GEMBIRA UJUNG",
+    "alamat": "JL. GEMBIRA UJUNG, KEL. GUNTUR, KEC. SETIABUDI, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "TEBET",
+    "kelurahan": "MENTENG DALAM",
+    "nama_rth": "RTH PATRA KUNINGAN UJUNG",
+    "alamat": "JL. PATRA KUNINGAN UJUNG XI RT 006 RW 013 KEL. MENTENG DALAM KEC. TEBET, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "CILANDAK",
+    "kelurahan": "CILANDAK BARAT",
+    "nama_rth": "RTH LEBAK BULUS V",
+    "alamat": "JL. LEBAK BULUS V",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "JAGAKARSA",
+    "nama_rth": "RTH KAHFI I NO.888",
+    "alamat": "JL. KAHFI I NO. 888",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "PENGGILINGAN",
+    "nama_rth": "TAMAN KAMBOJA",
+    "alamat": "KAMPUNG PEDAENGAN RT 004 RW 008, KEL. PENGGILINGAN, KEC. CAKUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "PENGGILINGAN",
+    "nama_rth": "TAMAN PULO LESTARI",
+    "alamat": "RT 004 RW 007, KEL. PENGGILINGAN, KEC. CAKUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "PONDOK RANGGON",
+    "nama_rth": "TAMAN RANGGON WIJAYA KUSUMA",
+    "alamat": "JL. CILANGKAP BARU RT 004 RW 003, KEL. PONDOK RANGGON, KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "CIBUBUR",
+    "nama_rth": "TAMAN LITERASI (TAMAN O)",
+    "alamat": "JL. SMU 99 RT 005 RW 003, KEL. CIBUBUR, KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "CIRACAS",
+    "nama_rth": "TAMAN CERIA CIRACAS",
+    "alamat": "JL. CENTEX GG. MASJID, KEL. CIRACAS, KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "KELAPA DUA WETAN",
+    "nama_rth": "TAMAN APUNG",
+    "alamat": "JL. LAPANGAN TEMBAK, KEL. KELAPA DUA WETAN, KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIRACAS",
+    "kelurahan": "RAMBUTAN",
+    "nama_rth": "TAMAN KAMPUNG JATI",
+    "alamat": "JL.KP. JATI KEL. RAMBUTAN KEC. CIRACAS, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN SWAKARSA",
+    "alamat": "JL. SWAKARSA RW 003, KEL. PONDOK KELAPA, KEC. DUREN SAWIT, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "KRAMAT JATI",
+    "kelurahan": "CEGER",
+    "nama_rth": "TAMAN DUKUH",
+    "alamat": "KAMPUNG DUKUH JL. PENGGILINGAN BARU RT 011 RW, KEL. CEGER, KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "CAKUNG TIMUR",
+    "nama_rth": "RTH RAYA CACING",
+    "alamat": "JL. CAKUNG CILINCING RT 008 RW 005 KEL. CAKUNG TIMUR KEC. CAKUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "PULO GEBANG",
+    "nama_rth": "RTH RAWA KUNING (TAMAN RAWA KUNING INDAH)",
+    "alamat": "JL. RAWA KUNING, KEL. PULO GEBANG, KEC. CAKUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "PULO GEBANG",
+    "nama_rth": "RTH GG. MASJID PULOGEBANG",
+    "alamat": "GANG MESJID RT 003 RW 004 KEL. PULO GEBANG KEC. CAKUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "UJUNG MENTENG",
+    "nama_rth": "RTH PERUM RUKEM",
+    "alamat": "PERUM RUKEM JAYA, KEL. UJUNG MENTENG, KEC. CAKUNG, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CAKUNG",
+    "kelurahan": "PENGGILINGAN",
+    "nama_rth": "RTH PENGGILINGAN RW 08",
+    "alamat": "KP. PEDAENGAN RT 004 RW 008 KEL. PENGGILINGAN KEC. CAKUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "CIPAYUNG",
+    "nama_rth": "RTH BAMBU PETUNG",
+    "alamat": "JL. BAMBU PETUNG, KEL. BAMBU APUS, KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "CILANGKAP",
+    "nama_rth": "RTH GIRI KENCANA",
+    "alamat": "JL. GIRI KENCANA, KEL. CILANGKAP, KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "CILANGKAP",
+    "nama_rth": "RTH RAYA CILANGKAP RT 07 (TAMAN CILANGKAP SEJUK)",
+    "alamat": "JL. SEJUK/GEREJA RT 007 RW 004 KEL. CILANGKAP KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "CIPAYUNG",
+    "nama_rth": "RTH CIPAYUNG (TAMAN CIPAYUNG ASRI)",
+    "alamat": "RW. 02, KEL. CIPAYUNG, KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "CIPAYUNG",
+    "nama_rth": "RTH MASJID NURUL HIDAYAH",
+    "alamat": "JL. MESJID NURUL HIDAYAH KEL. CIPAYUNG KEC. CIPAYUNG, JAKARTA TIMUR RT 006 RW 006",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "LUBANG BUAYA",
+    "nama_rth": "RTH LUBANG BUAYA",
+    "alamat": "JL. PAGELARANG RT 005 RW 003, KEL. LUBANG BUAYA, KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "LUBANG BUAYA",
+    "nama_rth": "RTH LUBANG BUAYA",
+    "alamat": "JL. RAWA BINONG RT 006 RW 003 KEL. LUBANG BUAYA KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "LUBANG BUAYA",
+    "nama_rth": "RTH KRAMAT III",
+    "alamat": "JL. KRAMAT III RT 004 RW 002 KEL. LUBANG BUAYA KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "MUNJUL",
+    "nama_rth": "RTH BUNTU JANKES (TAMAN SALAK KUNING)",
+    "alamat": "JL. BUNTU (TERUSAN JANKES AD)/JL. JANKES RT 007 RW 002 KEL. MUNJUL KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "CIPAYUNG",
+    "kelurahan": "PONDOK RANGGON",
+    "nama_rth": "RTH PONDOK RANGON",
+    "alamat": "JL. PONDOK RANGGON RAYA RT 001 RW 006, KEL. PONDOK RANGGON, KEC. CIPAYUNG, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "GAMBIR",
+    "kelurahan": "CIDENG",
+    "nama_rth": "TAMAN KOMPLEKS DINAS TEKNIS JATIBARU",
+    "alamat": "JL. TAMAN JATIBARU I",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "GAMBIR",
+    "kelurahan": "GAMBIR",
+    "nama_rth": "TAMAN BALAIKOTA DKI JAKARTA + DPRD",
+    "alamat": "JL. MEDAN MERDEKA SEL. BLOK B NO.8-9, RT.11/RW.2",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "MENTENG",
+    "kelurahan": "MENTENG",
+    "nama_rth": "TAMAN SITULEMBANG",
+    "alamat": "JL. LEMBANG TERUSAN NO.D-59, RT.6/RW.5",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "MENTENG",
+    "kelurahan": "MENTENG",
+    "nama_rth": "TAMAN SUROPATI",
+    "alamat": "JL. TAMAN SUROPATI, RT.5/RW.5",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "MENTENG",
+    "kelurahan": "MENTENG",
+    "nama_rth": "TAMAN PATUNG DIPONEGORO",
+    "alamat": "JL. IMAM BONJOL NO.1, RT.5/RW.5",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "MENTENG",
+    "kelurahan": "MENTENG",
+    "nama_rth": "TAMAN MENTENG",
+    "alamat": "JL. HOS. COKROAMINOTO, RT.3/RW.5",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "MENTENG",
+    "kelurahan": "MENTENG",
+    "nama_rth": "TAMAN KODOK MENTENG",
+    "alamat": "JL. SIDOARJO, RT.3/RW.5",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "MENTENG",
+    "kelurahan": "MENTENG",
+    "nama_rth": "RUMAH DINAS JABATAN GUBERNUR",
+    "alamat": "JL. TAMAN SUROPATI NO.7, RT.5/RW.5",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "SAWAH BESAR",
+    "kelurahan": "PASAR BARU",
+    "nama_rth": "TAMAN LAPANGAN BANTENG",
+    "alamat": "JL. LAPANGAN BANTENG UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "TANAH ABANG",
+    "kelurahan": "BEDUNGAN HILIR",
+    "nama_rth": "TAMAN SEMANGGI",
+    "alamat": "JL. JEND. SUDIRMAN, RT.14/RW.1",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA PUSAT",
+    "kecamatan": "TANAH ABANG",
+    "kelurahan": "PETAMBURAN",
+    "nama_rth": "TAMAN DINAS KEHUTANAN PROV. DKI JAKARTA",
+    "alamat": "JL. AIPDA KS TUBUN NO. 1",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "ROROTAN",
+    "nama_rth": "TAMAN ROROTAN NUSA (TAMAN ROTANUSA)",
+    "alamat": "JL. ROROTAN (KP. KANDANG SAPI), KEL. ROROTAN, KEC. CILINCING, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "ROROTAN",
+    "nama_rth": "TAMAN SUNGAI KENDAL",
+    "alamat": "JL. KENDAL RW 008, KEL. ROROTAN, KEC. CILINCING, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "PENJARINGAN",
+    "kelurahan": "PEJAGALAN",
+    "nama_rth": "TAMAN HUTAN KOTA PENJARINGAN",
+    "alamat": "JL. KEPANDUAN II, RT.7/RW.16, PEJAGALAN, KEC. PENJARINGAN, JKT UTARA, DAERAH KHUSUS IBUKOTA JAKARTA 14450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "PENJARINGAN",
+    "kelurahan": "PEJAGALAN",
+    "nama_rth": "TAMAN KALIJODO",
+    "alamat": "JALAN KEPANDUAN II, KELURAHAN PEJAGALAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "PENJARINGAN",
+    "kelurahan": "PEJAGALAN",
+    "nama_rth": "TAMAN JEMBATAN TIGA (CSR)",
+    "alamat": "JL. RAYA JEMBATAN TIGA (KEBON PISANG), KEL. PEJAGALAN, KEC. PENJARINGAN, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "PEJAGALAN",
+    "nama_rth": "RTH MALAKA I",
+    "alamat": "JL. MALAKA I, KEL. ROROTAN, KEC. CILINCING, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "TANJUNG PRIOK",
+    "kelurahan": "ROROTAN",
+    "nama_rth": "RTH DANAU ASRI SELATAN",
+    "alamat": "JL. DANAU ASRI SELATAN, KEL. SUNTER JAYA, KEC. TANJUNG PRIOK, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "TANJUNG PRIOK",
+    "kelurahan": "SUNTER JAYA",
+    "nama_rth": "RTH DANAU ASRI SELATAN (TAMAN AL IKHLAS)",
+    "alamat": "JL. DANAU ASRI SELATAN, KEL. SUNTER JAYA, KEC. TANJUNG PRIOK, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "TANJUNG PRIOK",
+    "kelurahan": "SUNTER JAYA",
+    "nama_rth": "RTH KAMPUNG PULO BESAR",
+    "alamat": "KP. PULO BESAR RT 02/11 KEL. SUNTER JAYA KEC. TANJUNG PRIOK, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "ROROTAN",
+    "nama_rth": "RTH ROROTAN IX (EKS JALUR) (TAMAN MALAKA ASRI)",
+    "alamat": "JL. ROROTAN IX RT 010 RW 006 KEL. ROROTAN KEC. CILINCING, JAKARTA UTARA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA UTARA",
+    "kecamatan": "CILINCING",
+    "kelurahan": "ROROTAN",
+    "nama_rth": "RTH ROROTAN IX",
+    "alamat": "JL. ROROTAN IX",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEBUN JERUK",
+    "nama_rth": "TAMAN MUTIARA",
+    "alamat": "JL. TAMAN MUTIARA PRIMA, KEL. KEBUN JERUK, KEC. KEBON JERUK, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "DURI KEPA",
+    "nama_rth": "TAMAN DUPA INDAH",
+    "alamat": "JL. MANGGA XIV RT 007 RW 003, KEL. DURI KEPA, KEC. KEBON JERUK, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN UTARA",
+    "nama_rth": "TAMAN KAMPUNG BARU",
+    "alamat": "JL. KAMPUNG BARU RW 010, KEL. KEMBANGAN UTARA, KEC. KEMBANGAN, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN CATTLEYA",
+    "alamat": "JL. S. PARMAN, KEMANGGISAN, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "KOSAMBI",
+    "nama_rth": "RTH DURI KOSAMBI",
+    "alamat": "JL. DURI KOSAMBI NO. 17 KEL. KOSAMBI KEC. CENGKARENG, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "RTH KP. GOMBOL (TAMAN GOMBOL PAYA)",
+    "alamat": "KP. GOMBOL PAYA RT 007 RW 013 KEL. KALIDERES KEC. KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "RTH PETA SELATAN",
+    "alamat": "JL. PETA SELATAN RT 007 RW 011 KEL. KALIDERES KEC. KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KAMAL",
+    "nama_rth": "RTH KP. BELAKANG",
+    "alamat": "KAMPUNG BELAKANG RT 003 RW 003 KEL. KAMAL KEC. KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KAMAL",
+    "nama_rth": "RTH LINGKUNGAN III RT 11 RW 03 (TAMAN CAMBEL II)",
+    "alamat": "JL. LINGKUNGAN III RT 011 RW 003 KEL. KAMAL KEC. KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "RTH PURI GARDENIA (TAMAN KUMBANG SEREH)",
+    "alamat": "PERUM PURI GARDENA II RT 007 RW 001 KEL. PEGADUNGAN KEC. KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "RTH LINGKUNGAN III",
+    "alamat": "JL. LINGKUNGAN III, KEL. TEGAL ALUR, KEC. KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "DURI KEPA",
+    "nama_rth": "RTH DURI KEPA (TAMAN NIRMALA MAS)",
+    "alamat": "RT 013 RW 008, KEL. DURI KEPA, KEC. KEBON JERUK, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "CILANDAK",
+    "kelurahan": "LEBAK BULUS",
+    "nama_rth": "TAMAN GUNUNG BALONG",
+    "alamat": "JL. GUNUNG BALONG II, KEL. LEBAK BULUS, KEC. CILANDAK, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "CIGANJUR",
+    "nama_rth": "TAMAN WARUNG SILAH",
+    "alamat": "JL. WARUNG SILA NO. 17 RT 004 RW 005, KEL. CIGANJUR, KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "JAGAKARSA",
+    "kelurahan": "CIPEDAK",
+    "nama_rth": "TAMAN ALANG-ALANG",
+    "alamat": "JL. ANTARIKSA RT 009 RW 002, KEL. CIPEDAK, KEC. JAGAKARSA, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN BARU",
+    "kelurahan": "GUNUNG",
+    "nama_rth": "TAMAN LEUSEUR",
+    "alamat": "JL. LEUSER, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN BARU",
+    "kelurahan": "KRAMAT PELA",
+    "nama_rth": "TAMAN LANGSAT",
+    "alamat": "JL. LANGSAT, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN BARU",
+    "kelurahan": "KRAMAT PELA",
+    "nama_rth": "TAMAN AYODIA",
+    "alamat": "JL. LAMANDAU III NO.RT.4, RT.4/RW.7, KRAMAT PELA,",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "KEBAYORAN BARU",
+    "kelurahan": "SELONG",
+    "nama_rth": "TAMAN MATARAM",
+    "alamat": "JL. SISINGAMANGARAJA NO.2, SELONG, KEC. KBY. BARU",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA SELATAN",
+    "kecamatan": "PASAR MINGGU",
+    "kelurahan": "KEBAGUSAN",
+    "nama_rth": "TAMAN ASAKINAH",
+    "alamat": "JL. ASAKINAH, KEL. KEBAGUSAN, KEC. PASAR MINGGU, JAKARTA SELATAN",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN SUMUR BOR",
+    "alamat": "JL. KEMUNING RAYA RT.1/RW.11, WEST CENGKARENG, CENGKARENG, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN BAMBU LARANGAN",
+    "alamat": "RT.1/RW.11, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN RT. 08/02 PEGADUNGAN",
+    "alamat": "RT. 08/02, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN RT. 09/02 PEGADUNGAN",
+    "alamat": "RT. 09/02, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2, BLOK H.6",
+    "alamat": "CITRA GARDEN 2, BLOK H.6 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2, BLOK I.3",
+    "alamat": "CITRA GARDEN 2, BLOK I.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2, BLOK M.3",
+    "alamat": "CITRA GARDEN 2, BLOKM.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2, BLOK N.2",
+    "alamat": "CITRA GARDEN 2, BLOK N.2 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2, BLOK O.5",
+    "alamat": "CITRA GARDEN 2, BLOK O.5 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2, BLOK P.10",
+    "alamat": "CITRA GARDEN 2, BLOK P.10, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BB.2",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BB.2 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BB.3",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BB.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BB.5",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BB.5 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BC.2",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BC.2 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BD.1",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BD.1 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BE.2",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BE.2 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BE.3",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BE.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BF.1",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BF.1 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BF.2",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BF.2 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BF.3",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BF.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BG.1",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BG.1 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BG.7",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BG.7 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BH.1.A",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BH.1.A , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BH.1.B",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BH.1.B , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BH.2.A",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BH.2.A , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BH.2.B",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BH.2.B , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BH.3",
+    "alamat": "CITRA GARDEN 2 EXT., BLOKBH.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BH.7",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BH.7 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BH.8",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BH.8 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BI.10",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BI.10 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BI.2",
+    "alamat": "CITRA GARDEN 2 EXT., BLOKBI.2 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BI.2.A",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BI.2.A , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BI.3",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BI.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BI.7",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BI.7 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA UTARA",
+    "nama_rth": "TAMAN RW. 04 KEDOYA UTARA",
+    "alamat": "JL. KOMP. GREEN GARDEN RW.4, KEDOYA UTARA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "DURI KEPA",
+    "nama_rth": "TAMAN BLOK D PERUM TAMAN RATU RW. 06",
+    "alamat": "RW.13, DURI KEPA, KEBONJERUK, JAKARTA BARAT, JAKARTA 11510",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "DURI KEPA",
+    "nama_rth": "TAMAN JERUK BALI",
+    "alamat": "JL. JERUK BALI, RT.7/RW.6, DURI KEPA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11510",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "DURI KEPA",
+    "nama_rth": "TAMAN KEBON RAYA",
+    "alamat": "JL. KEBON RAYA VI NO.27, RT.1/RW.1, DURI KEPA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11510",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "DURI KEPA",
+    "nama_rth": "TAMAN JERUK MANIS",
+    "alamat": "JL. JERUK MANIS V NO.87, RT.1/RW.6, DURI KEPA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11510",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN WAYES SEPUTIH",
+    "alamat": "JL. WAY SEPUTIH 20-18, RT.4/RW.1, TJ. DUREN SEL., KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN TJG. DUREN SELATAN III",
+    "alamat": "JL. TANJUNG DUREN SELATAN III NO.2, RT.3/RW.2, TJ. DUREN SEL., KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN DELIMA I",
+    "alamat": "JL. DELIMA I  RW.5, SOUTH TANJUNG DUREN, GROGOL PETAMBURAN, WEST JAKARTA CITY, JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN MANGGIS III",
+    "alamat": "JL. MANGGIS NO.10, RT.4/RW.4, TJ. DUREN SEL., KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN MANGGIS XIX",
+    "alamat": "JL. MANGGIS, RT.11/RW.4, SOUTH TANJUNG DUREN, GROGOL PETAMBURAN, WEST JAKARTA CITY, JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN DELIMA IV",
+    "alamat": "JL. DELIMA IV NO.16, RT.14/RW.5, TJ. DUREN SEL., KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN TJG. DUREN SELATAN I",
+    "alamat": "JL. TANJUNG DUREN SELATAN I, RW.2, SOUTH TANJUNG DUREN, GROGOL PETAMBURAN, WEST JAKARTA CITY, JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN LONTAR TIMUR",
+    "alamat": "JL. LONTAR TIMUR 22-14, RT.16/RW.6, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN MENTENG II",
+    "alamat": "JL. MENTENG 2, RT.12/RW.7, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN DUKUH BARAT V (LONTAR)",
+    "alamat": "JL. DUKU BARAT V NO.15-19, RT.10/RW.7, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN DUKUH II",
+    "alamat": "JL. DUKUH II NO.21, RT.5/RW.7, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN TANJUNG DUREN UTARA III E",
+    "alamat": "JL. TANJUNG DUREN UTARA IIIE NO.111E, RT.10/RW.3, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN TJG. DUREN UTARA VIII",
+    "alamat": "JL. TAMAN APEL VIII 104, RT.10/RW.3, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN TJG. DUREN UTARA VII B/C",
+    "alamat": "JL. TANJUNG DUREN UTARA VIIB NO.498, RT.3/RW.3, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN",
+    "nama_rth": "TAMAN TJG. DUREN UTARA II C",
+    "alamat": "JL. TANJUNG DUREN UTARA 2A NO.391, RT.11/RW.2, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN UTARA",
+    "nama_rth": "TAMAN TANJUNG DUREN UTARA III B/C",
+    "alamat": "JL. TANJUNG DUREN UTARA IIIB NO.254, RT.8/RW.3, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN UTARA",
+    "nama_rth": "TAMAN TANJUNG DUREN UTARA VI A/B",
+    "alamat": "JL. TANJUNG DUREN RAYA NO.2, RW.2, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN UTARA",
+    "nama_rth": "TAMAN EKS. POLSEK TANJUNG DUREN",
+    "alamat": "JL. TANJUNG DUREN UTARA 3 NO.302, RT.11/RW.2, TJ. DUREN UTARA, GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470, INDONESIA.",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN UTARA",
+    "nama_rth": "TAMAN TJG. DUREN UTARA IV A",
+    "alamat": "JL. TJ. DUREN UTARA 4 65-452, RW.3, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TANJUNG DUREN UTARA",
+    "nama_rth": "TAMAN RAMBUTAN",
+    "alamat": "JL. TJ. DUREN BAR. 2 NO.17, RT.6/RW.4, TJ. DUREN UTARA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TOMANG",
+    "nama_rth": "TAMAN PERMATA",
+    "alamat": "JL. PERMATA NO.1A, RT.10/RW.9, TOMANG, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11440",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TOMANG",
+    "nama_rth": "TAMAN KOMP. BAPPENAS",
+    "alamat": "JL. GELONG BARU UTARA 2, TOMANG",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "TOMANG",
+    "nama_rth": "TAMAN PULO MACAN",
+    "alamat": "JL. PULO MACAN V, RT.14/RW.5, TOMANG, GROGOL PETAMBURAN, JAKARTA BARAT, JAKARTA 11440",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "GROGOL",
+    "nama_rth": "TAMAN EMPANG GROGOL (DEDICATED)",
+    "alamat": "JL. DR. SEMERU 2 NO.45, RT.9/RW.9, GROGOL, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "GROGOL",
+    "nama_rth": "TAMAN SUSILO III.B",
+    "alamat": "JL. DR. SUSILO RAYA, RT.5/RW.5, GROGOL, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN HADIAH UTAMA III E",
+    "alamat": "JL. HADIAH UTAMA 3E 1286-1288, RT.2/RW.2, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN HADIAH UTAMA IV A",
+    "alamat": "JL. JELAMBAR MADYA IV, RT.9/RW.10, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN JELAMBAR MADYA V",
+    "alamat": "JL. JELAMBAR MADYA V 761-760, RW.10, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN HADIAH UTAMA V",
+    "alamat": "JL. HADIAH V BLOK D13 NO.1138A, RT.7/RW.1, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN HADIAH UTAMA RAYA",
+    "alamat": "JL. HADIAH UTAMA RAYA, RT.11/RW.1, JELAMBAR, GROGOL PETAMBURAN, WEST JAKARTA CITY, JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN SATRIA III",
+    "alamat": "JL. SATRIA III, RT.4/RW.4, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN JELAMBAR MADYA TIMUR II",
+    "alamat": "JL. JELAMBAR MADYA TIMUR II BLOK A. II NO.106, RT.2/RW.9, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN HADIAH UTAMA I",
+    "alamat": "JL. HADIAH UTAMA 1, RT.10/RW.1, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN KAVLING POLRI BLOK C",
+    "alamat": "JL. HADIAH UTAMA RAYA, RT.4/RW.2, JELAMBAR, GROGOL PETAMBURAN, WEST JAKARTA CITY, JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN JELAMBAR MADYA RAYA",
+    "alamat": "JL. JELAMBAR MADYA 1239-1241, RT.1, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN JELAMBAR MADYA BARAT I,II,III",
+    "alamat": "JL. JELAMBAR MADYA BARAT I, RT.13/RW.9, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN JELAMBAR BARU IX",
+    "alamat": "JL. JELAMBAR BARU IX, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN JELAMBAR BARU VIII",
+    "alamat": "JL. JELAMBAR BARU VIII, RT.11/RW.7, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR BARU",
+    "nama_rth": "TAMAN KOMPLEK THI BELAKANG KANTOR RW.07",
+    "alamat": "JL. JATAYU V E, RT.7/RW.7, JELAMBAR BARU, GROGOL PETAMBURAN, WEST JAKARTA CITY, JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR BARU",
+    "nama_rth": "TAMAN PAKUWON XVII F",
+    "alamat": "JL. JELAMBAR SELATAN XVII-F NO.5, RT.7/RW.9, JELAMBAR BARU, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR BARU",
+    "nama_rth": "TAMAN PAKUWON XVII G",
+    "alamat": "JL. JELAMBAR SELATAN XVII-G RT.8/RW.9, JELAMBAR BARU, GROGOL PETAMBURAN, WEST JAKARTA CITY, JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR BARU",
+    "nama_rth": "TAMAN JELAMBAR UTARA RW. 05",
+    "alamat": "JL. JELAMBAR UTARA, RT.2/RW.5, JELAMBAR BARU, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "WIJAYA KUSUMA",
+    "nama_rth": "TAMAN RASA SAYANG (DEDICATED)",
+    "alamat": "JL. RASA SAYANG JL. E NO.1, RT.1/RW.8, WIJAYA KUSUMA, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "GROGOL PETAMBURAN",
+    "kelurahan": "JELAMBAR",
+    "nama_rth": "TAMAN MASJID AL-AMANAH",
+    "alamat": "JL. JELAMBAR MADYA UTARA NO.2, RT.9/RW.2, JELAMBAR, KEC. GROGOL PETAMBURAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN ANGGREK NELI MURNI BLOK B",
+    "alamat": "JL. ANGGREK NELI MURNI IV-A NO.24, RT.6/RW.1, KEMANGGISAN, KEC. PALMERAH, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11410",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN ANGGREK NELI MURNI BLOK C",
+    "alamat": "RT.5/RW.1, KEMANGGISAN, PALMERAH, WEST JAKARTA CITY, JAKARTA 11480JL. ANGGREK NELI MURNI IV-A,",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN ANGGREK GARUDA II KORAMIL",
+    "alamat": "JL. ANGGREK GARUDA 7 5, RW.2, KEMANGGISAN, KEC. PALMERAH, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11480",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN ANGGREK GARUDA V",
+    "alamat": "JL. ANGGREK GARUDA V 61-47, RT.7/RW.2, KEMANGGISAN, KEC. PALMERAH, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11480",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN ANGGREK ROSLIANA (KOMODO)",
+    "alamat": "JL. ANGGREK ROSLIANA I 54-50, RT.2/RW.5, KEMANGGISAN, KEC. PALMERAH, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11480",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN POSYANDU RW.08, KEMANGGISAN",
+    "alamat": "RW 08, KEMANGGISAN, PALMERAH",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "KEMANGGISAN",
+    "nama_rth": "TAMAN ANGGREK NELI MURNI BLOK A",
+    "alamat": "JL. ANGGREK NELI MURNI BLOK A, KEMANGGISAN, KEC. PALMERAH, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11410",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "RAWA BELONG",
+    "nama_rth": "TAMAN KOMP. DPR (UNGGULAN)",
+    "alamat": "JL. RAWA BELONG RD, RT.3/RW.13, PALMERAH, WEST JAKARTA CITY, JAKARTA 11480",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "PALMERAH",
+    "nama_rth": "TAMAN INTERAKTIF GG. SWADAYA",
+    "alamat": "GG SWADAYA, PALMERAH, KEC. PALMERAH, KOTA JAKARTA BARAT,",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "PALMERAH",
+    "nama_rth": "TAMAN INTERAKTIF GG. BAHAGIA",
+    "alamat": "GG. BAHAGIA NO.30 RT 011 RW 009, PALMERAH, PALMERAH",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "PALMERAH",
+    "kelurahan": "JATI PULO",
+    "nama_rth": "TAMAN JUANG (BUNI)",
+    "alamat": "JL. SEMANGKA RAYA NO.15, RT.15/RW.2, JATIPULO, KEC. PALMERAH, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11430",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BI.8",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BI.8 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BI.10",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BI.10 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BJ.4",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BJ.4 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BJ.4",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BJ.4 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BK.1",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BK.1 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BK.3",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BK.3 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BK.4",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BK.4 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BK.6",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BK.6 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BLOK BK.7",
+    "alamat": "CITRA GARDEN 2 EXT., BLOK BK.7 , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 2 EXT., BUNDARAN",
+    "alamat": "CITRA GARDEN 2 EXT., BUNDARAN , PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "SEMANAN",
+    "nama_rth": "TAMAN KOPTI",
+    "alamat": "JL. BALONGAN BARU II NO.15, RT.4/RW.11, SEMANAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11850",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "SEMANAN",
+    "nama_rth": "TAMAN KERAMAT",
+    "alamat": "JALAN RAYA KRAMAT SEMANAN, RT.01 / RW.10, SEMANAN, KALIDERES, RT.1/RW.10, SEMANAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11850",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN BPN",
+    "alamat": "RT.1/RW.3, NORTH KEMBANGAN, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN BTN I",
+    "alamat": "JL. KEMBANGAN BARU NO.7, RT.7/RW.3, KEMBANGAN UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN BTN II",
+    "alamat": "JL. KEMBANGAN BARU NO.7, RT.7/RW.3, KEMBANGAN UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK C6",
+    "alamat": "JL. KEMBANG HARUM VI NO.5, RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK R10, BLOK F3",
+    "alamat": "JL. KEMBANG HARUM BLOK R10, BLOK F3 RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK D3",
+    "alamat": "JL. KEMBANG HARUM BLOK D3 RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK E2",
+    "alamat": "JL. KEMBANG HARUM BLOK E2 RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK B1",
+    "alamat": "JL. KEMBANG HARUM BLOK B1 RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK B2",
+    "alamat": "JL. KEMBANG HARUM BLOK B2 RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK B7",
+    "alamat": "JL. KEMBANG HARUM BLOK B7, RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK D",
+    "alamat": "JL. KEMBANG HARUM BLOK D, RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK A1",
+    "alamat": "JL. KEMBANG HARUM BLOK A1 RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN PURI INDAH BLOK A9",
+    "alamat": "JL. KEMBANG HARUM BLOK A9, RT.5/RW.4, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN KENCANA INDAH I",
+    "alamat": "JL. KENCANA INDAH, RW.7, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN KENCANA INDAH II",
+    "alamat": "JL. KENCANA INDAH II 46-24, RT.5/RW.2, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN",
+    "nama_rth": "TAMAN KENCANA INDAH III",
+    "alamat": "JL. KENCANA INDAH III BLOK J3 NO.13, RT.5/RW.2, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN KOMP. BPPT",
+    "alamat": "JL. TEKNOLOGI X NO.9A, RT.9/RW.3, MERUYA UTARA , KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN KOMP ARIES PASAR",
+    "alamat": "JL. ARIES UTAMA NO.12, RT.12/RW.3, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN ARIES BLOK A.2",
+    "alamat": "JL. ARIES UTAMA BLOK A.2 RW.3, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN ARIES BLOK A.7",
+    "alamat": "JL. ARIES UTAMA BLOK A.7RW.3, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN ARIES BLOK A.9",
+    "alamat": "JL. ARIES UTAMA BLOK A.9 RW.3, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN ARIES BLOK D.8",
+    "alamat": "JL. ARIES UTAMA BLOK D.8 RW.3, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN ANGGREK DAHLIA SMP 215",
+    "alamat": "JL. MAWAR, RT.11/RW.4, TAMAN, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN KOMPLEKS ARIES BLOK F16",
+    "alamat": "JL. ARIES UTAMA  BLOK F16 RW.3, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN KOMPLEK MERUYA ILIR BLOK A.3",
+    "alamat": "JL TAMAN MERUYA ILIR A.3 RW 002, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN KOMPLEK MERUYA ILIR BLOK A.13",
+    "alamat": "JL TAMAN MERUYA ILIR A.13 RW 002, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11621",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN KOMPLEK MERUYA ILIR BLOK A.17",
+    "alamat": "JL TAMAN MERUYA ILIR A.17 RW 002, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11622",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN KOMPLEK MERUYA ILIR BLOK G",
+    "alamat": "JL TAMAN MERUYA ILIR BLOK G RW 002, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK E",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK E RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK F1",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK F1 RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK F ( AL-AZHAR )",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK F1 RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK H",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK H RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK J",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK E RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK C (TAMAN NAGASARI)",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK C, RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK D.1",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK D1, RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK D.2",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK D.2, RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK D.3",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK D.3, RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN MERUYA ILIR BLOK B",
+    "alamat": "JL PERMATA MERUYA ILIR BLOK B, RW 004, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11623",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN BANTARAN KALI ARIES SISI TIMUR",
+    "alamat": "JL. ARIES UTAMA III 7-57, RT.7/RW.9, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN BANTARAN KALI ARIES SISI BARAT",
+    "alamat": "JL. ARIES UTAMA II, RT.5/RW.8, MERUYA UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11620",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA UTARA",
+    "nama_rth": "TAMAN BLOK A KAVLING DKI",
+    "alamat": "KAVLING DKI, MERUYA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA SELATAN",
+    "nama_rth": "TAMAN KOMP. UNILEVER BLOK A",
+    "alamat": "KOMPLEK UNILEVER BLOK A RT.6/RW.5, MERUYA SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "MERUYA SELATAN",
+    "nama_rth": "TAMAN KOMP. UNILEVER BLOK B",
+    "alamat": "KOMPLEK UNILEVER BLOK B, MERUYA SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN SELATAN",
+    "nama_rth": "TAMAN KOMP. WALIKOTA JAK-BAR BLOK C",
+    "alamat": "JL. PURI ASRI, RT.2/RW.2, KEMBANGAN SEL., KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "KEMBANGAN UTARA",
+    "nama_rth": "TAMAN KOMP. WALIKOTA JAK-BAR BLOK D",
+    "alamat": "JL. KEMBANGAN RAYA, RW.2, KEMBANGAN UTARA, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11610",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN ALFA INDAH BLOK A.2",
+    "alamat": "JL. TAMAN ALFA INDAH BLOK A2, RW.7, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN ALFA INDAH BLOK A.19",
+    "alamat": "JL. TAMAN ALFA INDAH BLOK A19, RW.7, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN ALFA INDAH BLOK B.4",
+    "alamat": "JL. TAMAN ALFA INDAH BLOK B4, RW.7, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN ALFA INDAH BLOK B.18",
+    "alamat": "JL. TAMAN ALFA INDAH BLOK B18, RW.7, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN ALFA INDAH BLOK F",
+    "alamat": "JL. TAMAN ALFA INDAH BLOK F, RW.7, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN KOMPLEK MEGA KEBON JERUK",
+    "alamat": "JL. REGENSI KEBON JERUK, RW.9, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN JOGLO BLOK D",
+    "alamat": "JL AL-MUBAROK III RW.8, JOGLO, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN JOGLO BLOK F",
+    "alamat": "JL AL-MUBAROK III RW.8, JOGLO, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN JOGLO BLOK E",
+    "alamat": "JL AL-MUBAROK III RW.8, JOGLO, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN JOGLO BLOK M",
+    "alamat": "JL AL-MUBAROK III RW.8, JOGLO, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN JOGLO BLOK R",
+    "alamat": "JL AL-MUBAROK III RW.8, JOGLO, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN JOGLO BLOK Z",
+    "alamat": "JL AL-MUBAROK III RW.8, JOGLO, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN KOMPLEK KOPKAMTIB",
+    "alamat": "RT.7/RW.2, JOGLO, KEMBANGAN, WEST JAKARTA CITY, JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN KOMPLEK PEMADAM KEBAKARAN",
+    "alamat": "JL. JOGLO RAYA JL. BUNTU NO.9, RT.9/RW.2, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "JOGLO",
+    "nama_rth": "TAMAN BELAKANG KELURAHAN JOGLO",
+    "alamat": "JL. JOGLO RAYA NO.1, RT.5/RW.8, JOGLO, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11640",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "SRENGSENG",
+    "nama_rth": "TAMAN KEBON JERUK BLOK J (INTERCON)",
+    "alamat": "JL. JERUK UTAMA BLOK J, RW.10, SRENGSENG, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11630",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEMBANGAN",
+    "kelurahan": "SRENGSENG",
+    "nama_rth": "TAMAN KEBON JERUK BLOK Q (INTERCON)",
+    "alamat": "JL. JERUK UTAMA BLOK Q, RW.10, SRENGSENG, KEC. KEMBANGAN, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11630",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEBON JERUK",
+    "nama_rth": "TAMAN FLAMBOYANT",
+    "alamat": "JL. RAYA KB. JERUK NO.1, RT.1/RW.11, KB. JERUK, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11530",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "SUKABUMI UTARA",
+    "nama_rth": "TAMAN MELUR",
+    "alamat": "JL. RAYA KB. JERUK NO.2, RT.2/RW.6, SUKABUMI UTARA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11540",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEBON JERUK",
+    "nama_rth": "TAMAN SEBRANG KANTOR KECAMATAN",
+    "alamat": "JL. RAYA KB. JERUK 39, RT.5/RW.1, KB. JERUK, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11530",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEBON JERUK",
+    "nama_rth": "TAMAN KOMPLEK DPR I KEBON JERUK",
+    "alamat": "JL. KOMP. DPR 1 NO.1, RT.7/RW.2, KB. JERUK, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11530",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEBON JERUK",
+    "nama_rth": "TAMAN KOMPLEK KEBON JERUK BLOK C RW. 08",
+    "alamat": "KOMPLEK KEBON JERUK BLOK C RW. 08",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEBON JERUK",
+    "nama_rth": "TAMAN KOMPLEK KEBON JERUK BLOK A RW. 08",
+    "alamat": "KOMPLEK KEBON JERUK BLOK A RW. 08",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KELAPA DUA",
+    "nama_rth": "KEBUN BIBIT VILLA KELAPA DUA",
+    "alamat": "JL. RAYA KLP. DUA, RT.1/RW.2, KLP. DUA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11550",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK AE 8",
+    "alamat": "BLOK, JL. KEDOYA AZALEA BLOK AE 8, SOUTH KEDOYA, KEBONJERUK, WEST JAKARTA CITY, JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK E",
+    "alamat": "BLOK, JL. KEDOYA AZALEA BLOK E, SOUTH KEDOYA, KEBONJERUK, WEST JAKARTA CITY, JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK A 10",
+    "alamat": "BLOK, JL. KEDOYA AZALEA XI BLOK A6 NO.10, RT.2/RW.4, SOUTH KEDOYA, KEBONJERUK, WEST JAKARTA CITY, JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN MEDIAN KOMP. ANEKA ELOK",
+    "alamat": "JL. KEDOYA AKASIA II, RT.6/RW.4, KEDOYA SEL., KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK AA6",
+    "alamat": "BLOK, JL. KEDOYA AZALEA AA6 , SOUTH KEDOYA, KEBONJERUK, WEST JAKARTA CITY, JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK AB 4",
+    "alamat": "JL. KEDOYA AZALEA V, RT.4/RW.4, KEDOYA SEL., KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK AC 2",
+    "alamat": "JL. KEDOYA AZALEA BLOK AC 2, KEDOYA SEL., KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK AD 3",
+    "alamat": "JL. KEDOYA AZALEA BLOK AD 3, KEDOYA SEL., KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK AD 12",
+    "alamat": "JL. KEDOYA AZALEA BLOK AD 12, KEDOYA SEL., KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA",
+    "nama_rth": "TAMAN ANEKA ELOK BLOK A 11",
+    "alamat": "JL. KEDOYA AZALEA BLOK A 11, KEDOYA SEL., KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA UTARA",
+    "nama_rth": "TAMAN SUNRISE GARDEN RW 05 ( I )",
+    "alamat": "JL. SURYA MULIA, RT.11/RW.5, KEDOYA UTARA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA UTARA",
+    "nama_rth": "TAMAN SUNRISE GARDEN RW 05 ( II )",
+    "alamat": "JL. SURYA MULIA, RT.11/RW.5, KEDOYA UTARA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KEBON JERUK",
+    "kelurahan": "KEDOYA UTARA",
+    "nama_rth": "TAMAN COSMOS",
+    "alamat": "JL. TAMAN COSMOS, RT.6/RW.7, KEDOYA UTARA, KEC. KB. JERUK, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11520",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KOSAMBI",
+    "nama_rth": "TAMAN BLOK E5 KOMPLEK KOSAMBI BARU",
+    "alamat": "KOMPLEK KOSAMBI BARU BLOK E5, DURI KOSAMBI, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11750",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KOSAMBI",
+    "nama_rth": "TAMAN BLOK A2 KOMPLEK KOSAMBI BARU",
+    "alamat": "KOMPLEK KOSAMBI BARU BLOK A2 , DURI KOSAMBI, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11750",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KOSAMBI",
+    "nama_rth": "TAMAN WIJAYA KUSUMA",
+    "alamat": "JL. WIJAYA KUSUMA NO.7, RT.7/RW.12, DURI KOSAMBI, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11750",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KOSAMBI",
+    "nama_rth": "TAMAN BLOK A11 KOMPLEK KOSAMBI BARU",
+    "alamat": "KOMPLEK KOSAMBI BARU BLOK A11 , DURI KOSAMBI, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11750",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KOSAMBI",
+    "nama_rth": "TAMAN BLOK D KOMPLEK KOSAMBI BARU",
+    "alamat": "KOMPLEK KOSAMBI BARU BLOK D, DURI KOSAMBI, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11750",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KOSAMBI",
+    "nama_rth": "TAMAN BLOK B6 KOMPLEK KOSAMBI BARU",
+    "alamat": "KOMPLEK KOSAMBI BARU BLOK B6 , DURI KOSAMBI, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11750",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "CENGKARENG",
+    "kelurahan": "DURI KOSAMBI",
+    "nama_rth": "TAMAN BLOK F3 KOMPLEK KOSAMBI BARU",
+    "alamat": "KOMPLEK KOSAMBI BARU BLOK F3  , DURI KOSAMBI, KECAMATAN CENGKARENG, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11750",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PREPEDAN",
+    "nama_rth": "TAMAN SIPON",
+    "alamat": "JL. BENDA RAYA NO.39, RT.1/RW.7, PREPEDAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11810",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KAMAL",
+    "nama_rth": "TAMAN RT. 01/06 KAMAL",
+    "alamat": "RT. 01/06,KEL. KAMAL, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KAMAL",
+    "nama_rth": "TAMAN RT. 01/08 KAMAL",
+    "alamat": "RT. 01/08,KEL. KAMAL, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KAMAL",
+    "nama_rth": "TAMAN RT. 09/03 KAMAL",
+    "alamat": "RT. 09/03,KEL. KAMAL, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KAMAL",
+    "nama_rth": "TAMAN RT. 10/03 KAMAL",
+    "alamat": "RT. 10/03,KEL. KAMAL, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PREPEDAN",
+    "nama_rth": "TAMAN CITRA GARDEN 5 BLOK A.6",
+    "alamat": "BLOK A.6, JL. PERUMAHAN CITRA 5, PREPEDAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11810",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PREPEDAN",
+    "nama_rth": "TAMAN CITRA GARDEN 5 BLOK B.8",
+    "alamat": "BLOK B.8, JL. PERUMAHAN CITRA 5, PREPEDAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11810",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PREPEDAN",
+    "nama_rth": "TAMAN CITRA GARDEN 5 BLOK C.2",
+    "alamat": "BLOK C.2, JL. PERUMAHAN CITRA 5, PREPEDAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11810",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PREPEDAN",
+    "nama_rth": "TAMAN CITRA GARDEN 5 BLOK D.6",
+    "alamat": "BLOK D.6, JL. PERUMAHAN CITRA 5, PREPEDAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11810",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN PELOPOR",
+    "alamat": "JL. PELOPOR 1, RT.1/RW.5, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN KOMPLEK KEBERSIHAN I",
+    "alamat": "JL. BAMBU LARANGAN NO.05/05, RT.1/RW.19, PEGADUNGAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN KOMPLEK KEBERSIHAN II",
+    "alamat": "JL. BAMBU LARANGAN NO.05/05, RT.1/RW.19, PEGADUNGAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN SUKATANI I",
+    "alamat": "JL. SUKATANI RAYA BLOK L8 NO.19, RT.12/RW.7, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN SUKATANI II",
+    "alamat": "JL. SUKATANI RAYA BLOK L8 NO.19, RT.12/RW.7, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN YUDISTIRA",
+    "alamat": "JL. YUDHISTIRA NO.20, RT.3/RW.7, TEGAL ALUR, KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820, INDONESIA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN SUMONGGOL",
+    "alamat": "JL. KAMAL RAYA GG. SADUN NO.63, RT.14/RW.9, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN MENVO",
+    "alamat": "JL. MENVO 4 NO.5, RT.7/RW.10, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN MALIOBORO I,II,III",
+    "alamat": "JL. MALIOBORO NO.6, RT.6/RW.6, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN MUSHOLLAH A",
+    "alamat": "JL. MUSHOLLA, TEGAL ALUR, KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN MUSHOLLAH B",
+    "alamat": "JL. MUSHOLLA, TEGAL ALUR, KALIDERES, JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN KOMPLEK KEBERSIHAN III",
+    "alamat": "JL. BINA SERASIH, RT.5/RW.17, PEGADUNGAN, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN ANGGREK BIRU",
+    "alamat": "JL. PALAPA NO.DALAM, RW.6, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN BHAKTI MULYA",
+    "alamat": "JALAN BAKTI MULYA BLOK BAKTI II NO.2, TEGAL ALUR, KALIDERES, RT.8/RW.2, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN MIRINDA DALAM",
+    "alamat": "JL. MIRINDA KAV.PTB RT 05/07 KEC. KALIDERES, TEGAL ALUR, KEC. KALI DERES, KOTA JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN PALAPA I",
+    "alamat": "JL. PALAPA RT.9/RW.6, TEGAL ALUR, KALIDERES, WEST JAKARTA CITY, JAKARTA 11820JL",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN PALAPA II",
+    "alamat": "JL. PALAPA RT.9/RW.6, TEGAL ALUR, KALIDERES, WEST JAKARTA CITY, JAKARTA 11820JL",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN BAHAGIA I",
+    "alamat": "JL. BAHAGIA BLOK D.3 NO.12, RT.5/RW.7, 11820, RT.12/RW.6, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN BAHAGIA II",
+    "alamat": "JL. BAHAGIA BLOK D.3 NO.12, RT.5/RW.7, 11820, RT.12/RW.6, TEGAL ALUR, KEC. KALIDERES, KOTA JAKARTA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN BELAKANG PASAR MENCENG",
+    "alamat": "JL. JAWA, RT.5/RW.6, TEGAL ALUR, KALIDERES, WEST JAKARTA CITY, JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "TEGAL ALUR",
+    "nama_rth": "TAMAN JL. H. BI'IN",
+    "alamat": "JL. H. BIIN RW.5, TEGAL ALUR, KALIDERES, WEST JAKARTA CITY, JAKARTA 11820",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN JL. MAWAR II",
+    "alamat": "JL. MAWAR II KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11830",
+    "jenis_rth": "LAINNYA"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN BERINGIN DALAM",
+    "alamat": "JL. BERINGIN 4, RT.3/RW.11, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN KAMBOJA",
+    "alamat": "JL. KAMBOJA NO.26, RT.1/RW.11, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK A.2",
+    "alamat": "TAMAN INDAH 3, BLOK A.2, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK A.13",
+    "alamat": "TAMAN INDAH 3, BLOK A.13, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK B.11",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK C.4",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK C.12",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK E.4",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11841",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK F.5",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11842",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK G.4",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11843",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK H.3",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11844",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "KALIDERES",
+    "nama_rth": "TAMAN CITRA GARDEN 1, BLOK I.3",
+    "alamat": "JL. BUKIT ASRI RT.6/RW.16, KALIDERES, KEC. KALIDERES, KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11845",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK A.1 (POS GERBANG 1)",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK B.24 (POS GERBANG 1)",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11830",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK B.7",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11831",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK C.3",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11832",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK C.8",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11833",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK D.8",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11834",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK D.3",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11835",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 3, BLOK F.2",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11836",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN3 EXT., BLOK A.12",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11837",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN3 EXT., BLOK A.14",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11838",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN3 EXT., BLOK B.12",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11839",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN3 EXT., BLOK B.25",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11840",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN3 EXT., BLOK E.6",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11841",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN3 EXT., BLOK E.12",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11842",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN3 EXT., BLOK F.1",
+    "alamat": "RW.13, PEGADUNGAN, KALIDERES, WEST JAKARTA CITY, JAKARTA 11843",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA BARAT",
+    "kecamatan": "KALIDERES",
+    "kelurahan": "PEGADUNGAN",
+    "nama_rth": "TAMAN CITRA GARDEN 5, BLOK E.7",
+    "alamat": "CITRA GARDEN 5, BLOK E.7 KEC. KALIDERES,PEGADUNGAN , KOTA JAKARTA BARAT, DAERAH KHUSUS IBUKOTA JAKARTA 11810",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN KESENIAN",
+    "alamat": "JL. KESENIAN NO.15, RT.16/RW.9, PD. BAMBU, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13430",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN NAKULA",
+    "alamat": "JL. NAKULA RAYA, RT.1/RW.6, PD. BAMBU, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13440",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN SWADAYA VIII",
+    "alamat": "JL. SWADAYA RAYA NO.34, RT.4/RW.5, DUREN SAWIT, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13440",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN SMU 71",
+    "alamat": "JL. KAVLING TNI ANGKATAN LAUT, RT.7/RW.16, DUREN SAWIT, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13440",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN KAV AGRARIA",
+    "alamat": "JL. KAV. AGRARIA , JAKARTA TIMUR , DUREN SAWIT , DUREN SAWIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN JL. BENDA RAYA",
+    "alamat": "JL. BENDA RAYA, DUREN SAWIT, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN PTB P6",
+    "alamat": "JL. DUREN SAWIT 1, DUREN SAWIT, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN KAV PTB RW 08 DUREN SAWIT",
+    "alamat": "JL. DUREN SAWIT TIMUR VI, DUREN SAWIT, JAKARTA TIMUR",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN PTB DEPAN MESJID",
+    "alamat": "",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN DUREN SAWIT INDAH I",
+    "alamat": "JL. DUREN SAWIT BARAT IIIA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN DUREN SAWIT RT.008/11",
+    "alamat": "",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN BLOK BB PTB DUREN SAWIT / TAMAN BLOCK M DAN U",
+    "alamat": "",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "DUREN SAWIT",
+    "nama_rth": "TAMAN BLOK A2 KEL. DUREN SAWIT",
+    "alamat": "",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "KLENDER",
+    "nama_rth": "TAMAN BAYU",
+    "alamat": "JL. NAGA RAYA NO.31-15, RT.6/RW.18, KLENDER, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13440",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "KLENDER",
+    "nama_rth": "TAMAN DUREN SAWIT INDAH II",
+    "alamat": "JL. DUREN SAWIT INDAH 6, KLENDER, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "KLENDER",
+    "nama_rth": "TAMAN SEGITIGA DERMAGA IF, IIF, IIIF, IVF",
+    "alamat": "JL. DUREN SAWIT RAYA (DERMAGA), RT.7/RW.10, KLENDER, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "KLENDER",
+    "nama_rth": "TAMAN DERMAGA",
+    "alamat": "JL. DERMAGA RAYA 6-32, RT.5/RW.10, KLENDER, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13470",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "KLENDER",
+    "nama_rth": "TAMAN RW 13 KEL. KLENDER",
+    "alamat": "JL. BUARAN INDAH III, KLENDER",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN BAMBU DURI",
+    "alamat": "JL. BAMBU DURI I , PONDOK BAMBU,  DUREN SAWIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN BULUH PERINDU",
+    "alamat": "JL. BULUH PERINDU V, PONDOK BAMBU, DUREN SAWIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN BAMBU KUNING",
+    "alamat": "JL. BAMBU KUNING IV NO.10, RT.10/RW.8, PD. BAMBU, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13430",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN BAMBU BETUNG DUREN SAWIT",
+    "alamat": "JL. BETUNG RAYA I, RT.5/RW.11, PONDOK BAMBU, DURENSAWIT, EAST JAKARTA CITY, JAKARTA 13430",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN JL. TUTUL",
+    "alamat": "JL. TUTUL, RW.11, PONDOK BAMBU, DURENSAWIT, EAST JAKARTA CITY, JAKARTA",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK BAMBU",
+    "nama_rth": "TAMAN JL. BB MAS RAYA",
+    "alamat": "JL. BAMBU MAS RAYA, RT.11/RW.8, PONDOK BAMBU, DURENSAWIT, EAST JAKARTA CITY, JAKARTA 13430",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN JL. KEJAKSAAN",
+    "alamat": "JL. KEJAKSAAN V NO.155, RT.11/RW.11, PD. BAMBU, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13430",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN PONDOK KELAPA BLOK AD DPRD",
+    "alamat": "KAV. DPRD BLOK AD JL. NYIUR 3, PONDOK KELAPA, DUREN SWAIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN PONDOK KELAPA BLOK AE DPRD",
+    "alamat": "KAV. DPRD BLOK AE 2, JL. NYIUR 3, PONDOK KELAPA, DUREN SWAIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN PONDOK KELAPA BLOK M",
+    "alamat": "BLOK M PERUM KARYAWAN DKI, PONDOK KELAPA, DUREN SAWIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN PONDOK KELAPA BLOK S",
+    "alamat": "BLOK S PERUM KARYAWAN DKI, PONDOK KELAPA, DUREN SAWIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN PONDOK KELAPA BLOK B",
+    "alamat": "BLOK B PERUM KARYAWAN DKI, PONDOK KELAPA, DUREN SAWIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN JANUR III",
+    "alamat": "JL. JANUR III,RW.10, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "",
+    "nama_rth": "TAMAN BLOK H, KAV DKI",
+    "alamat": "BLOK H PERUM KARYAWAN DKI, PONDOK KELAPA, DUREN SAWIT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN JANUR KUNING",
+    "alamat": "JL. JANUR KUNING , RT.5/RW.4, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN LEMBAH PALEM",
+    "alamat": "JL. HYBRIDA, RT.5/RW.9, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN LEMBAH NYIUR",
+    "alamat": "JL. LEMBAH NYIUR RAYA, RT.13/RW.9, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN LEMBAH AREN",
+    "alamat": "JL. LEMBAH PALEM 9, RT.12/RW.9, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN BLOK C5, KAV DKI",
+    "alamat": "KAVLING DKI PONDOK KELAPA BLOK C5",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN SABUT",
+    "alamat": "JL. SABUT II NO.14, RT.10/RW.11, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN CENGKIR",
+    "alamat": "JL. CENGKIR I NO.7, RT.7/RW.11, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN MANGGAR III",
+    "alamat": "JL. MANGGAR III, RT.3/RW.11, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN MANGGAR IV",
+    "alamat": "JL. MANGGAR IV, RT.2/RW.11, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN THEVETIA",
+    "alamat": "JL. SWAKARSA II RT 012 RW 003",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "MALAKA JAYA",
+    "nama_rth": "TAMAN KELAPA",
+    "alamat": "JL. PONDOK KELAPA RAYA, RT.1/RW.11, MALAKA JAYA, DURENSAWIT, EAST JAKARTA CITY, JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN PONDOK KELAPA BARAT 2",
+    "alamat": "JL. PONDOK KELAPA BARAT",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN MALAKA SELATAN AL-IMAN",
+    "alamat": "JL. MALAKA SELATAN IB, RT.5/RW.11, MALAKA JAYA, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "MALAKA JAYA",
+    "nama_rth": "TAMAN MALAKA UTARA BLOK C",
+    "alamat": "JL. TAMAN MALAKA UTARA 3.A, RT.7/RW.9, MALAKA JAYA, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "MALAKA SARI",
+    "nama_rth": "TAMAN MALAKA IV",
+    "alamat": "JL. MALAKA 4, RT.5/RW.10, MALAKA SARI, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "PONDOK KELAPA",
+    "nama_rth": "TAMAN MALAKA SELATAN BLOK I A/IB",
+    "alamat": "JL. TAMAN MALAKA SELATAN, RT.5/RW.11, PD. KLP., KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13450",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "MALAKA SARI",
+    "nama_rth": "TAMAN RW 07 KEL. MALAKA JAYA",
+    "alamat": "TAMAN MALAKA BAR. I, RT.2/RW.9, MALAKA SARI, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "MALAKA JAYA",
+    "nama_rth": "TAMAN JL. NUSA INDAH IV",
+    "alamat": "JL. NUSA INDAH IV, RW.13, MALAKA JAYA, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "MALAKA JAYA",
+    "nama_rth": "TAMAN MAWAR MERAH III",
+    "alamat": "JL. MAWAR MERAH III NO.85, RT.8/RW.12, MALAKA JAYA, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  },
+  {
+    "periode": "2022",
+    "wilayah": "JAKARTA TIMUR",
+    "kecamatan": "DUREN SAWIT",
+    "kelurahan": "MALAKA SARI",
+    "nama_rth": "TAMAN DELIMA V",
+    "alamat": "JL. DELIMA V, RT.11/RW.5, MALAKA SARI, KEC. DUREN SAWIT, KOTA JAKARTA TIMUR, DAERAH KHUSUS IBUKOTA JAKARTA 13460",
+    "jenis_rth": "TAMAN"
+  }
+]
