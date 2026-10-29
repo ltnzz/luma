@@ -334,19 +334,19 @@ const openApiSpec = {
 };
 
 /**
- * GET /api/docs/openapi.json
+ * GET /api/docs/openapi.json & /docs/openapi.json
  * Mengembalikan OpenAPI specification dalam format JSON
  */
-router.get('/api/docs/openapi.json', (_req: Request, res: Response) => {
+router.get(['/api/docs/openapi.json', '/docs/openapi.json'], (_req: Request, res: Response) => {
   res.setHeader('Content-Type', 'application/json');
   res.status(200).json(openApiSpec);
 });
 
 /**
- * GET /api/docs
+ * GET /api/docs & /docs
  * Tampilan interaktif Swagger UI via CDN resmi Swagger UI
  */
-router.get('/api/docs', (_req: Request, res: Response) => {
+router.get(['/api/docs', '/docs'], (_req: Request, res: Response) => {
   const html = `<!DOCTYPE html>
 <html lang="id">
 <head>
@@ -367,8 +367,11 @@ router.get('/api/docs', (_req: Request, res: Response) => {
   <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-standalone-preset.js"></script>
   <script>
     window.onload = function() {
+      var specUrl = window.location.pathname.indexOf('/api') !== -1
+        ? "/api/docs/openapi.json"
+        : "/docs/openapi.json";
       window.ui = SwaggerUIBundle({
-        url: "/api/docs/openapi.json",
+        url: specUrl,
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [

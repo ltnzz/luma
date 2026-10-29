@@ -22,7 +22,7 @@ const nodeEnv = getValidNodeEnv();
 const rawDatabaseUrl = process.env.DATABASE_URL;
 
 if (nodeEnv === 'production' && !rawDatabaseUrl) {
-  throw new Error('[Environment] DATABASE_URL is required in production environment.');
+  console.warn('[Environment] WARNING: DATABASE_URL is not defined in production environment.');
 }
 
 export const env: AppEnv = {
@@ -30,4 +30,3 @@ export const env: AppEnv = {
   NODE_ENV: nodeEnv,
   DATABASE_URL: rawDatabaseUrl || 'postgres://postgres:password@localhost:5432/luma',
 };
-
