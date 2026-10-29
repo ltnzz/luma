@@ -14,7 +14,11 @@ export function createApp(): Express {
   app.set('trust proxy', 1);
 
   // Security & Optimization Middleware
-  app.use(helmet());
+  app.use(
+    helmet({
+      contentSecurityPolicy: false,
+    })
+  );
   app.use(cors());
   app.use(compression());
   app.use(globalRateLimiter);
