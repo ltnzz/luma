@@ -1,19 +1,9 @@
 import { Router, Request, Response } from 'express';
-import fs from 'fs/promises';
-import path from 'path';
+import { readJsonDatasetCached } from '../utils/datasetCache';
+import { cacheControl } from '../middleware/cacheControl.middleware';
 
 const router = Router();
-const DATASET_DIR = path.resolve(__dirname, '../../dataset');
-
-async function readJsonFile<T = unknown>(relativePath: string): Promise<T | null> {
-  try {
-    const fullPath = path.join(DATASET_DIR, relativePath);
-    const content = await fs.readFile(fullPath, 'utf-8');
-    return JSON.parse(content) as T;
-  } catch {
-    return null;
-  }
-}
+router.use('/api/v1/visualizations', cacheControl(300, 600));
 
 interface CatalogItem {
   category: string;
@@ -100,7 +90,7 @@ interface VisualizationData {
  * Metrik global overview dan distribusi volume dataset lintas sektor untuk tab Overview di dashboard
  */
 router.get('/api/v1/visualizations/overview', async (_req: Request, res: Response) => {
-  const data = await readJsonFile<VisualizationData>('visualization_data.json');
+  const data = await readJsonDatasetCached<VisualizationData>('visualization_data.json');
   if (!data) {
     res.status(404).json({
       status: 'error',
@@ -179,7 +169,7 @@ router.get('/api/v1/visualizations/overview', async (_req: Request, res: Respons
  * Daftar paket katalog dataset normalisasi DKI Jakarta
  */
 router.get('/api/v1/visualizations/catalog', async (_req: Request, res: Response) => {
-  const data = await readJsonFile<VisualizationData>('visualization_data.json');
+  const data = await readJsonDatasetCached<VisualizationData>('visualization_data.json');
   if (!data) {
     res.status(404).json({
       status: 'error',
@@ -211,7 +201,7 @@ router.get('/api/v1/visualizations/sectors/:sector', async (req: Request, res: R
     return;
   }
 
-  const data = await readJsonFile<VisualizationData>('visualization_data.json');
+  const data = await readJsonDatasetCached<VisualizationData>('visualization_data.json');
   if (!data || !data[normalizedSector as keyof VisualizationData]) {
     res.status(404).json({
       status: 'error',
