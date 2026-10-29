@@ -1,26 +1,16 @@
 import { Router, Request, Response } from 'express';
-import fs from 'fs/promises';
-import path from 'path';
+import { readJsonDatasetCached } from '../utils/datasetCache';
+import { cacheControl } from '../middleware/cacheControl.middleware';
 
 const router = Router();
-const DATASET_DIR = path.resolve(__dirname, '../../dataset');
-
-async function readDatasetJson<T = unknown>(relativePath: string): Promise<T | null> {
-  try {
-    const fullPath = path.join(DATASET_DIR, relativePath);
-    const content = await fs.readFile(fullPath, 'utf-8');
-    return JSON.parse(content) as T;
-  } catch {
-    return null;
-  }
-}
+router.use('/api/v1/dataset', cacheControl(300, 600));
 
 /**
  * GET /api/v1/dataset/summary
  * Mengembalikan katalog dataset dan metrik KPI visualisasi lintas sektor
  */
 router.get('/api/v1/dataset/summary', async (_req: Request, res: Response) => {
-  const data = await readDatasetJson('visualization_data.json');
+  const data = await readJsonDatasetCached('visualization_data.json');
   if (!data) {
     res.status(404).json({
       status: 'error',
@@ -40,7 +30,7 @@ router.get('/api/v1/dataset/summary', async (_req: Request, res: Response) => {
  * Mengembalikan data agregasi multisektoral per wilayah administrasi DKI Jakarta
  */
 router.get('/api/v1/dataset/wilayah', async (_req: Request, res: Response) => {
-  const data = await readDatasetJson('merged_dki_by_wilayah.json');
+  const data = await readJsonDatasetCached('merged_dki_by_wilayah.json');
   if (!data) {
     res.status(404).json({
       status: 'error',
@@ -60,7 +50,7 @@ router.get('/api/v1/dataset/wilayah', async (_req: Request, res: Response) => {
  * Mengembalikan data indikator dan spasial peta interaktif Luma
  */
 router.get('/api/v1/dataset/indicators', async (_req: Request, res: Response) => {
-  const data = await readDatasetJson('kotaterbaca_payload.json');
+  const data = await readJsonDatasetCached('kotaterbaca_payload.json');
   if (!data) {
     res.status(404).json({
       status: 'error',
@@ -98,7 +88,7 @@ router.get('/api/v1/dataset/sectors/:sector', async (req: Request, res: Response
     return;
   }
 
-  const data = await readDatasetJson(targetFile);
+  const data = await readJsonDatasetCached(targetFile);
   if (!data) {
     res.status(404).json({
       status: 'error',
