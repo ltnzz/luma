@@ -8,6 +8,27 @@
       "when": 1792690081273,
       "tag": "0000_nasty_redwing",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793197131040,
+      "tag": "0001_small_bloodstorm",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793239590414,
+      "tag": "0002_jazzy_krista_starr",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793240846973,
+      "tag": "0003_shiny_catseye",
+      "breakpoints": true
     }
   ]
 }
