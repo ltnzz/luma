@@ -1,0 +1,17 @@
+{
+  "name": "luma",
+  "private": true,
+  "workspaces": [
+    "apps/*"
+  ],
+  "dependencies": {
+    "compression": "^1.8.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "drizzle-orm": "^0.45.4",
+    "express": "^4.21.2",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "pg": "^8.13.1"
+  }
+}

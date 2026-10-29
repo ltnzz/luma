@@ -1,8 +1,6 @@
-import { createApp } from './app';
+import app from './app';
 import { env } from './config/env';
 import { pool } from './db';
-
-const app = createApp();
 
 let server: ReturnType<typeof app.listen> | undefined;
 
