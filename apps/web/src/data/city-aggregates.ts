@@ -26,7 +26,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 46,
-      facilities: 6,
+      facilities: 22,
       total: 2531,
     },
     corridors: [
@@ -54,7 +54,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 57,
-      facilities: 11,
+      facilities: 24,
       total: 5512,
     },
     corridors: [
@@ -78,7 +78,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 35,
-      facilities: 2,
+      facilities: 18,
       total: 4489,
     },
     corridors: ['KORIDOR 1', 'KORIDOR 3', 'KORIDOR 8', 'KORIDOR 9', 'KORIDOR 12'],
@@ -95,7 +95,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 63,
-      facilities: 14,
+      facilities: 22,
       total: 5470,
     },
     corridors: [
@@ -120,7 +120,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 33,
-      facilities: 1,
+      facilities: 16,
       total: 3153,
     },
     corridors: ['KORIDOR 2', 'KORIDOR 5', 'KORIDOR 9', 'KORIDOR 10', 'KORIDOR 12'],
@@ -137,7 +137,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 0,
-      facilities: 0,
+      facilities: 13,
       total: 80,
     },
     corridors: [],

@@ -2,12 +2,10 @@ import { Router, Request, Response } from 'express';
 import { db } from '../db';
 import { facilities } from '../db/schema';
 import { eq, ilike, and, sql } from 'drizzle-orm';
-import fs from 'fs/promises';
-import path from 'path';
+import { kotaterbacaPayload } from '../data/datasets';
 import crypto from 'crypto';
 
 const router = Router();
-const PAYLOAD_PATH = path.resolve(__dirname, '../../dataset/kotaterbaca_payload.json');
 
 function slugToUuid(slug: string): string {
   const hash = crypto.createHash('sha256').update(`luma:facility:${slug}`).digest('hex');
@@ -39,11 +37,10 @@ interface FallbackFacility {
 
 async function getFallbackFacilities(): Promise<FallbackFacility[]> {
   try {
-    const raw = await fs.readFile(PAYLOAD_PATH, 'utf-8');
-    const data = JSON.parse(raw) as {
-      facilities: Array<Omit<FallbackFacility, 'slug'> & { id: string }>;
+    const data = kotaterbacaPayload as {
+      facilities?: Array<Omit<FallbackFacility, 'slug'> & { id: string }>;
     };
-    return (data.facilities || []).map((f) => ({
+    return (data?.facilities || []).map((f) => ({
       ...f,
       id: slugToUuid(f.id),
       slug: f.id,

@@ -600,7 +600,7 @@ export function InteractiveMap({
       }
 
       const html = `
-        <div style="padding: 10px 12px; font-family: Inter, sans-serif; min-width: 190px; max-width: 270px; color: #1c2620;">
+        <div style="padding: 10px 12px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 190px; max-width: 270px; color: #1c2620;">
           <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 3px;">
             <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: ${color}; letter-spacing: 0.05em;">
               ${line}
@@ -760,7 +760,7 @@ export function InteractiveMap({
         <div class="flex items-center gap-1.5 whitespace-nowrap">
           <span class="text-xs font-bold text-foreground tracking-tight">${city.name}</span>
           <span class="px-1.5 py-0.5 text-[10px] font-extrabold bg-primary/15 text-primary rounded-md">
-            ${city.counts.total.toLocaleString('id-ID')} Titik
+            ${city.counts.facilities} Fasilitas
           </span>
         </div>
       `
@@ -840,7 +840,7 @@ export function InteractiveMap({
       wrapperEl.appendChild(innerEl)
 
       const popupHtml = `
-        <div style="padding: 10px; font-family: Inter, sans-serif; min-width: 180px; max-width: 240px; color: #1c2620;">
+        <div style="padding: 10px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 180px; max-width: 240px; color: #1c2620;">
           <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: ${color}; letter-spacing: 0.05em;">
             ${f.subCategory || f.category}
           </span>

@@ -18,6 +18,7 @@ const WILAYAH_OPTIONS = [
   { key: 'JAKARTA BARAT', label: 'Jakarta Barat' },
   { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan' },
   { key: 'JAKARTA TIMUR', label: 'Jakarta Timur' },
+  { key: 'KEP. SERIBU', label: 'Kep. Seribu' },
 ]
 
 interface RegionalIndicatorCardProps {
