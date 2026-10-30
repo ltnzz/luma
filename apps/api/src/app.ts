@@ -6,6 +6,7 @@ import routes from './routes';
 import { globalRateLimiter } from './middleware/rateLimit.middleware';
 import { errorHandler } from './middleware/error.middleware';
 import { notFoundHandler } from './middleware/notFound.middleware';
+import { env } from './config/env';
 
 export function createApp(): Express {
   const app = express();
@@ -19,7 +20,27 @@ export function createApp(): Express {
       contentSecurityPolicy: false,
     })
   );
-  app.use(cors());
+  app.use(
+    cors({
+      origin(origin, callback) {
+        // Requests without Origin include health probes and server-to-server calls.
+        if (!origin) {
+          callback(null, true);
+          return;
+        }
+
+        const normalizedOrigin = origin.replace(/\/$/, '');
+        if (env.CORS_ORIGINS.includes('*') || env.CORS_ORIGINS.includes(normalizedOrigin)) {
+          callback(null, true);
+          return;
+        }
+
+        callback(new Error(`Origin '${origin}' is not allowed by CORS`));
+      },
+      methods: ['GET', 'HEAD', 'OPTIONS'],
+      allowedHeaders: ['Accept', 'Content-Type'],
+    })
+  );
   app.use(compression());
   app.use(globalRateLimiter);
   app.use(express.json({ limit: '1mb' }));

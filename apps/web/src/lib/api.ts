@@ -1,5 +1,5 @@
 /**
- * Thin API client for the Luma backend (apps/api, Express).
+ * Typed domain API for the Luma backend (apps/api, Express).
  *
  * Contract references (verified by audit, do NOT invent endpoints/fields):
  * - apps/api/README.md  -> relative `/api/v1` paths, dev proxy to :4000
@@ -15,111 +15,16 @@
  *   JSON dataset was served instead.
  */
 
-export const API_BASE = '/api/v1'
+import { ApiError, requestEnvelope } from './api-client'
 
-const REQUEST_TIMEOUT_MS = 15_000
-
-export type ApiErrorKind = 'http' | 'network' | 'timeout' | 'parse' | 'empty'
-
-export class ApiError extends Error {
-  readonly kind: ApiErrorKind
-  readonly status?: number
-
-  constructor(kind: ApiErrorKind, message: string, status?: number) {
-    super(message)
-    this.name = 'ApiError'
-    this.kind = kind
-    this.status = status
-  }
-}
-
-export function isAbortError(error: unknown): boolean {
-  return error instanceof Error && error.name === 'AbortError' && !(error instanceof ApiError)
-}
-
-interface ErrorBody {
-  status?: string
-  statusCode?: number
-  message?: string
-}
-
-/** Envelope as produced by the backend routes. */
-export interface ApiEnvelope<T> {
-  status: string
-  data: T
-  source?: string
-  sector?: string
-  pagination?: {
-    page: number
-    limit: number
-    total: number
-    totalPages: number
-  }
-}
-
-async function parseErrorBody(response: Response): Promise<ErrorBody | null> {
-  try {
-    const text = await response.text()
-    if (!text) return null
-    return JSON.parse(text) as ErrorBody
-  } catch {
-    return null
-  }
-}
-
-async function requestEnvelope<T>(path: string, signal?: AbortSignal): Promise<ApiEnvelope<T>> {
-  const timeoutController = new AbortController()
-  const timeoutId = window.setTimeout(() => timeoutController.abort(), REQUEST_TIMEOUT_MS)
-
-  // Combine the caller's signal (component unmount) with our timeout signal.
-  const onExternalAbort = () => timeoutController.abort()
-  signal?.addEventListener('abort', onExternalAbort)
-
-  let response: Response
-  try {
-    response = await fetch(`${API_BASE}${path}`, {
-      signal: timeoutController.signal,
-      headers: { Accept: 'application/json' },
-    })
-  } catch (error) {
-    if (signal?.aborted) {
-      // Caller aborted (unmount): rethrow the AbortError for silent cleanup.
-      throw error
-    }
-    if (error instanceof DOMException && error.name === 'AbortError') {
-      throw new ApiError('timeout', 'Request timed out')
-    }
-    throw new ApiError('network', 'Network request failed')
-  } finally {
-    window.clearTimeout(timeoutId)
-    signal?.removeEventListener('abort', onExternalAbort)
-  }
-
-  if (!response.ok) {
-    const body = await parseErrorBody(response)
-    // The backend does not always include statusCode in 400/404 bodies;
-    // the HTTP status itself is the source of truth.
-    throw new ApiError('http', body?.message ?? response.statusText, response.status)
-  }
-
-  let body: { status?: unknown; data?: unknown; source?: unknown; sector?: unknown }
-  try {
-    body = (await response.json()) as typeof body
-  } catch {
-    throw new ApiError('parse', 'Malformed JSON response')
-  }
-
-  if (body.data === undefined || body.data === null) {
-    throw new ApiError('empty', 'Success response without data')
-  }
-
-  return {
-    status: typeof body.status === 'string' ? body.status : 'success',
-    data: body.data as T,
-    source: typeof body.source === 'string' ? body.source : undefined,
-    sector: typeof body.sector === 'string' ? body.sector : undefined,
-  }
-}
+export {
+  ApiError,
+  API_BASE_URL,
+  getApiHealth,
+  isAbortError,
+  requestApiRetry,
+} from './api-client'
+export type { ApiEnvelope, ApiErrorKind } from './api-client'
 
 /* ------------------------------------------------------------------ */
 /* GET /api/v1/indicators                                              */
@@ -188,7 +93,7 @@ async function fetchIndicators(
   fallbackWilayahCode: string,
   signal?: AbortSignal,
 ): Promise<{ lookup: Record<string, RegionalIndicator>; source: IndicatorSource | null }> {
-  const envelope = await requestEnvelope<unknown>('/indicators' + path, signal)
+  const envelope = await requestEnvelope<unknown>('/api/v1/indicators' + path, { signal })
   const data = envelope.data as RawIndicator | null
 
   if (!data || typeof data !== 'object') {
@@ -315,7 +220,7 @@ let overviewCache: Promise<OverviewData> | null = null
  */
 export function getOverview(): Promise<OverviewData> {
   if (!overviewCache) {
-    overviewCache = requestEnvelope<OverviewEnvelope>('/visualizations/overview')
+    overviewCache = requestEnvelope<OverviewEnvelope>('/api/v1/visualizations/overview')
       .then((envelope) => {
         const body = envelope.data
         const source = body.kpis !== undefined ? body : (body.overview as OverviewEnvelope | undefined)
@@ -341,34 +246,203 @@ export function getOverview(): Promise<OverviewData> {
   return overviewCache
 }
 
-/** Reset module-level caches (error recovery / tests). */
-export function clearApiCaches(): void {
-  overviewCache = null
+/* ------------------------------------------------------------------ */
+/* GET /api/v1/facilities                                              */
+/* ------------------------------------------------------------------ */
+
+export interface FacilityDocument {
+  title: string
+  size?: string
+  dept?: string
+  fileUrl?: string
 }
 
+export interface Facility {
+  id: string
+  slug: string | null
+  name: string
+  category: string
+  subCategory: string | null
+  wilayah: string
+  kecamatan: string | null
+  address: string | null
+  lat: number
+  lng: number
+  specs: Record<string, string>
+  budget: Record<string, string>
+  metrics: Record<string, unknown>
+  documents: FacilityDocument[]
+}
 
-export async function getFacilities<T = unknown>(
-  params?: { wilayah?: string; category?: string; search?: string; page?: number; limit?: number },
-  signal?: AbortSignal,
-): Promise<{ data: T[]; pagination?: ApiEnvelope<unknown>['pagination']; source?: string }> {
-  const query = new URLSearchParams()
-  if (params?.wilayah && params.wilayah !== 'ALL') query.set('wilayah', params.wilayah)
-  if (params?.category && params.category !== 'all') query.set('category', params.category)
-  if (params?.search) query.set('search', params.search)
-  if (params?.page) query.set('page', String(params.page))
-  if (params?.limit) query.set('limit', String(params.limit))
+export interface FacilitiesParams {
+  wilayah?: string
+  category?: string
+  search?: string
+  page?: number
+  limit?: number
+}
 
-  const qs = query.toString()
-  const path = qs ? `/facilities?${qs}` : '/facilities?limit=50'
-  const envelope = await requestEnvelope<T[]>(path, signal)
+export interface FacilitiesResult {
+  items: Facility[]
+  pagination: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
+  source: string | null
+}
+
+type RawFacility = Record<string, unknown>
+
+function asString(value: unknown): string | null {
+  return typeof value === 'string' && value.trim() ? value : null
+}
+
+function asNumber(value: unknown): number | null {
+  if (typeof value === 'number' && Number.isFinite(value)) return value
+  if (typeof value === 'string' && value.trim()) {
+    const parsed = Number(value)
+    return Number.isFinite(parsed) ? parsed : null
+  }
+  return null
+}
+
+function asStringRecord(value: unknown): Record<string, string> {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return {}
+  return Object.fromEntries(
+    Object.entries(value).flatMap(([key, item]) =>
+      typeof item === 'string' ? [[key, item]] : [],
+    ),
+  )
+}
+
+function normalizeSpecs(value: unknown): Record<string, string> {
+  if (Array.isArray(value)) {
+    return Object.fromEntries(
+      value.flatMap((item) => {
+        if (!item || typeof item !== 'object') return []
+        const spec = item as Record<string, unknown>
+        const key = asString(spec.specKey ?? spec.spec_key)
+        const specValue = asString(spec.specValue ?? spec.spec_value)
+        return key && specValue ? [[key, specValue]] : []
+      }),
+    )
+  }
+  return asStringRecord(value)
+}
+
+function normalizeDocuments(raw: RawFacility): FacilityDocument[] {
+  const value = raw.documents ?? raw.docs
+  if (!Array.isArray(value)) return []
+
+  return value.flatMap((item) => {
+    if (!item || typeof item !== 'object') return []
+    const document = item as Record<string, unknown>
+    const title = asString(document.title)
+    if (!title) return []
+    return [{
+      title,
+      size: asString(document.size) ?? undefined,
+      dept: asString(document.dept) ?? undefined,
+      fileUrl: asString(document.fileUrl ?? document.file_url) ?? undefined,
+    }]
+  })
+}
+
+function normalizeFacility(raw: RawFacility): Facility | null {
+  const id = asString(raw.id)
+  const name = asString(raw.name)
+  const category = asString(raw.category)
+  const wilayah = asString(raw.wilayah)
+  const lat = asNumber(raw.lat)
+  const lng = asNumber(raw.lng)
+
+  if (!id || !name || !category || !wilayah || lat === null || lng === null) return null
+
   return {
-    data: envelope.data || [],
-    pagination: envelope.pagination,
-    source: envelope.source,
+    id,
+    slug: asString(raw.slug),
+    name,
+    category,
+    subCategory: asString(raw.subCategory ?? raw.sub_category),
+    wilayah,
+    kecamatan: asString(raw.kecamatan),
+    address: asString(raw.address),
+    lat,
+    lng,
+    specs: normalizeSpecs(raw.specs),
+    budget: asStringRecord(raw.budget),
+    metrics:
+      raw.metrics && typeof raw.metrics === 'object' && !Array.isArray(raw.metrics)
+        ? (raw.metrics as Record<string, unknown>)
+        : {},
+    documents: normalizeDocuments(raw),
   }
 }
 
-export async function getFacilityDetail<T = unknown>(id: string, signal?: AbortSignal): Promise<T> {
-  const envelope = await requestEnvelope<T>(`/facilities/${encodeURIComponent(id)}`, signal)
+export async function getFacilities(
+  params: FacilitiesParams = {},
+  signal?: AbortSignal,
+): Promise<FacilitiesResult> {
+  const query = new URLSearchParams()
+  if (params.wilayah && params.wilayah !== 'ALL') query.set('wilayah', params.wilayah)
+  if (params.category && params.category !== 'all') query.set('category', params.category)
+  if (params.search) query.set('search', params.search)
+  query.set('page', String(params.page ?? 1))
+  query.set('limit', String(params.limit ?? 100))
+
+  const envelope = await requestEnvelope<unknown[]>(`/api/v1/facilities?${query}`, { signal })
+  const items = Array.isArray(envelope.data)
+    ? envelope.data.flatMap((raw) => {
+        const normalized = raw && typeof raw === 'object' ? normalizeFacility(raw as RawFacility) : null
+        return normalized ? [normalized] : []
+      })
+    : []
+
+  return {
+    items,
+    pagination: envelope.pagination ?? {
+      page: params.page ?? 1,
+      limit: params.limit ?? 100,
+      total: items.length,
+      totalPages: items.length > 0 ? 1 : 0,
+    },
+    source: envelope.source ?? null,
+  }
+}
+
+export async function getFacility(id: string, signal?: AbortSignal): Promise<Facility> {
+  const envelope = await requestEnvelope<RawFacility>(
+    `/api/v1/facilities/${encodeURIComponent(id)}`,
+    { signal },
+  )
+  const facility = normalizeFacility(envelope.data)
+  if (!facility) throw new ApiError('empty', 'Facility response is incomplete')
+  return facility
+}
+
+export const getFacilityDetail = getFacility
+
+/* ------------------------------------------------------------------ */
+/* GET /api/v1/visualizations/sectors/:sector                          */
+/* ------------------------------------------------------------------ */
+
+export type AnalyticsSector = 'air' | 'rth' | 'sekolah' | 'transum' | 'udara' | 'kesehatan'
+export type SectorAnalytics = Record<string, unknown>
+
+export async function getSectorAnalytics(
+  sector: AnalyticsSector,
+  signal?: AbortSignal,
+): Promise<SectorAnalytics> {
+  const envelope = await requestEnvelope<SectorAnalytics>(
+    `/api/v1/visualizations/sectors/${encodeURIComponent(sector)}`,
+    { signal },
+  )
   return envelope.data
+}
+
+/** Reset module-level caches (error recovery / tests). */
+export function clearApiCaches(): void {
+  overviewCache = null
 }

@@ -10,6 +10,11 @@ import { IndicatorsCard } from './components/IndicatorsCard'
 import { Card } from '../../components/ui/Card'
 import { Skeleton } from '../../components/ui/Skeleton'
 import { InteractiveMap } from '../../components/ui/InteractiveMap'
+import { ErrorBanner } from '../../components/ui/ErrorBanner'
+import { useFacilities } from './hooks/useFacilities'
+import type { Facility } from '../../lib/api'
+import { FacilityDetailModal } from './components/FacilityDetailModal'
+import { AnalyticsPanel } from './components/AnalyticsPanel'
 
 /**
  * Screen 1 — "Ringkasan kondisi DKI Jakarta" (Figma).
@@ -23,11 +28,16 @@ export function DashboardPage() {
   const { t, language } = useTranslation()
   const [selectedCode, setSelectedCode] = useState<string | null>(null)
   const [mapView, setMapView] = useState<'hex' | 'interactive'>('hex')
+  const [selectedFacilityId, setSelectedFacilityId] = useState<string | null>(null)
   const indicators = useIndicators()
   const overview = useOverview()
+  const facilities = useFacilities(selectedCode ?? undefined)
 
   const handleSelect = useCallback((code: string) => setSelectedCode(code), [])
   const handleReset = useCallback(() => setSelectedCode(null), [])
+  const handleFacilitySelect = useCallback((facility: Facility) => {
+    setSelectedFacilityId(facility.id)
+  }, [])
 
   const scopeName = selectedCode
     ? findWilayahMeta(selectedCode)?.name ?? indicators.lookup?.[selectedCode]?.label ?? selectedCode
@@ -94,7 +104,25 @@ export function DashboardPage() {
                 ) : null}
               </>
             ) : (
-              <InteractiveMap height="360px" />
+              <div className="relative">
+                <InteractiveMap
+                  height="360px"
+                  facilities={facilities.items}
+                  onFacilitySelect={handleFacilitySelect}
+                />
+                {facilities.status === 'loading' ? (
+                  <div className="pointer-events-none absolute bottom-3 left-3 rounded-lg border border-border bg-surface/90 px-3 py-2 text-xs text-muted shadow-sm backdrop-blur-md">
+                    Memuat marker fasilitas…
+                  </div>
+                ) : null}
+                {facilities.status === 'error' ? (
+                  <ErrorBanner
+                    error={facilities.error}
+                    onRetry={facilities.refetch}
+                    className="absolute bottom-3 left-3 right-3 flex items-center justify-between gap-3 rounded-xl border border-danger/30 bg-surface/95 px-3 py-2 shadow-md backdrop-blur-md"
+                  />
+                ) : null}
+              </div>
             )}
           </div>
 
@@ -111,12 +139,24 @@ export function DashboardPage() {
               )
             ) : (
               <span className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
-                Peta Geografis DKI Jakarta — Navigasi bebas & toggle citra satelit
+                Peta Geografis DKI Jakarta — {facilities.pagination?.total ?? facilities.items.length} fasilitas
               </span>
             )}
           </div>
         </Card>
       </div>
+
+      <AnalyticsPanel
+        overviewStatus={overview.status}
+        overview={overview.data}
+        overviewError={overview.error}
+        onOverviewRetry={overview.refetch}
+      />
+
+      <FacilityDetailModal
+        facilityId={selectedFacilityId}
+        onClose={() => setSelectedFacilityId(null)}
+      />
     </div>
   )
 }

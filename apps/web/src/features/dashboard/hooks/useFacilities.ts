@@ -1,61 +1,93 @@
-import { useEffect, useState, useCallback } from 'react'
-import { getFacilities, ApiError, isAbortError } from '../../../lib/api'
+import { useCallback, useEffect, useState } from 'react'
+
+import {
+  ApiError,
+  getFacilities,
+  isAbortError,
+  type Facility,
+  type FacilitiesResult,
+  type FacilitiesParams,
+} from '../../../lib/api'
+import { useApiRetry } from '../../../hooks/useApiRetry'
+import type { QueryStatus } from '../types'
 import type { FacilityItem, FacilitiesFilterParams } from '../types/facility.types'
 
 interface FacilitiesState {
-  facilities: FacilityItem[]
-  loading: boolean
+  wilayah?: string
+  status: QueryStatus
+  items: Facility[]
+  pagination: FacilitiesResult['pagination'] | null
   error: ApiError | null
 }
 
-export function useFacilities(initialParams?: FacilitiesFilterParams) {
-  const wilayah = initialParams?.wilayah
-  const category = initialParams?.category
-  const limit = initialParams?.limit
-  const page = initialParams?.page
+export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams) {
+  const params: FacilitiesParams =
+    typeof paramsOrWilayah === 'string'
+      ? { wilayah: paramsOrWilayah }
+      : (paramsOrWilayah ?? {})
 
-  const [reloadToken, setReloadToken] = useState<number>(0)
+  const wilayah = params.wilayah
+  const category = params.category
+  const limit = params.limit ?? 100
+  const page = params.page ?? 1
+  const search = params.search
+
   const [state, setState] = useState<FacilitiesState>({
-    facilities: [],
-    loading: true,
+    wilayah,
+    status: 'loading',
+    items: [],
+    pagination: null,
     error: null,
   })
+  const [reloadToken, setReloadToken] = useState(0)
 
   useEffect(() => {
     const controller = new AbortController()
 
-    getFacilities<FacilityItem>({ wilayah, category, limit, page }, controller.signal)
-      .then((res) => {
+    getFacilities({ wilayah, category, limit, page, search }, controller.signal)
+      .then((result) => {
         setState({
-          facilities: res.data,
-          loading: false,
+          wilayah,
+          status: result.items.length > 0 ? 'success' : 'empty',
+          items: result.items,
+          pagination: result.pagination,
           error: null,
         })
       })
-      .catch((err: unknown) => {
-        if (controller.signal.aborted || isAbortError(err)) return
+      .catch((error: unknown) => {
+        if (controller.signal.aborted || isAbortError(error)) return
         setState({
-          facilities: [],
-          loading: false,
-          error: err instanceof ApiError ? err : new ApiError('network', 'Gagal memuat data fasilitas'),
+          wilayah,
+          status: 'error',
+          items: [],
+          pagination: null,
+          error: error instanceof ApiError ? error : new ApiError('network', 'Gagal memuat data fasilitas'),
         })
       })
 
-    return () => {
-      controller.abort()
-    }
-  }, [wilayah, category, limit, page, reloadToken])
+    return () => controller.abort()
+  }, [wilayah, category, limit, page, search, reloadToken])
 
   const refetch = useCallback(() => {
-    setState((prev) => ({ ...prev, loading: true, error: null }))
+    setState((previous) => ({ ...previous, status: 'loading', error: null }))
     setReloadToken((token) => token + 1)
   }, [])
+  useApiRetry(refetch)
+
+  const isMatching = state.wilayah === wilayah
+  const items = isMatching ? state.items : []
+  const status = isMatching ? state.status : ('loading' as const)
+  const error = isMatching ? state.error : null
+  const pagination = isMatching ? state.pagination : null
 
   return {
-    facilities: state.facilities,
-    loading: state.loading,
-    error: state.error,
-    params: { wilayah, category, limit, page },
+    items,
+    status,
+    pagination,
+    error,
+    facilities: items as unknown as FacilityItem[],
+    loading: status === 'loading',
+    params: { wilayah, category, limit, page, search },
     refetch,
   }
 }

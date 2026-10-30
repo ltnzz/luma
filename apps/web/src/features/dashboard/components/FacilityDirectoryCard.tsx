@@ -68,7 +68,7 @@ export function FacilityDirectoryCard({
         !searchQuery ||
         f.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (f.address && f.address.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        f.subCategory.toLowerCase().includes(searchQuery.toLowerCase())
+        (f.subCategory && f.subCategory.toLowerCase().includes(searchQuery.toLowerCase()))
 
       return matchCategory && matchWilayah && matchSearch
     })

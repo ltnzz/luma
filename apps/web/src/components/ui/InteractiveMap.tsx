@@ -9,8 +9,8 @@ import {
   type FilterSpecification,
 } from 'maplibre-gl'
 import maplibreglWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
+import type { Facility } from '../../lib/api'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import type { FacilityItem } from '../../features/dashboard/types/facility.types'
 import { TargetIcon, SunIcon, MoonIcon, SatelliteIcon } from './Icons'
 import jakartaBoundary from '../../data/jakarta-boundary.json'
 import jakartaSubdistricts from '../../data/jakarta-subdistricts-boundary.json'
@@ -134,10 +134,11 @@ interface InteractiveMapProps {
   maxBounds?: [[number, number], [number, number]]
   height?: string
   className?: string
-  facilities?: FacilityItem[]
+  facilities?: Facility[]
   selectedFacilityId?: string | null
-  onSelectFacility?: (facility: FacilityItem) => void
-  onOpenDetail?: (facility: FacilityItem) => void
+  onSelectFacility?: (facility: Facility) => void
+  onFacilitySelect?: (facility: Facility) => void
+  onOpenDetail?: (facility: Facility) => void
   focusCoords?: [number, number] | null // [lng, lat] to fly to
   focusZoom?: number | null
   showTransit?: boolean
@@ -465,6 +466,7 @@ export function InteractiveMap({
   facilities = [],
   selectedFacilityId,
   onSelectFacility,
+  onFacilitySelect,
   onOpenDetail,
   focusCoords,
   focusZoom,
@@ -729,7 +731,8 @@ export function InteractiveMap({
     const map = mapRef.current
 
     // Jika di Layer 2 (ada kota spesifik dipilih), lebur / hapus semua marker kota
-    if (selectedWilayah && selectedWilayah !== 'ALL') {
+    const isStandaloneMode = Boolean(onFacilitySelect && !onSelectWilayah)
+    if (isStandaloneMode || (selectedWilayah && selectedWilayah !== 'ALL')) {
       Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
       cityMarkersRef.current = {}
       return
@@ -793,7 +796,7 @@ export function InteractiveMap({
       Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
       cityMarkersRef.current = {}
     }
-  }, [selectedWilayah, isLoaded])
+  }, [selectedWilayah, isLoaded, onFacilitySelect, onSelectWilayah])
 
   // =========================================================================
   // LAYER 2: Marker Fasilitas Individual (Hanya aktif saat kota dipilih)
@@ -808,15 +811,14 @@ export function InteractiveMap({
     })
     markersMapRef.current = {}
 
-    // Di Layer 1 (Seluruh DKI), marker individual disembunyikan agar visual tidak padat
-    if (!selectedWilayah || selectedWilayah === 'ALL') {
+    const isStandaloneMode = Boolean(onFacilitySelect && !onSelectWilayah)
+    if (!isStandaloneMode && (!selectedWilayah || selectedWilayah === 'ALL')) {
       return
     }
 
-    // Filter fasilitas hanya untuk kota yang aktif
-    const activeFacilities = facilities.filter(
-      (f) => !f.wilayah || f.wilayah === selectedWilayah
-    )
+    const activeFacilities = isStandaloneMode
+      ? facilities
+      : facilities.filter((f) => !f.wilayah || f.wilayah === selectedWilayah)
 
     activeFacilities.forEach((f) => {
       const color = CATEGORY_COLORS[f.category] ?? '#16a34a'
@@ -871,7 +873,8 @@ export function InteractiveMap({
       wrapperEl.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
-        onSelectFacility?.(f)
+        const selectHandler = onSelectFacility ?? onFacilitySelect
+        selectHandler?.(f)
         onOpenDetail?.(f)
       })
 
@@ -890,7 +893,7 @@ export function InteractiveMap({
       })
       markersMapRef.current = {}
     }
-  }, [facilities, selectedWilayah, isLoaded, onSelectFacility, onOpenDetail])
+  }, [facilities, selectedWilayah, isLoaded, onSelectFacility, onFacilitySelect, onOpenDetail, onSelectWilayah])
 
   // =========================================================================
   // DYNAMIC TRANSIT, BOUNDARY HIGHLIGHT & DIMMING FILTER

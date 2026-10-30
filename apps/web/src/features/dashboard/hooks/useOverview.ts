@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import { ApiError, getOverview, isAbortError, type OverviewData } from '../../../lib/api'
+import { ApiError, clearApiCaches, getOverview, isAbortError, type OverviewData } from '../../../lib/api'
+import { useApiRetry } from '../../../hooks/useApiRetry'
 import type { QueryStatus } from '../types'
 
 interface UseOverviewResult {
@@ -51,9 +52,12 @@ export function useOverview(): UseOverviewResult {
   }, [reloadToken])
 
   const refetch = useCallback(() => {
+    clearApiCaches()
     setState({ status: 'loading', data: null, error: null })
     setReloadToken((token) => token + 1)
   }, [])
+
+  useApiRetry(refetch)
 
   return { ...state, refetch }
 }
