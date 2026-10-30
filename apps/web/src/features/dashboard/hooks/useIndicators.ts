@@ -8,6 +8,7 @@ import {
   type RegionalIndicator,
 } from '../../../lib/api'
 import type { QueryStatus } from '../types'
+import { useApiRetry } from '../../../hooks/useApiRetry'
 
 interface IndicatorsState {
   status: QueryStatus
@@ -70,6 +71,8 @@ export function useIndicators(): UseIndicatorsResult {
     setState((previous) => ({ ...previous, status: 'loading', error: null }))
     setReloadToken((token) => token + 1)
   }, [])
+
+  useApiRetry(refetch)
 
   return { ...state, refetch }
 }
