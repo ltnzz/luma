@@ -1,27 +1,49 @@
 :root {
-  --luma-background: #ffffff;
-  --luma-surface: #f8fafc;
-  --luma-surface-muted: #f1f5f9;
-  --luma-text: #1e293b;
-  --luma-text-muted: #64748b;
-  --luma-border: #e2e8f0;
-  --luma-primary: #3b82f6;
-  --luma-primary-hover: #2563eb;
+  /* Light theme — on-white surfaces with a subtle green tint (per Figma). */
+  --luma-background: #f3f6f3;
+  --luma-surface: #ffffff;
+  --luma-surface-muted: #e9f0ea;
+  --luma-text: #1c2620;
+  --luma-text-muted: #5d6962;
+  --luma-border: #dce4dd;
+  --luma-primary: #16a34a;
+  --luma-primary-hover: #15803d;
   --luma-on-primary: #ffffff;
-  --luma-danger: #ef4444;
+  --luma-primary-soft: #dcfce7;
+  --luma-primary-soft-text: #14532d;
+  --luma-danger: #dc2626;
+  --luma-surface-dark: #0e1712;
+  --luma-on-surface-dark: #e7efe9;
+
+  /* Map/visualization category accents (Figma legend: education, health,
+     RTH, public transport). Used by map markers on screens 2 & 3. */
+  --luma-map-education: #2563eb;
+  --luma-map-health: #dc2626;
+  --luma-map-rth: #16a34a;
+  --luma-map-transit: #7e22ce;
 }
 
 [data-theme="dark"] {
-  --luma-background: #0f172a;
-  --luma-surface: #1e293b;
-  --luma-surface-muted: #334155;
-  --luma-text: #f8fafc;
-  --luma-text-muted: #94a3b8;
-  --luma-border: #475569;
-  --luma-primary: #60a5fa;
-  --luma-primary-hover: #3b82f6;
-  --luma-on-primary: #000000;
+  /* Dark theme — near-black with a green tint (per Figma). */
+  --luma-background: #0a0f0c;
+  --luma-surface: #101711;
+  --luma-surface-muted: #1b241e;
+  --luma-text: #e8eee9;
+  --luma-text-muted: #8ea296;
+  --luma-border: #243126;
+  --luma-primary: #22c55e;
+  --luma-primary-hover: #4ade80;
+  --luma-on-primary: #05270f;
+  --luma-primary-soft: #143120;
+  --luma-primary-soft-text: #86efac;
   --luma-danger: #f87171;
+  --luma-surface-dark: #101711;
+  --luma-on-surface-dark: #e8eee9;
+
+  --luma-map-education: #60a5fa;
+  --luma-map-health: #f87171;
+  --luma-map-rth: #4ade80;
+  --luma-map-transit: #c084fc;
 }
 
 :root {
@@ -29,4 +51,6 @@
   --luma-radius-md: 0.25rem;
   --luma-radius-lg: 0.5rem;
   --luma-radius-xl: 0.75rem;
+  /* Panel roundness used by dashboard cards/popups. */
+  --luma-radius-2xl: 1rem;
 }

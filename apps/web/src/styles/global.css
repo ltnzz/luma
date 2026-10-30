@@ -11,12 +11,22 @@
   --color-primary: var(--luma-primary);
   --color-primary-hover: var(--luma-primary-hover);
   --color-on-primary: var(--luma-on-primary);
+  --color-primary-soft: var(--luma-primary-soft);
+  --color-primary-soft-text: var(--luma-primary-soft-text);
   --color-danger: var(--luma-danger);
+  --color-surface-dark: var(--luma-surface-dark);
+  --color-on-surface-dark: var(--luma-on-surface-dark);
+
+  --color-map-education: var(--luma-map-education);
+  --color-map-health: var(--luma-map-health);
+  --color-map-rth: var(--luma-map-rth);
+  --color-map-transit: var(--luma-map-transit);
 
   --radius-sm: var(--luma-radius-sm);
   --radius-md: var(--luma-radius-md);
   --radius-lg: var(--luma-radius-lg);
   --radius-xl: var(--luma-radius-xl);
+  --radius-2xl: var(--luma-radius-2xl);
 }
 
 * {
