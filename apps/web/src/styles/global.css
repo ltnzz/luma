@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "./tokens.css";
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   --color-background: var(--luma-background);
   --color-surface: var(--luma-surface);
@@ -11,12 +13,22 @@
   --color-primary: var(--luma-primary);
   --color-primary-hover: var(--luma-primary-hover);
   --color-on-primary: var(--luma-on-primary);
+  --color-primary-soft: var(--luma-primary-soft);
+  --color-primary-soft-text: var(--luma-primary-soft-text);
   --color-danger: var(--luma-danger);
+  --color-surface-dark: var(--luma-surface-dark);
+  --color-on-surface-dark: var(--luma-on-surface-dark);
+
+  --color-map-education: var(--luma-map-education);
+  --color-map-health: var(--luma-map-health);
+  --color-map-rth: var(--luma-map-rth);
+  --color-map-transit: var(--luma-map-transit);
 
   --radius-sm: var(--luma-radius-sm);
   --radius-md: var(--luma-radius-md);
   --radius-lg: var(--luma-radius-lg);
   --radius-xl: var(--luma-radius-xl);
+  --radius-2xl: var(--luma-radius-2xl);
 }
 
 * {
@@ -52,4 +64,67 @@ select:focus-visible {
 ::selection {
   background: var(--luma-primary);
   color: var(--luma-on-primary);
+}
+
+@keyframes luma-modal-overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes luma-modal-overlay-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes luma-modal-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes luma-modal-content-out {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0.25rem) scale(0.98);
+  }
+}
+
+.luma-modal-overlay[data-state='open'] {
+  animation: luma-modal-overlay-in 180ms ease-out both;
+}
+
+.luma-modal-overlay[data-state='closed'] {
+  animation: luma-modal-overlay-out 140ms ease-in both;
+}
+
+.luma-modal-container[data-state='open'] {
+  animation: luma-modal-content-in 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.luma-modal-container[data-state='closed'] {
+  animation: luma-modal-content-out 140ms ease-in both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-modal-overlay,
+  .luma-modal-container {
+    animation-duration: 1ms !important;
+  }
 }
