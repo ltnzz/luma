@@ -6,9 +6,11 @@ import {
   isAbortError,
   type Facility,
   type FacilitiesResult,
+  type FacilitiesParams,
 } from '../../../lib/api'
 import { useApiRetry } from '../../../hooks/useApiRetry'
 import type { QueryStatus } from '../types'
+import type { FacilityItem, FacilitiesFilterParams } from '../types/facility.types'
 
 interface FacilitiesState {
   wilayah?: string
@@ -18,8 +20,20 @@ interface FacilitiesState {
   error: ApiError | null
 }
 
-export function useFacilities(wilayah?: string) {
+export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams) {
+  const params: FacilitiesParams =
+    typeof paramsOrWilayah === 'string'
+      ? { wilayah: paramsOrWilayah }
+      : (paramsOrWilayah ?? {})
+
+  const wilayah = params.wilayah
+  const category = params.category
+  const limit = params.limit ?? 100
+  const page = params.page ?? 1
+  const search = params.search
+
   const [state, setState] = useState<FacilitiesState>({
+    wilayah,
     status: 'loading',
     items: [],
     pagination: null,
@@ -30,7 +44,7 @@ export function useFacilities(wilayah?: string) {
   useEffect(() => {
     const controller = new AbortController()
 
-    getFacilities({ wilayah, limit: 100 }, controller.signal)
+    getFacilities({ wilayah, category, limit, page, search }, controller.signal)
       .then((result) => {
         setState({
           wilayah,
@@ -47,12 +61,12 @@ export function useFacilities(wilayah?: string) {
           status: 'error',
           items: [],
           pagination: null,
-          error: error instanceof ApiError ? error : new ApiError('network', 'Network request failed'),
+          error: error instanceof ApiError ? error : new ApiError('network', 'Gagal memuat data fasilitas'),
         })
       })
 
     return () => controller.abort()
-  }, [reloadToken, wilayah])
+  }, [wilayah, category, limit, page, search, reloadToken])
 
   const refetch = useCallback(() => {
     setState((previous) => ({ ...previous, status: 'loading', error: null }))
@@ -60,9 +74,20 @@ export function useFacilities(wilayah?: string) {
   }, [])
   useApiRetry(refetch)
 
-  if (state.wilayah !== wilayah) {
-    return { status: 'loading' as const, items: [], pagination: null, error: null, refetch }
-  }
+  const isMatching = state.wilayah === wilayah
+  const items = isMatching ? state.items : []
+  const status = isMatching ? state.status : ('loading' as const)
+  const error = isMatching ? state.error : null
+  const pagination = isMatching ? state.pagination : null
 
-  return { ...state, refetch }
+  return {
+    items,
+    status,
+    pagination,
+    error,
+    facilities: items as unknown as FacilityItem[],
+    loading: status === 'loading',
+    params: { wilayah, category, limit, page, search },
+    refetch,
+  }
 }

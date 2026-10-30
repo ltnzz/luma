@@ -1,51 +1,97 @@
 import { useTranslation } from '../../../i18n/useTranslation'
-import type { Language } from '../../../i18n/dictionaries'
 import ThemeToggle from '../../../components/ThemeToggle'
+import { MapIcon, BarChartIcon } from '../../../components/ui/Icons'
 
 interface DashboardHeaderProps {
-  /** Scope label for the navbar chip, e.g. "Cakupan: DKI Jakarta". */
-  scopeLabel: string
+  viewMode?: 'fullscreen-map' | 'dashboard'
+  onViewModeChange?: (mode: 'fullscreen-map' | 'dashboard') => void
+  scopeLabel?: string
 }
 
 /**
- * Top navbar from the Figma design: brand mark + wordmark + tagline on the
- * left; scope chip, language switcher and dark/light pill on the right.
+ * Unified Modern Navbar (Clean & Bebas Clutter):
+ * - Kiri: Brand Luma + Tag Jakarta Spasial
+ * - Tengah: Segmented Tab Peta Spasial vs Ringkasan Sektoral
+ * - Kanan: Switch Bahasa [ID | EN] dan ThemeToggle (Icon-Only)
  */
-export function DashboardHeader({ scopeLabel }: DashboardHeaderProps) {
-  const { t, language, setLanguage } = useTranslation()
+export function DashboardHeader({
+  viewMode = 'fullscreen-map',
+  onViewModeChange,
+}: DashboardHeaderProps) {
+  const { language, setLanguage } = useTranslation()
 
   return (
-    <header className="flex flex-wrap items-center justify-between gap-4">
-      <div className="flex items-center gap-3">
+    <header className="z-30 flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-4 sm:px-6 shadow-2xs">
+      {/* 1. Kiri: Brand Logo & Title */}
+      <div className="flex items-center gap-2.5">
         <span
           aria-hidden="true"
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-sm font-bold text-on-primary"
+          className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-sm font-black text-on-primary shadow-xs select-none"
         >
           L
         </span>
-        <div className="leading-tight">
-          <p className="text-base font-bold text-foreground">{t('app.name')}</p>
-          <p className="text-xs text-muted">{t('app.tagline')}</p>
+        <div className="flex items-center gap-2">
+          <span className="text-base font-bold tracking-tight text-foreground">Luma</span>
+          <span className="hidden sm:inline-flex rounded-full border border-border bg-surface-muted px-2 py-0.5 text-[10px] font-semibold text-muted">
+            DKI Jakarta
+          </span>
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3">
-        <span className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-2 text-xs font-medium text-foreground">
-          {scopeLabel}
-        </span>
-
-        <label className="flex items-center gap-2 text-sm">
-          <span className="sr-only">{t('common.language')}</span>
-          <select
-            aria-label={t('common.language')}
-            className="cursor-pointer rounded-full border border-border bg-surface px-3 py-2 text-xs text-foreground"
-            value={language}
-            onChange={(event) => setLanguage(event.target.value as Language)}
+      {/* 2. Tengah: Segmented Switcher Tab (Peta Spasial vs Ringkasan Sektoral) */}
+      {onViewModeChange ? (
+        <nav aria-label="Mode Tampilan" className="flex items-center rounded-xl border border-border bg-surface-muted p-1 shadow-2xs">
+          <button
+            type="button"
+            onClick={() => onViewModeChange('fullscreen-map')}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
+              viewMode === 'fullscreen-map'
+                ? 'bg-surface text-foreground shadow-xs'
+                : 'text-muted hover:text-foreground'
+            }`}
           >
-            <option value="id">{t('common.languageIndonesian')}</option>
-            <option value="en">{t('common.languageEnglish')}</option>
-          </select>
-        </label>
+            <MapIcon size={14} className={viewMode === 'fullscreen-map' ? 'text-primary' : ''} />
+            <span className="hidden xs:inline">Peta Spasial</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onViewModeChange('dashboard')}
+            className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
+              viewMode === 'dashboard'
+                ? 'bg-surface text-foreground shadow-xs'
+                : 'text-muted hover:text-foreground'
+            }`}
+          >
+            <BarChartIcon size={14} className={viewMode === 'dashboard' ? 'text-primary' : ''} />
+            <span className="hidden xs:inline">Ringkasan Sektoral</span>
+          </button>
+        </nav>
+      ) : null}
+
+      {/* 3. Kanan: Minimalist Utilities (Bahasa [ID | EN] & Theme Icon) */}
+      <div className="flex items-center gap-2">
+        <div className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold">
+          <button
+            type="button"
+            onClick={() => setLanguage('id')}
+            className={`rounded-lg px-2 py-1 text-[11px] transition-colors cursor-pointer ${
+              language === 'id' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
+            }`}
+            title="Bahasa Indonesia"
+          >
+            ID
+          </button>
+          <button
+            type="button"
+            onClick={() => setLanguage('en')}
+            className={`rounded-lg px-2 py-1 text-[11px] transition-colors cursor-pointer ${
+              language === 'en' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
+            }`}
+            title="English"
+          >
+            EN
+          </button>
+        </div>
 
         <ThemeToggle />
       </div>
