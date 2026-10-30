@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { Map, NavigationControl, type StyleSpecification } from 'maplibre-gl'
+import { Map, Marker, NavigationControl, type StyleSpecification } from 'maplibre-gl'
+import type { Facility } from '../../lib/api'
 import 'maplibre-gl/dist/maplibre-gl.css'
 
 export type MapMode = 'default' | 'satellite'
@@ -34,6 +35,18 @@ interface InteractiveMapProps {
   initialZoom?: number
   height?: string
   className?: string
+  facilities?: Facility[]
+  onFacilitySelect?: (facility: Facility) => void
+}
+
+const markerColors: Record<string, string> = {
+  pendidikan: '#2563eb',
+  kesehatan: '#dc2626',
+  fasum: '#16a34a',
+  rth: '#16a34a',
+  transum: '#7e22ce',
+  udara: '#ea580c',
+  air: '#0891b2',
 }
 
 export function InteractiveMap({
@@ -41,9 +54,12 @@ export function InteractiveMap({
   initialZoom = 11,
   height = '420px',
   className = '',
+  facilities = [],
+  onFacilitySelect,
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<Map | null>(null)
+  const markersRef = useRef<Marker[]>([])
   const [mapMode, setMapMode] = useState<MapMode>('default')
   const [isLoaded, setIsLoaded] = useState(false)
 
@@ -79,6 +95,41 @@ export function InteractiveMap({
       mapRef.current = null
     }
   }, [initialCenter, initialZoom])
+
+  useEffect(() => {
+    markersRef.current.forEach((marker) => marker.remove())
+    markersRef.current = []
+
+    const map = mapRef.current
+    if (!map || !isLoaded) return
+
+    markersRef.current = facilities.map((facility) => {
+      const element = document.createElement('button')
+      element.type = 'button'
+      element.title = facility.name
+      element.setAttribute('aria-label', `Lihat detail ${facility.name}`)
+      element.style.width = '28px'
+      element.style.height = '28px'
+      element.style.borderRadius = '9999px'
+      element.style.border = '3px solid rgba(255,255,255,0.92)'
+      element.style.background = markerColors[facility.category.toLowerCase()] ?? '#334155'
+      element.style.boxShadow = '0 8px 20px rgba(0,0,0,0.28)'
+      element.style.cursor = 'pointer'
+      element.addEventListener('click', (event) => {
+        event.stopPropagation()
+        onFacilitySelect?.(facility)
+      })
+
+      return new Marker({ element, anchor: 'center' })
+        .setLngLat([facility.lng, facility.lat])
+        .addTo(map)
+    })
+
+    return () => {
+      markersRef.current.forEach((marker) => marker.remove())
+      markersRef.current = []
+    }
+  }, [facilities, isLoaded, onFacilitySelect])
 
   // Ganti Style (Default vs Satelit)
   const switchMode = (mode: MapMode) => {
