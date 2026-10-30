@@ -10,6 +10,7 @@ import { IndicatorsCard } from './components/IndicatorsCard'
 import { DashboardHeader } from './components/DashboardHeader'
 import { Card } from '../../components/ui/Card'
 import { Skeleton } from '../../components/ui/Skeleton'
+import { InteractiveMap } from '../../components/ui/InteractiveMap'
 
 /**
  * Screen 1 — "Ringkasan kondisi DKI Jakarta" (Figma).
@@ -22,6 +23,7 @@ import { Skeleton } from '../../components/ui/Skeleton'
 export function DashboardPage() {
   const { t, language } = useTranslation()
   const [selectedCode, setSelectedCode] = useState<string | null>(null)
+  const [mapView, setMapView] = useState<'hex' | 'interactive'>('hex')
   const indicators = useIndicators()
   const overview = useOverview()
 
@@ -53,6 +55,28 @@ export function DashboardPage() {
               <h2 className="text-sm font-semibold text-foreground">{t('dashboard.map.title')}</h2>
               <p className="mt-1 max-w-sm text-xs text-muted">{t('dashboard.map.note')}</p>
             </div>
+
+            {/* View Switcher: Hexbin vs Interactive Map */}
+            <div className="flex items-center rounded-lg border border-border bg-surface-muted p-1">
+              <button
+                type="button"
+                onClick={() => setMapView('hex')}
+                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                  mapView === 'hex' ? 'bg-surface text-foreground shadow-xs' : 'text-muted hover:text-foreground'
+                }`}
+              >
+                ⬡ Skematik
+              </button>
+              <button
+                type="button"
+                onClick={() => setMapView('interactive')}
+                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                  mapView === 'interactive' ? 'bg-surface text-foreground shadow-xs' : 'text-muted hover:text-foreground'
+                }`}
+              >
+                🗺️ Geografis & Satelit
+              </button>
+            </div>
           </div>
 
           <div className="relative border-t border-border bg-surface-muted/40 p-4">
@@ -60,7 +84,7 @@ export function DashboardPage() {
               <div className="flex h-80 items-center justify-center">
                 <Skeleton className="h-64 w-full max-w-md rounded-full" />
               </div>
-            ) : (
+            ) : mapView === 'hex' ? (
               <>
                 <HexRegionMap selected={selectedCode} onSelect={handleSelect} />
                 {selectedCode ? (
@@ -73,17 +97,25 @@ export function DashboardPage() {
                   />
                 ) : null}
               </>
+            ) : (
+              <InteractiveMap height="360px" />
             )}
           </div>
 
           <div className="border-t border-border p-4">
-            {selectedCode ? (
-              <span className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
-                {t('dashboard.indicators.selectedHeading')} — {scopeName}
-              </span>
+            {mapView === 'hex' ? (
+              selectedCode ? (
+                <span className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
+                  {t('dashboard.indicators.selectedHeading')} — {scopeName}
+                </span>
+              ) : (
+                <span className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
+                  {t('dashboard.map.selectPrompt')}
+                </span>
+              )
             ) : (
               <span className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-1.5 text-xs text-muted">
-                {t('dashboard.map.selectPrompt')}
+                Peta Geografis DKI Jakarta — Navigasi bebas & toggle citra satelit
               </span>
             )}
           </div>
