@@ -100,7 +100,7 @@ export function Modal({
 
     if (isOpen && !isMounted) {
       mountFrame = window.requestAnimationFrame(() => setIsMounted(true))
-    } else if (isMounted) {
+    } else if (!isOpen && isMounted) {
       unmountTimer = window.setTimeout(
         () => setIsMounted(false),
         ANIMATION_DURATION_MS,

@@ -111,8 +111,9 @@ export function DashboardPage() {
                   onFacilitySelect={handleFacilitySelect}
                 />
                 {facilities.status === 'loading' ? (
-                  <div className="pointer-events-none absolute bottom-3 left-3 rounded-lg border border-border bg-surface/90 px-3 py-2 text-xs text-muted shadow-sm backdrop-blur-md">
-                    Memuat marker fasilitas…
+                  <div className="pointer-events-none absolute bottom-3 left-3 flex items-center gap-2 rounded-xl border border-border bg-surface/90 px-3 py-2 shadow-sm backdrop-blur-md">
+                    <Skeleton className="h-2 w-2 rounded-full" />
+                    <Skeleton className="h-3 w-32 rounded" />
                   </div>
                 ) : null}
                 {facilities.status === 'error' ? (

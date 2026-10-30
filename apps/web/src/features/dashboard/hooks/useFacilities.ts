@@ -28,7 +28,7 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
 
   const wilayah = params.wilayah
   const category = params.category
-  const limit = params.limit ?? 100
+  const limit = params.limit ?? 200
   const page = params.page ?? 1
   const search = params.search
 

@@ -7,15 +7,19 @@ import {
   type StyleSpecification,
   type GeoJSONSourceSpecification,
   type FilterSpecification,
+  type ExpressionSpecification,
+  type MapLayerMouseEvent,
 } from 'maplibre-gl'
 import maplibreglWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import type { Facility } from '../../lib/api'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { Skeleton } from './Skeleton'
 import { TargetIcon, SunIcon, MoonIcon, SatelliteIcon } from './Icons'
 import jakartaBoundary from '../../data/jakarta-boundary.json'
 import jakartaSubdistricts from '../../data/jakarta-subdistricts-boundary.json'
 import transitNetwork from '../../data/transit-network.json'
 import { CITY_AGGREGATES } from '../../data/city-aggregates'
+import { TRANSJAKARTA_CORRIDORS } from '../../data/transit-corridors'
 
 // Konfigurasi Worker MapLibre GL untuk lingkungan Vite (mencegah error Worker 404)
 setWorkerUrl(maplibreglWorkerUrl)
@@ -145,6 +149,8 @@ interface InteractiveMapProps {
   activeTransitModes?: string[]
   selectedWilayah?: string
   onSelectWilayah?: (wilayah: string) => void
+  focusedCorridorId?: string | null
+  onSelectCorridor?: (corridorId: string | null) => void
 }
 
 interface MarkerEntry {
@@ -474,6 +480,8 @@ export function InteractiveMap({
   activeTransitModes = ['mrt', 'transjakarta', 'lrt', 'krl'],
   selectedWilayah = 'ALL',
   onSelectWilayah,
+  focusedCorridorId,
+  onSelectCorridor,
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
@@ -485,6 +493,7 @@ export function InteractiveMap({
 
   const selectedWilayahRef = useRef(selectedWilayah)
   const onSelectWilayahRef = useRef(onSelectWilayah)
+  const onSelectCorridorRef = useRef(onSelectCorridor)
 
   useEffect(() => {
     selectedWilayahRef.current = selectedWilayah
@@ -493,6 +502,10 @@ export function InteractiveMap({
   useEffect(() => {
     onSelectWilayahRef.current = onSelectWilayah
   }, [onSelectWilayah])
+
+  useEffect(() => {
+    onSelectCorridorRef.current = onSelectCorridor
+  }, [onSelectCorridor])
 
   useEffect(() => {
     modeRef.current = mapMode
@@ -651,10 +664,20 @@ export function InteractiveMap({
       map.getCanvas().style.cursor = ''
     }
 
+    const handleRouteClick = (e: MapLayerMouseEvent) => {
+      const feature = e.features?.[0]
+      if (!feature || !feature.properties) return
+      const routeId = String(feature.properties.id || '')
+      if (routeId && onSelectCorridorRef.current) {
+        onSelectCorridorRef.current(routeId)
+      }
+    }
+
     map.on('mouseenter', 'transit-stations-circle', handleStationEnter)
     map.on('mouseleave', 'transit-stations-circle', handleStationLeave)
     map.on('mouseenter', 'transit-routes-line', handleRouteEnter)
     map.on('mouseleave', 'transit-routes-line', handleRouteLeave)
+    map.on('click', 'transit-routes-line', handleRouteClick)
 
     map.once('load', handleLoaded)
     map.once('idle', handleLoaded)
@@ -697,6 +720,7 @@ export function InteractiveMap({
       map.off('mouseleave', 'transit-stations-circle', handleStationLeave)
       map.off('mouseenter', 'transit-routes-line', handleRouteEnter)
       map.off('mouseleave', 'transit-routes-line', handleRouteLeave)
+      map.off('click', 'transit-routes-line', handleRouteClick)
       Object.values(markers).forEach(({ marker, popup }) => {
         popup.remove()
         marker.remove()
@@ -873,6 +897,7 @@ export function InteractiveMap({
       wrapperEl.addEventListener('click', (e) => {
         e.preventDefault()
         e.stopPropagation()
+        popup.remove()
         const selectHandler = onSelectFacility ?? onFacilitySelect
         selectHandler?.(f)
         onOpenDetail?.(f)
@@ -925,40 +950,130 @@ export function InteractiveMap({
       }
     }
 
-    // 2. Opacity Koridor Selektif: Koridor di kota aktif = 100%, lainnya = 20%
-    if (isLayer2 && activeCity && activeCity.corridors.length > 0) {
+    // 2. Opacity & Warna Koridor: Jika ada koridor yang difokuskan, rute lain menjadi abu-abu
+    if (focusedCorridorId) {
+      const matched = TRANSJAKARTA_CORRIDORS.find(
+        (c) => c.id === focusedCorridorId || c.koridorCode === focusedCorridorId
+      )
+      const targetId = matched?.id ?? focusedCorridorId
+      const targetKoridor = matched?.koridorCode ?? ''
+      const targetShort = matched?.shortCode ?? ''
+
+      const isFocusedRoute: ExpressionSpecification = [
+        'any',
+        ['==', ['get', 'id'], targetId],
+        ['==', ['get', 'koridor'], targetKoridor],
+        ['==', ['get', 'shortName'], targetShort],
+      ]
+
+      const unfocusedColor = mapMode === 'dark' ? '#475569' : '#94a3b8'
+
       if (map.getLayer('transit-routes-line')) {
+        map.setPaintProperty('transit-routes-line', 'line-color', [
+          'case',
+          isFocusedRoute,
+          ['get', 'color'],
+          unfocusedColor,
+        ])
+        map.setPaintProperty('transit-routes-line', 'line-width', [
+          'case',
+          isFocusedRoute,
+          [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            10, 4.5,
+            14, 7.5,
+          ],
+          [
+            'interpolate',
+            ['linear'],
+            ['zoom'],
+            10, 1.8,
+            14, 3.0,
+          ],
+        ])
         map.setPaintProperty('transit-routes-line', 'line-opacity', [
           'case',
-          ['in', ['get', 'koridor'], ['literal', activeCity.corridors]],
+          isFocusedRoute,
           1.0,
-          0.2,
+          0.28,
         ])
       }
+
       if (map.getLayer('transit-routes-glow')) {
+        map.setPaintProperty('transit-routes-glow', 'line-color', [
+          'case',
+          isFocusedRoute,
+          ['get', 'color'],
+          'transparent',
+        ])
         map.setPaintProperty('transit-routes-glow', 'line-opacity', [
           'case',
-          ['in', ['get', 'koridor'], ['literal', activeCity.corridors]],
-          0.45,
-          0.05,
+          isFocusedRoute,
+          0.65,
+          0.0,
         ])
       }
-    } else {
-      if (map.getLayer('transit-routes-line')) {
-        map.setPaintProperty('transit-routes-line', 'line-opacity', 0.95)
-      }
-      if (map.getLayer('transit-routes-glow')) {
-        map.setPaintProperty('transit-routes-glow', 'line-opacity', 0.35)
-      }
-    }
 
-    // 3. Titik Halte / Stasiun: Hanya muncul di Layer 2 khusus untuk kota aktif
-    if (map.getLayer('transit-stations-circle')) {
-      if (showTransit && isLayer2 && activeCity) {
+      // Halte / Stasiun untuk rute yang difokuskan
+      if (map.getLayer('transit-stations-circle')) {
         map.setLayoutProperty('transit-stations-circle', 'visibility', 'visible')
-        map.setFilter('transit-stations-circle', ['==', ['get', 'wilayah'], selectedWilayah])
-      } else {
-        map.setLayoutProperty('transit-stations-circle', 'visibility', 'none')
+        map.setFilter('transit-stations-circle', [
+          'any',
+          ['==', ['get', 'koridor'], targetKoridor],
+          ['==', ['get', 'line'], targetShort],
+        ])
+        map.setPaintProperty('transit-stations-circle', 'circle-opacity', 1.0)
+        map.setPaintProperty('transit-stations-circle', 'circle-color', ['get', 'color'])
+      }
+    } else {
+      // Keadaan Normal: Tidak ada koridor spesifik yang difokuskan
+      if (map.getLayer('transit-routes-line')) {
+        map.setPaintProperty('transit-routes-line', 'line-color', ['get', 'color'])
+        map.setPaintProperty('transit-routes-line', 'line-width', [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          10, 2.5,
+          14, 4.5,
+        ])
+        if (isLayer2 && activeCity && activeCity.corridors.length > 0) {
+          map.setPaintProperty('transit-routes-line', 'line-opacity', [
+            'case',
+            ['in', ['get', 'koridor'], ['literal', activeCity.corridors]],
+            1.0,
+            0.2,
+          ])
+        } else {
+          map.setPaintProperty('transit-routes-line', 'line-opacity', 0.95)
+        }
+      }
+
+      if (map.getLayer('transit-routes-glow')) {
+        map.setPaintProperty('transit-routes-glow', 'line-color', ['get', 'color'])
+        if (isLayer2 && activeCity && activeCity.corridors.length > 0) {
+          map.setPaintProperty('transit-routes-glow', 'line-opacity', [
+            'case',
+            ['in', ['get', 'koridor'], ['literal', activeCity.corridors]],
+            0.45,
+            0.05,
+          ])
+        } else {
+          map.setPaintProperty('transit-routes-glow', 'line-opacity', 0.35)
+        }
+      }
+
+      // 3. Titik Halte / Stasiun: Hanya muncul di Layer 2 khusus untuk kota aktif
+      if (map.getLayer('transit-stations-circle')) {
+        if (showTransit && isLayer2 && activeCity) {
+          map.setLayoutProperty('transit-stations-circle', 'visibility', 'visible')
+          map.setFilter('transit-stations-circle', ['==', ['get', 'wilayah'], selectedWilayah])
+          map.setPaintProperty('transit-stations-circle', 'circle-opacity', 0.9)
+          map.setPaintProperty('transit-stations-circle', 'circle-color', ['get', 'color'])
+        } else {
+          map.setLayoutProperty('transit-stations-circle', 'visibility', 'none')
+        }
       }
     }
 
@@ -987,7 +1102,7 @@ export function InteractiveMap({
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-  }, [showTransit, activeTransitModes, selectedWilayah, isLoaded])
+  }, [showTransit, activeTransitModes, selectedWilayah, focusedCorridorId, mapMode, isLoaded])
 
   // Update status visual seleksi tanpa merecreate marker di DOM
   useEffect(() => {
@@ -1043,12 +1158,26 @@ export function InteractiveMap({
         className="absolute inset-0 h-full w-full bg-surface-muted"
       />
 
-      {/* Loading Overlay */}
+      {/* Map Skeleton Placeholder */}
       {!isLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-surface/70 backdrop-blur-xs z-30 pointer-events-none">
-          <div className="flex flex-col items-center gap-2">
-            <div className="h-6 w-6 animate-spin rounded-full border-2 border-primary border-t-transparent" />
-            <span className="text-xs font-semibold text-foreground">Memuat peta Jakarta...</span>
+        <div className="absolute inset-0 z-30 flex flex-col justify-between p-4 bg-surface-muted/80 backdrop-blur-xs pointer-events-none transition-opacity duration-300">
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-9 w-44 rounded-2xl bg-surface border border-border/80 shadow-xs" />
+            <Skeleton className="h-9 w-28 rounded-2xl bg-surface border border-border/80 shadow-xs" />
+          </div>
+          <div className="self-center flex flex-col items-center gap-2.5">
+            <div className="relative flex h-10 w-10 items-center justify-center">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/25" />
+              <span className="relative inline-flex h-4 w-4 rounded-full bg-primary/70" />
+            </div>
+            <Skeleton className="h-4 w-36 rounded-full bg-surface border border-border/70 shadow-xs" />
+          </div>
+          <div className="flex justify-between items-end">
+            <Skeleton className="h-9 w-32 rounded-xl bg-surface border border-border/80 shadow-xs" />
+            <div className="flex flex-col gap-2 items-end">
+              <Skeleton className="h-24 w-8 rounded-xl bg-surface border border-border/80 shadow-xs" />
+              <Skeleton className="h-8 w-28 rounded-xl bg-surface border border-border/80 shadow-xs" />
+            </div>
           </div>
         </div>
       )}

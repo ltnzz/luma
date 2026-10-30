@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { Skeleton } from '../../../components/ui/Skeleton'
 import type { FacilityItem } from '../types/facility.types'
 import {
   MapPinIcon,
@@ -169,9 +170,19 @@ export function FacilityDirectoryCard({
           {/* List Kartu Fasilitas */}
           <div className="flex-1 overflow-y-auto pr-1 flex flex-col gap-2">
             {loading ? (
-              <div className="flex flex-col gap-2 py-4">
-                {[1, 2, 3].map((i) => (
-                  <div key={i} className="h-16 animate-pulse rounded-xl bg-surface-muted" />
+              <div className="flex flex-col gap-2 py-1">
+                {[1, 2, 3, 4].map((i) => (
+                  <div key={i} className="rounded-xl border border-border/70 bg-surface p-2.5 flex flex-col gap-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <Skeleton className="h-3.5 w-36 rounded" />
+                      <Skeleton className="h-4 w-16 rounded-md" />
+                    </div>
+                    <Skeleton className="h-2.5 w-48 rounded" />
+                    <div className="flex items-center gap-2 mt-0.5">
+                      <Skeleton className="h-3 w-16 rounded" />
+                      <Skeleton className="h-3 w-20 rounded" />
+                    </div>
+                  </div>
                 ))}
               </div>
             ) : filteredFacilities.length === 0 ? (

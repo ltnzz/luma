@@ -57,7 +57,7 @@ async function getFallbackFacilities(): Promise<FallbackFacility[]> {
 router.get('/api/v1/facilities', async (req: Request, res: Response) => {
   const { wilayah, category, search } = req.query;
   const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
-  const limit = Math.max(1, Math.min(100, parseInt(String(req.query.limit || '10'), 10) || 10));
+  const limit = Math.max(1, Math.min(250, parseInt(String(req.query.limit || '10'), 10) || 10));
   const offset = (page - 1) * limit;
 
   try {

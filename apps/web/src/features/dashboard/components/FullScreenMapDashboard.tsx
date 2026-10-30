@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react'
 import { InteractiveMap } from '../../../components/ui/InteractiveMap'
+import { EnvironmentStatusCard } from './EnvironmentStatusCard'
 import { RegionalIndicatorCard } from './RegionalIndicatorCard'
 import { FacilityDetailModal } from './FacilityDetailModal'
 import { TransitRoutesWidget } from './TransitRoutesWidget'
@@ -7,7 +8,7 @@ import { useFacilities } from '../hooks/useFacilities'
 import { useIndicators } from '../hooks/useIndicators'
 import { useOverview } from '../hooks/useOverview'
 import { useTranslation } from '../../../i18n/useTranslation'
-import { buildKpis } from '../kpiMapping'
+import { buildKpis, buildSynchronizedMapKpis } from '../kpiMapping'
 import type { FacilityItem } from '../types/facility.types'
 
 const WILAYAH_COORDINATES: Record<string, { center: [number, number]; zoom: number }> = {
@@ -28,6 +29,9 @@ export function FullScreenMapDashboard() {
   const [focusCoords, setFocusCoords] = useState<[number, number] | null>(null)
   const [focusZoom, setFocusZoom] = useState<number | null>(null)
   const [showTransit, setShowTransit] = useState<boolean>(true)
+  const [focusedCorridorId, setFocusedCorridorId] = useState<string | null>(null)
+  // Auto-Accordion Controller: 'facilities' | 'transit' | 'none'
+  const [activeExpandedPanel, setActiveExpandedPanel] = useState<'facilities' | 'transit' | 'none'>('facilities')
   const activeTransitModes = useMemo(() => ['transjakarta'], [])
 
   const indicators = useIndicators()
@@ -36,12 +40,21 @@ export function FullScreenMapDashboard() {
     wilayah: activeWilayah === 'ALL' ? undefined : activeWilayah,
   })
 
+  // Synchronized KPIs directly matching 115 facilities in Layer 2 (Opsi 1)
+  const mapKpis = useMemo(() => {
+    return buildSynchronizedMapKpis({
+      wilayah: activeWilayah,
+      t,
+    })
+  }, [activeWilayah, t])
+
   const currentIndicator = useMemo(() => {
     if (!indicators.lookup) return null
     return indicators.lookup[activeWilayah] ?? indicators.lookup['ALL'] ?? null
   }, [indicators.lookup, activeWilayah])
 
-  const kpis = useMemo(() => {
+  // Macro census statistics from BPS / Open Data DKI
+  const macroKpis = useMemo(() => {
     if (indicators.status !== 'success' || overview.status !== 'success') return null
     const selectedCode = activeWilayah === 'ALL' ? null : activeWilayah
     return buildKpis({
@@ -58,6 +71,7 @@ export function FullScreenMapDashboard() {
     setActiveWilayah(wilayah)
     if (wilayah === 'ALL') {
       setSelectedFacility(null)
+      setFocusedCorridorId(null)
     }
     const target = WILAYAH_COORDINATES[wilayah] ?? WILAYAH_COORDINATES['ALL']
     setFocusCoords(target.center)
@@ -79,9 +93,16 @@ export function FullScreenMapDashboard() {
     setShowTransit((prev) => !prev)
   }, [])
 
-  const handleFocusRoute = useCallback((center: [number, number], zoom: number) => {
+  const handleFocusRoute = useCallback((center: [number, number], zoom: number, corridorId?: string) => {
     setFocusCoords(center)
     setFocusZoom(zoom)
+    if (corridorId) {
+      setFocusedCorridorId(corridorId)
+    }
+  }, [])
+
+  const handleResetFocusCorridor = useCallback(() => {
+    setFocusedCorridorId(null)
   }, [])
 
   return (
@@ -100,6 +121,8 @@ export function FullScreenMapDashboard() {
         activeTransitModes={activeTransitModes}
         selectedWilayah={activeWilayah}
         onSelectWilayah={handleSelectWilayah}
+        focusedCorridorId={focusedCorridorId}
+        onSelectCorridor={setFocusedCorridorId}
       />
 
       {/* Floating Breadcrumb Pill saat berada di Layer 2 (Per-Kota) */}
@@ -120,22 +143,40 @@ export function FullScreenMapDashboard() {
         </div>
       )}
 
-      {/* 2. Left Floating Compact Regional Indicator Card */}
-      <div className="pointer-events-none absolute top-3 left-3 sm:top-4 sm:left-4 z-20">
+      {/* 2. Left Floating Top Stack: Kapsul Lingkungan Hidup (Udara & Air) + Kartu Fasilitas Publik (2x2) */}
+      <div className="pointer-events-none absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex flex-col gap-2">
+        {/* Kapsul Lingkungan Hidup: Persistent ringkas (~60px) */}
+        <EnvironmentStatusCard
+          kpis={mapKpis}
+          loading={indicators.status === 'loading' || overview.status === 'loading'}
+        />
+
+        {/* Kartu Fasilitas Publik: Grid 2x2 ringkas terintegrasi Auto-Accordion */}
         <RegionalIndicatorCard
-          kpis={kpis}
+          mapKpis={mapKpis}
+          macroKpis={macroKpis}
           activeWilayah={activeWilayah}
           onSelectWilayah={handleSelectWilayah}
           loading={indicators.status === 'loading' || overview.status === 'loading'}
+          isCollapsed={activeExpandedPanel !== 'facilities'}
+          onToggleCollapse={(collapsed) => {
+            setActiveExpandedPanel(collapsed ? 'none' : 'facilities')
+          }}
         />
       </div>
 
-      {/* 3. Left Bottom Floating Transit Routes Widget */}
+      {/* 3. Left Bottom Floating Transit Routes Widget: Terintegrasi Auto-Accordion */}
       <div className="pointer-events-none absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20">
         <TransitRoutesWidget
           showTransit={showTransit}
           onToggleShowTransit={handleToggleShowTransit}
           onFocusRoute={handleFocusRoute}
+          focusedCorridorId={focusedCorridorId}
+          onResetFocus={handleResetFocusCorridor}
+          isCollapsed={activeExpandedPanel !== 'transit'}
+          onToggleCollapse={(collapsed) => {
+            setActiveExpandedPanel(collapsed ? 'none' : 'transit')
+          }}
         />
       </div>
 

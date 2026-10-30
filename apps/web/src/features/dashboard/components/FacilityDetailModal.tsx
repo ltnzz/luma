@@ -1,4 +1,4 @@
-import { Button } from '../../../components/ui/Button'
+import { useMemo, useState } from 'react'
 import { ErrorBanner } from '../../../components/ui/ErrorBanner'
 import { Modal } from '../../../components/ui/Modal'
 import { Skeleton } from '../../../components/ui/Skeleton'
@@ -14,11 +14,11 @@ interface FacilityDetailModalProps {
 }
 
 const CATEGORY_BADGE_COLORS: Record<string, string> = {
-  fasum: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/30',
-  transum: 'bg-blue-500/10 text-blue-600 border-blue-500/30',
-  kesehatan: 'bg-rose-500/10 text-rose-600 border-rose-500/30',
-  pendidikan: 'bg-indigo-500/10 text-indigo-600 border-indigo-500/30',
-  lingkungan: 'bg-cyan-500/10 text-cyan-600 border-cyan-500/30',
+  fasum: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
+  transum: 'bg-blue-500/20 text-blue-300 border-blue-500/40',
+  kesehatan: 'bg-rose-500/20 text-rose-300 border-rose-500/40',
+  pendidikan: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+  lingkungan: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/40',
 }
 
 export function FacilityDetailModal({
@@ -31,22 +31,75 @@ export function FacilityDetailModal({
   const detail = useFacilityDetail(facilityId ?? null)
 
   const activeFacility = propFacility ?? detail.data
-  const modalOpen = isOpen !== undefined ? isOpen : (facilityId !== null && facilityId !== undefined) || propFacility !== null
+  const modalOpen =
+    isOpen !== undefined
+      ? isOpen
+      : (facilityId !== null && facilityId !== undefined) || propFacility !== null
 
-  if (!modalOpen) return null
+  // Pola React resmi: sinkronisasi state saat prop berubah tanpa useEffect
+  const [prevFacility, setPrevFacility] = useState<FacilityItem | Facility | null>(activeFacility)
+  const [cachedFacility, setCachedFacility] = useState<FacilityItem | Facility | null>(activeFacility)
+
+  if (activeFacility !== prevFacility) {
+    setPrevFacility(activeFacility)
+    if (activeFacility) {
+      setCachedFacility(activeFacility)
+    }
+  }
+
+  const displayFacility = activeFacility ?? cachedFacility
+
+  // Normalisasi spesifikasi fasilitas baik format object Record maupun Array relasional [{ specKey, specValue }]
+  const specs = useMemo<Record<string, string>>(() => {
+    const raw = displayFacility?.specs
+    if (!raw) return {}
+    if (Array.isArray(raw)) {
+      const res: Record<string, string> = {}
+      for (const item of raw) {
+        if (item && typeof item === 'object') {
+          const spec = item as Record<string, unknown>
+          const k = spec.specKey ?? spec.spec_key ?? spec.key
+          const v = spec.specValue ?? spec.spec_value ?? spec.value
+          if (k && v !== undefined && v !== null) {
+            res[String(k)] = String(v)
+          }
+        }
+      }
+      return res
+    }
+    if (typeof raw === 'object') {
+      const res: Record<string, string> = {}
+      for (const [k, v] of Object.entries(raw)) {
+        if (v !== undefined && v !== null && typeof v !== 'object') {
+          res[k] = String(v)
+        }
+      }
+      return res
+    }
+    return {}
+  }, [displayFacility?.specs])
+
+  // Jika modal belum pernah dibuka sama sekali dan tidak ada data, jangan mount ke DOM
+  if (!modalOpen && !displayFacility) {
+    return null
+  }
 
   const categoryBadge =
-    activeFacility?.category ? (CATEGORY_BADGE_COLORS[activeFacility.category.toLowerCase()] ?? 'bg-surface-muted text-muted border-border') : ''
+    displayFacility?.category
+      ? (CATEGORY_BADGE_COLORS[displayFacility.category.toLowerCase()] ??
+        'bg-white/10 text-white/80 border-white/20')
+      : ''
 
-  const docs = activeFacility
-    ? ('documents' in activeFacility && Array.isArray(activeFacility.documents)
-        ? activeFacility.documents
-        : ('docs' in activeFacility && Array.isArray(activeFacility.docs) ? activeFacility.docs : []))
+  const docs = displayFacility
+    ? ('documents' in displayFacility && Array.isArray(displayFacility.documents)
+        ? displayFacility.documents
+        : ('docs' in displayFacility && Array.isArray(displayFacility.docs) ? displayFacility.docs : []))
     : []
 
-  const metrics = (activeFacility?.metrics ?? {}) as Record<string, unknown>
-  const budget = (activeFacility?.budget ?? {}) as Record<string, string | null | undefined>
-  const specs = (activeFacility?.specs ?? {}) as Record<string, string>
+  const metrics = (displayFacility?.metrics ?? {}) as Record<string, unknown>
+  const aqiStatus = metrics.aqiStatus ?? metrics.aqi_status
+  const transitAccess = metrics.transitAccess ?? metrics.transit_access
+  const budget = (displayFacility?.budget ?? {}) as Record<string, string | null | undefined>
 
   return (
     <Modal
@@ -54,135 +107,171 @@ export function FacilityDetailModal({
       onClose={onClose}
       size="lg"
       title={
-        activeFacility ? (
-          <div className="flex flex-col gap-1 pr-6">
+        displayFacility ? (
+          <div className="flex flex-col gap-1.5 pr-2">
             <div className="flex items-center gap-2">
-              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider ${categoryBadge}`}>
-                {activeFacility.subCategory || activeFacility.category}
+              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider backdrop-blur-sm shadow-sm ${categoryBadge}`}>
+                {displayFacility.subCategory || displayFacility.category}
               </span>
-              <span className="text-xs text-muted">{activeFacility.wilayah}</span>
+              <span className="text-xs font-medium text-white/60">{displayFacility.wilayah}</span>
             </div>
-            <h2 className="text-lg font-bold text-foreground sm:text-xl">{activeFacility.name}</h2>
+            <span className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
+              {displayFacility.name}
+            </span>
           </div>
         ) : (
           'Detail fasilitas'
         )
       }
-      description={activeFacility?.address ?? (detail.status === 'loading' ? 'Memuat informasi fasilitas dari server…' : undefined)}
-      footer={
-        <div className="flex items-center justify-between w-full text-xs text-muted">
-          <span>
-            {activeFacility ? `Koordinat: ${activeFacility.lat.toFixed(4)}, ${activeFacility.lng.toFixed(4)}` : ''}
+      description={
+        displayFacility?.address ? (
+          <span className="flex items-center gap-1.5 text-xs text-white/70">
+            <svg className="size-3.5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
+            <span>{displayFacility.address}</span>
           </span>
-          <Button variant="default" onClick={onClose}>
+        ) : (
+          detail.status === 'loading' ? 'Memuat informasi fasilitas dari server…' : undefined
+        )
+      }
+      footer={
+        <div className="flex items-center justify-between w-full text-xs text-white/60">
+          <span className="font-mono text-[11px] text-white/50 flex items-center gap-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            {displayFacility && typeof displayFacility.lat === 'number' && typeof displayFacility.lng === 'number'
+              ? `GPS: ${displayFacility.lat.toFixed(4)}, ${displayFacility.lng.toFixed(4)}`
+              : ''}
+          </span>
+          <button
+            type="button"
+            onClick={onClose}
+            className="rounded-xl border border-white/15 bg-white/10 px-4 py-2 text-xs font-semibold text-white transition-all hover:bg-white/20 hover:border-white/25 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 backdrop-blur-md cursor-pointer"
+          >
             Tutup
-          </Button>
+          </button>
         </div>
       }
     >
-      {detail.status === 'loading' && !activeFacility ? (
+      {detail.status === 'loading' && !displayFacility ? (
         <div className="space-y-3" aria-label="Memuat detail fasilitas">
-          <Skeleton className="h-20 w-full bg-white/10" />
-          <Skeleton className="h-40 w-full bg-white/10" />
-          <Skeleton className="h-28 w-full bg-white/10" />
+          <Skeleton className="h-20 w-full bg-white/10 rounded-2xl" />
+          <Skeleton className="h-40 w-full bg-white/10 rounded-2xl" />
+          <Skeleton className="h-28 w-full bg-white/10 rounded-2xl" />
         </div>
       ) : null}
 
-      {detail.status === 'error' && !activeFacility ? (
+      {detail.status === 'error' && !displayFacility ? (
         <ErrorBanner
           error={detail.error}
-          className="rounded-xl border border-red-400/20 bg-red-400/10 px-4 py-3"
+          className="rounded-2xl border border-red-400/30 bg-red-500/10 p-4 text-white backdrop-blur-md"
         />
       ) : null}
 
-      {activeFacility ? (
-        <div className="flex flex-col gap-6 py-2">
-          {/* Metrik Lingkungan & Walkability */}
+      {displayFacility ? (
+        <div className="flex flex-col gap-6 py-1">
+          {/* Metrik Lingkungan & Walkability (Glass Cards) */}
           {Object.keys(metrics).length > 0 ? (
             <section className="flex flex-col gap-2.5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-muted">Indikator Lingkungan & Akses</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400/90 flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span>Indikator Lingkungan & Akses</span>
+              </h3>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                <div className="rounded-xl border border-border bg-surface-muted/50 p-3">
-                  <span className="text-[11px] font-medium text-muted">Kualitas Udara (AQI)</span>
-                  <p className="mt-1 text-base font-bold text-foreground">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3.5 backdrop-blur-md hover:bg-white/[0.07] transition-all shadow-sm">
+                  <span className="text-[11px] font-medium text-white/60">Kualitas Udara (AQI)</span>
+                  <p className="mt-1 text-base font-bold text-white">
                     {String(metrics.aqi ?? '—')}{' '}
-                    {metrics.aqiStatus ? (
-                      <span className="text-xs font-normal text-muted">({String(metrics.aqiStatus)})</span>
+                    {aqiStatus ? (
+                      <span className="text-xs font-normal text-emerald-300">({String(aqiStatus)})</span>
                     ) : null}
                   </p>
                   {metrics.pm25 ? (
-                    <p className="mt-0.5 text-[10px] text-muted">PM2.5: {String(metrics.pm25)}</p>
+                    <p className="mt-0.5 text-[10px] text-white/50">PM2.5: {String(metrics.pm25)}</p>
                   ) : null}
                 </div>
 
-                <div className="rounded-xl border border-border bg-surface-muted/50 p-3">
-                  <span className="text-[11px] font-medium text-muted">Walkability Score</span>
-                  <p className="mt-1 text-base font-bold text-foreground">
+                <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-3.5 backdrop-blur-md hover:bg-white/[0.07] transition-all shadow-sm">
+                  <span className="text-[11px] font-medium text-white/60">Walkability Score</span>
+                  <p className="mt-1 text-base font-bold text-white">
                     {String(metrics.walkability ?? '—')}
                   </p>
                 </div>
 
-                <div className="col-span-2 sm:col-span-1 rounded-xl border border-border bg-surface-muted/50 p-3">
-                  <span className="text-[11px] font-medium text-muted">Akses Transit</span>
-                  <p className="mt-1 text-xs font-semibold text-foreground line-clamp-2">
-                    {String(metrics.transitAccess ?? '—')}
+                <div className="col-span-2 sm:col-span-1 rounded-2xl border border-white/10 bg-white/[0.04] p-3.5 backdrop-blur-md hover:bg-white/[0.07] transition-all shadow-sm">
+                  <span className="text-[11px] font-medium text-white/60">Akses Transit</span>
+                  <p className="mt-1 text-xs font-semibold text-white/90 line-clamp-2">
+                    {String(transitAccess ?? '—')}
                   </p>
                 </div>
               </div>
             </section>
           ) : null}
 
-          {/* Transparansi Anggaran */}
+          {/* Transparansi Anggaran (Glass Panel) */}
           {Object.keys(budget).length > 0 ? (
             <section className="flex flex-col gap-2.5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-muted">Transparansi Anggaran & Pembangunan</h3>
-              <div className="rounded-xl border border-border bg-surface-muted/30 p-4">
-                <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border pb-3">
-                  <span className="text-xs text-muted">Nilai Realisasi Anggaran</span>
-                  <span className="text-lg font-extrabold text-foreground">{budget.total ?? 'Termasuk APBD'}</span>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400/90 flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span>Transparansi Anggaran & Pembangunan</span>
+              </h3>
+              <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-md shadow-sm">
+                <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-white/10 pb-3">
+                  <span className="text-xs text-white/60">Nilai Realisasi Anggaran</span>
+                  <span className="text-lg font-extrabold text-emerald-400">{budget.total ?? 'Termasuk APBD'}</span>
                 </div>
 
                 <dl className="mt-3 grid grid-cols-1 gap-2.5 sm:grid-cols-2 text-xs">
                   <div>
-                    <dt className="text-muted">Sumber Pendanaan</dt>
-                    <dd className="font-medium text-foreground">{budget.source ?? '—'}</dd>
+                    <dt className="text-white/50">Sumber Pendanaan</dt>
+                    <dd className="font-medium text-white/90 mt-0.5">{budget.source ?? '—'}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted">Tahun Pelaksanaan</dt>
-                    <dd className="font-medium text-foreground">{budget.year ?? '—'}</dd>
+                    <dt className="text-white/50">Tahun Pelaksanaan</dt>
+                    <dd className="font-medium text-white/90 mt-0.5">{budget.year ?? '—'}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted">Pelaksana / Kontraktor</dt>
-                    <dd className="font-medium text-foreground">{budget.contractor ?? '—'}</dd>
+                    <dt className="text-white/50">Pelaksana / Kontraktor</dt>
+                    <dd className="font-medium text-white/90 mt-0.5">{budget.contractor ?? '—'}</dd>
                   </div>
                   <div>
-                    <dt className="text-muted">Status Operasional</dt>
-                    <dd className="font-medium text-emerald-600">{budget.status ?? 'Aktif'}</dd>
+                    <dt className="text-white/50">Status Operasional</dt>
+                    <dd className="font-medium text-emerald-400 flex items-center gap-1.5 mt-0.5">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                      <span>{budget.status ?? 'Aktif'}</span>
+                    </dd>
                   </div>
                 </dl>
               </div>
             </section>
           ) : null}
 
-          {/* Spesifikasi Teknis */}
+          {/* Spesifikasi Teknis (Glass Chips Grid) */}
           {specs && Object.keys(specs).length > 0 ? (
             <section className="flex flex-col gap-2.5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-muted">Spesifikasi Fasilitas</h3>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400/90 flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span>Spesifikasi Fasilitas</span>
+              </h3>
+              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 {Object.entries(specs).map(([key, val]) => (
-                  <div key={key} className="flex flex-col rounded-lg border border-border/80 bg-surface p-2.5 text-xs">
-                    <span className="text-[11px] text-muted">{key}</span>
-                    <span className="mt-0.5 font-medium text-foreground">{val}</span>
+                  <div key={key} className="flex flex-col rounded-xl border border-white/10 bg-white/[0.04] p-3 backdrop-blur-md">
+                    <span className="text-[11px] font-medium text-white/50">{key}</span>
+                    <span className="mt-1 text-xs font-semibold text-white/95">{val}</span>
                   </div>
                 ))}
               </div>
             </section>
           ) : null}
 
-          {/* Dokumen Publik */}
+          {/* Dokumen Publik (Glass List Rows) */}
           {docs.length > 0 ? (
             <section className="flex flex-col gap-2.5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-muted">Dokumen Keterbukaan Publik</h3>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-400/90 flex items-center gap-1.5">
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span>Dokumen Keterbukaan Publik</span>
+              </h3>
               <div className="flex flex-col gap-2">
                 {docs.map((doc, idx) => {
                   const title = 'title' in doc ? doc.title : ''
@@ -191,20 +280,20 @@ export function FacilityDetailModal({
                   return (
                     <div
                       key={idx}
-                      className="flex items-center justify-between rounded-lg border border-border bg-surface p-3 text-xs"
+                      className="flex items-center justify-between rounded-xl border border-white/10 bg-white/[0.04] p-3 backdrop-blur-md hover:bg-white/[0.08] transition-all text-xs"
                     >
                       <div className="flex items-center gap-2.5 overflow-hidden">
-                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-rose-500/10 text-rose-600 font-bold text-[10px]">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-rose-500/20 border border-rose-500/30 text-rose-400 font-bold text-[10px]">
                           PDF
                         </span>
                         <div className="truncate">
-                          <p className="font-medium text-foreground truncate">{title}</p>
-                          <p className="text-[10px] text-muted">
+                          <p className="font-medium text-white truncate">{title}</p>
+                          <p className="text-[10px] text-white/50">
                             {dept ?? 'Dinas Terkait'} {size ? `• ${size}` : ''}
                           </p>
                         </div>
                       </div>
-                      <span className="shrink-0 rounded-md border border-border bg-surface-muted px-2.5 py-1 text-[11px] font-medium text-muted">
+                      <span className="shrink-0 rounded-md border border-white/15 bg-white/[0.06] px-2.5 py-1 text-[11px] font-medium text-white/80">
                         Tersedia
                       </span>
                     </div>
