@@ -23,7 +23,7 @@ export function Select({
 }: SelectProps) {
   return (
     <div className={className}>
-      <p className="text-xs text-muted">{label}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
       <select
         className="block w-full rounded-md border border-border bg-surface px-3 py-2 text-foreground shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
         disabled={disabled}
