@@ -7,7 +7,6 @@ import { findWilayahMeta } from './meta'
 import { HexRegionMap } from './components/HexRegionMap'
 import { WilayahPopover } from './components/WilayahPopover'
 import { IndicatorsCard } from './components/IndicatorsCard'
-import { DashboardHeader } from './components/DashboardHeader'
 import { Card } from '../../components/ui/Card'
 import { Skeleton } from '../../components/ui/Skeleton'
 import { InteractiveMap } from '../../components/ui/InteractiveMap'
@@ -33,14 +32,11 @@ export function DashboardPage() {
   const scopeName = selectedCode
     ? findWilayahMeta(selectedCode)?.name ?? indicators.lookup?.[selectedCode]?.label ?? selectedCode
     : t('dashboard.scope.all')
-  const scopeLabel = `${t('dashboard.scope')}: ${scopeName}`
 
   const selectedIndicator = selectedCode && indicators.lookup ? indicators.lookup[selectedCode] ?? null : null
 
   return (
     <div className="flex flex-col gap-8">
-      <DashboardHeader scopeLabel={scopeLabel} />
-
       <div className="max-w-2xl">
         <h1 className="text-2xl font-bold leading-tight text-foreground sm:text-3xl">{t('dashboard.title')}</h1>
         <p className="mt-2 text-sm text-muted">{t('dashboard.subtitle')}</p>
@@ -61,7 +57,7 @@ export function DashboardPage() {
               <button
                 type="button"
                 onClick={() => setMapView('hex')}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
                   mapView === 'hex' ? 'bg-surface text-foreground shadow-xs' : 'text-muted hover:text-foreground'
                 }`}
               >
@@ -70,7 +66,7 @@ export function DashboardPage() {
               <button
                 type="button"
                 onClick={() => setMapView('interactive')}
-                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors ${
+                className={`rounded-md px-2.5 py-1 text-xs font-medium transition-colors cursor-pointer ${
                   mapView === 'interactive' ? 'bg-surface text-foreground shadow-xs' : 'text-muted hover:text-foreground'
                 }`}
               >

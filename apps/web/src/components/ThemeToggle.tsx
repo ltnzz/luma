@@ -6,7 +6,7 @@ import { useTranslation } from '../i18n/useTranslation'
 function MoonIcon({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className} aria-hidden="true">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   )
 }
@@ -23,13 +23,15 @@ function SunIcon({ className }: { className?: string }) {
   )
 }
 
+interface ThemeToggleProps {
+  showLabel?: boolean
+  className?: string
+}
+
 /**
- * Dark/light pill toggle per the Figma navbar ("Dark mode" / "Light mode").
- * Shows the action for the opposite mode; the first click resolves a
- * 'system' theme to an explicit one. ThemeProvider's 'system' support is
- * preserved as the stored default.
+ * Compact icon-only ThemeToggle with optional text label support.
  */
-export default function ThemeToggle() {
+export default function ThemeToggle({ showLabel = false, className = '' }: ThemeToggleProps) {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
   const [systemPrefersDark, setSystemPrefersDark] = useState(
@@ -49,11 +51,18 @@ export default function ThemeToggle() {
     <button
       type="button"
       onClick={() => setTheme(resolvedDark ? 'light' : 'dark')}
-      className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-border bg-surface px-3 py-2 text-xs font-medium text-foreground hover:bg-surface-muted"
+      className={`inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs ${className}`}
+      title={resolvedDark ? t('theme.light') : t('theme.dark')}
+      aria-label={resolvedDark ? t('theme.light') : t('theme.dark')}
     >
-      {resolvedDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
-      {resolvedDark ? t('theme.toLight') : t('theme.toDark')}
-      <span className="sr-only">{t('theme.toggleA11y')}</span>
+      {resolvedDark ? (
+        <SunIcon className="h-4 w-4 text-foreground" />
+      ) : (
+        <MoonIcon className="h-4 w-4 text-foreground" />
+      )}
+      {showLabel ? (
+        <span className="text-xs font-medium ml-1.5">{resolvedDark ? t('theme.light') : t('theme.dark')}</span>
+      ) : null}
     </button>
   )
 }

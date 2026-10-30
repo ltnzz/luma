@@ -49,6 +49,12 @@ export interface ApiEnvelope<T> {
   data: T
   source?: string
   sector?: string
+  pagination?: {
+    page: number
+    limit: number
+    total: number
+    totalPages: number
+  }
 }
 
 async function parseErrorBody(response: Response): Promise<ErrorBody | null> {
@@ -338,4 +344,31 @@ export function getOverview(): Promise<OverviewData> {
 /** Reset module-level caches (error recovery / tests). */
 export function clearApiCaches(): void {
   overviewCache = null
+}
+
+
+export async function getFacilities<T = unknown>(
+  params?: { wilayah?: string; category?: string; search?: string; page?: number; limit?: number },
+  signal?: AbortSignal,
+): Promise<{ data: T[]; pagination?: ApiEnvelope<unknown>['pagination']; source?: string }> {
+  const query = new URLSearchParams()
+  if (params?.wilayah && params.wilayah !== 'ALL') query.set('wilayah', params.wilayah)
+  if (params?.category && params.category !== 'all') query.set('category', params.category)
+  if (params?.search) query.set('search', params.search)
+  if (params?.page) query.set('page', String(params.page))
+  if (params?.limit) query.set('limit', String(params.limit))
+
+  const qs = query.toString()
+  const path = qs ? `/facilities?${qs}` : '/facilities?limit=50'
+  const envelope = await requestEnvelope<T[]>(path, signal)
+  return {
+    data: envelope.data || [],
+    pagination: envelope.pagination,
+    source: envelope.source,
+  }
+}
+
+export async function getFacilityDetail<T = unknown>(id: string, signal?: AbortSignal): Promise<T> {
+  const envelope = await requestEnvelope<T>(`/facilities/${encodeURIComponent(id)}`, signal)
+  return envelope.data
 }
