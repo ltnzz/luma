@@ -2,24 +2,26 @@ import fs from 'fs/promises';
 import fsSync from 'fs';
 import path from 'path';
 
-// Static imports guarantee that bundlers and Vercel Node File Trace (@vercel/nft)
-// package these essential datasets into the serverless deployment artifact, preventing 404 ENOENT.
-import visualizationDataJson from '../../dataset/visualization_data.json';
-import mergedDkiJson from '../../dataset/merged_dki_by_wilayah.json';
-import kotaterbacaPayloadJson from '../../dataset/kotaterbaca_payload.json';
-import summaryAirJson from '../../dataset/air/summary_air_by_river.json';
-import summaryRthJson from '../../dataset/rth/summary_rth.json';
-import summarySekolahJson from '../../dataset/sekolah/summary_sekolah.json';
-import summaryTransumJson from '../../dataset/transum/summary_transum.json';
+// Bundled datasets: Compiled directly into TypeScript/JavaScript
+// so Vercel Serverless Function has 100% in-memory access with ZERO external file dependencies.
+import {
+  visualizationData,
+  mergedDkiByWilayah,
+  kotaterbacaPayload,
+  summaryAir,
+  summaryRth,
+  summarySekolah,
+  summaryTransum,
+} from '../data/datasets';
 
 const STATIC_DATASETS: Record<string, unknown> = {
-  'visualization_data.json': visualizationDataJson,
-  'merged_dki_by_wilayah.json': mergedDkiJson,
-  'kotaterbaca_payload.json': kotaterbacaPayloadJson,
-  'air/summary_air_by_river.json': summaryAirJson,
-  'rth/summary_rth.json': summaryRthJson,
-  'sekolah/summary_sekolah.json': summarySekolahJson,
-  'transum/summary_transum.json': summaryTransumJson,
+  'visualization_data.json': visualizationData,
+  'merged_dki_by_wilayah.json': mergedDkiByWilayah,
+  'kotaterbaca_payload.json': kotaterbacaPayload,
+  'air/summary_air_by_river.json': summaryAir,
+  'rth/summary_rth.json': summaryRth,
+  'sekolah/summary_sekolah.json': summarySekolah,
+  'transum/summary_transum.json': summaryTransum,
 };
 
 const CANDIDATE_DIRS = [
@@ -50,7 +52,6 @@ export async function readJsonDatasetCached<T = unknown>(relativePath: string): 
     return cache.get(relativePath) as T;
   }
 
-  // Fallback to static datasets if present
   if (STATIC_DATASETS[relativePath]) {
     cache.set(relativePath, STATIC_DATASETS[relativePath]);
     return STATIC_DATASETS[relativePath] as T;
@@ -64,7 +65,6 @@ export async function readJsonDatasetCached<T = unknown>(relativePath: string): 
     cache.set(relativePath, parsed);
     return parsed;
   } catch {
-    // Also try candidate dirs individually if resolveDatasetDir didn't find the specific relativePath
     for (const candidate of CANDIDATE_DIRS) {
       try {
         const fullPath = path.join(candidate, relativePath);
