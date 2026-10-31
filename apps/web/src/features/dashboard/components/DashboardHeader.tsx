@@ -1,5 +1,4 @@
 import { useTranslation } from '../../../i18n/useTranslation'
-import ThemeToggle from '../../../components/ThemeToggle'
 import { MapIcon, BarChartIcon } from '../../../components/ui/Icons'
 
 interface DashboardHeaderProps {
@@ -12,7 +11,11 @@ interface DashboardHeaderProps {
  * Unified Modern Navbar (Clean & Bebas Clutter):
  * - Kiri: Brand Luma + Tag Jakarta Spasial
  * - Tengah: Segmented Tab Peta Spasial vs Ringkasan Sektoral
- * - Kanan: Switch Bahasa [ID | EN] dan ThemeToggle (Icon-Only)
+ * - Kanan: Switch Bahasa [ID | EN]
+ *   Note: ThemeToggle sengaja TIDAK ada di header — pengaturan tema kini
+ *   eksklusif via kontrol peta kanan-bawah (InteractiveMap) agar tidak
+ *   ada dua toggle tema yang redundan. ThemeProvider & persistensi tema
+ *   tetap utuh (light/dark tetap didukung).
  */
 export function DashboardHeader({
   viewMode = 'fullscreen-map',
@@ -51,7 +54,7 @@ export function DashboardHeader({
             }`}
           >
             <MapIcon size={14} className={viewMode === 'fullscreen-map' ? 'text-primary' : ''} />
-            <span className="hidden xs:inline">Peta Spasial</span>
+            <span className="hidden sm:inline">Peta Spasial</span>
           </button>
           <button
             type="button"
@@ -63,12 +66,12 @@ export function DashboardHeader({
             }`}
           >
             <BarChartIcon size={14} className={viewMode === 'dashboard' ? 'text-primary' : ''} />
-            <span className="hidden xs:inline">Ringkasan Sektoral</span>
+            <span className="hidden sm:inline">Ringkasan Sektoral</span>
           </button>
         </nav>
       ) : null}
 
-      {/* 3. Kanan: Minimalist Utilities (Bahasa [ID | EN] & Theme Icon) */}
+      {/* 3. Kanan: Minimalist Utilities (Bahasa [ID | EN]) */}
       <div className="flex items-center gap-2">
         <div className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold">
           <button
@@ -92,8 +95,6 @@ export function DashboardHeader({
             EN
           </button>
         </div>
-
-        <ThemeToggle />
       </div>
     </header>
   )

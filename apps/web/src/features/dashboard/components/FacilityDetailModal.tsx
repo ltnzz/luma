@@ -31,10 +31,17 @@ export function FacilityDetailModal({
   const detail = useFacilityDetail(facilityId ?? null)
 
   const activeFacility = propFacility ?? detail.data
+  // BUG FIX: `propFacility !== null` menganggap prop yang TIDAK diberikan
+  // (undefined) sebagai "terbuka", sehingga pemakaian via facilityId
+  // (page.tsx) selalu mengembalikan modal true — modal "Detil fasilitas" kosong
+  // langsung muncul di view Ringkasan Sektoral, tak bisa ditutup, dan
+  // overlay-nya (z-50) menutupi switcher header (z-30) sehingga tombol
+  // Map/Ringkasan terasa mati. Gunakan Boolean() agar undefined = tidak
+  // terbuka; perilaku isOpen-eksplisit (FullScreenMapDashboard) tetap sama.
   const modalOpen =
     isOpen !== undefined
       ? isOpen
-      : (facilityId !== null && facilityId !== undefined) || propFacility !== null
+      : Boolean(propFacility) || (facilityId !== null && facilityId !== undefined)
 
   // Pola React resmi: sinkronisasi state saat prop berubah tanpa useEffect
   const [prevFacility, setPrevFacility] = useState<FacilityItem | Facility | null>(activeFacility)

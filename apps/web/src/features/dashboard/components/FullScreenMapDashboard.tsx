@@ -67,11 +67,18 @@ export function FullScreenMapDashboard() {
     })
   }, [t, language, indicators.status, overview.status, overview.data, currentIndicator, activeWilayah])
 
-  const handleSelectWilayah = useCallback((wilayah: string) => {
+  const handleSelectWilayah = useCallback((wilayah: string, options?: { skipFocus?: boolean }) => {
     setActiveWilayah(wilayah)
     if (wilayah === 'ALL') {
       setSelectedFacility(null)
       setFocusedCorridorId(null)
+    }
+    if (options?.skipFocus) {
+      // Dari tombol Reset peta: reset bersih — focusCoords/focusZoom dinolkan
+      // agar external focus effect tidak menimpa fitBounds batas DKI.
+      setFocusCoords(null)
+      setFocusZoom(null)
+      return
     }
     const target = WILAYAH_COORDINATES[wilayah] ?? WILAYAH_COORDINATES['ALL']
     setFocusCoords(target.center)
