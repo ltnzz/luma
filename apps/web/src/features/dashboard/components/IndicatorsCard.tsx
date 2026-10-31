@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { useTranslation } from '../../../i18n/useTranslation'
 import { useIndicators } from '../hooks/useIndicators'
 import { useOverview } from '../hooks/useOverview'
+import { useRealtimeAirQuality } from '../hooks/useRealtimeAirQuality'
 import { buildKpis, type KpiViewModel } from '../kpiMapping'
 import { findWilayahMeta } from '../meta'
 import { Card } from '../../../components/ui/Card'
@@ -23,6 +24,7 @@ export function IndicatorsCard({ selectedCode }: IndicatorsCardProps) {
   const { t, language } = useTranslation()
   const indicators = useIndicators()
   const overview = useOverview()
+  const { data: realtimeAirQuality } = useRealtimeAirQuality(selectedCode ?? 'ALL')
 
   const scopeRow = useMemo(() => {
     if (!indicators.lookup) return null
@@ -40,8 +42,9 @@ export function IndicatorsCard({ selectedCode }: IndicatorsCardProps) {
       indicator: scopeRow,
       overview: overview.data,
       overviewStatus: overview.status,
+      realtimeAirQuality,
     })
-  }, [t, language, indicators.status, overview.status, overview.data, scopeRow, selectedCode])
+  }, [t, language, indicators.status, overview.status, overview.data, scopeRow, selectedCode, realtimeAirQuality])
 
   const regionName = selectedCode
     ? (findWilayahMeta(selectedCode)?.name ?? scopeRow?.label ?? selectedCode)

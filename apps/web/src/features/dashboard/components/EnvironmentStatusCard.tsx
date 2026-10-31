@@ -5,15 +5,20 @@ import { WindIcon, DropletIcon } from '../../../components/ui/Icons'
 interface EnvironmentStatusCardProps {
   kpis: KpiViewModel[] | null
   loading?: boolean
+  isLive?: boolean
 }
 
 /**
  * EnvironmentStatusCard:
  * - Kapsul status lingkungan hidup ramping (~55-65px tinggi).
- * - Menampilkan Kualitas Udara (ISPU) dan Kualitas Air (Titik Pantau).
+ * - Menampilkan Kualitas Udara (ISPU/AQI Real-time) dan Kualitas Air (Titik Pantau).
  * - Persistent melayang di sisi kiri atas kanvas peta tanpa tombol collapse agar cepat dipantau.
  */
-export function EnvironmentStatusCard({ kpis, loading = false }: EnvironmentStatusCardProps) {
+export function EnvironmentStatusCard({
+  kpis,
+  loading = false,
+  isLive = false,
+}: EnvironmentStatusCardProps) {
   const aqiKpi = kpis?.find((k) => k.key === 'kualitasUdara')
   const airKpi = kpis?.find((k) => k.key === 'kualitasAir')
 
@@ -35,7 +40,15 @@ export function EnvironmentStatusCard({ kpis, loading = false }: EnvironmentStat
               <span className="text-[10px] font-semibold text-muted truncate">
                 {aqiKpi.title}
               </span>
-              <WindIcon size={12} className="text-primary shrink-0" />
+              <div className="flex items-center gap-1 shrink-0">
+                {isLive && (
+                  <span className="flex items-center gap-1 rounded-full bg-primary/10 px-1 py-0.2 text-[8px] font-bold text-primary">
+                    <span className="h-1 w-1 rounded-full bg-primary animate-pulse" />
+                    LIVE
+                  </span>
+                )}
+                <WindIcon size={12} className="text-primary shrink-0" />
+              </div>
             </div>
             <div>
               <p className="text-xs sm:text-[12.5px] font-black text-foreground tracking-tight line-clamp-1">

@@ -3,6 +3,7 @@ import type { Language } from '../../i18n/dictionaries'
 import { formatLocaleDate } from '../../lib/utils'
 import type { IndicatorSource, OverviewData, RegionalIndicator } from '../../lib/api'
 import type { KpiKey, KpiValue, QueryStatus } from './types'
+import type { RealtimeAirQuality } from './hooks/useRealtimeAirQuality'
 
 interface BuildKpiParams {
   t: TranslateFunction
@@ -13,6 +14,7 @@ interface BuildKpiParams {
   indicator: RegionalIndicator | null
   overview: OverviewData | null
   overviewStatus: QueryStatus
+  realtimeAirQuality?: RealtimeAirQuality | null
 }
 
 export type KpiViewModel = {
@@ -54,6 +56,7 @@ export function buildKpis({
   indicator,
   overview,
   overviewStatus,
+  realtimeAirQuality,
 }: BuildKpiParams): KpiViewModel[] {
   const locale = language === 'id' ? 'id-ID' : 'en-US'
   const generatedAtDate = overview?.generatedAt ? new Date(overview.generatedAt) : null
@@ -75,9 +78,11 @@ export function buildKpis({
     {
       key: 'kualitasUdara',
       title: t('dashboard.kpi.kualitasUdara'),
-      getValue: (row) => [
-        row.aqiVal ? `${row.aqiVal} ${t('dashboard.kpi.aqiUnit')}` : null,
-        row.aqiStatus,
+      getValue: () => [
+        realtimeAirQuality?.aqi != null ? `${realtimeAirQuality.aqi} AQI` : '—',
+        realtimeAirQuality?.category != null
+          ? `${realtimeAirQuality.category} • PM2.5: ${realtimeAirQuality.pm25} µg/m³`
+          : 'Data real-time belum tersedia',
       ],
     },
     {
@@ -155,68 +160,68 @@ export interface SynchronizedRegionStats {
 
 /**
  * Verified facility counts per administrative region matching Layer 2 map pins 1:1.
- * Sum across all 6 regions: 25 Sekolah + 34 Faskes + 24 RTH + 21 Transit + 11 Kualitas Air = 115 Fasilitas.
+ * Sum across all 6 regions: 1.503 Sekolah + 51 Faskes + 34 RTH + 21 Transit + 11 Kualitas Air = 1.620 Fasilitas.
  */
 export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   ALL: {
-    total: 115,
+    total: 1620,
     kualitasAir: { value: '11 Titik Pantau', sub: 'Pintu Air, Waduk & Sungai Ciliwung' },
     kualitasUdara: { value: '74 ISPU', sub: 'Sedang • 5 SPKU Terkoneksi' },
-    pendidikan: { value: '25 Sekolah', sub: 'SMA & SMP Negeri Terverifikasi' },
-    kesehatan: { value: '34 Faskes', sub: 'RSUD & Puskesmas Rujukan Utama' },
-    rth: { value: '24 Ruang Terbuka', sub: 'Taman Publik, Hutan & Konservasi Hijau' },
+    pendidikan: { value: '1.503 Sekolah', sub: '117 SMAN • 289 SMPN • 1.097 SDN' },
+    kesehatan: { value: '51 Faskes', sub: 'RSUD & Puskesmas Rujukan Utama' },
+    rth: { value: '34 Ruang Terbuka', sub: 'Taman Publik, Hutan & Konservasi Hijau' },
     transportasi: { value: '21 Simpul Transit', sub: 'Stasiun MRT/LRT/KRL & Halte Sentral BRT' },
   },
   'JAKARTA PUSAT': {
-    total: 22,
+    total: 228,
     kualitasAir: { value: '2 Titik Pantau', sub: 'Pintu Air Karet & Ciliwung Istiqlal' },
     kualitasUdara: { value: '68 ISPU', sub: 'Sedang • SPKU Thamrin / Monas' },
-    pendidikan: { value: '4 Sekolah', sub: 'SMAN 1, SMAN 68, SMPN 1, SDN Besuki' },
-    kesehatan: { value: '6 Faskes', sub: 'RSUD Tarakan, Johar Baru, Cempaka Putih...' },
-    rth: { value: '5 Ruang Terbuka', sub: 'Taman Suropati, Menteng, Banteng, Monas' },
+    pendidikan: { value: '205 Sekolah', sub: '13 SMAN • 36 SMPN • 156 SDN' },
+    kesehatan: { value: '9 Faskes', sub: 'RSUD Tarakan, Puskesmas Gambir, Tn Abang...' },
+    rth: { value: '7 Ruang Terbuka', sub: 'Taman Suropati, Menteng, GBK, Situ Lembang...' },
     transportasi: { value: '5 Simpul Transit', sub: 'Stasiun MRT HI, Dukuh Atas, Gambir...' },
   },
   'JAKARTA SELATAN': {
-    total: 24,
+    total: 345,
     kualitasAir: { value: '2 Titik Pantau', sub: 'Pintu Air Manggarai & SPKU Ciliwung' },
     kualitasUdara: { value: '72 ISPU', sub: 'Sedang • SPKU Jagakarsa' },
-    pendidikan: { value: '5 Sekolah', sub: 'SMAN 8, SMAN 70, SMAN 28, SMPN 115...' },
-    kesehatan: { value: '8 Faskes', sub: 'RSUD Pasar Minggu, Tebet, Jagakarsa...' },
-    rth: { value: '5 Ruang Terbuka', sub: 'Tebet Eco Park, Ayodya, Langsat...' },
+    pendidikan: { value: '320 Sekolah', sub: '29 SMAN • 66 SMPN • 225 SDN' },
+    kesehatan: { value: '12 Faskes', sub: 'RSUD Pasar Minggu, Puskesmas Kebayoran Baru...' },
+    rth: { value: '7 Ruang Terbuka', sub: 'Tebet Eco Park, Martha Tiahahu, Spathodea...' },
     transportasi: { value: '4 Simpul Transit', sub: 'CSW ASEAN, MRT Blok M, Lebak Bulus...' },
   },
   'JAKARTA BARAT': {
-    total: 18,
+    total: 404,
     kualitasAir: { value: '3 Titik Pantau', sub: 'Waduk Tomang, Kali Angke, Pompa Kosambi' },
     kualitasUdara: { value: '76 ISPU', sub: 'Sedang • SPKU Kebon Jeruk' },
-    pendidikan: { value: '4 Sekolah', sub: 'SMAN 78, SMAN 112, SMAN 33, SMPN 111' },
-    kesehatan: { value: '5 Faskes', sub: 'RSUD Cengkareng, Kembangan, Kalideres...' },
-    rth: { value: '3 Ruang Terbuka', sub: 'Hutan Kota Srengseng, Cattleya, Kalijodo' },
+    pendidikan: { value: '385 Sekolah', sub: '17 SMAN • 50 SMPN • 318 SDN' },
+    kesehatan: { value: '8 Faskes', sub: 'RSUD Cengkareng, Puskesmas Kebon Jeruk...' },
+    rth: { value: '5 Ruang Terbuka', sub: 'Hutan Srengseng, Jalur Tomang, Rawa Buaya...' },
     transportasi: { value: '3 Simpul Transit', sub: 'Halte Grogol 1, Kalideres, Stasiun Kota' },
   },
   'JAKARTA UTARA': {
-    total: 16,
+    total: 204,
     kualitasAir: { value: '1 Titik Pantau', sub: 'Rumah Pompa Utama Waduk Pluit' },
     kualitasUdara: { value: '75 ISPU', sub: 'Sedang • SPKU Cilincing & Kelapa Gading' },
-    pendidikan: { value: '3 Sekolah', sub: 'SMAN 13, SMAN 80, SMAN 75' },
-    kesehatan: { value: '5 Faskes', sub: 'RSUD Koja, Tanjung Priok, Cilincing...' },
-    rth: { value: '4 Ruang Terbuka', sub: 'Taman Waduk Pluit, Mangrove, Danau Sunter' },
+    pendidikan: { value: '186 Sekolah', sub: '17 SMAN • 39 SMPN • 130 SDN' },
+    kesehatan: { value: '8 Faskes', sub: 'RSUD Koja, Puskesmas Tj Priok, Penjaringan...' },
+    rth: { value: '6 Ruang Terbuka', sub: 'Taman Waduk Pluit, Hutan Penjaringan, Bambu...' },
     transportasi: { value: '3 Simpul Transit', sub: 'Terminal Tj Priok, LRT Boulevard, Marina' },
   },
   'JAKARTA TIMUR': {
-    total: 22,
+    total: 418,
     kualitasAir: { value: '3 Titik Pantau', sub: 'Pintu Air KBT, SPKU Kali Baru, Waduk Setu' },
     kualitasUdara: { value: '70 ISPU', sub: 'Sedang • SPKU Lubang Buaya' },
-    pendidikan: { value: '5 Sekolah', sub: 'SMAN 61, SMAN 81, SMAN 21, SMPN 49...' },
-    kesehatan: { value: '6 Faskes', sub: 'RSUD Pasar Rebo, Budhi Asih, Matraman...' },
-    rth: { value: '4 Ruang Terbuka', sub: 'Waduk Ria Rio, TMII, Hutan Cilangkap' },
+    pendidikan: { value: '395 Sekolah', sub: '40 SMAN • 95 SMPN • 260 SDN' },
+    kesehatan: { value: '10 Faskes', sub: 'RSUD Pasar Rebo, Puskesmas Duren Sawit...' },
+    rth: { value: '6 Ruang Terbuka', sub: 'Waduk Ria Rio, TMII, Cempaka, Waduk Setu...' },
     transportasi: { value: '4 Simpul Transit', sub: 'Sentra Kp Rambutan, Jatinegara, PGC...' },
   },
   'KEP. SERIBU': {
-    total: 13,
+    total: 21,
     kualitasAir: { value: '0 Titik Pantau', sub: 'Kawasan Konservasi Perairan Laut Nasional' },
     kualitasUdara: { value: '45 ISPU', sub: 'Baik • SPKU Maritim Kepulauan' },
-    pendidikan: { value: '4 Sekolah', sub: 'SMAN 69, SMPN 133, SMKN 61, SMPN 241' },
+    pendidikan: { value: '12 Sekolah', sub: '1 SMAN • 7 SMPN • 4 SDN' },
     kesehatan: { value: '4 Faskes', sub: 'RSUD Kep. Seribu, Puskesmas P. Tidung, Pari' },
     rth: { value: '3 Ruang Terbuka', sub: 'TN Kep. Seribu, Jembatan Cinta, Pasir Perawan' },
     transportasi: { value: '2 Dermaga', sub: 'Dermaga P. Pramuka & Dermaga P. Tidung' },
@@ -229,11 +234,22 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
 export function buildSynchronizedMapKpis({
   wilayah,
   t,
+  realtimeAirQuality,
 }: {
   wilayah: string
   t: TranslateFunction
+  realtimeAirQuality?: RealtimeAirQuality | null
 }): KpiViewModel[] {
   const stats = VERIFIED_MAP_KPIS[wilayah] ?? VERIFIED_MAP_KPIS['ALL']
+
+  const hasAqiData = Boolean(realtimeAirQuality && typeof realtimeAirQuality.aqi === 'number')
+
+  const aqiValue = hasAqiData ? `${realtimeAirQuality!.aqi} AQI` : '—'
+
+  const aqiSub =
+    realtimeAirQuality && realtimeAirQuality.category
+      ? `${realtimeAirQuality.category} • PM2.5: ${realtimeAirQuality.pm25} µg/m³`
+      : 'Data real-time belum tersedia'
 
   return [
     {
@@ -248,10 +264,10 @@ export function buildSynchronizedMapKpis({
     {
       key: 'kualitasUdara',
       title: t('dashboard.kpi.kualitasUdara'),
-      hasData: true,
-      value: stats.kualitasUdara.value,
-      sub: stats.kualitasUdara.sub,
-      footer: null,
+      hasData: hasAqiData,
+      value: aqiValue,
+      sub: aqiSub,
+      footer: realtimeAirQuality?.updatedAt ? `Live ${realtimeAirQuality.updatedAt}` : null,
       note: null,
     },
     {

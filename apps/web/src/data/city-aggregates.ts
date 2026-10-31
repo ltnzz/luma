@@ -18,7 +18,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     code: 'JAKARTA PUSAT',
     name: 'Jakarta Pusat',
     subdistrictName: 'JakartaPusat',
-    center: [106.8341, -6.1805],
+    center: [106.8420, -6.1820],
     zoom: 13.0,
     bounds: [
       [106.7918, -6.2293],
@@ -26,7 +26,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 46,
-      facilities: 22,
+      facilities: 228,
       total: 2531,
     },
     corridors: [
@@ -54,7 +54,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 57,
-      facilities: 24,
+      facilities: 345,
       total: 5512,
     },
     corridors: [
@@ -70,7 +70,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     code: 'JAKARTA BARAT',
     name: 'Jakarta Barat',
     subdistrictName: 'JakartaBarat',
-    center: [106.7589, -6.1683],
+    center: [106.7320, -6.1620],
     zoom: 12.6,
     bounds: [
       [106.6862, -6.2252],
@@ -78,7 +78,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 35,
-      facilities: 18,
+      facilities: 404,
       total: 4489,
     },
     corridors: ['KORIDOR 1', 'KORIDOR 3', 'KORIDOR 8', 'KORIDOR 9', 'KORIDOR 12'],
@@ -95,7 +95,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 63,
-      facilities: 22,
+      facilities: 418,
       total: 5470,
     },
     corridors: [
@@ -120,7 +120,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 33,
-      facilities: 16,
+      facilities: 204,
       total: 3153,
     },
     corridors: ['KORIDOR 2', 'KORIDOR 5', 'KORIDOR 9', 'KORIDOR 10', 'KORIDOR 12'],
@@ -137,7 +137,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
     ],
     counts: {
       halte: 0,
-      facilities: 13,
+      facilities: 21,
       total: 80,
     },
     corridors: [],

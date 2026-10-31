@@ -4304,6 +4304,1005 @@
           "dept": "Dishub DKI"
         }
       ]
+    },
+    {
+      "id": "puskesmas-kecamatan-gambir",
+      "name": "Puskesmas Kecamatan Gambir",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "GAMBIR",
+      "address": "Jl. Petojo Enclek No.14, Petojo Selatan, Gambir, Jakarta Pusat",
+      "lat": -6.1685,
+      "lng": 106.8164,
+      "specs": {
+        "Status": "Puskesmas Terakreditasi Paripurna",
+        "Layanan": "Poli Umum, Poli Gigi, KIA/KB, IGD 24 Jam, Poli Lansia",
+        "Jam Layanan": "24 Jam (IGD), 07.30 - 16.00 WIB (Poli Reguler)"
+      },
+      "budget": {
+        "total": "Rp 16.800.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 74,
+        "aqi_status": "Sedang",
+        "pm25": "23.5 µg/m³",
+        "walkability": "4.5 / 5.0",
+        "transit_access": "120m ke Halte Petojo"
+      },
+      "docs": [
+        {
+          "title": "Profil Pelayanan Puskesmas Gambir.pdf",
+          "size": "2.8 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-tanah-abang",
+      "name": "Puskesmas Kecamatan Tanah Abang",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "TANAH ABANG",
+      "address": "Jl. Danau Toba No.5, Bendungan Hilir, Tanah Abang, Jakarta Pusat",
+      "lat": -6.2012,
+      "lng": 106.8145,
+      "specs": {
+        "Status": "Puskesmas Model Ramah Difabel",
+        "Layanan": "IGD 24 Jam, Poli Gigi, Poli Jiwa, Skrining PTM",
+        "Jam Layanan": "24 Jam (UGD), 07.30 - 16.00 WIB (Poli)"
+      },
+      "budget": {
+        "total": "Rp 18.200.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 72,
+        "aqi_status": "Sedang",
+        "pm25": "22.8 µg/m³",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "250m ke Stasiun MRT Bendungan Hilir"
+      },
+      "docs": [
+        {
+          "title": "Rencana Kinerja Tahunan Puskesmas Tanah Abang.pdf",
+          "size": "3.1 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-kemayoran",
+      "name": "Puskesmas Kecamatan Kemayoran",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "KEMAYORAN",
+      "address": "Jl. Harapan Mulia No.1, Kemayoran, Jakarta Pusat",
+      "lat": -6.1605,
+      "lng": 106.8522,
+      "specs": {
+        "Status": "Puskesmas Ramah Anak",
+        "Layanan": "Poli Umum, KIA, Konseling Gizi, Farmasi 24 Jam",
+        "Jam Layanan": "24 Jam (UGD & Persalinan)"
+      },
+      "budget": {
+        "total": "Rp 15.500.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 76,
+        "aqi_status": "Sedang",
+        "pm25": "24.2 µg/m³",
+        "walkability": "4.3 / 5.0",
+        "transit_access": "300m ke Stasiun Kemayoran"
+      },
+      "docs": [
+        {
+          "title": "Laporan Kinerja Puskesmas Kemayoran.pdf",
+          "size": "2.4 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-kebayoran-baru",
+      "name": "Puskesmas Kecamatan Kebayoran Baru",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan Unggulan",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "KEBAYORAN BARU",
+      "address": "Jl. Kerinci VII No.1, Gunung, Kebayoran Baru, Jakarta Selatan",
+      "lat": -6.2415,
+      "lng": 106.7978,
+      "specs": {
+        "Status": "Akreditasi Paripurna Kemenkes",
+        "Layanan": "Poli Spesialis Anak, Rawat Bersalin 24 Jam, Poli Mata",
+        "Fasilitas": "Ambulans Siaga 119, Laboratorium Terpadu"
+      },
+      "budget": {
+        "total": "Rp 21.000.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 68,
+        "aqi_status": "Sedang",
+        "pm25": "20.5 µg/m³",
+        "walkability": "4.8 / 5.0",
+        "transit_access": "180m ke Stasiun MRT Blok M BCA"
+      },
+      "docs": [
+        {
+          "title": "DED Renovasi Gedung Puskesmas Kebayoran Baru.pdf",
+          "size": "4.2 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-cilandak",
+      "name": "Puskesmas Kecamatan Cilandak",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "CILANDAK",
+      "address": "Jl. TB Simatupang No.37, Cilandak Barat, Jakarta Selatan",
+      "lat": -6.2915,
+      "lng": 106.7985,
+      "specs": {
+        "Status": "Puskesmas Ramah Lansia & Remaja",
+        "Layanan": "UGD 24 Jam, Poli Paru & TB DOTS, Fisioterapi",
+        "Kapasitas": "Rawat Inap 15 TT"
+      },
+      "budget": {
+        "total": "Rp 19.400.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 70,
+        "aqi_status": "Sedang",
+        "pm25": "21.6 µg/m³",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "200m ke Stasiun MRT Fatmawati"
+      },
+      "docs": [
+        {
+          "title": "Laporan Tahunan Pelayanan Puskesmas Cilandak.pdf",
+          "size": "2.9 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-pasar-minggu",
+      "name": "Puskesmas Kecamatan Pasar Minggu",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "PASAR MINGGU",
+      "address": "Jl. Kebagusan Raya No.1, Ragunan, Pasar Minggu, Jakarta Selatan",
+      "lat": -6.2845,
+      "lng": 106.8415,
+      "specs": {
+        "Status": "Puskesmas Siaga Bencana",
+        "Layanan": "Poli Umum, KIA/KB, Laboratorium, Konseling Remaja",
+        "Fasilitas": "Unit Donor Darah Mini, Farmasi Cepat"
+      },
+      "budget": {
+        "total": "Rp 17.800.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 72,
+        "aqi_status": "Sedang",
+        "pm25": "22.1 µg/m³",
+        "walkability": "4.3 / 5.0",
+        "transit_access": "350m ke Stasiun KRL Pasar Minggu"
+      },
+      "docs": [
+        {
+          "title": "Profil Puskesmas Pasar Minggu.pdf",
+          "size": "2.5 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-setiabudi",
+      "name": "Puskesmas Kecamatan Setiabudi",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan Model",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "SETIABUDI",
+      "address": "Jl. Halimun No.13, Guntur, Setiabudi, Jakarta Selatan",
+      "lat": -6.2115,
+      "lng": 106.8295,
+      "specs": {
+        "Status": "Puskesmas Berstandar Green Building",
+        "Layanan": "Medical Check Up, Poli Gigi, Layanan Terpadu Balita",
+        "Layanan Unggulan": "Klinik Berhenti Merokok & Sanitasi Lingkungan"
+      },
+      "budget": {
+        "total": "Rp 18.900.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 69,
+        "aqi_status": "Sedang",
+        "pm25": "21.0 µg/m³",
+        "walkability": "4.7 / 5.0",
+        "transit_access": "300m ke Stasiun LRT Dukuh Atas"
+      },
+      "docs": [
+        {
+          "title": "Rencana Strategis Puskesmas Setiabudi.pdf",
+          "size": "3.3 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-kebon-jeruk",
+      "name": "Puskesmas Kecamatan Kebon Jeruk",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan Model",
+      "wilayah": "JAKARTA BARAT",
+      "kecamatan": "KEBON JERUK",
+      "address": "Jl. Kebon Jeruk Raya No.2, Kebon Jeruk, Jakarta Barat",
+      "lat": -6.1925,
+      "lng": 106.7725,
+      "specs": {
+        "Status": "Puskesmas ISO 9001:2015 & Paripurna",
+        "Layanan": "Poli Umum, KIA, Poli Paru, Laboratorium Otomatis",
+        "Inovasi": "Sistem Antrean Digital Terintegrasi JakSehat"
+      },
+      "budget": {
+        "total": "Rp 20.500.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.0 µg/m³",
+        "walkability": "4.5 / 5.0",
+        "transit_access": "150m ke Halte Kebon Jeruk"
+      },
+      "docs": [
+        {
+          "title": "Inovasi Pelayanan Publik Puskesmas Kebon Jeruk.pdf",
+          "size": "3.7 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-kembangan",
+      "name": "Puskesmas Kecamatan Kembangan",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA BARAT",
+      "kecamatan": "KEMBANGAN",
+      "address": "Jl. Kembangan Raya No.2, Kembangan Selatan, Jakarta Barat",
+      "lat": -6.1875,
+      "lng": 106.7412,
+      "specs": {
+        "Status": "Puskesmas Ramah Ibu & Anak",
+        "Layanan": "UGD 24 Jam, Konseling Gizi, Imunisasi Lengkap",
+        "Kapasitas": "Ruang Bersalin 10 TT"
+      },
+      "budget": {
+        "total": "Rp 16.700.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 73,
+        "aqi_status": "Sedang",
+        "pm25": "23.1 µg/m³",
+        "walkability": "4.2 / 5.0",
+        "transit_access": "400m ke Akses Tol JORR Kembangan"
+      },
+      "docs": [
+        {
+          "title": "Laporan Tahunan Mutu Puskesmas Kembangan.pdf",
+          "size": "2.6 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-cengkareng",
+      "name": "Puskesmas Kecamatan Cengkareng",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA BARAT",
+      "kecamatan": "CENGKARENG",
+      "address": "Jl. Kamal Raya No.2, Cengkareng Barat, Jakarta Barat",
+      "lat": -6.1525,
+      "lng": 106.7385,
+      "specs": {
+        "Status": "Puskesmas Berkapasitas Besar",
+        "Layanan": "Poli Umum, Rawat Inap Persalinan, TB DOTS, Gigi",
+        "Fasilitas": "Unit Rontgen & Laboratorium Patologi Dasar"
+      },
+      "budget": {
+        "total": "Rp 22.300.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 76,
+        "aqi_status": "Sedang",
+        "pm25": "24.5 µg/m³",
+        "walkability": "4.3 / 5.0",
+        "transit_access": "250m ke Halte Transjakarta Rawa Buaya"
+      },
+      "docs": [
+        {
+          "title": "Rencana Aksi Kesehatan Masyarakat Cengkareng.pdf",
+          "size": "3.5 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-tanjung-priok",
+      "name": "Puskesmas Kecamatan Tanjung Priok",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA UTARA",
+      "kecamatan": "TANJUNG PRIOK",
+      "address": "Jl. Bugis No.70, Kebon Bawang, Tanjung Priok, Jakarta Utara",
+      "lat": -6.1285,
+      "lng": 106.8855,
+      "specs": {
+        "Status": "Puskesmas Wilayah Pesisir & Pelabuhan",
+        "Layanan": "UGD 24 Jam, Poli Jiwa, Kesehatan Kerja Pelabuhan",
+        "Fasilitas": "Ambulans Air Reaksi Cepat & Ruang Isolasi"
+      },
+      "budget": {
+        "total": "Rp 19.800.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 74,
+        "aqi_status": "Sedang",
+        "pm25": "23.8 µg/m³",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "350m ke Stasiun Tanjung Priok"
+      },
+      "docs": [
+        {
+          "title": "Laporan Kinerja Puskesmas Tanjung Priok.pdf",
+          "size": "3.2 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-penjaringan",
+      "name": "Puskesmas Kecamatan Penjaringan",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA UTARA",
+      "kecamatan": "PENJARINGAN",
+      "address": "Jl. Pluit Raya No.2, Penjaringan, Jakarta Utara",
+      "lat": -6.1225,
+      "lng": 106.7865,
+      "specs": {
+        "Status": "Puskesmas Siaga Banjir & Rob",
+        "Layanan": "Poli Umum, KIA, Pengendalian Penyakit Menular",
+        "Fasilitas": "Ruang Gawat Darurat Tahan Banjir"
+      },
+      "budget": {
+        "total": "Rp 18.500.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 73,
+        "aqi_status": "Sedang",
+        "pm25": "23.2 µg/m³",
+        "walkability": "4.5 / 5.0",
+        "transit_access": "200m ke Halte Pluit Landmark"
+      },
+      "docs": [
+        {
+          "title": "Manajemen Krisis Bencana Puskesmas Penjaringan.pdf",
+          "size": "2.9 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-cilincing",
+      "name": "Puskesmas Kecamatan Cilincing",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA UTARA",
+      "kecamatan": "CILINCING",
+      "address": "Jl. Madya Kebantenan No.4, Semper Timur, Cilincing, Jakarta Utara",
+      "lat": -6.1185,
+      "lng": 106.9325,
+      "specs": {
+        "Status": "Puskesmas Pelayanan Komunitas Pesisir",
+        "Layanan": "IGD 24 Jam, Rawat Inap Ibu Hamil, TB DOTS",
+        "Kapasitas": "18 Tempat Tidur"
+      },
+      "budget": {
+        "total": "Rp 17.600.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 75,
+        "aqi_status": "Sedang",
+        "pm25": "24.1 µg/m³",
+        "walkability": "4.1 / 5.0",
+        "transit_access": "250m ke Akses Feeder Transjakarta Cilincing"
+      },
+      "docs": [
+        {
+          "title": "Program Penurunan Stunting Pesisir Cilincing.pdf",
+          "size": "3.4 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-matraman",
+      "name": "Puskesmas Kecamatan Matraman",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "MATRAMAN",
+      "address": "Jl. Kebon Kelapa No.29, Utan Kayu Selatan, Matraman, Jakarta Timur",
+      "lat": -6.2015,
+      "lng": 106.8615,
+      "specs": {
+        "Status": "Puskesmas Akreditasi Paripurna",
+        "Layanan": "Poli Umum, Poli Gigi, Konseling Remaja, Laboratorium",
+        "Fasilitas": "Farmasi Terpadu, Layanan Lansia Santun"
+      },
+      "budget": {
+        "total": "Rp 17.200.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 71,
+        "aqi_status": "Sedang",
+        "pm25": "22.3 µg/m³",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "150m ke Halte Utan Kayu Rawamangun"
+      },
+      "docs": [
+        {
+          "title": "Rencana Kinerja Puskesmas Matraman.pdf",
+          "size": "2.7 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-duren-sawit",
+      "name": "Puskesmas Kecamatan Duren Sawit",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan Unggulan",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "DUREN SAWIT",
+      "address": "Jl. Pahlawan Revolusi No.1, Pondok Bambu, Duren Sawit, Jakarta Timur",
+      "lat": -6.2285,
+      "lng": 106.9125,
+      "specs": {
+        "Status": "Puskesmas Model Pelayanan Digital",
+        "Layanan": "Poli Jiwa Terpadu, Rawat Bersalin 24 Jam, Poli Anak",
+        "Fasilitas": "Ruang Ramah Anak, Jalur Khusus Disabilitas"
+      },
+      "budget": {
+        "total": "Rp 21.500.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 72,
+        "aqi_status": "Sedang",
+        "pm25": "22.7 µg/m³",
+        "walkability": "4.5 / 5.0",
+        "transit_access": "200m ke Akses Transjakarta BKT"
+      },
+      "docs": [
+        {
+          "title": "Evaluasi Pelayanan Puskesmas Duren Sawit.pdf",
+          "size": "3.6 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-kramat-jati",
+      "name": "Puskesmas Kecamatan Kramat Jati",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "KRAMAT JATI",
+      "address": "Jl. Raya Inpres No.48, Tengah, Kramat Jati, Jakarta Timur",
+      "lat": -6.2685,
+      "lng": 106.8715,
+      "specs": {
+        "Status": "Puskesmas Rujukan Wilayah Padat Penduduk",
+        "Layanan": "UGD 24 Jam, Poli TB & Kusta, Pelayanan Balita",
+        "Kapasitas": "Ruang Observasi 12 TT"
+      },
+      "budget": {
+        "total": "Rp 18.900.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 74,
+        "aqi_status": "Sedang",
+        "pm25": "23.4 µg/m³",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "250m ke Sentra PGC Cililitan"
+      },
+      "docs": [
+        {
+          "title": "Laporan Kinerja Tahunan Puskesmas Kramat Jati.pdf",
+          "size": "3.0 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "puskesmas-kecamatan-cakung",
+      "name": "Puskesmas Kecamatan Cakung",
+      "category": "kesehatan",
+      "sub_category": "Puskesmas Kecamatan BLUD",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "CAKUNG",
+      "address": "Jl. Raya Bekasi Km 23, Cakung Barat, Jakarta Timur",
+      "lat": -6.1895,
+      "lng": 106.9455,
+      "specs": {
+        "Status": "Puskesmas Terpadu Wilayah Industri",
+        "Layanan": "Poli Umum, Kesehatan Kerja Industri, KIA/KB",
+        "Fasilitas": "Unit Tanggap Darurat Bencana Industri"
+      },
+      "budget": {
+        "total": "Rp 19.300.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Kesehatan DKI Jakarta",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 76,
+        "aqi_status": "Sedang",
+        "pm25": "24.8 µg/m³",
+        "walkability": "4.2 / 5.0",
+        "transit_access": "300m ke Halte Pulogebang"
+      },
+      "docs": [
+        {
+          "title": "Profil Pelayanan Puskesmas Cakung.pdf",
+          "size": "2.8 MB",
+          "dept": "Dinkes DKI"
+        }
+      ]
+    },
+    {
+      "id": "hutan-kota-gbk-senayan",
+      "name": "Hutan Kota Gelora Bung Karno (GBK)",
+      "category": "fasum",
+      "sub_category": "Hutan Kota & Konservasi Hijau",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "TANAH ABANG",
+      "address": "Kawasan Gelora Bung Karno, Jl. Jenderal Sudirman, Senayan, Jakarta Pusat",
+      "lat": -6.2215,
+      "lng": 106.8045,
+      "specs": {
+        "Luas Area": "4,5 Hektar",
+        "Fasilitas": "Jogging Track, Danau Buatan, Amphitheater, Plaza Pandang",
+        "Koleksi Pohon": "Trembesi, Tabebuya, Asam Jawa, Angsana"
+      },
+      "budget": {
+        "total": "Rp 32.500.000.000",
+        "source": "Revitalisasi GBK & Pemprov DKI",
+        "year": "2022 - 2023",
+        "contractor": "PPKGBK & Dinas Pertamanan",
+        "status": "100% Beroperasi Publik"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "19.5 µg/m³",
+        "walkability": "4.9 / 5.0",
+        "transit_access": "150m ke Stasiun MRT Istora Mandiri"
+      },
+      "docs": [
+        {
+          "title": "Masterplan Kawasan Hijau Terbuka GBK.pdf",
+          "size": "4.8 MB",
+          "dept": "Dinas Pertamanan"
+        }
+      ]
+    },
+    {
+      "id": "taman-situ-lembang-menteng",
+      "name": "Taman Situ Lembang",
+      "category": "fasum",
+      "sub_category": "Taman Kota & Danau Resapan",
+      "wilayah": "JAKARTA PUSAT",
+      "kecamatan": "MENTENG",
+      "address": "Jl. Lembang No.1, Menteng, Jakarta Pusat",
+      "lat": -6.2005,
+      "lng": 106.8365,
+      "specs": {
+        "Luas Area": "1,4 Hektar",
+        "Fasilitas": "Danau Air Mancur, Area Memancing, Jalur Refleksi, Arena Anak",
+        "Fungsi Ekologis": "Retensi Air Hujan & Penurunan Suhu Mikro Menteng"
+      },
+      "budget": {
+        "total": "Rp 8.900.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Pertamanan dan Hutan Kota",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 68,
+        "aqi_status": "Sedang",
+        "pm25": "20.2 µg/m³",
+        "walkability": "4.8 / 5.0",
+        "transit_access": "400m ke Stasiun KRL Cikini"
+      },
+      "docs": [
+        {
+          "title": "Pemeliharaan Danau dan Taman Situ Lembang.pdf",
+          "size": "2.1 MB",
+          "dept": "Dinas Pertamanan"
+        }
+      ]
+    },
+    {
+      "id": "taman-literasi-martha-tiahahu",
+      "name": "Taman Literasi Martha Christina Tiahahu",
+      "category": "fasum",
+      "sub_category": "Taman Tematik & Ruang Komunitas",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "KEBAYORAN BARU",
+      "address": "Kawasan Blok M, Jl. Sisingamangaraja, Melawai, Kebayoran Baru, Jakarta Selatan",
+      "lat": -6.2438,
+      "lng": 106.7975,
+      "specs": {
+        "Luas Area": "9.710 m²",
+        "Fasilitas": "Perpustakaan Mini, Amphitheater, Kolam Teratai, Healing Garden",
+        "Integrasi Transit": "Terhubung langsung dengan Hub Transit CSW - Blok M"
+      },
+      "budget": {
+        "total": "Rp 14.200.000.000",
+        "source": "Integrasi TOD PT MRT Jakarta & Pemprov DKI",
+        "year": "2022 - 2023",
+        "contractor": "PT Integrasi Transit Jakarta (ITJ)",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 67,
+        "aqi_status": "Sedang",
+        "pm25": "19.8 µg/m³",
+        "walkability": "5.0 / 5.0",
+        "transit_access": "50m ke Stasiun MRT Blok M BCA"
+      },
+      "docs": [
+        {
+          "title": "Konsep Revitalisasi Taman Literasi Blok M.pdf",
+          "size": "3.9 MB",
+          "dept": "PT ITJ"
+        }
+      ]
+    },
+    {
+      "id": "taman-spathodea-jagakarsa",
+      "name": "Taman Spathodea",
+      "category": "fasum",
+      "sub_category": "Taman Alami & Kolam Retensi",
+      "wilayah": "JAKARTA SELATAN",
+      "kecamatan": "JAGAKARSA",
+      "address": "Jl. Kebagusan Raya No.30, Jagakarsa, Jakarta Selatan",
+      "lat": -6.3195,
+      "lng": 106.8245,
+      "specs": {
+        "Luas Area": "2,3 Hektar",
+        "Fasilitas": "Danau Spathodea, Jogging Track Berbukit, Outdoor Gym",
+        "Karakteristik": "Topografi Berkontur Alami Kaya Vegetasi Bunga Spathodea"
+      },
+      "budget": {
+        "total": "Rp 9.500.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Pertamanan dan Hutan Kota",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 64,
+        "aqi_status": "Sedang",
+        "pm25": "18.6 µg/m³",
+        "walkability": "4.5 / 5.0",
+        "transit_access": "500m ke Stasiun Tanjung Barat"
+      },
+      "docs": [
+        {
+          "title": "Konservasi Lahan Hijau Jagakarsa.pdf",
+          "size": "2.7 MB",
+          "dept": "Dinas Pertamanan"
+        }
+      ]
+    },
+    {
+      "id": "taman-jalur-hijau-tomang",
+      "name": "Taman Jalur Hijau Tomang",
+      "category": "fasum",
+      "sub_category": "Jalur Hijau Penyangga Kota",
+      "wilayah": "JAKARTA BARAT",
+      "kecamatan": "GROGOL PETAMBURAN",
+      "address": "Jl. Tomang Raya, Jatipulo, Palmerah / Grogol Petamburan, Jakarta Barat",
+      "lat": -6.1775,
+      "lng": 106.7915,
+      "specs": {
+        "Luas Area": "1,8 Hektar",
+        "Fasilitas": "Pedestrian Hijau Lebar, Kanopi Pohon Peneduh, Bangku Taman",
+        "Fungsi": "Penyerap Emisi Koridor Tol Tomang & Jalan Arteri"
+      },
+      "budget": {
+        "total": "Rp 7.800.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Pertamanan dan Hutan Kota",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 74,
+        "aqi_status": "Sedang",
+        "pm25": "23.5 µg/m³",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "150m ke Halte RS Harapan Kita"
+      },
+      "docs": [
+        {
+          "title": "Penataan Koridor Hijau Tomang Raya.pdf",
+          "size": "2.3 MB",
+          "dept": "Dinas Pertamanan"
+        }
+      ]
+    },
+    {
+      "id": "hutan-kota-rawa-buaya",
+      "name": "Hutan Kota Rawa Buaya",
+      "category": "fasum",
+      "sub_category": "Hutan Kota & Waduk Retensi",
+      "wilayah": "JAKARTA BARAT",
+      "kecamatan": "CENGKARENG",
+      "address": "Jl. Outer Ring Road, Rawa Buaya, Cengkareng, Jakarta Barat",
+      "lat": -6.1555,
+      "lng": 106.7285,
+      "specs": {
+        "Luas Area": "3,1 Hektar",
+        "Fasilitas": "Waduk Pengendali Banjir, Hutan Lindung Mini, Area Pembibitan",
+        "Koleksi Vegetasi": "Mahoni, Trembesi, Sengon, Bakau Darat"
+      },
+      "budget": {
+        "total": "Rp 12.600.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Sumber Daya Air & Pertamanan",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 72,
+        "aqi_status": "Sedang",
+        "pm25": "22.8 µg/m³",
+        "walkability": "4.2 / 5.0",
+        "transit_access": "350m ke Halte Rawa Buaya"
+      },
+      "docs": [
+        {
+          "title": "Revitalisasi Lahan Basah Rawa Buaya.pdf",
+          "size": "3.5 MB",
+          "dept": "Dinas SDA"
+        }
+      ]
+    },
+    {
+      "id": "hutan-kota-penjaringan",
+      "name": "Taman Hutan Kota Penjaringan",
+      "category": "fasum",
+      "sub_category": "Hutan Kota Pesisir",
+      "wilayah": "JAKARTA UTARA",
+      "kecamatan": "PENJARINGAN",
+      "address": "Jl. Kepanduan II, Pejagalan, Penjaringan, Jakarta Utara",
+      "lat": -6.1265,
+      "lng": 106.7895,
+      "specs": {
+        "Luas Area": "14,5 Hektar",
+        "Fasilitas": "Hutan Lindung Pesisir, Jalur Sepeda, Menara Pengamat Burung",
+        "Fungsi Vital": "Sabuk Hijau Penahan Angin Laut & Penurun Polusi Tol Pelabuhan"
+      },
+      "budget": {
+        "total": "Rp 24.000.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Pertamanan dan Hutan Kota",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 71,
+        "aqi_status": "Sedang",
+        "pm25": "22.1 µg/m³",
+        "walkability": "4.4 / 5.0",
+        "transit_access": "300m ke Akses Feeder Pejagalan"
+      },
+      "docs": [
+        {
+          "title": "Kawasan Konservasi Hutan Kota Penjaringan.pdf",
+          "size": "4.5 MB",
+          "dept": "Dinas Pertamanan"
+        }
+      ]
+    },
+    {
+      "id": "taman-sungai-bambu-tanjung-priok",
+      "name": "Taman Sungai Bambu",
+      "category": "fasum",
+      "sub_category": "Taman Publik Ramah Keluarga",
+      "wilayah": "JAKARTA UTARA",
+      "kecamatan": "TANJUNG PRIOK",
+      "address": "Jl. Sungai Bambu No.1, Tanjung Priok, Jakarta Utara",
+      "lat": -6.1345,
+      "lng": 106.8845,
+      "specs": {
+        "Luas Area": "1,2 Hektar",
+        "Fasilitas": "Lapangan Futsal Terbuka, Taman Bermain Anak, Danau Mini",
+        "Pencapaian": "Taman Percontohan Sanitasi Bersih Jakarta Utara"
+      },
+      "budget": {
+        "total": "Rp 6.900.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Pertamanan dan Hutan Kota",
+        "status": "Beroperasi Aktif"
+      },
+      "metrics": {
+        "aqi": 73,
+        "aqi_status": "Sedang",
+        "pm25": "23.4 µg/m³",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "250m ke Halte Enggano"
+      },
+      "docs": [
+        {
+          "title": "Pengembangan RPTRA Sungai Bambu.pdf",
+          "size": "2.2 MB",
+          "dept": "Dinas Pertamanan"
+        }
+      ]
+    },
+    {
+      "id": "taman-cempaka-cipayung",
+      "name": "Taman Cempaka",
+      "category": "fasum",
+      "sub_category": "Taman Konservasi Alam & Rekreasi",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "CIPAYUNG",
+      "address": "Jl. Raya Hankam, Cilangkap, Cipayung, Jakarta Timur",
+      "lat": -6.3145,
+      "lng": 106.8915,
+      "specs": {
+        "Luas Area": "3,4 Hektar",
+        "Fasilitas": "Danau Retensi Cempaka, Jogging Track Alam, Gazebo Bambu",
+        "Karakteristik": "RTH Alami Asri Penyerap Emisi Tol Jagorawi"
+      },
+      "budget": {
+        "total": "Rp 11.200.000.000",
+        "source": "APBD DKI Jakarta",
+        "year": "2023",
+        "contractor": "Dinas Pertamanan dan Hutan Kota",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 66,
+        "aqi_status": "Sedang",
+        "pm25": "19.2 µg/m³",
+        "walkability": "4.5 / 5.0",
+        "transit_access": "400m ke Akses Tol Jagorawi Cipayung"
+      },
+      "docs": [
+        {
+          "title": "Rencana Pengelolaan RTH Taman Cempaka.pdf",
+          "size": "2.9 MB",
+          "dept": "Dinas Pertamanan"
+        }
+      ]
+    },
+    {
+      "id": "taman-waduk-setu-cipayung",
+      "name": "Taman Waduk Setu",
+      "category": "fasum",
+      "sub_category": "Taman Rekreasi Air & Resapan",
+      "wilayah": "JAKARTA TIMUR",
+      "kecamatan": "CIPAYUNG",
+      "address": "Jl. Pagelarang, Setu, Cipayung, Jakarta Timur",
+      "lat": -6.3215,
+      "lng": 106.9045,
+      "specs": {
+        "Luas Area": "5,8 Hektar",
+        "Fasilitas": "Danau Alami Luas, Jalur Lari Keliling Waduk, Taman Piknik",
+        "Fungsi": "Pengendali Banjir Kali Sunter & Ruang Terbuka Biru-Hijau"
+      },
+      "budget": {
+        "total": "Rp 16.500.000.000",
+        "source": "APBD DKI Jakarta (Dinas SDA & Pertamanan)",
+        "year": "2023",
+        "contractor": "Dinas SDA DKI Jakarta",
+        "status": "Beroperasi Penuh"
+      },
+      "metrics": {
+        "aqi": 65,
+        "aqi_status": "Sedang",
+        "pm25": "18.9 µg/m³",
+        "walkability": "4.6 / 5.0",
+        "transit_access": "500m ke Stasiun LRT Ciracas"
+      },
+      "docs": [
+        {
+          "title": "Normalisasi dan Penataan Lanskap Waduk Setu.pdf",
+          "size": "3.8 MB",
+          "dept": "Dinas SDA"
+        }
+      ]
     }
   ],
   "wilayah_list": [

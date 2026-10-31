@@ -4,9 +4,19 @@ import { EnvironmentStatusCard } from './EnvironmentStatusCard'
 import { RegionalIndicatorCard } from './RegionalIndicatorCard'
 import { FacilityDetailModal } from './FacilityDetailModal'
 import { TransitRoutesWidget } from './TransitRoutesWidget'
+import { MapLegend } from './MapLegend'
+import {
+  MapFilterBar,
+  type FaskesFilterState,
+  type RthFilterState,
+  type FaskesTypeFilter,
+  type RthTypeFilter,
+} from './MapFilterBar'
 import { useFacilities } from '../hooks/useFacilities'
 import { useIndicators } from '../hooks/useIndicators'
 import { useOverview } from '../hooks/useOverview'
+import { useRealtimeAirQuality } from '../hooks/useRealtimeAirQuality'
+import { useSchoolsData } from '../hooks/useSchoolsData'
 import { useTranslation } from '../../../i18n/useTranslation'
 import { buildKpis, buildSynchronizedMapKpis } from '../kpiMapping'
 import type { FacilityItem } from '../types/facility.types'
@@ -40,13 +50,96 @@ export function FullScreenMapDashboard() {
     wilayah: activeWilayah === 'ALL' ? undefined : activeWilayah,
   })
 
+  // Filter state untuk Kesehatan (Faskes) dan RTH
+  const [faskesFilter, setFaskesFilter] = useState<FaskesFilterState>({
+    enabled: true,
+    subType: 'ALL',
+  })
+
+  const [rthFilter, setRthFilter] = useState<RthFilterState>({
+    enabled: true,
+    subType: 'ALL',
+  })
+
+  const handleToggleFaskes = useCallback(() => {
+    setFaskesFilter((prev) => ({ ...prev, enabled: !prev.enabled }))
+  }, [])
+
+  const handleChangeFaskesSubType = useCallback((subType: FaskesTypeFilter) => {
+    setFaskesFilter((prev) => ({ ...prev, subType }))
+  }, [])
+
+  const handleToggleRth = useCallback(() => {
+    setRthFilter((prev) => ({ ...prev, enabled: !prev.enabled }))
+  }, [])
+
+  const handleChangeRthSubType = useCallback((subType: RthTypeFilter) => {
+    setRthFilter((prev) => ({ ...prev, subType }))
+  }, [])
+
+  // Hitung jumlah faskes & RTH di wilayah aktif
+  const faskesCounts = useMemo(() => {
+    const list = facilities.filter((f) => f.category === 'kesehatan')
+    const rsud = list.filter((f) => f.subCategory?.toLowerCase().includes('rumah sakit')).length
+    const puskesmas = list.filter((f) => f.subCategory?.toLowerCase().includes('puskesmas')).length
+    return { total: list.length, rsud, puskesmas }
+  }, [facilities])
+
+  const rthCounts = useMemo(() => {
+    const list = facilities.filter((f) => f.category === 'fasum')
+    const hutan = list.filter(
+      (f) => f.subCategory?.toLowerCase().includes('hutan') || f.name.toLowerCase().includes('hutan')
+    ).length
+    const taman = list.length - hutan
+    return { total: list.length, taman, hutan }
+  }, [facilities])
+
+  const {
+    levelFilters,
+    toggleLevel,
+    resetLevels,
+    schoolCounts,
+    activeSchools,
+  } = useSchoolsData(activeWilayah)
+
+  // Gabungkan fasilitas dasar (Faskes, RTH, Air, Transit) terfilter dengan sekolah yang aktif
+  const combinedFacilities = useMemo(() => {
+    const filteredBase = facilities.filter((f) => {
+      if (f.category === 'kesehatan') {
+        if (!faskesFilter.enabled) return false
+        if (faskesFilter.subType === 'RSUD') {
+          return f.subCategory?.toLowerCase().includes('rumah sakit')
+        }
+        if (faskesFilter.subType === 'PUSKESMAS') {
+          return f.subCategory?.toLowerCase().includes('puskesmas')
+        }
+        return true
+      }
+      if (f.category === 'fasum') {
+        if (!rthFilter.enabled) return false
+        const isHutan =
+          f.subCategory?.toLowerCase().includes('hutan') || f.name.toLowerCase().includes('hutan')
+        if (rthFilter.subType === 'HUTAN') return isHutan
+        if (rthFilter.subType === 'TAMAN') return !isHutan
+        return true
+      }
+      return true
+    })
+
+    if (activeSchools.length === 0) return filteredBase
+    return [...filteredBase, ...(activeSchools as unknown as FacilityItem[])]
+  }, [facilities, activeSchools, faskesFilter, rthFilter])
+
+  const { data: realtimeAirQuality, isLive: isAirLive } = useRealtimeAirQuality(activeWilayah)
+
   // Synchronized KPIs directly matching 115 facilities in Layer 2 (Opsi 1)
   const mapKpis = useMemo(() => {
     return buildSynchronizedMapKpis({
       wilayah: activeWilayah,
       t,
+      realtimeAirQuality,
     })
-  }, [activeWilayah, t])
+  }, [activeWilayah, t, realtimeAirQuality])
 
   const currentIndicator = useMemo(() => {
     if (!indicators.lookup) return null
@@ -64,8 +157,9 @@ export function FullScreenMapDashboard() {
       indicator: currentIndicator,
       overview: overview.data,
       overviewStatus: overview.status,
+      realtimeAirQuality,
     })
-  }, [t, language, indicators.status, overview.status, overview.data, currentIndicator, activeWilayah])
+  }, [t, language, indicators.status, overview.status, overview.data, currentIndicator, activeWilayah, realtimeAirQuality])
 
   const handleSelectWilayah = useCallback((wilayah: string, options?: { skipFocus?: boolean }) => {
     setActiveWilayah(wilayah)
@@ -118,7 +212,7 @@ export function FullScreenMapDashboard() {
       <InteractiveMap
         height="100%"
         className="h-full w-full"
-        facilities={facilities}
+        facilities={combinedFacilities}
         selectedFacilityId={selectedFacility?.id}
         onSelectFacility={handleMarkerClick}
         onOpenDetail={handleSelectFacility}
@@ -132,21 +226,25 @@ export function FullScreenMapDashboard() {
         onSelectCorridor={setFocusedCorridorId}
       />
 
-      {/* Floating Breadcrumb Pill saat berada di Layer 2 (Per-Kota) */}
+      {/* Floating Filter Bar: Hanya muncul saat berada di tingkat scope kota (Layer 2) */}
       {activeWilayah !== 'ALL' && (
-        <div className="pointer-events-auto absolute top-3.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2.5 rounded-full border border-border bg-surface/95 px-4 py-1.5 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-top-2 duration-300">
-          <button
-            type="button"
-            onClick={() => handleSelectWilayah('ALL')}
-            className="flex items-center gap-1.5 text-xs font-bold text-primary hover:underline cursor-pointer"
-          >
-            <span className="text-sm leading-none font-extrabold">‹</span>
-            <span>Kembali ke Seluruh DKI Jakarta</span>
-          </button>
-          <span className="text-border">|</span>
-          <span className="text-xs font-semibold text-foreground">
-            {activeWilayah}
-          </span>
+        <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 max-w-[95vw] overflow-x-auto scrollbar-none">
+          <MapFilterBar
+            activeWilayah={activeWilayah}
+            onSelectWilayah={handleSelectWilayah}
+            faskesFilter={faskesFilter}
+            onToggleFaskes={handleToggleFaskes}
+            onChangeFaskesSubType={handleChangeFaskesSubType}
+            faskesCounts={faskesCounts}
+            rthFilter={rthFilter}
+            onToggleRth={handleToggleRth}
+            onChangeRthSubType={handleChangeRthSubType}
+            rthCounts={rthCounts}
+            levelFilters={levelFilters}
+            onToggleLevel={toggleLevel}
+            onResetLevels={resetLevels}
+            schoolCounts={schoolCounts}
+          />
         </div>
       )}
 
@@ -156,6 +254,7 @@ export function FullScreenMapDashboard() {
         <EnvironmentStatusCard
           kpis={mapKpis}
           loading={indicators.status === 'loading' || overview.status === 'loading'}
+          isLive={isAirLive}
         />
 
         {/* Kartu Fasilitas Publik: Grid 2x2 ringkas terintegrasi Auto-Accordion */}
@@ -187,7 +286,12 @@ export function FullScreenMapDashboard() {
         />
       </div>
 
-      {/* 4. Reusable Detail Modal for Facility Details */}
+      {/* 4. Floating Map Legend: Pojok Kanan Bawah Samping Kontrol Zoom */}
+      <div className="pointer-events-none absolute bottom-4 right-16 z-20">
+        <MapLegend />
+      </div>
+
+      {/* 5. Reusable Detail Modal for Facility Details */}
       <FacilityDetailModal
         facility={selectedFacility}
         isOpen={isDetailModalOpen}

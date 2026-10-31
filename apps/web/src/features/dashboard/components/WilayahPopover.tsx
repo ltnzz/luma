@@ -5,6 +5,7 @@ import type { Language } from '../../../i18n/dictionaries'
 import { formatLocaleDate } from '../../../lib/utils'
 import { Button } from '../../../components/ui/Button'
 import { findWilayahMeta } from '../meta'
+import { useRealtimeAirQuality } from '../hooks/useRealtimeAirQuality'
 
 interface WilayahPopoverProps {
   code: string
@@ -39,6 +40,8 @@ function sourceLabel(source: RegionalIndicator['source'], t: TranslateFunction):
  */
 export function WilayahPopover({ code, indicator, generatedAt, language, onReset }: WilayahPopoverProps) {
   const { t } = useTranslation()
+  const { data: realtimeAirQuality } = useRealtimeAirQuality(code)
+  const aqiDisplay = realtimeAirQuality?.aqi != null ? `${realtimeAirQuality.aqi} AQI` : '—'
   const meta = findWilayahMeta(code)
   const regionName = meta?.name ?? indicator?.label ?? code
 
@@ -61,7 +64,7 @@ export function WilayahPopover({ code, indicator, generatedAt, language, onReset
       <h3 className="mt-1 text-lg font-bold">{regionName}</h3>
 
       <div className="mt-3 flex flex-col gap-2 border-t border-border pt-3">
-        <PopoverRow label={t('dashboard.kpi.kualitasUdara')} value={indicator?.aqiVal ?? null} />
+        <PopoverRow label={t('dashboard.kpi.kualitasUdara')} value={aqiDisplay} />
         <PopoverRow label={t('dashboard.kpi.pendidikan')} value={indicator?.sekolahTotal ?? null} />
         <PopoverRow label={t('dashboard.kpi.kesehatan')} value={indicator?.faskesTotal ?? null} />
         <PopoverRow label={t('dashboard.kpi.rth')} value={indicator?.rthPct ?? null} />

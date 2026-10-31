@@ -1,27 +1,26 @@
 import { useTranslation } from '../../../i18n/useTranslation'
+import ThemeToggle from '../../../components/ThemeToggle'
 import { MapIcon, BarChartIcon } from '../../../components/ui/Icons'
 
+export type ViewMode = 'fullscreen-map' | 'dashboard'
+
 interface DashboardHeaderProps {
-  viewMode?: 'fullscreen-map' | 'dashboard'
-  onViewModeChange?: (mode: 'fullscreen-map' | 'dashboard') => void
+  viewMode?: ViewMode
+  onViewModeChange?: (mode: ViewMode) => void
   scopeLabel?: string
 }
 
 /**
  * Unified Modern Navbar (Clean & Bebas Clutter):
- * - Kiri: Brand Luma + Tag Jakarta Spasial
- * - Tengah: Segmented Tab Peta Spasial vs Ringkasan Sektoral
- * - Kanan: Switch Bahasa [ID | EN]
- *   Note: ThemeToggle sengaja TIDAK ada di header — pengaturan tema kini
- *   eksklusif via kontrol peta kanan-bawah (InteractiveMap) agar tidak
- *   ada dua toggle tema yang redundan. ThemeProvider & persistensi tema
- *   tetap utuh (light/dark tetap didukung).
+ * - Kiri: Brand Luma + Tagline Kepanjangan
+ * - Tengah: Segmented Tab Peta Spasial vs Ringkasan Sektoral (Soon)
+ * - Kanan: Switch Bahasa [ID | EN] dan ThemeToggle (Icon-Only)
  */
 export function DashboardHeader({
   viewMode = 'fullscreen-map',
   onViewModeChange,
 }: DashboardHeaderProps) {
-  const { language, setLanguage } = useTranslation()
+  const { language, setLanguage, t } = useTranslation()
 
   return (
     <header className="z-30 flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-4 sm:px-6 shadow-2xs">
@@ -33,46 +32,50 @@ export function DashboardHeader({
         >
           L
         </span>
-        <div className="flex items-center gap-2">
-          <span className="text-base font-bold tracking-tight text-foreground">Luma</span>
-          <span className="hidden sm:inline-flex rounded-full border border-border bg-surface-muted px-2 py-0.5 text-[10px] font-semibold text-muted">
-            DKI Jakarta
+        <div className="flex flex-col justify-center">
+          <span className="text-sm sm:text-base font-bold tracking-tight text-foreground leading-none">
+            {t('app.name')}
+          </span>
+          <span className="text-[10px] font-medium text-muted leading-tight whitespace-nowrap mt-0.5">
+            {t('app.tagline')}
           </span>
         </div>
       </div>
 
-      {/* 2. Tengah: Segmented Switcher Tab (Peta Spasial vs Ringkasan Sektoral) */}
-      {onViewModeChange ? (
-        <nav aria-label="Mode Tampilan" className="flex items-center rounded-xl border border-border bg-surface-muted p-1 shadow-2xs">
-          <button
-            type="button"
-            onClick={() => onViewModeChange('fullscreen-map')}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
-              viewMode === 'fullscreen-map'
-                ? 'bg-surface text-foreground shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-          >
-            <MapIcon size={14} className={viewMode === 'fullscreen-map' ? 'text-primary' : ''} />
-            <span className="hidden sm:inline">Peta Spasial</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => onViewModeChange('dashboard')}
-            className={`flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
-              viewMode === 'dashboard'
-                ? 'bg-surface text-foreground shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-          >
-            <BarChartIcon size={14} className={viewMode === 'dashboard' ? 'text-primary' : ''} />
-            <span className="hidden sm:inline">Ringkasan Sektoral</span>
-          </button>
-        </nav>
-      ) : null}
+      {/* 2. Kanan: Segmented Switcher Tab + Minimalist Utilities (Bahasa [ID | EN] & Theme Icon) */}
+      <div className="flex items-center gap-2 sm:gap-3">
+        {onViewModeChange ? (
+          <nav aria-label="Mode Tampilan" className="flex items-center rounded-xl border border-border bg-surface-muted p-1 shadow-2xs">
+            <button
+              type="button"
+              onClick={() => onViewModeChange('fullscreen-map')}
+              className={`flex items-center gap-1.5 rounded-lg px-2.5 sm:px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'fullscreen-map'
+                  ? 'bg-surface text-foreground shadow-xs'
+                  : 'text-muted hover:text-foreground'
+              }`}
+            >
+              <MapIcon size={14} className={viewMode === 'fullscreen-map' ? 'text-primary' : ''} />
+              <span className="hidden xs:inline">Peta Spasial</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onViewModeChange('dashboard')}
+              className={`flex items-center gap-1.5 rounded-lg px-2.5 sm:px-3 py-1 text-xs font-semibold transition-all cursor-pointer ${
+                viewMode === 'dashboard'
+                  ? 'bg-surface text-foreground shadow-xs'
+                  : 'text-muted hover:text-foreground'
+              }`}
+            >
+              <BarChartIcon size={14} className={viewMode === 'dashboard' ? 'text-primary' : ''} />
+              <span className="hidden xs:inline">Ringkasan Sektoral</span>
+              <span className="text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1 py-0.2 rounded">
+                Soon
+              </span>
+            </button>
+          </nav>
+        ) : null}
 
-      {/* 3. Kanan: Minimalist Utilities (Bahasa [ID | EN]) */}
-      <div className="flex items-center gap-2">
         <div className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold">
           <button
             type="button"
@@ -95,6 +98,8 @@ export function DashboardHeader({
             EN
           </button>
         </div>
+
+        <ThemeToggle />
       </div>
     </header>
   )

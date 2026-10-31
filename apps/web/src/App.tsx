@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { DashboardPage } from './features/dashboard/page'
+import { ComingSoonView } from './features/dashboard/components/ComingSoonView'
 import { FullScreenMapDashboard } from './features/dashboard/components/FullScreenMapDashboard'
-import { DashboardHeader } from './features/dashboard/components/DashboardHeader'
+import { DashboardHeader, type ViewMode } from './features/dashboard/components/DashboardHeader'
 
-export type AppViewMode = 'dashboard' | 'fullscreen-map'
+export type AppViewMode = ViewMode
 
 export default function App() {
   const [viewMode, setViewMode] = useState<AppViewMode>('fullscreen-map')
@@ -19,8 +19,8 @@ export default function App() {
           <FullScreenMapDashboard />
         </main>
       ) : (
-        <main className="flex-1 min-h-0 px-4 py-8 sm:px-8 max-w-6xl mx-auto w-full overflow-y-auto">
-          <DashboardPage />
+        <main className="flex-1 min-h-0 w-full overflow-y-auto">
+          <ComingSoonView onBackToMap={() => setViewMode('fullscreen-map')} />
         </main>
       )}
     </div>

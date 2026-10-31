@@ -115,7 +115,7 @@ export function RegionalIndicatorCard({
   const activeLabel =
     WILAYAH_OPTIONS.find((w) => w.key === activeWilayah)?.label ?? activeWilayah
 
-  const facilityTotal = VERIFIED_MAP_KPIS[activeWilayah]?.total ?? 115
+  const facilityTotal = VERIFIED_MAP_KPIS[activeWilayah]?.total ?? 1620
 
   // Tentukan KPI mana yang aktif berdasarkan mode yang dipilih
   const resolvedKpis =
@@ -203,7 +203,7 @@ export function RegionalIndicatorCard({
               >
                 {WILAYAH_OPTIONS.map((w) => {
                   const isSelected = w.key === activeWilayah
-                  const count = VERIFIED_MAP_KPIS[w.key]?.total ?? 115
+                  const count = VERIFIED_MAP_KPIS[w.key]?.total ?? 1620
                   return (
                     <button
                       key={w.key}
