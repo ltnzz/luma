@@ -97,7 +97,6 @@ export function FullScreenMapDashboard() {
   const {
     levelFilters,
     toggleLevel,
-    resetLevels,
     schoolCounts,
     activeSchools,
   } = useSchoolsData(activeWilayah)
@@ -228,10 +227,9 @@ export function FullScreenMapDashboard() {
 
       {/* Floating Filter Bar: Hanya muncul saat berada di tingkat scope kota (Layer 2) */}
       {activeWilayah !== 'ALL' && (
-        <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 max-w-[95vw] overflow-x-auto scrollbar-none">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 max-w-[90vw] overflow-x-auto scrollbar-none flex-wrap">
           <MapFilterBar
             activeWilayah={activeWilayah}
-            onSelectWilayah={handleSelectWilayah}
             faskesFilter={faskesFilter}
             onToggleFaskes={handleToggleFaskes}
             onChangeFaskesSubType={handleChangeFaskesSubType}
@@ -242,14 +240,13 @@ export function FullScreenMapDashboard() {
             rthCounts={rthCounts}
             levelFilters={levelFilters}
             onToggleLevel={toggleLevel}
-            onResetLevels={resetLevels}
             schoolCounts={schoolCounts}
           />
         </div>
       )}
 
       {/* 2. Left Floating Top Stack: Kapsul Lingkungan Hidup (Udara & Air) + Kartu Fasilitas Publik (2x2) */}
-      <div className="pointer-events-none absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex flex-col gap-2">
+      <div className="pointer-events-none absolute top-4 left-2 sm:left-4 z-20 flex flex-col gap-2 sm:gap-3">
         {/* Kapsul Lingkungan Hidup: Persistent ringkas (~60px) */}
         <EnvironmentStatusCard
           kpis={mapKpis}
@@ -272,7 +269,7 @@ export function FullScreenMapDashboard() {
       </div>
 
       {/* 3. Left Bottom Floating Transit Routes Widget: Terintegrasi Auto-Accordion */}
-      <div className="pointer-events-none absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20">
+      <div className="pointer-events-none absolute bottom-6 left-2 sm:left-4 z-20">
         <TransitRoutesWidget
           showTransit={showTransit}
           onToggleShowTransit={handleToggleShowTransit}
@@ -286,8 +283,11 @@ export function FullScreenMapDashboard() {
         />
       </div>
 
-      {/* 4. Floating Map Legend: Pojok Kanan Bawah Samping Kontrol Zoom */}
-      <div className="pointer-events-none absolute bottom-4 right-16 z-20">
+      {/* 4. Floating Map Navigation Controls: Kanan Bawah (Zoom + Mode Switcher) */}
+      {/* Kontrol peta bawaan diatur di dalam InteractiveMap (bottom-4 right-4). */}
+
+      {/* 5. Floating Map Legend: Pojok kanan bawah, bersebelahan dengan kontrol peta */}
+      <div className="pointer-events-auto absolute bottom-4 right-36 sm:right-40 z-20">
         <MapLegend />
       </div>
 

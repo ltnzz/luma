@@ -14,6 +14,25 @@ import {
   CloseIcon,
 } from '../../../components/ui/Icons'
 
+const CATEGORIES = [
+  { key: 'all', label: 'Semua', Icon: MapPinIcon, accent: 'var(--luma-border-strong)' },
+  { key: 'fasum', label: 'RTH / Taman', Icon: TreeIcon, accent: 'var(--luma-map-rth)' },
+  { key: 'transum', label: 'Transportasi', Icon: BusIcon, accent: 'var(--luma-map-education)' },
+  { key: 'kesehatan', label: 'Kesehatan', Icon: HospitalIcon, accent: 'var(--luma-map-health)' },
+  { key: 'pendidikan', label: 'Pendidikan', Icon: SchoolIcon, accent: 'var(--luma-map-transit)' },
+  { key: 'lingkungan', label: 'Lingkungan', Icon: DropletIcon, accent: 'var(--luma-border-strong)' },
+]
+
+const WILAYAH_OPTIONS = [
+  { key: 'ALL', label: 'Seluruh DKI Jakarta' },
+  { key: 'JAKARTA PUSAT', label: 'Jakarta Pusat' },
+  { key: 'JAKARTA UTARA', label: 'Jakarta Utara' },
+  { key: 'JAKARTA BARAT', label: 'Jakarta Barat' },
+  { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan' },
+  { key: 'JAKARTA TIMUR', label: 'Jakarta Timur' },
+  { key: 'KEP. SERIBU', label: 'Kep. Seribu' },
+]
+
 interface FacilityDirectoryCardProps {
   facilities: FacilityItem[]
   loading: boolean
@@ -28,25 +47,6 @@ interface FacilityDirectoryCardProps {
   isCollapsed: boolean
   onToggleCollapse: () => void
 }
-
-const CATEGORIES = [
-  { key: 'all', label: 'Semua', Icon: MapPinIcon },
-  { key: 'fasum', label: 'RTH / Taman', Icon: TreeIcon },
-  { key: 'transum', label: 'Transportasi', Icon: BusIcon },
-  { key: 'kesehatan', label: 'Kesehatan', Icon: HospitalIcon },
-  { key: 'pendidikan', label: 'Pendidikan', Icon: SchoolIcon },
-  { key: 'lingkungan', label: 'Lingkungan', Icon: DropletIcon },
-]
-
-const WILAYAH_OPTIONS = [
-  { key: 'ALL', label: 'Seluruh DKI Jakarta' },
-  { key: 'JAKARTA PUSAT', label: 'Jakarta Pusat' },
-  { key: 'JAKARTA UTARA', label: 'Jakarta Utara' },
-  { key: 'JAKARTA BARAT', label: 'Jakarta Barat' },
-  { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan' },
-  { key: 'JAKARTA TIMUR', label: 'Jakarta Timur' },
-  { key: 'KEP. SERIBU', label: 'Kep. Seribu' },
-]
 
 export function FacilityDirectoryCard({
   facilities,
@@ -78,28 +78,32 @@ export function FacilityDirectoryCard({
 
   return (
     <aside
-      className={`pointer-events-auto flex flex-col rounded-2xl border border-border bg-surface text-foreground shadow-xl transition-all duration-300 ${isCollapsed
+      className={`pointer-events-auto flex flex-col rounded-xl border border-border bg-surface/90 text-foreground shadow-xl backdrop-blur-md transition-all duration-300 ${isCollapsed
           ? 'h-14 w-80 overflow-hidden'
-          : 'max-h-[calc(100vh-16rem)] w-88 sm:w-96'
+          : 'max-h-[calc(100vh-16rem)] w-full sm:w-88'
         }`}
       onClick={(e) => e.stopPropagation()}
     >
       {/* Header Panel */}
-      <div className="flex items-center justify-between border-b border-border p-3.5">
+      <div className="flex items-center justify-between border-b border-border/80 p-3 sm:p-3.5">
         <div className="flex items-center gap-2">
           <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-soft text-primary-soft-text">
             <MapPinIcon size={14} />
           </span>
           <div>
-            <h3 className="text-xs font-bold text-foreground">Direktori Fasilitas Publik</h3>
-            <p className="text-[10px] text-muted">{filteredFacilities.length} titik ditemukan</p>
+            <h3 className="text-xs sm:text-sm font-bold text-foreground tracking-tight">
+              Direktori Fasilitas Publik
+            </h3>
+            <p className="text-[10px] text-muted">
+              {filteredFacilities.length} titik ditemukan
+            </p>
           </div>
         </div>
 
         <button
           type="button"
           onClick={onToggleCollapse}
-          className="flex h-7 w-7 items-center justify-center rounded-lg border border-border text-xs text-muted hover:bg-surface-muted transition-colors"
+          className="flex h-7 w-7 items-center justify-center rounded-lg border border-border text-xs text-muted hover:bg-surface-muted/60 transition-colors"
           title={isCollapsed ? 'Perluas panel' : 'Kecilkan panel'}
         >
           {isCollapsed ? <ChevronUpIcon size={14} /> : <ChevronDownIcon size={14} />}
@@ -107,13 +111,13 @@ export function FacilityDirectoryCard({
       </div>
 
       {!isCollapsed && (
-        <div className="flex flex-col gap-3 p-3 overflow-hidden flex-1">
+        <div className="flex flex-col gap-3 p-3 sm:p-3.5 overflow-hidden flex-1">
           {/* Filter Wilayah Dropdown & Search */}
           <div className="flex flex-col gap-2">
             <select
               value={activeWilayah}
               onChange={(e) => onSelectWilayah(e.target.value)}
-              className="w-full rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs text-foreground focus:outline-primary"
+              className="w-full rounded-lg border border-border bg-surface px-2.5 py-1.5 text-xs text-foreground focus:outline-primary focus:ring-1 focus:ring-primary"
             >
               {WILAYAH_OPTIONS.map((w) => (
                 <option key={w.key} value={w.key}>
@@ -123,7 +127,7 @@ export function FacilityDirectoryCard({
             </select>
 
             <div className="relative">
-              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted">
                 <SearchIcon size={13} />
               </span>
               <input
@@ -131,13 +135,13 @@ export function FacilityDirectoryCard({
                 placeholder="Cari fasilitas publik / alamat..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="w-full rounded-lg border border-border bg-surface-muted/50 pl-8 pr-7 py-1.5 text-xs text-foreground placeholder:text-muted focus:bg-surface focus:outline-primary"
+                className="w-full rounded-lg border border-border bg-surface-muted/50 pl-9 pr-7 py-1.5 text-xs text-foreground placeholder:text-muted focus:bg-surface focus:outline-primary focus:ring-1 focus:ring-primary"
               />
               {searchQuery ? (
                 <button
                   type="button"
                   onClick={() => onSearchChange('')}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground"
                 >
                   <CloseIcon size={12} />
                 </button>
@@ -155,12 +159,13 @@ export function FacilityDirectoryCard({
                   key={cat.key}
                   type="button"
                   onClick={() => onSelectCategory(cat.key)}
-                  className={`flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${active
-                      ? 'border-primary bg-primary text-on-primary'
+                  className={`flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-[11px] font-medium transition-colors ${
+                    active
+                      ? `border-[${cat.accent}] bg-[${cat.accent}] text-white shadow-xs`
                       : 'border-border bg-surface text-muted hover:bg-surface-muted hover:text-foreground'
-                    }`}
+                  }`}
                 >
-                  <Icon size={12} />
+                  <Icon size={11} />
                   <span>{cat.label}</span>
                 </button>
               )
@@ -172,7 +177,7 @@ export function FacilityDirectoryCard({
             {loading ? (
               <div className="flex flex-col gap-2 py-1">
                 {[1, 2, 3, 4].map((i) => (
-                  <div key={i} className="rounded-xl border border-border/70 bg-surface p-2.5 flex flex-col gap-1.5">
+                  <div key={i} className="rounded-lg border border-border/70 bg-surface p-2.5 flex flex-col gap-1.5">
                     <div className="flex items-center justify-between gap-2">
                       <Skeleton className="h-3.5 w-36 rounded" />
                       <Skeleton className="h-4 w-16 rounded-md" />
@@ -197,24 +202,34 @@ export function FacilityDirectoryCard({
                   <div
                     key={facility.id}
                     onClick={() => onSelectFacility(facility)}
-                    className={`cursor-pointer rounded-xl border p-2.5 text-left transition-all ${isSelected
+                    className={`cursor-pointer rounded-lg border p-2.5 text-left transition-all ${isSelected
                         ? 'border-primary bg-primary-soft/40 shadow-xs'
                         : 'border-border bg-surface hover:border-muted hover:bg-surface-muted/50'
                       }`}
                   >
                     <div className="flex items-start justify-between gap-1.5">
-                      <h4 className="text-xs font-bold text-foreground line-clamp-1">{facility.name}</h4>
-                      <span className="shrink-0 rounded-md bg-surface-muted px-1.5 py-0.5 text-[9px] font-semibold uppercase text-muted">
+                      <h4 className="text-xs sm:text-sm font-bold text-foreground line-clamp-1">
+                        {facility.name}
+                      </h4>
+                      <span
+                        className={`shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-semibold uppercase ${
+                          isSelected ? 'bg-primary text-on-primary' : 'bg-surface-muted text-muted'
+                        }`}
+                      >
                         {facility.subCategory || facility.category}
                       </span>
                     </div>
 
-                    <p className="mt-1 text-[11px] text-muted line-clamp-1">{facility.address ?? facility.wilayah}</p>
+                    <p className="mt-1 text-[11px] text-muted line-clamp-1">
+                      {facility.address ?? facility.wilayah}
+                    </p>
 
                     <div className="mt-2 flex items-center justify-between text-[10px] text-muted pt-1.5 border-t border-border/60">
                       <span>{facility.wilayah}</span>
                       {facility.budget?.total ? (
-                        <span className="font-semibold text-foreground">{facility.budget.total}</span>
+                        <span className="font-semibold text-foreground">
+                          {facility.budget.total}
+                        </span>
                       ) : (
                         <span className="text-primary font-medium">Buka Detail →</span>
                       )}

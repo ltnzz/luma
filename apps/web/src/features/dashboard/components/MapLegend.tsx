@@ -18,12 +18,12 @@ export function MapLegend() {
     <div className="pointer-events-auto flex flex-col items-end">
       {/* Floating Panel Legenda (Expanded) */}
       {isOpen && (
-        <div className="mb-2 w-72 rounded-2xl border border-border bg-surface/95 p-3.5 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="mb-2 w-72 rounded-xl border border-border bg-surface/95 p-3 sm:p-3.5 shadow-2xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-2 duration-200">
           {/* Header Panel */}
-          <div className="flex items-center justify-between border-b border-border/80 pb-2 mb-2.5">
+          <div className="flex items-center justify-between border-b border-border/80 pb-2 mb-3">
             <div className="flex items-center gap-1.5">
               <span className="flex h-2 w-2 rounded-full bg-primary" />
-              <h4 className="text-xs font-bold text-foreground">
+              <h4 className="text-xs sm:text-sm font-bold text-foreground tracking-tight">
                 {t('dashboard.legend.title')}
               </h4>
             </div>
@@ -39,10 +39,13 @@ export function MapLegend() {
           </div>
 
           {/* List of Legend Items */}
-          <div className="flex flex-col gap-2.5">
+          <div className="flex flex-col gap-2.5 sm:gap-3">
             {/* 1. Faskes */}
             <div className="flex items-start gap-2.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-danger text-white shadow-2xs">
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg shadow-xs"
+                style={{ backgroundColor: 'var(--luma-map-health)' }}
+              >
                 <HospitalIcon size={13} className="text-white" />
               </span>
               <div className="flex flex-col min-w-0">
@@ -60,8 +63,11 @@ export function MapLegend() {
 
             {/* 2. RTH */}
             <div className="flex items-start gap-2.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-primary text-on-primary shadow-2xs">
-                <TreeIcon size={13} className="text-on-primary" />
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg shadow-xs"
+                style={{ backgroundColor: 'var(--luma-map-rth)' }}
+              >
+                <TreeIcon size={13} className="text-white" />
               </span>
               <div className="flex flex-col min-w-0">
                 <div className="flex items-center gap-1.5">
@@ -78,7 +84,10 @@ export function MapLegend() {
 
             {/* 3. Pendidikan */}
             <div className="flex items-start gap-2.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-blue-600 text-white shadow-2xs">
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg shadow-xs"
+                style={{ backgroundColor: '#7e22ce' }}
+              >
                 <SchoolIcon size={13} className="text-white" />
               </span>
               <div className="flex flex-col min-w-0">
@@ -86,7 +95,7 @@ export function MapLegend() {
                   <span className="text-xs font-bold text-foreground">
                     {t('dashboard.legend.schools')}
                   </span>
-                  <span className="text-[10px] font-semibold text-blue-600">1.503</span>
+                  <span className="text-[10px] font-semibold text-purple-600">1.503</span>
                 </div>
                 <span className="text-[11px] text-muted leading-tight">
                   {t('dashboard.legend.schoolsSub')}
@@ -96,7 +105,10 @@ export function MapLegend() {
 
             {/* 4. Transportasi */}
             <div className="flex items-start gap-2.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-600 text-white shadow-2xs">
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg shadow-xs"
+                style={{ backgroundColor: '#2563eb' }}
+              >
                 <BusIcon size={13} className="text-white" />
               </span>
               <div className="flex flex-col min-w-0">
@@ -111,7 +123,10 @@ export function MapLegend() {
 
             {/* 5. Lingkungan Hidup */}
             <div className="flex items-start gap-2.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-cyan-600 text-white shadow-2xs">
+              <span
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg shadow-xs"
+                style={{ backgroundColor: '#06b6d4' }}
+              >
                 <DropletIcon size={13} className="text-white" />
               </span>
               <div className="flex flex-col min-w-0">
@@ -126,7 +141,7 @@ export function MapLegend() {
 
             {/* 6. Batas Administrasi Wilayah */}
             <div className="flex items-start gap-2.5">
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border-2 border-primary/80 bg-primary/10">
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-primary/80 bg-primary/5">
                 <span className="h-0.5 w-3.5 rounded-full bg-primary" />
               </span>
               <div className="flex flex-col min-w-0">
@@ -141,7 +156,7 @@ export function MapLegend() {
           </div>
 
           {/* Footer note */}
-          <div className="mt-3 border-t border-border/60 pt-2 text-center">
+          <div className="mt-4 border-t border-border/60 pt-3 text-center">
             <span className="text-[10px] text-muted font-medium">
               Data spasial berbasis koordinat GPS riil terverifikasi
             </span>
@@ -156,7 +171,7 @@ export function MapLegend() {
         className={`flex items-center gap-1.5 rounded-xl border border-border px-3 py-1.5 text-xs font-bold shadow-md backdrop-blur-md transition-all cursor-pointer ${
           isOpen
             ? 'bg-primary text-on-primary border-primary'
-            : 'bg-surface/95 text-foreground hover:bg-surface-muted hover:border-primary/50'
+            : 'bg-surface/90 text-foreground hover:bg-surface-muted hover:border-primary/50'
         }`}
         title="Buka / tutup legenda peta"
         aria-expanded={isOpen}
@@ -168,4 +183,3 @@ export function MapLegend() {
     </div>
   )
 }
-

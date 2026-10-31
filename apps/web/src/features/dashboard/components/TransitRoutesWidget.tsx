@@ -82,7 +82,7 @@ export function TransitRoutesWidget({
   }
 
   return (
-    <div className="pointer-events-auto w-[295px] sm:w-[330px] rounded-2xl border border-border/80 bg-surface/95 p-2.5 sm:p-3 shadow-xl backdrop-blur-md transition-all duration-200 select-none">
+    <div className="pointer-events-auto w-[295px] sm:w-[340px] rounded-xl border border-border/80 bg-surface/90 p-2 sm:p-2.5 shadow-xl backdrop-blur-md transition-all duration-200 select-none">
       {/* Header: Judul + Toggle Ringkas + Tombol Tutup Icon-Only */}
       <div className="flex items-center justify-between gap-2 border-b border-border/80 pb-2">
         <div className="flex items-center gap-2 min-w-0">
@@ -90,7 +90,7 @@ export function TransitRoutesWidget({
             <BusIcon size={12} />
           </span>
           <div>
-            <h3 className="text-xs font-bold text-foreground">Rute Transjakarta</h3>
+            <h3 className="text-xs sm:text-sm font-bold text-foreground tracking-tight">Rute Transjakarta</h3>
             <p className="text-[10px] text-muted">13 Koridor BRT • 234 Halte</p>
           </div>
         </div>
@@ -99,7 +99,7 @@ export function TransitRoutesWidget({
           <button
             type="button"
             onClick={onToggleShowTransit}
-            className="text-[10.5px] font-semibold text-muted hover:text-primary transition-colors cursor-pointer"
+            className="text-[10px] font-semibold text-muted hover:text-primary transition-colors cursor-pointer"
             title={showTransit ? 'Sembunyikan semua rute' : 'Tampilkan rute'}
           >
             {showTransit ? 'Sembunyikan' : 'Tampilkan'}
@@ -108,7 +108,7 @@ export function TransitRoutesWidget({
           <button
             type="button"
             onClick={() => setCollapsed(true)}
-            className="p-1 rounded-md text-muted hover:text-foreground hover:bg-surface-muted transition-colors cursor-pointer"
+            className="p-1 rounded-md text-muted hover:text-foreground hover:bg-surface-muted/60 transition-colors cursor-pointer"
             title="Tutup panel trayek"
             aria-label="Tutup panel trayek"
           >

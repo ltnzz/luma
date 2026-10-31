@@ -54,7 +54,13 @@ export function KpiBoard({ heading, kpis, loading, error, empty, onRetry }: KpiB
       {!loading && !error && kpis ? (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           {kpis.map((kpi) => (
-            <KpiCard key={kpi.key} kpi={kpi} />
+            <KpiCard
+              key={kpi.key}
+              kpi={kpi}
+              variant={kpi.variant}
+              status={kpi.status ?? null}
+              sparkline={kpi.sparkline ?? null}
+            />
           ))}
         </div>
       ) : null}

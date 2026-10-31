@@ -4,6 +4,7 @@ import { formatLocaleDate } from '../../lib/utils'
 import type { IndicatorSource, OverviewData, RegionalIndicator } from '../../lib/api'
 import type { KpiKey, KpiValue, QueryStatus } from './types'
 import type { RealtimeAirQuality } from './hooks/useRealtimeAirQuality'
+import { getAqiCategory } from './hooks/useRealtimeAirQuality'
 
 interface BuildKpiParams {
   t: TranslateFunction
@@ -26,6 +27,12 @@ export type KpiViewModel = {
   footer: KpiValue['footer']
   /** Explicit scope note (e.g. DKI-wide aggregate shown inside a region view). */
   note: string | null
+  /** Card visual variant for differentiated styling. */
+  variant?: 'default' | 'environment' | 'facility'
+  /** Color-coded status badge (used by environment cards). */
+  status?: { label: string; color: string } | null
+  /** Normalized historical values (0-max) for compact sparkline. Only set when real historical data exists. */
+  sparkline?: number[] | null
 }
 
 function indicatorSourceLabel(source: IndicatorSource | null, t: TranslateFunction): string | null {
@@ -112,6 +119,9 @@ export function buildKpis({
   // 1. Kualitas Air — DKI-wide aggregate from overview only.
   const air = overviewStatus === 'success' ? overview?.kpis.air ?? null : null
   const airValue = air ? `${air.totalRecords.toLocaleString(locale)} ${t('dashboard.kpi.airValueLabel')}` : null
+  const airTrend = overview?.charts.airTrend ?? []
+  const airSparkline =
+    airTrend.length > 0 ? airTrend.map((point) => (typeof point.avg_cod === 'number' ? point.avg_cod : 0)) : null
   kpis.push({
     key: 'kualitasAir',
     title: t('dashboard.kpi.kualitasAir'),
@@ -120,10 +130,32 @@ export function buildKpis({
     sub: air ? `${air.totalSungai.toLocaleString(locale)} ${t('dashboard.kpi.airSubLabel')}` : null,
     footer: buildFooter(null, generatedAt),
     note: air && showAirScopeNote ? t('dashboard.kpi.airScopeNote') : null,
+    variant: 'environment',
+    sparkline: airSparkline,
   })
 
   // 2-6. Indicator-sourced cards.
+  const aqi = realtimeAirQuality?.aqi != null ? realtimeAirQuality.aqi : null
+  const aqiCategory = aqi != null ? getAqiCategory(aqi) : null
+  const aqiStatusColor = (category: string) => {
+    const c = category.toLowerCase()
+    if (c.includes('baik')) return 'var(--luma-primary)'
+    if (c.includes('sedang')) return 'var(--luma-map-transit)'
+    if (c.includes('tidak sehat (sensitif)')) return '#f59e0b'
+    if (c.includes('tidak sehat')) return 'var(--luma-danger)'
+    if (c.includes('sangat tidak sehat')) return '#be185d'
+    if (c.includes('berbahaya')) return '#7f1d1d'
+    return 'var(--luma-primary)'
+  }
+
   for (const config of configs) {
+    const isFacility =
+      config.key === 'pendidikan' ||
+      config.key === 'kesehatan' ||
+      config.key === 'rth' ||
+      config.key === 'transportasi'
+    const isAir = config.key === 'kualitasUdara'
+
     if (indicator) {
       const [value, sub] = config.getValue(indicator)
       kpis.push({
@@ -134,9 +166,23 @@ export function buildKpis({
         sub,
         footer: indicatorFooter,
         note: null,
+        variant: isFacility ? 'facility' : isAir ? 'environment' : 'default',
+        status:
+          isAir && aqiCategory != null
+            ? { label: aqiCategory, color: aqiStatusColor(aqiCategory) }
+            : null,
       })
     } else {
-      kpis.push({ key: config.key, title: config.title, hasData: false, value: null, sub: null, footer: null, note: null })
+      kpis.push({
+        key: config.key,
+        title: config.title,
+        hasData: false,
+        value: null,
+        sub: null,
+        footer: null,
+        note: null,
+        variant: isFacility ? 'facility' : isAir ? 'environment' : 'default',
+      })
     }
   }
 

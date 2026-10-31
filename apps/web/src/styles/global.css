@@ -29,6 +29,21 @@
   --radius-lg: var(--luma-radius-lg);
   --radius-xl: var(--luma-radius-xl);
   --radius-2xl: var(--luma-radius-2xl);
+  --radius-3xl: var(--luma-radius-3xl);
+
+  --shadow-xs: var(--luma-shadow-xs);
+  --shadow-sm: var(--luma-shadow-sm);
+  --shadow-md: var(--luma-shadow-md);
+  --shadow-lg: var(--luma-shadow-lg);
+
+  --text-xs: var(--luma-text-xs);
+  --text-sm: var(--luma-text-sm);
+  --text-base: var(--luma-text-base);
+  --text-lg: var(--luma-text-lg);
+  --text-xl: var(--luma-text-xl);
+  --text-2xl: var(--luma-text-2xl);
+  --text-3xl: var(--luma-text-3xl);
+  --text-4xl: var(--luma-text-4xl);
 }
 
 * {

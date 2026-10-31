@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import type { ReactElement } from 'react'
 import { Skeleton } from '../../../components/ui/Skeleton'
 import { VERIFIED_MAP_KPIS, type KpiViewModel } from '../kpiMapping'
 import {
@@ -38,25 +39,31 @@ interface RegionalIndicatorCardProps {
   onToggleCollapse?: (collapsed: boolean) => void
 }
 
-// Icon mapping per sektor fasilitas publik
-function getFacilityIcon(key: string) {
-  switch (key) {
-    case 'pendidikan':
-      return SchoolIcon
-    case 'kesehatan':
-      return HospitalIcon
-    case 'rth':
-      return TreeIcon
-    case 'transportasi':
-    default:
-      return BusIcon
-  }
+// Warna kategori konsisten dengan marker peta (map-marker.ts)
+const CATEGORY_CONFIG: Record<string, { accent: string; icon: () => ReactElement }> = {
+  pendidikan: {
+    accent: 'var(--luma-map-transit)',
+    icon: () => <SchoolIcon size={12} className="shrink-0" />,
+  },
+  kesehatan: {
+    accent: 'var(--luma-map-health)',
+    icon: () => <HospitalIcon size={12} className="shrink-0" />,
+  },
+  rth: {
+    accent: 'var(--luma-map-rth)',
+    icon: () => <TreeIcon size={12} className="shrink-0" />,
+  },
+  transportasi: {
+    accent: 'var(--luma-map-education)',
+    icon: () => <BusIcon size={12} className="shrink-0" />,
+  },
 }
 
 /**
  * RegionalIndicatorCard (Public Facilities Card):
  * - Melayang di sisi kiri atas (tepat di bawah Kapsul Status Lingkungan Hidup).
  * - Menampilkan 4 sektor fasilitas publik utama (Pendidikan, Kesehatan, RTH, Transportasi) dalam grid 2x2.
+ * - Setiap kartu sektor memiliki identitas warna konsisten dengan marker peta.
  * - Desain tombol minimalis (less buttons) dengan tab teks flat dan icon-only close button.
  * - Terintegrasi dengan Auto-Accordion cerdas agar tidak bertabrakan dengan widget transit.
  */
@@ -131,7 +138,7 @@ export function RegionalIndicatorCard({
       <button
         type="button"
         onClick={() => setCollapsed(false)}
-        className="pointer-events-auto flex items-center gap-2 rounded-full border border-border/80 bg-surface/90 px-3 py-1.5 shadow-md backdrop-blur-md hover:border-primary/40 text-foreground transition-all cursor-pointer select-none"
+        className="pointer-events-auto flex items-center gap-2 rounded-full border border-border/80 bg-surface/90 px-3 py-1.5 shadow-md backdrop-blur-md hover:border-primary/50 text-foreground transition-all cursor-pointer select-none w-full sm:w-auto"
         title="Buka kartu fasilitas wilayah"
         aria-label="Buka kartu fasilitas wilayah"
       >
@@ -145,7 +152,7 @@ export function RegionalIndicatorCard({
   }
 
   return (
-    <div className="pointer-events-auto w-[295px] sm:w-[330px] rounded-2xl border border-border/80 bg-surface/95 p-2.5 sm:p-3 shadow-xl backdrop-blur-md transition-all duration-200 select-none">
+    <div className="pointer-events-auto w-full sm:w-[295px] rounded-xl border border-border/80 bg-surface/90 p-2 sm:p-2.5 shadow-xl backdrop-blur-md transition-all duration-200 select-none">
       {/* Header Kartu: Status Dot + Judul + Tombol Tutup Icon-Only */}
       <div className="flex flex-col gap-1.5 border-b border-border/80 pb-2">
         <div className="flex items-center justify-between gap-2">
@@ -162,7 +169,7 @@ export function RegionalIndicatorCard({
               setCollapsed(true)
               setIsDropdownOpen(false)
             }}
-            className="p-1 rounded-md text-muted hover:text-foreground hover:bg-surface-muted transition-colors cursor-pointer"
+            className="p-1 rounded-md text-muted hover:text-foreground hover:bg-surface-muted/60 transition-colors cursor-pointer"
             title="Tutup kartu fasilitas"
             aria-label="Tutup kartu fasilitas"
           >
@@ -176,7 +183,7 @@ export function RegionalIndicatorCard({
             <button
               type="button"
               onClick={() => setIsDropdownOpen((prev) => !prev)}
-              className="flex w-full items-center justify-between rounded-lg border border-border/70 bg-surface-muted/50 px-2.5 py-1.5 text-xs font-bold text-primary hover:border-primary/50 hover:bg-surface-muted transition-colors cursor-pointer"
+              className="flex w-full items-center justify-between rounded-lg border border-border/70 bg-surface-muted/50 px-2.5 py-1.5 text-xs font-bold text-primary hover:border-primary/50 hover:bg-surface-muted/70 transition-colors cursor-pointer"
               aria-haspopup="listbox"
               aria-expanded={isDropdownOpen}
               title="Pilih Wilayah Jakarta"
@@ -199,7 +206,7 @@ export function RegionalIndicatorCard({
             {isDropdownOpen && (
               <div
                 role="listbox"
-                className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto rounded-xl border border-border bg-surface p-1 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150"
+                className="absolute top-full left-0 right-0 z-50 mt-1 max-h-60 overflow-y-auto rounded-xl border border-border bg-surface/95 p-1 shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in-95 duration-150"
               >
                 {WILAYAH_OPTIONS.map((w) => {
                   const isSelected = w.key === activeWilayah
@@ -216,7 +223,7 @@ export function RegionalIndicatorCard({
                       }}
                       className={`flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs transition-colors cursor-pointer ${
                         isSelected
-                          ? 'bg-primary/15 font-bold text-primary'
+                          ? 'bg-primary/15 font-bold text-primary border border-primary/40'
                           : 'text-foreground font-medium hover:bg-surface-muted hover:text-primary'
                       }`}
                     >
@@ -267,50 +274,94 @@ export function RegionalIndicatorCard({
       </div>
 
       {/* Grid 4 Sektor Fasilitas Publik (2 Kolom x 2 Baris) */}
-      <div className="mt-2 grid grid-cols-2 gap-1.5">
+      <div className="mt-2 grid grid-cols-2 gap-1.5 sm:gap-2">
         {loading || !facilityKpis ? (
           Array.from({ length: 4 }).map((_, idx) => (
             <div
               key={idx}
-              className="flex flex-col justify-between rounded-xl border border-border/60 bg-surface-muted/30 p-2 h-[68px]"
+              className="flex flex-col justify-between rounded-lg border border-border/60 bg-surface-muted/40 p-1.5 sm:p-2 h-[64px] sm:h-[80px]"
             >
               <div className="flex items-center justify-between">
                 <Skeleton className="h-2.5 w-16 rounded" />
                 <Skeleton className="h-3 w-3 rounded-full" />
               </div>
-              <Skeleton className="h-4 w-12 rounded mt-1" />
-              <Skeleton className="h-2 w-20 rounded mt-1" />
+              <Skeleton className="h-4 w-12 rounded sm:w-16 mt-1" />
+              <Skeleton className="h-2 w-20 rounded sm:w-24 mt-1" />
             </div>
           ))
         ) : (
           facilityKpis.map((kpi) => {
-            const Icon = getFacilityIcon(kpi.key)
+            const config = CATEGORY_CONFIG[kpi.key]
+            const accentColor = config?.accent
+            const Icon = config?.icon
             return (
-              <div
+              <FacilitySectorCard
                 key={kpi.key}
-                className="flex flex-col justify-between rounded-xl border border-border/70 bg-surface-muted/40 p-2 hover:border-primary/40 hover:bg-surface-muted/70 transition-colors min-h-[68px]"
-              >
-                <div>
-                  <div className="flex items-center justify-between gap-1">
-                    <span className="text-[10.5px] font-medium text-muted truncate">
-                      {kpi.title}
-                    </span>
-                    <Icon size={12} className="text-primary shrink-0" />
-                  </div>
-                  <p className="mt-0.5 text-xs sm:text-[13px] font-black text-foreground tracking-tight line-clamp-1">
-                    {kpi.value ?? '—'}
-                  </p>
-                </div>
-                {kpi.sub && (
-                  <p className="mt-0.5 text-[9.5px] text-muted leading-tight line-clamp-2">
-                    {kpi.sub}
-                  </p>
-                )}
-              </div>
+                title={kpi.title}
+                value={kpi.value ?? '—'}
+                sub={kpi.sub ?? null}
+                icon={Icon ? <Icon /> : null}
+                accentColor={accentColor}
+              />
             )
           })
         )}
       </div>
+    </div>
+  )
+}
+
+function FacilitySectorCard({
+  title,
+  value,
+  sub,
+  icon,
+  accentColor,
+}: {
+  title: string
+  value: string
+  sub: string | null
+  icon: ReactElement | null
+  accentColor: string | undefined
+}) {
+  const hasAccent = Boolean(accentColor)
+
+  return (
+    <div
+      className={`
+        flex flex-col justify-between rounded-lg p-1.5 sm:p-2 hover:bg-surface-muted/70 transition-colors min-h-[64px] sm:min-h-[80px]
+        border border-border/70 bg-surface-muted/50
+      `}
+      style={
+        hasAccent ? { borderColor: accentColor } : {}
+      }
+    >
+      <div>
+        <div className="flex items-center justify-between gap-1">
+          <span className="text-[10px] sm:text-xs font-medium text-muted truncate">
+            {title}
+          </span>
+          {icon && (
+            <span
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg"
+              style={{
+                backgroundColor: hasAccent ? accentColor : undefined,
+                color: hasAccent ? '#ffffff' : undefined,
+              }}
+            >
+              {icon}
+            </span>
+          )}
+        </div>
+        <p className="mt-0.5 text-xs sm:text-[13px] font-black text-foreground tracking-tight line-clamp-1">
+          {value}
+        </p>
+      </div>
+      {sub && (
+        <p className="mt-0.5 text-[9px] text-muted leading-tight line-clamp-2">
+          {sub}
+        </p>
+      )}
     </div>
   )
 }

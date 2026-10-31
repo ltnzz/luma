@@ -21,13 +21,34 @@
   --luma-map-health: #dc2626;
   --luma-map-rth: #16a34a;
   --luma-map-transit: #7e22ce;
+
+  /* Border strength hierarchy. */
+  --luma-border-soft: #e9f0ea;
+  --luma-border-medium: #dce4dd;
+  --luma-border-strong: #c8d6ca;
+
+  /* Card elevation (light theme). */
+  --luma-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --luma-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.08), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+  --luma-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.08), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --luma-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+
+  /* Typography scale (fluid, rem-based). */
+  --luma-text-xs: 0.75rem;
+  --luma-text-sm: 0.875rem;
+  --luma-text-base: 1rem;
+  --luma-text-lg: 1.125rem;
+  --luma-text-xl: 1.25rem;
+  --luma-text-2xl: 1.5rem;
+  --luma-text-3xl: 1.875rem;
+  --luma-text-4xl: 2.25rem;
 }
 
 [data-theme="dark"] {
-  /* Dark theme — near-black with a green tint (per Figma). */
-  --luma-background: #0a0f0c;
-  --luma-surface: #101711;
-  --luma-surface-muted: #1b241e;
+  /* Dark theme — midnight charcoal with emerald accents (Midnight Categorical). */
+  --luma-background: #0a0c0e;
+  --luma-surface: #0f1214;
+  --luma-surface-muted: #161a1c;
   --luma-text: #e8eee9;
   --luma-text-muted: #8ea296;
   --luma-border: #243126;
@@ -37,13 +58,34 @@
   --luma-primary-soft: #143120;
   --luma-primary-soft-text: #86efac;
   --luma-danger: #f87171;
-  --luma-surface-dark: #101711;
+  --luma-surface-dark: #0f1214;
   --luma-on-surface-dark: #e8eee9;
 
   --luma-map-education: #60a5fa;
   --luma-map-health: #f87171;
   --luma-map-rth: #4ade80;
   --luma-map-transit: #c084fc;
+
+  /* Border strength hierarchy (dark). */
+  --luma-border-soft: #1d2621;
+  --luma-border-medium: #243126;
+  --luma-border-strong: #324438;
+
+  /* Card elevation (dark theme — subtle, no heavy shadows). */
+  --luma-shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.3);
+  --luma-shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.35), 0 1px 2px -1px rgb(0 0 0 / 0.25);
+  --luma-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.35), 0 2px 4px -2px rgb(0 0 0 / 0.25);
+  --luma-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.35), 0 4px 6px -4px rgb(0 0 0 / 0.3);
+
+  /* Typography scale (fluid, rem-based). */
+  --luma-text-xs: 0.75rem;
+  --luma-text-sm: 0.875rem;
+  --luma-text-base: 1rem;
+  --luma-text-lg: 1.125rem;
+  --luma-text-xl: 1.25rem;
+  --luma-text-2xl: 1.5rem;
+  --luma-text-3xl: 1.875rem;
+  --luma-text-4xl: 2.25rem;
 }
 
 :root {
@@ -53,4 +95,6 @@
   --luma-radius-xl: 0.75rem;
   /* Panel roundness used by dashboard cards/popups. */
   --luma-radius-2xl: 1rem;
+  /* Command-center panel roundness. */
+  --luma-radius-3xl: 1.5rem;
 }

@@ -1349,11 +1349,11 @@ export function InteractiveMap({
       {/* Floating Control Stack di Kanan Bawah: Zoom (+/-/Reset) dan di bawahnya Mode 3-Icon Switcher */}
       <div className="pointer-events-auto absolute bottom-4 right-4 z-10 flex flex-col items-end gap-2">
         {/* Kontrol Navigasi (Zoom In, Zoom Out, Reset Pandangan) */}
-        <div className="flex flex-col rounded-xl border border-border bg-surface shadow-md overflow-hidden">
+        <div className="flex flex-col rounded-xl border border-border bg-surface/90 backdrop-blur-md shadow-xl overflow-hidden">
           <button
             type="button"
             onClick={() => mapRef.current?.zoomIn()}
-            className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center text-foreground hover:bg-surface-muted/60 transition-colors border-b border-border/60 text-base font-bold cursor-pointer"
             title="Perbesar (Zoom In)"
             aria-label="Perbesar"
           >
@@ -1362,7 +1362,7 @@ export function InteractiveMap({
           <button
             type="button"
             onClick={() => mapRef.current?.zoomOut()}
-            className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center text-foreground hover:bg-surface-muted/60 transition-colors border-b border-border/60 text-base font-bold cursor-pointer"
             title="Perkecil (Zoom Out)"
             aria-label="Perkecil"
           >
@@ -1371,7 +1371,7 @@ export function InteractiveMap({
           <button
             type="button"
             onClick={handleResetView}
-            className="flex h-8 w-8 items-center justify-center text-primary hover:bg-surface-muted transition-colors cursor-pointer"
+            className="flex h-9 w-9 items-center justify-center text-primary hover:bg-surface-muted/60 transition-colors cursor-pointer"
             title="Reset ke pandangan seluruh Jakarta"
             aria-label="Reset Pandangan"
           >
@@ -1380,14 +1380,14 @@ export function InteractiveMap({
         </div>
 
         {/* 3-Icon Mode Switcher (Matahari / Bulan / Satelit) */}
-        <div className="flex items-center rounded-xl border border-border bg-surface p-0.5 shadow-md">
+        <div className="flex items-center rounded-xl border border-border bg-surface/90 backdrop-blur-md p-0.5 shadow-xl">
           <button
             type="button"
             onClick={() => switchMode('light')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
+            className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${
               mapMode === 'light'
                 ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
+                : 'text-muted hover:text-foreground hover:bg-surface-muted/40'
             }`}
             title="Kanvas Terang (Light Gray Canvas)"
             aria-label="Kanvas Terang"
@@ -1397,10 +1397,10 @@ export function InteractiveMap({
           <button
             type="button"
             onClick={() => switchMode('dark')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
+            className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${
               mapMode === 'dark'
                 ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
+                : 'text-muted hover:text-foreground hover:bg-surface-muted/40'
             }`}
             title="Kanvas Gelap (Dark Gray Canvas)"
             aria-label="Kanvas Gelap"
@@ -1410,10 +1410,10 @@ export function InteractiveMap({
           <button
             type="button"
             onClick={() => switchMode('satellite')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
+            className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors cursor-pointer ${
               mapMode === 'satellite'
                 ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
+                : 'text-muted hover:text-foreground hover:bg-surface-muted/40'
             }`}
             title="Citra Satelit (Satellite Imagery)"
             aria-label="Citra Satelit"

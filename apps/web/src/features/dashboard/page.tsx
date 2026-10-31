@@ -15,6 +15,7 @@ import { useFacilities } from './hooks/useFacilities'
 import type { Facility } from '../../lib/api'
 import { FacilityDetailModal } from './components/FacilityDetailModal'
 import { AnalyticsPanel } from './components/AnalyticsPanel'
+import { FacilityDistributionChart } from './components/FacilityDistributionChart'
 
 /**
  * Screen 1 — "Ringkasan kondisi DKI Jakarta" (Figma).
@@ -153,6 +154,21 @@ export function DashboardPage() {
         overviewError={overview.error}
         onOverviewRetry={overview.refetch}
       />
+
+      <Card className="overflow-hidden">
+        <div className="flex flex-wrap items-end justify-between gap-3 border-b border-border p-5">
+          <div>
+            <h2 className="text-sm font-semibold text-foreground">{t('dashboard.legend.title')}</h2>
+            <p className="mt-1 text-xs text-muted">Proporsi fasilitas publik per kategori berdasarkan data terverifikasi.</p>
+          </div>
+          <span className="text-xs font-semibold text-primary">
+            {selectedCode ? findWilayahMeta(selectedCode)?.name ?? selectedCode : t('dashboard.scope.all')}
+          </span>
+        </div>
+        <div className="p-4">
+          <FacilityDistributionChart wilayah={selectedCode ?? 'ALL'} />
+        </div>
+      </Card>
 
       <FacilityDetailModal
         facilityId={selectedFacilityId}
