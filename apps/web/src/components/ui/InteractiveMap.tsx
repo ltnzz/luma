@@ -23,6 +23,8 @@ import { CITY_AGGREGATES } from '../../data/city-aggregates'
 import { TRANSJAKARTA_CORRIDORS } from '../../data/transit-corridors'
 import { buildDeduplicatedStations } from '../../data/transit-stations-deduped'
 import { clusterNearbyItems } from '../../features/dashboard/utils/proximityClustering'
+import { SPKU_STATIONS, getAqiLevel } from '../../features/dashboard/utils/airQualityLevels'
+import { WATER_NETWORK, WATER_FACILITIES } from '../../data/water-network'
 
 // Konfigurasi Worker MapLibre GL untuk lingkungan Vite (mencegah error Worker 404)
 setWorkerUrl(maplibreglWorkerUrl)
@@ -154,6 +156,8 @@ interface InteractiveMapProps {
   onSelectWilayah?: (wilayah: string) => void
   focusedCorridorId?: string | null
   onSelectCorridor?: (corridorId: string | null) => void
+  showWaterNetwork?: boolean
+  activeCategory?: string | null
 }
 
 interface MarkerEntry {
@@ -346,6 +350,96 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
 }
 
 // Helper untuk menambahkan rute dan stasiun trayek transportasi publik (MRT, Transjakarta, LRT)
+function applyWaterLayers(map: MapLibreMap) {
+  try {
+    if (!map.getSource('water-network-source')) {
+      map.addSource('water-network-source', {
+        type: 'geojson',
+        data: WATER_NETWORK as unknown as GeoJSONData,
+      })
+    }
+
+    if (!map.getLayer('water-network-glow')) {
+      map.addLayer({
+        id: 'water-network-glow',
+        type: 'line',
+        source: 'water-network-source',
+        paint: {
+          'line-color': '#38bdf8',
+          'line-width': ['interpolate', ['linear'], ['zoom'], 10, 3.5, 14, 7],
+          'line-opacity': 0.45,
+          'line-blur': 2,
+        },
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
+      })
+    }
+
+    if (!map.getLayer('water-network-line')) {
+      map.addLayer({
+        id: 'water-network-line',
+        type: 'line',
+        source: 'water-network-source',
+        paint: {
+          'line-color': ['get', 'color'],
+          'line-width': ['interpolate', ['linear'], ['zoom'], 10, 2.4, 14, 4.4],
+          'line-opacity': 0.95,
+        },
+        layout: {
+          'line-join': 'round',
+          'line-cap': 'round',
+        },
+      })
+    }
+
+    if (!map.getSource('water-facilities-source')) {
+      map.addSource('water-facilities-source', {
+        type: 'geojson',
+        data: WATER_FACILITIES as unknown as GeoJSONData,
+      })
+    }
+
+    if (!map.getLayer('water-facilities-circle')) {
+      map.addLayer({
+        id: 'water-facilities-circle',
+        type: 'circle',
+        source: 'water-facilities-source',
+        paint: {
+          'circle-radius': ['interpolate', ['linear'], ['zoom'], 10, 4.5, 14, 7],
+          'circle-color': '#0284c7',
+          'circle-stroke-color': '#ffffff',
+          'circle-stroke-width': 2,
+        },
+      })
+    }
+
+    if (!map.getLayer('water-facilities-label')) {
+      map.addLayer({
+        id: 'water-facilities-label',
+        type: 'symbol',
+        source: 'water-facilities-source',
+        minzoom: 11.5,
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': 10,
+          'text-offset': [0, 1.2],
+          'text-anchor': 'top',
+          'text-font': ['Open Sans Semibold'],
+        },
+        paint: {
+          'text-color': '#0369a1',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 1.5,
+        },
+      })
+    }
+  } catch (err) {
+    console.error('[applyWaterLayers error]', err)
+  }
+}
+
 function applyTransitLayers(map: MapLibreMap, initialFacilities: Facility[] = []) {
   try {
     // 1. Source Rute Trayek
@@ -466,7 +560,7 @@ const DEFAULT_PIN_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="n
 
 export function InteractiveMap({
   initialCenter = JAKARTA_CENTER,
-  initialZoom = 11.6,
+  initialZoom = 10.8,
   minZoom,
   maxZoom = 19,
   maxBounds,
@@ -479,17 +573,22 @@ export function InteractiveMap({
   onOpenDetail,
   focusCoords,
   focusZoom,
+  showWaterNetwork = true,
   showTransit = true,
   activeTransitModes = ['mrt', 'transjakarta', 'lrt', 'krl'],
   selectedWilayah = 'ALL',
   onSelectWilayah,
   focusedCorridorId,
   onSelectCorridor,
+  activeCategory = null,
 }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const markersMapRef = useRef<Record<string, MarkerEntry>>({})
   const cityMarkersRef = useRef<Record<string, Marker>>({})
+  const provinsiMarkerRef = useRef<Marker | null>(null)
+  const lastMarkerModeRef = useRef<'provinsi' | 'kota' | null>(null)
+  const lastActiveCategoryRef = useRef<string | null>(null)
   const syncCityMarkersRef = useRef<() => void>(() => {})
   const [mapMode, setMapMode] = useState<MapMode>('light')
   const modeRef = useRef<MapMode>('light')
@@ -553,6 +652,7 @@ export function InteractiveMap({
         map.resize()
         applyJakartaBoundary(map, modeRef.current)
         applyTransitLayers(map, facilitiesRef.current)
+        applyWaterLayers(map)
         syncCityMarkersRef.current()
       }
     }
@@ -561,6 +661,7 @@ export function InteractiveMap({
       if (!isDisposed) {
         applyJakartaBoundary(map, modeRef.current)
         applyTransitLayers(map, facilitiesRef.current)
+        applyWaterLayers(map)
         syncCityMarkersRef.current()
       }
     })
@@ -801,28 +902,214 @@ export function InteractiveMap({
     if (!mapRef.current || !isLoaded) return
     const map = mapRef.current
 
-    // Jika di Layer 2 (ada kota spesifik dipilih), lebur / hapus semua marker kota
+    // Jika di Layer 2 (ada kota spesifik dipilih), lebur / hapus semua marker kota & provinsi
     const isStandaloneMode = Boolean(onFacilitySelect && !onSelectWilayah)
     const isLayer1Active = !isStandaloneMode && (!selectedWilayah || selectedWilayah === 'ALL')
 
     if (!isLayer1Active) {
       Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
       cityMarkersRef.current = {}
+      if (provinsiMarkerRef.current) {
+        provinsiMarkerRef.current.remove()
+        provinsiMarkerRef.current = null
+      }
+      lastMarkerModeRef.current = null
       return
     }
 
-    // Periksa apakah semua marker kota saat ini masih aktif dan terpasang di DOM
+    const currentZoom = map.getZoom()
+    const isProvinceLevel = currentZoom < 10.2
+
+    // -------------------------------------------------------------------------
+    // MODE 1: ZOOM OUT (< 10.2) -> 1 MARKER TUNGGAL AGREGAT PROVINSI DKI JAKARTA
+    // -------------------------------------------------------------------------
+    if (isProvinceLevel) {
+      // Hapus marker per-kota jika sebelumnya aktif
+      if (Object.keys(cityMarkersRef.current).length > 0) {
+        Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
+        cityMarkersRef.current = {}
+      }
+
+      // Hindari re-render jika marker provinsi sudah terpasang dan kategori tidak berubah
+      if (
+        lastMarkerModeRef.current === 'provinsi' &&
+        provinsiMarkerRef.current &&
+        provinsiMarkerRef.current.getElement()?.isConnected &&
+        lastActiveCategoryRef.current === activeCategory
+      ) {
+        return
+      }
+
+      lastMarkerModeRef.current = 'provinsi'
+      lastActiveCategoryRef.current = activeCategory
+
+      if (provinsiMarkerRef.current) {
+        provinsiMarkerRef.current.remove()
+        provinsiMarkerRef.current = null
+      }
+
+      // Hitung metrik dinamis se-DKI sesuai kategori yang aktif di dock bawah
+      let badgeText = '1.740 Fasilitas'
+      let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
+      let cardBorder = 'border-primary/50 group-hover:border-primary'
+      let dotColor = 'bg-primary'
+
+      if (activeCategory === 'kesehatan') {
+        const totalFaskes = facilities.filter((f) => f.category === 'kesehatan').length
+        badgeText = `${totalFaskes > 0 ? totalFaskes : 47} Faskes`
+        badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
+        cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
+        dotColor = 'bg-rose-500'
+      } else if (activeCategory === 'rth') {
+        const totalRth = facilities.filter((f) => f.category === 'fasum').length
+        badgeText = `${totalRth > 0 ? totalRth : 24} RTH`
+        badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
+        cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
+        dotColor = 'bg-emerald-500'
+      } else if (activeCategory === 'sekolah') {
+        badgeText = '1.503 Sekolah'
+        badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
+        cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
+        dotColor = 'bg-blue-500'
+      } else if (activeCategory === 'transum') {
+        badgeText = '13 Koridor BRT'
+        badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
+        cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
+        dotColor = 'bg-purple-500'
+      } else if (activeCategory === 'air') {
+        badgeText = '68% Air Bersih'
+        badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
+        cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
+        dotColor = 'bg-sky-500'
+      }
+
+      const aqiInfo = getAqiLevel(173) // Rata-rata AQI DKI Jakarta
+      const aqiBadge = `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo.color}18; color: ${aqiInfo.color}; border: 1px solid ${aqiInfo.color}40;" title="Kualitas Udara SPKU DKI: 173 AQI (${aqiInfo.category})">
+        <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo.color}"></span>
+        173 AQI
+      </span>`
+
+      const wrapperEl = document.createElement('div')
+      wrapperEl.className = 'group relative flex flex-col items-center cursor-pointer select-none z-10'
+      wrapperEl.style.transformOrigin = 'center bottom'
+
+      const cardEl = document.createElement('div')
+      cardEl.className = `flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+
+      cardEl.innerHTML = `
+        <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full ${dotColor} opacity-60"></span>
+          <span class="relative inline-flex h-1.5 w-1.5 rounded-full ${dotColor}"></span>
+        </div>
+        <div class="flex items-center gap-1.5 whitespace-nowrap">
+          <span class="text-xs font-bold text-foreground tracking-tight">DKI Jakarta</span>
+          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">
+            ${badgeText}
+          </span>
+          ${aqiBadge}
+        </div>
+      `
+      wrapperEl.setAttribute('data-scope', 'DKI')
+
+      const notchEl = document.createElement('div')
+      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b${cardBorder}`
+
+      wrapperEl.appendChild(cardEl)
+      wrapperEl.appendChild(notchEl)
+
+      // Klik 1 Marker DKI -> Auto flyTo halus ke zoom 10.8 di pusat DKI (otomatis terurai jadi 5-6 kota)
+      const handleProvinceClick = (e: MouseEvent) => {
+        e.preventDefault()
+        e.stopPropagation()
+        map.flyTo({ center: [106.8272, -6.185], zoom: 10.8, duration: 800 })
+      }
+
+      wrapperEl.addEventListener('mousedown', (e) => e.stopPropagation())
+      wrapperEl.addEventListener('pointerdown', (e) => e.stopPropagation())
+      wrapperEl.addEventListener('click', handleProvinceClick)
+
+      const marker = new Marker({ element: wrapperEl, anchor: 'bottom' })
+        .setLngLat([106.8272, -6.185])
+        .addTo(map)
+
+      provinsiMarkerRef.current = marker
+      return
+    }
+
+    // -------------------------------------------------------------------------
+    // MODE 2: ZOOM IN (>= 10.2) -> 5-6 MARKER KOTA ADMINISTRATIF TERURAI
+    // -------------------------------------------------------------------------
+    if (provinsiMarkerRef.current) {
+      provinsiMarkerRef.current.remove()
+      provinsiMarkerRef.current = null
+    }
+
+    // Cek apakah semua marker kota masih utuh dan terhubung
     const allMarkersHealthy =
+      lastMarkerModeRef.current === 'kota' &&
       Object.keys(cityMarkersRef.current).length === CITY_AGGREGATES.length &&
       Object.values(cityMarkersRef.current).every((m) => m.getElement()?.isConnected)
 
-    if (allMarkersHealthy) return
+    if (allMarkersHealthy && lastActiveCategoryRef.current === activeCategory) return
+    lastMarkerModeRef.current = 'kota'
+    lastActiveCategoryRef.current = activeCategory
 
-    // Bersihkan instance lama jika ada yang terputus / rusak
+    // Bersihkan instance lama jika kategori berubah atau ada marker rusak
     Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
     cityMarkersRef.current = {}
 
+    const defaultCounts: Record<string, { faskes: number; rth: number; sekolah: number; air: number }> = {
+      'JAKARTA PUSAT': { faskes: 9, rth: 7, sekolah: 205, air: 72 },
+      'JAKARTA SELATAN': { faskes: 12, rth: 7, sekolah: 320, air: 68 },
+      'JAKARTA BARAT': { faskes: 8, rth: 5, sekolah: 385, air: 65 },
+      'JAKARTA UTARA': { faskes: 8, rth: 6, sekolah: 186, air: 70 },
+      'JAKARTA TIMUR': { faskes: 10, rth: 6, sekolah: 395, air: 64 },
+      'KEP. SERIBU': { faskes: 4, rth: 3, sekolah: 12, air: 45 },
+    }
+
     CITY_AGGREGATES.forEach((city) => {
+      const station = SPKU_STATIONS.find((s) => s.code === city.code)
+      const aqiInfo = station ? getAqiLevel(station.aqi) : null
+
+      let badgeText = `${city.counts.facilities} Fasilitas`
+      let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
+      let cardBorder = 'border-primary/50 group-hover:border-primary'
+      let dotColor = 'bg-primary'
+
+      if (activeCategory === 'kesehatan') {
+        const cityFaskes = facilities.filter((f) => f.wilayah === city.code && f.category === 'kesehatan').length
+        const count = cityFaskes > 0 ? cityFaskes : (defaultCounts[city.code]?.faskes ?? 8)
+        badgeText = `${count} Faskes`
+        badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
+        cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
+        dotColor = 'bg-rose-500'
+      } else if (activeCategory === 'rth') {
+        const cityRth = facilities.filter((f) => f.wilayah === city.code && f.category === 'fasum').length
+        const count = cityRth > 0 ? cityRth : (defaultCounts[city.code]?.rth ?? 6)
+        badgeText = `${count} RTH`
+        badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
+        cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
+        dotColor = 'bg-emerald-500'
+      } else if (activeCategory === 'sekolah') {
+        const count = defaultCounts[city.code]?.sekolah ?? 200
+        badgeText = `${count} Sekolah`
+        badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
+        cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
+        dotColor = 'bg-blue-500'
+      } else if (activeCategory === 'transum') {
+        const count = city.corridors.length
+        badgeText = `${count} Koridor BRT`
+        badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
+        cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
+        dotColor = 'bg-purple-500'
+      } else if (activeCategory === 'air') {
+        const pct = defaultCounts[city.code]?.air ?? 68
+        badgeText = `${pct}% Air Bersih`
+        badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
+        cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
+        dotColor = 'bg-sky-500'
+      }
+
       // Wrapper luar khusus untuk positioning MapLibre (TIDAK BOLEH ada CSS transition-transform atau scale)
       const wrapperEl = document.createElement('div')
       wrapperEl.className = 'group relative flex flex-col items-center cursor-pointer select-none z-10'
@@ -830,27 +1117,32 @@ export function InteractiveMap({
 
       // Card dalam tempat styling, hover effect, dan konten
       const cardEl = document.createElement('div')
-      cardEl.className =
-        'flex items-center gap-2 px-2.5 py-1.5 bg-surface/95 backdrop-blur-md border border-primary/50 rounded-xl shadow-lg group-hover:border-primary group-hover:shadow-xl transition-all'
+      cardEl.className = `flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+
+      const aqiBadge = station
+        ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo?.color}18; color: ${aqiInfo?.color}; border: 1px solid ${aqiInfo?.color}40;" title="Kualitas Udara SPKU: ${station.aqi} AQI (${station.category})">
+            <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo?.color}"></span>
+            ${station.aqi} AQI
+          </span>`
+        : ''
 
       cardEl.innerHTML = `
         <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-60"></span>
-          <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary"></span>
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full ${dotColor} opacity-60"></span>
+          <span class="relative inline-flex h-1.5 w-1.5 rounded-full ${dotColor}"></span>
         </div>
         <div class="flex items-center gap-1.5 whitespace-nowrap">
           <span class="text-xs font-bold text-foreground tracking-tight">${city.name}</span>
-          <span class="px-1.5 py-0.5 text-[10px] font-extrabold bg-primary/15 text-primary rounded-md">
-            ${city.counts.facilities} Fasilitas
+          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">
+            ${badgeText}
           </span>
+          ${aqiBadge}
         </div>
       `
-
       wrapperEl.setAttribute('data-city-code', city.code)
 
       const notchEl = document.createElement('div')
-      notchEl.className =
-        'w-2 h-2 -mt-1 rotate-45 bg-surface border-r border-b border-primary/50 group-hover:border-primary'
+      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b${cardBorder}`
 
       wrapperEl.appendChild(cardEl)
       wrapperEl.appendChild(notchEl)
@@ -872,7 +1164,7 @@ export function InteractiveMap({
 
       cityMarkersRef.current[city.code] = marker
     })
-  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah])
+  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities])
 
   useEffect(() => {
     syncCityMarkersRef.current = syncCityMarkers
@@ -881,9 +1173,21 @@ export function InteractiveMap({
   useEffect(() => {
     syncCityMarkers()
 
+    const map = mapRef.current
+    if (map) {
+      map.on('zoomend', syncCityMarkers)
+    }
+
     return () => {
+      if (map) {
+        map.off('zoomend', syncCityMarkers)
+      }
       Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
       cityMarkersRef.current = {}
+      if (provinsiMarkerRef.current) {
+        provinsiMarkerRef.current.remove()
+        provinsiMarkerRef.current = null
+      }
     }
   }, [syncCityMarkers, mapMode])
 
@@ -925,9 +1229,13 @@ export function InteractiveMap({
           wrapperEl.style.width = '36px'
           wrapperEl.style.height = '36px'
 
+          const sampleCategory = group.items[0]?.category || 'fasum'
+          const clusterColor = CATEGORY_COLORS[sampleCategory] || '#16a34a'
+
           const innerEl = document.createElement('div')
           innerEl.className =
-            'flex items-center justify-center rounded-full bg-primary text-white font-extrabold text-xs shadow-lg transition-transform hover:scale-125 border-2 border-surface'
+            'flex items-center justify-center rounded-full text-white font-extrabold text-xs shadow-lg transition-transform hover:scale-125 border-2 border-surface'
+          innerEl.style.backgroundColor = clusterColor
           innerEl.style.width = '30px'
           innerEl.style.height = '30px'
           innerEl.innerText = String(group.count)
@@ -1081,6 +1389,21 @@ export function InteractiveMap({
 
     const isLayer2 = Boolean(selectedWilayah && selectedWilayah !== 'ALL')
     const activeCity = isLayer2 ? CITY_AGGREGATES.find((c) => c.code === selectedWilayah) : null
+
+    // 0. Visibilitas Jalur Pipa Air Bersih PAM JAYA
+    const waterVisibility = showWaterNetwork ? 'visible' : 'none'
+    if (map.getLayer('water-network-glow')) {
+      map.setLayoutProperty('water-network-glow', 'visibility', waterVisibility)
+    }
+    if (map.getLayer('water-network-line')) {
+      map.setLayoutProperty('water-network-line', 'visibility', waterVisibility)
+    }
+    if (map.getLayer('water-facilities-circle')) {
+      map.setLayoutProperty('water-facilities-circle', 'visibility', waterVisibility)
+    }
+    if (map.getLayer('water-facilities-label')) {
+      map.setLayoutProperty('water-facilities-label', 'visibility', waterVisibility)
+    }
 
     // 1. Visibilitas Garis & Glow Rute Trayek
     const routeVisibility = showTransit ? 'visible' : 'none'
@@ -1263,7 +1586,7 @@ export function InteractiveMap({
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-  }, [showTransit, activeTransitModes, selectedWilayah, focusedCorridorId, mapMode, isLoaded])
+  }, [showWaterNetwork, showTransit, activeTransitModes, selectedWilayah, focusedCorridorId, mapMode, isLoaded])
 
   // Update status visual seleksi tanpa merecreate marker di DOM
   useEffect(() => {

@@ -1,28 +1,26 @@
 import { useState, useCallback, useMemo } from 'react'
 import { InteractiveMap } from '../../../components/ui/InteractiveMap'
-import { EnvironmentStatusCard } from './EnvironmentStatusCard'
-import { RegionalIndicatorCard } from './RegionalIndicatorCard'
 import { FacilityDetailModal } from './FacilityDetailModal'
 import { TransitRoutesWidget } from './TransitRoutesWidget'
-import { MapLegend } from './MapLegend'
+import { AirQualityCard } from './AirQualityCard'
+import { StaticMapLegend } from './StaticMapLegend'
+import { KpiMetricsDock, type KpiCategory } from './KpiMetricsDock'
+import { CompactDataSourceCard } from './CompactDataSourceCard'
 import {
-  MapFilterBar,
-  type FaskesFilterState,
-  type RthFilterState,
-  type FaskesTypeFilter,
-  type RthTypeFilter,
-} from './MapFilterBar'
+  ContextualCategoryFilterCard,
+  type FaskesSubFilter,
+  type RthSubFilter,
+  type SchoolSubFilter,
+} from './ContextualCategoryFilterCard'
 import { useFacilities } from '../hooks/useFacilities'
-import { useIndicators } from '../hooks/useIndicators'
-import { useOverview } from '../hooks/useOverview'
 import { useRealtimeAirQuality } from '../hooks/useRealtimeAirQuality'
 import { useSchoolsData } from '../hooks/useSchoolsData'
-import { useTranslation } from '../../../i18n/useTranslation'
-import { buildKpis, buildSynchronizedMapKpis } from '../kpiMapping'
+import { CITY_AGGREGATES } from '../../../data/city-aggregates'
+import { TRANSJAKARTA_CORRIDORS } from '../../../data/transit-corridors'
 import type { FacilityItem } from '../types/facility.types'
 
 const WILAYAH_COORDINATES: Record<string, { center: [number, number]; zoom: number }> = {
-  ALL: { center: [106.8272, -6.185], zoom: 11.6 },
+  ALL: { center: [106.8272, -6.185], zoom: 10.8 },
   'JAKARTA PUSAT': { center: [106.8341, -6.1805], zoom: 13.0 },
   'JAKARTA UTARA': { center: [106.8926, -6.1214], zoom: 12.6 },
   'JAKARTA BARAT': { center: [106.7589, -6.1683], zoom: 12.6 },
@@ -31,51 +29,79 @@ const WILAYAH_COORDINATES: Record<string, { center: [number, number]; zoom: numb
   'KEP. SERIBU': { center: [106.5615, -5.6122], zoom: 11.0 },
 }
 
-export function FullScreenMapDashboard() {
-  const { t, language } = useTranslation()
-  const [activeWilayah, setActiveWilayah] = useState<string>('ALL')
-  const [selectedFacility, setSelectedFacility] = useState<FacilityItem | null>(null)
-  const [isDetailModalOpen, setIsDetailModalOpen] = useState<boolean>(false)
+interface FullScreenMapDashboardProps {
+  activeWilayah?: string
+  onSelectWilayah?: (wilayah: string) => void
+  onNavigateToDataSources?: () => void
+}
+
+/**
+ * FullScreenMapDashboard — Dashboard Peta Interaktif Luma (Arsitektur Filter Dinamis Terpadu)
+ * - Dock Bawah (KpiMetricsDock) bertindak sebagai Pengendali Filter Kategori Utama (Provinsi & Kota)
+ * - Kolom Kiri menampilkan ContextualCategoryFilterCard saat kategori aktif (Faskes, RTH, Sekolah, Transum, Air)
+ * - Map Layer beralih ke mode Solo-Focus saat kategori aktif untuk kejelasan visual
+ */
+export function FullScreenMapDashboard({
+  activeWilayah: propActiveWilayah,
+  onSelectWilayah: propOnSelectWilayah,
+  onNavigateToDataSources,
+}: FullScreenMapDashboardProps = {}) {
+  const [internalWilayah, setInternalWilayah] = useState<string>('ALL')
+  const activeWilayah = propActiveWilayah ?? internalWilayah
+
   const [focusCoords, setFocusCoords] = useState<[number, number] | null>(null)
   const [focusZoom, setFocusZoom] = useState<number | null>(null)
-  const [showTransit, setShowTransit] = useState<boolean>(true)
+
+  const [selectedFacility, setSelectedFacility] = useState<FacilityItem | null>(null)
+  const [isTransitMode, setIsTransitMode] = useState<boolean>(false)
+  const [showWaterNetwork, setShowWaterNetwork] = useState<boolean>(true)
   const [focusedCorridorId, setFocusedCorridorId] = useState<string | null>(null)
-  // Auto-Accordion Controller: 'facilities' | 'transit' | 'none'
-  const [activeExpandedPanel, setActiveExpandedPanel] = useState<'facilities' | 'transit' | 'none'>('facilities')
+  const [isTransitPanelCollapsed, setIsTransitPanelCollapsed] = useState<boolean>(false)
   const activeTransitModes = useMemo(() => ['transjakarta'], [])
 
-  const indicators = useIndicators()
-  const overview = useOverview()
+  // 1. Primary Filter Category State (Dikendalikan oleh KpiMetricsDock di Bawah)
+  const [activeCategoryFilter, setActiveCategoryFilter] = useState<KpiCategory | null>(null)
+
+  // 2. Sub-filter States
+  const [faskesSubFilter, setFaskesSubFilter] = useState<FaskesSubFilter>('all')
+  const [rthSubFilter, setRthSubFilter] = useState<RthSubFilter>('all')
+  const [schoolSubFilter, setSchoolSubFilter] = useState<SchoolSubFilter>('all')
+
+  const handleSelectWilayah = useCallback(
+    (wilayah: string) => {
+      if (propOnSelectWilayah) {
+        propOnSelectWilayah(wilayah)
+      } else {
+        setInternalWilayah(wilayah)
+      }
+
+      // Reset facility selection saat berpindah wilayah
+      setSelectedFacility(null)
+
+      const target = WILAYAH_COORDINATES[wilayah] ?? WILAYAH_COORDINATES.ALL
+      setFocusCoords(target.center)
+      setFocusZoom(target.zoom)
+    },
+    [propOnSelectWilayah]
+  )
+
+  const cityAggregate = useMemo(() => {
+    return CITY_AGGREGATES.find((c) => c.code === activeWilayah) ?? null
+  }, [activeWilayah])
+
+  const scopeLabel = cityAggregate ? cityAggregate.name : 'DKI Jakarta'
+  const corridorCount = cityAggregate ? cityAggregate.corridors.length : 13
+
+  const availableCorridors = useMemo(() => {
+    if (!cityAggregate) return TRANSJAKARTA_CORRIDORS
+    return TRANSJAKARTA_CORRIDORS.filter((c) =>
+      cityAggregate.corridors.includes(c.koridorCode)
+    )
+  }, [cityAggregate])
+
   const { facilities } = useFacilities({
     wilayah: activeWilayah === 'ALL' ? undefined : activeWilayah,
   })
-
-  // Filter state untuk Kesehatan (Faskes) dan RTH
-  const [faskesFilter, setFaskesFilter] = useState<FaskesFilterState>({
-    enabled: true,
-    subType: 'ALL',
-  })
-
-  const [rthFilter, setRthFilter] = useState<RthFilterState>({
-    enabled: true,
-    subType: 'ALL',
-  })
-
-  const handleToggleFaskes = useCallback(() => {
-    setFaskesFilter((prev) => ({ ...prev, enabled: !prev.enabled }))
-  }, [])
-
-  const handleChangeFaskesSubType = useCallback((subType: FaskesTypeFilter) => {
-    setFaskesFilter((prev) => ({ ...prev, subType }))
-  }, [])
-
-  const handleToggleRth = useCallback(() => {
-    setRthFilter((prev) => ({ ...prev, enabled: !prev.enabled }))
-  }, [])
-
-  const handleChangeRthSubType = useCallback((subType: RthTypeFilter) => {
-    setRthFilter((prev) => ({ ...prev, subType }))
-  }, [])
 
   // Hitung jumlah faskes & RTH di wilayah aktif
   const faskesCounts = useMemo(() => {
@@ -94,131 +120,107 @@ export function FullScreenMapDashboard() {
     return { total: list.length, taman, hutan }
   }, [facilities])
 
-  const {
-    levelFilters,
-    toggleLevel,
-    resetLevels,
-    schoolCounts,
-    activeSchools,
-  } = useSchoolsData(activeWilayah)
+  const { schoolCounts, schoolsInWilayah } = useSchoolsData(activeWilayah)
 
-  // Gabungkan fasilitas dasar (Faskes, RTH, Air, Transit) terfilter dengan sekolah yang aktif
+  // Filter Fasilitas Dinamis Berdasarkan activeCategoryFilter & Sub-filter
   const combinedFacilities = useMemo(() => {
-    const filteredBase = facilities.filter((f) => {
-      if (f.category === 'kesehatan') {
-        if (!faskesFilter.enabled) return false
-        if (faskesFilter.subType === 'RSUD') {
+    // 1. Kategori TRANSUM atau AIR: Tidak menggunakan pin titik fasilitas individual
+    if (activeCategoryFilter === 'transum' || activeCategoryFilter === 'air') {
+      return []
+    }
+
+    // 2. Kategori SEKOLAH: HANYA tampilkan sekolah dari database resmi sesuai jenjang
+    if (activeCategoryFilter === 'sekolah') {
+      return schoolsInWilayah.filter((s) => {
+        if (schoolSubFilter === 'all') return true
+        return s.level?.toLowerCase() === schoolSubFilter.toLowerCase()
+      }) as unknown as FacilityItem[]
+    }
+
+    // 3. Kategori KESEHATAN (Faskes): HANYA tampilkan fasilitas kesehatan
+    if (activeCategoryFilter === 'kesehatan') {
+      return facilities.filter((f) => {
+        if (f.category !== 'kesehatan') return false
+        if (faskesSubFilter === 'rsud') {
           return f.subCategory?.toLowerCase().includes('rumah sakit')
         }
-        if (faskesFilter.subType === 'PUSKESMAS') {
+        if (faskesSubFilter === 'puskesmas') {
           return f.subCategory?.toLowerCase().includes('puskesmas')
         }
         return true
-      }
-      if (f.category === 'fasum') {
-        if (!rthFilter.enabled) return false
+      })
+    }
+
+    // 4. Kategori RTH (Ruang Hijau): HANYA tampilkan fasilitas fasum/RTH
+    if (activeCategoryFilter === 'rth') {
+      return facilities.filter((f) => {
+        if (f.category !== 'fasum') return false
         const isHutan =
           f.subCategory?.toLowerCase().includes('hutan') || f.name.toLowerCase().includes('hutan')
-        if (rthFilter.subType === 'HUTAN') return isHutan
-        if (rthFilter.subType === 'TAMAN') return !isHutan
+        if (rthSubFilter === 'hutan') return isHutan
+        if (rthSubFilter === 'taman') return !isHutan
         return true
-      }
-      return true
-    })
+      })
+    }
 
-    if (activeSchools.length === 0) return filteredBase
-    return [...filteredBase, ...(activeSchools as unknown as FacilityItem[])]
-  }, [facilities, activeSchools, faskesFilter, rthFilter])
+    // 5. Default (Semua Kategori): Tampilkan fasilitas dasar non-sekolah + seluruh sekolah
+    const baseWithoutMockEdu = facilities.filter((f) => f.category !== 'pendidikan')
+    return [...baseWithoutMockEdu, ...(schoolsInWilayah as unknown as FacilityItem[])]
+  }, [facilities, schoolsInWilayah, activeCategoryFilter, faskesSubFilter, rthSubFilter, schoolSubFilter])
 
   const { data: realtimeAirQuality, isLive: isAirLive } = useRealtimeAirQuality(activeWilayah)
 
-  // Synchronized KPIs directly matching 115 facilities in Layer 2 (Opsi 1)
-  const mapKpis = useMemo(() => {
-    return buildSynchronizedMapKpis({
-      wilayah: activeWilayah,
-      t,
-      realtimeAirQuality,
-    })
-  }, [activeWilayah, t, realtimeAirQuality])
+  // Saat marker fasilitas diklik: buka tooltip pratinjau
+  const handleMarkerClick = useCallback(
+    (facility: FacilityItem) => {
+      setSelectedFacility(facility)
+      setFocusCoords([facility.lng, facility.lat])
+    },
+    []
+  )
 
-  const currentIndicator = useMemo(() => {
-    if (!indicators.lookup) return null
-    return indicators.lookup[activeWilayah] ?? indicators.lookup['ALL'] ?? null
-  }, [indicators.lookup, activeWilayah])
-
-  // Macro census statistics from BPS / Open Data DKI
-  const macroKpis = useMemo(() => {
-    if (indicators.status !== 'success' || overview.status !== 'success') return null
-    const selectedCode = activeWilayah === 'ALL' ? null : activeWilayah
-    return buildKpis({
-      t,
-      language,
-      selectedCode,
-      indicator: currentIndicator,
-      overview: overview.data,
-      overviewStatus: overview.status,
-      realtimeAirQuality,
-    })
-  }, [t, language, indicators.status, overview.status, overview.data, currentIndicator, activeWilayah, realtimeAirQuality])
-
-  const handleSelectWilayah = useCallback((wilayah: string, options?: { skipFocus?: boolean }) => {
-    setActiveWilayah(wilayah)
-    if (wilayah === 'ALL') {
-      setSelectedFacility(null)
-      setFocusedCorridorId(null)
-    }
-    if (options?.skipFocus) {
-      // Dari tombol Reset peta: reset bersih — focusCoords/focusZoom dinolkan
-      // agar external focus effect tidak menimpa fitBounds batas DKI.
-      setFocusCoords(null)
-      setFocusZoom(null)
-      return
-    }
-    const target = WILAYAH_COORDINATES[wilayah] ?? WILAYAH_COORDINATES['ALL']
-    setFocusCoords(target.center)
-    setFocusZoom(target.zoom)
-  }, [])
-
-  const handleSelectFacility = useCallback((facility: FacilityItem) => {
-    setSelectedFacility(facility)
-    setFocusCoords([facility.lng, facility.lat])
-    setFocusZoom(15)
-    setIsDetailModalOpen(true)
-  }, [])
-
-  const handleMarkerClick = useCallback((facility: FacilityItem) => {
-    setSelectedFacility(facility)
-  }, [])
 
   const handleToggleShowTransit = useCallback(() => {
-    setShowTransit((prev) => !prev)
+    setActiveCategoryFilter((prev) => (prev === 'transum' ? null : 'transum'))
   }, [])
 
-  const handleFocusRoute = useCallback((center: [number, number], zoom: number, corridorId?: string) => {
-    setFocusCoords(center)
-    setFocusZoom(zoom)
-    if (corridorId) {
-      setFocusedCorridorId(corridorId)
-    }
-  }, [])
+  const handleFocusRoute = useCallback(
+    (center: [number, number], zoom: number, corridorId?: string) => {
+      setFocusCoords(center)
+      setFocusZoom(zoom)
+      if (corridorId) {
+        setFocusedCorridorId(corridorId)
+      }
+    },
+    []
+  )
 
   const handleResetFocusCorridor = useCallback(() => {
     setFocusedCorridorId(null)
   }, [])
 
+  // Aksi toggle interaktif dari KpiMetricsDock di Bawah
+  const handleDockCategoryClick = useCallback((category: KpiCategory) => {
+    setActiveCategoryFilter((prev) => (prev === category ? null : category))
+  }, [])
+
+  // Visibilitas Layer Berdasarkan Filter Solo
+  const isTransitVisible = activeCategoryFilter === null || activeCategoryFilter === 'transum'
+  const isWaterVisible = showWaterNetwork && (activeCategoryFilter === null || activeCategoryFilter === 'air')
+
   return (
-    <div className="relative h-full w-full overflow-hidden bg-surface-muted">
-      {/* 1. Base Layer: Full-Screen Interactive Map Canvas (Clean Esri Canvas) */}
+    <div className="relative h-full w-full overflow-hidden bg-surface-muted select-none">
+      {/* 1. Base Layer: Full-Screen Interactive Map Canvas */}
       <InteractiveMap
         height="100%"
         className="h-full w-full"
         facilities={combinedFacilities}
         selectedFacilityId={selectedFacility?.id}
         onSelectFacility={handleMarkerClick}
-        onOpenDetail={handleSelectFacility}
         focusCoords={focusCoords}
         focusZoom={focusZoom}
-        showTransit={showTransit}
+        showWaterNetwork={isWaterVisible}
+        showTransit={isTransitVisible}
         activeTransitModes={activeTransitModes}
         selectedWilayah={activeWilayah}
         onSelectWilayah={handleSelectWilayah}
@@ -226,77 +228,96 @@ export function FullScreenMapDashboard() {
         onSelectCorridor={setFocusedCorridorId}
       />
 
-      {/* Floating Filter Bar: Hanya muncul saat berada di tingkat scope kota (Layer 2) */}
-      {activeWilayah !== 'ALL' && (
-        <div className="absolute top-3.5 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 max-w-[95vw] overflow-x-auto scrollbar-none">
-          <MapFilterBar
-            activeWilayah={activeWilayah}
-            onSelectWilayah={handleSelectWilayah}
-            faskesFilter={faskesFilter}
-            onToggleFaskes={handleToggleFaskes}
-            onChangeFaskesSubType={handleChangeFaskesSubType}
-            faskesCounts={faskesCounts}
-            rthFilter={rthFilter}
-            onToggleRth={handleToggleRth}
-            onChangeRthSubType={handleChangeRthSubType}
-            rthCounts={rthCounts}
-            levelFilters={levelFilters}
-            onToggleLevel={toggleLevel}
-            onResetLevels={resetLevels}
-            schoolCounts={schoolCounts}
+
+      {/* 3. Panel Kolom Kiri: Sumber Data Resmi, Kualitas Udara, dan Contextual Filter / Legenda */}
+      {!isTransitMode && (
+        <aside className="pointer-events-none absolute top-3.5 left-3 sm:top-4 sm:left-4 z-30 flex flex-col gap-2 max-h-[calc(100vh-5.5rem)] overflow-y-auto scrollbar-none pb-2">
+          <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
+          <AirQualityCard
+            airAqi={realtimeAirQuality?.aqi ?? 173}
+            airStatus={realtimeAirQuality?.category ?? 'Tidak Sehat'}
+            isAirLive={isAirLive}
+          />
+
+          {/* Contextual Filter Card: Muncul saat salah satu card dock bawah aktif */}
+          {activeCategoryFilter ? (
+            <ContextualCategoryFilterCard
+              category={activeCategoryFilter}
+              scopeLabel={scopeLabel}
+              corridors={availableCorridors}
+              faskesFilter={faskesSubFilter}
+              onFaskesFilterChange={setFaskesSubFilter}
+              rthFilter={rthSubFilter}
+              onRthFilterChange={setRthSubFilter}
+              schoolFilter={schoolSubFilter}
+              onSchoolFilterChange={setSchoolSubFilter}
+              selectedCorridorId={focusedCorridorId}
+              onSelectCorridor={(corridor) => {
+                if (corridor) {
+                  handleFocusRoute(corridor.center, corridor.zoom, corridor.id)
+                } else {
+                  handleResetFocusCorridor()
+                }
+              }}
+              isWaterNetworkVisible={showWaterNetwork}
+              onToggleWaterNetwork={() => setShowWaterNetwork((prev) => !prev)}
+              faskesCounts={faskesCounts}
+              rthCounts={rthCounts}
+              schoolCounts={schoolCounts}
+              onClose={() => setActiveCategoryFilter(null)}
+            />
+          ) : (
+            <StaticMapLegend />
+          )}
+        </aside>
+      )}
+
+      {/* 4. Bottom Center — Horizontal KPI Metrics Overview Dock & Filter Controller (Selalu Tampil) */}
+      {!isTransitMode && (
+        <div className="pointer-events-none absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 animate-in fade-in slide-in-from-bottom-3 duration-300 max-w-[calc(100vw-1.5rem)]">
+          <KpiMetricsDock
+            waterCoverage={68}
+            waterCoverageLabel="Akses"
+            isWaterActive={showWaterNetwork}
+            faskesCount={faskesCounts.total}
+            rthCount={rthCounts.total}
+            schoolCount={schoolCounts.total > 0 ? schoolCounts.total : 1503}
+            transitCorridorCount={corridorCount}
+            activeCategory={activeCategoryFilter}
+            onFilterCategory={handleDockCategoryClick}
           />
         </div>
       )}
 
-      {/* 2. Left Floating Top Stack: Kapsul Lingkungan Hidup (Udara & Air) + Kartu Fasilitas Publik (2x2) */}
-      <div className="pointer-events-none absolute top-3 left-3 sm:top-4 sm:left-4 z-20 flex flex-col gap-2">
-        {/* Kapsul Lingkungan Hidup: Persistent ringkas (~60px) */}
-        <EnvironmentStatusCard
-          kpis={mapKpis}
-          loading={indicators.status === 'loading' || overview.status === 'loading'}
-          isLive={isAirLive}
+      {/* Mode Transum Khusus (jika dibuka dari panel rute) */}
+      {isTransitMode && (
+        <div className="pointer-events-none absolute top-16 left-3 sm:top-16 sm:left-4 z-20 animate-in fade-in slide-in-from-left-4 duration-300">
+          <TransitRoutesWidget
+            showTransit={isTransitVisible}
+            onToggleShowTransit={handleToggleShowTransit}
+            onFocusRoute={handleFocusRoute}
+            focusedCorridorId={focusedCorridorId}
+            onResetFocus={handleResetFocusCorridor}
+            isCollapsed={isTransitPanelCollapsed}
+            onToggleCollapse={(collapsed) => {
+              setIsTransitPanelCollapsed(collapsed)
+              if (collapsed) {
+                setIsTransitMode(false)
+              }
+            }}
+          />
+        </div>
+      )}
+
+      {/* Modal Detail Fasilitas Glass (Muncul langsung di Kanan saat marker diklik) */}
+      {selectedFacility && !isTransitMode && (
+        <FacilityDetailModal
+          facility={selectedFacility}
+          isOpen={Boolean(selectedFacility)}
+          onClose={() => setSelectedFacility(null)}
+          variant="side-glass"
         />
-
-        {/* Kartu Fasilitas Publik: Grid 2x2 ringkas terintegrasi Auto-Accordion */}
-        <RegionalIndicatorCard
-          mapKpis={mapKpis}
-          macroKpis={macroKpis}
-          activeWilayah={activeWilayah}
-          onSelectWilayah={handleSelectWilayah}
-          loading={indicators.status === 'loading' || overview.status === 'loading'}
-          isCollapsed={activeExpandedPanel !== 'facilities'}
-          onToggleCollapse={(collapsed) => {
-            setActiveExpandedPanel(collapsed ? 'none' : 'facilities')
-          }}
-        />
-      </div>
-
-      {/* 3. Left Bottom Floating Transit Routes Widget: Terintegrasi Auto-Accordion */}
-      <div className="pointer-events-none absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-20">
-        <TransitRoutesWidget
-          showTransit={showTransit}
-          onToggleShowTransit={handleToggleShowTransit}
-          onFocusRoute={handleFocusRoute}
-          focusedCorridorId={focusedCorridorId}
-          onResetFocus={handleResetFocusCorridor}
-          isCollapsed={activeExpandedPanel !== 'transit'}
-          onToggleCollapse={(collapsed) => {
-            setActiveExpandedPanel(collapsed ? 'none' : 'transit')
-          }}
-        />
-      </div>
-
-      {/* 4. Floating Map Legend: Pojok Kanan Bawah Samping Kontrol Zoom */}
-      <div className="pointer-events-none absolute bottom-4 right-16 z-20">
-        <MapLegend />
-      </div>
-
-      {/* 5. Reusable Detail Modal for Facility Details */}
-      <FacilityDetailModal
-        facility={selectedFacility}
-        isOpen={isDetailModalOpen}
-        onClose={() => setIsDetailModalOpen(false)}
-      />
+      )}
     </div>
   )
 }

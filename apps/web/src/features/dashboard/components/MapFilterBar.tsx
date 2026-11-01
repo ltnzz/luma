@@ -5,6 +5,7 @@ import {
   HospitalIcon,
   TreeIcon,
   SchoolIcon,
+  BusIcon,
 } from '../../../components/ui/Icons'
 
 const WILAYAH_ITEMS = [
@@ -48,6 +49,10 @@ interface MapFilterBarProps {
   onToggleLevel: (level: keyof SchoolLevelsFilter) => void
   onResetLevels: () => void
   schoolCounts: { sma: number; smp: number; sd: number; total: number }
+  // Transum & Reset
+  showTransit: boolean
+  onToggleTransit: () => void
+  onResetAll: () => void
 }
 
 export function MapFilterBar({
@@ -64,6 +69,9 @@ export function MapFilterBar({
   levelFilters,
   onToggleLevel,
   schoolCounts,
+  showTransit,
+  onToggleTransit,
+  onResetAll,
 }: MapFilterBarProps) {
   const [isWilayahOpen, setIsWilayahOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -81,7 +89,7 @@ export function MapFilterBar({
   }, [isWilayahOpen])
 
   return (
-    <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-border bg-surface/95 px-3 py-1.5 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-top-2 duration-300 flex-nowrap whitespace-nowrap">
+    <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-border bg-surface/95 px-3 py-1.5 shadow-xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-top-2 duration-300 flex-nowrap whitespace-nowrap select-none">
       {/* 1. Tombol Kembali ke Seluruh DKI */}
       <button
         type="button"
@@ -272,7 +280,7 @@ export function MapFilterBar({
 
       <span className="h-3.5 w-px bg-border shrink-0" />
 
-      {/* 5. Filter Jenjang Sekolah di Wilayah Ini (Default: False) */}
+      {/* 5. Filter Jenjang Sekolah di Wilayah Ini */}
       <div className="flex items-center gap-1 shrink-0">
         <div className="flex items-center gap-1 text-[11px] font-bold text-muted px-1">
           <SchoolIcon size={12} className="text-primary" />
@@ -339,6 +347,38 @@ export function MapFilterBar({
           </span>
         </button>
       </div>
+
+      <span className="h-3.5 w-px bg-border shrink-0" />
+
+      {/* 6. Filter Transportasi Publik (Transum) */}
+      <div className="flex items-center gap-1 shrink-0">
+        <button
+          type="button"
+          onClick={onToggleTransit}
+          className={`flex items-center gap-1.5 rounded-lg px-2 py-0.5 text-[11px] font-bold transition-all cursor-pointer ${
+            showTransit
+              ? 'bg-amber-600 text-white shadow-2xs'
+              : 'border border-border bg-surface-muted/60 text-muted hover:text-foreground hover:bg-surface-muted'
+          }`}
+          title="Nyalakan/matikan jaringan rute & halte transportasi publik"
+        >
+          <BusIcon size={12} className={showTransit ? 'text-white' : 'text-amber-600'} />
+          <span>Transum</span>
+        </button>
+      </div>
+
+      <span className="h-3.5 w-px bg-border shrink-0" />
+
+      {/* 7. Master Reset Chip (Desain Node PXxX4) */}
+      <button
+        type="button"
+        onClick={onResetAll}
+        className="flex items-center gap-1 rounded-lg border border-border/80 bg-surface-muted/70 px-2 py-0.5 text-[11px] font-bold text-muted hover:text-foreground hover:bg-surface-muted transition-all cursor-pointer shrink-0"
+        title="Reset semua filter ke kondisi awal"
+      >
+        <span className="text-[10px] leading-none">↺</span>
+        <span>Reset</span>
+      </button>
     </div>
   )
 }
