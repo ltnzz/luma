@@ -52,6 +52,13 @@ export function useSchoolsData(activeWilayah = 'ALL') {
     return { sma, smp, sd, total: inWilayah.length }
   }, [activeWilayah])
 
+  // Seluruh sekolah di wilayah aktif (lengkap untuk disaring oleh subfilter jenjang)
+  const schoolsInWilayah = useMemo(() => {
+    return activeWilayah === 'ALL'
+      ? ALL_SCHOOLS
+      : ALL_SCHOOLS.filter((s) => s.wilayah === activeWilayah)
+  }, [activeWilayah])
+
   // Sekolah yang aktif berdasarkan toggle filter & wilayah
   const activeSchools = useMemo(() => {
     const isAnyActive = levelFilters.sma || levelFilters.smp || levelFilters.sd
@@ -76,6 +83,7 @@ export function useSchoolsData(activeWilayah = 'ALL') {
     resetLevels,
     schoolCounts,
     activeSchools,
+    schoolsInWilayah,
     hasActiveSchools: levelFilters.sma || levelFilters.smp || levelFilters.sd,
   }
 }

@@ -1,112 +1,186 @@
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from '../../../i18n/useTranslation'
 import ThemeToggle from '../../../components/ThemeToggle'
-import { MapIcon, BarChartIcon } from '../../../components/ui/Icons'
+import { MapPinIcon, ChevronDownIcon } from '../../../components/ui/Icons'
 
-export type ViewMode = 'fullscreen-map' | 'dashboard'
+const WILAYAH_ITEMS = [
+  { key: 'ALL', label: 'Seluruh DKI Jakarta' },
+  { key: 'JAKARTA PUSAT', label: 'Jakarta Pusat' },
+  { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan' },
+  { key: 'JAKARTA BARAT', label: 'Jakarta Barat' },
+  { key: 'JAKARTA UTARA', label: 'Jakarta Utara' },
+  { key: 'JAKARTA TIMUR', label: 'Jakarta Timur' },
+  { key: 'KEP. SERIBU', label: 'Kep. Seribu' },
+] as const
 
 interface DashboardHeaderProps {
-  viewMode?: ViewMode
-  onViewModeChange?: (mode: ViewMode) => void
-  scopeLabel?: string
+  activeWilayah?: string
+  onSelectWilayah?: (wilayah: string) => void
 }
 
 /**
- * Unified Command-Center Navbar:
- * - Kiri: Brand Luma + Tagline + status chip
- * - Tengah: Segmented Tab Peta Spasial vs Ringkasan Sektoral (Soon)
- * - Kanan: Switch Bahasa [ID | EN] dan ThemeToggle (Icon-Only)
+ * Unified Modern Navbar (Persis Sesuai Mockup Pen Node 2U1UA):
+ * - Kiri: Brand Luma + Region Selector Dropdown (Pill)
+ * - Kanan: Live Date & Time Realtime + Switch Bahasa [ID | EN] + Theme Toggle
  */
 export function DashboardHeader({
-  viewMode = 'fullscreen-map',
-  onViewModeChange,
+  activeWilayah = 'ALL',
+  onSelectWilayah,
 }: DashboardHeaderProps) {
   const { language, setLanguage, t } = useTranslation()
+  const [isRegionOpen, setIsRegionOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+
+  // Realtime live clock & date (Desain Node 2U1UA)
+  const [currentTime, setCurrentTime] = useState<Date>(() => new Date())
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date())
+    }, 1000)
+    return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setIsRegionOpen(false)
+      }
+    }
+    if (isRegionOpen) {
+      document.addEventListener('mousedown', handleClickOutside)
+    }
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [isRegionOpen])
+
+  const timeString = useMemo(() => {
+    return (
+      currentTime.toLocaleTimeString('id-ID', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      }) + ' WIB'
+    )
+  }, [currentTime])
+
+  const dateString = useMemo(() => {
+    return currentTime.toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  }, [currentTime, language])
+
+  const currentWilayahLabel = useMemo(() => {
+    const found = WILAYAH_ITEMS.find((item) => item.key === activeWilayah)
+    return found ? found.label : activeWilayah
+  }, [activeWilayah])
 
   return (
-    <header
-      className="z-40 shrink-0 border-b border-border bg-surface/80 backdrop-blur-md bg-background px-4 sm:px-6"
-      style={{ height: '4.5rem' }}
-    >
-      <div className="flex h-full items-center justify-between gap-4">
-        {/* 1. Kiri: Brand Logo & Title */}
-        <div className="flex items-center gap-3">
-          <span
-            aria-hidden="true"
-            className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary text-sm font-black text-on-primary shadow-sm select-none"
-          >
-            L
+    <header className="z-30 flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-4 sm:px-6 shadow-2xs select-none">
+      {/* 1. Kiri: Brand Logo & Title */}
+      <div className="flex items-center gap-2.5">
+        <span
+          aria-hidden="true"
+          className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-sm font-black text-on-primary shadow-xs select-none"
+        >
+          L
+        </span>
+        <div className="flex flex-col justify-center">
+          <span className="text-sm sm:text-base font-bold tracking-tight text-foreground leading-none">
+            {t('app.name')}
           </span>
-          <div className="flex flex-col justify-center">
-            <span className="text-base sm:text-lg font-bold tracking-tight text-foreground leading-none">
-              {t('app.name')}
-            </span>
-          <span className="text-[10px] font-medium text-muted leading-tight mt-0.5 truncate max-w-[14rem]">
+          <span className="text-[10px] font-medium text-muted leading-tight whitespace-nowrap mt-0.5">
             {t('app.tagline')}
           </span>
-          </div>
         </div>
+      </div>
 
-        {/* 2. Kanan: Navigasi Map/Analytics, Bahasa, dan Theme Toggle */}
-        <div className="flex items-center gap-2">
-          {onViewModeChange ? (
-            <nav aria-label="Mode Tampilan" className="flex items-center rounded-xl border border-border bg-surface-muted p-1 shadow-sm">
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => onViewModeChange('fullscreen-map')}
-                  className={`flex h-8 items-center gap-2 rounded-lg px-3 text-xs font-semibold transition-all cursor-pointer ${
-                    viewMode === 'fullscreen-map'
-                      ? 'bg-surface text-foreground shadow-xs'
-                      : 'text-muted hover:text-foreground'
-                  }`}
-                >
-                  <MapIcon size={14} className={viewMode === 'fullscreen-map' ? 'text-primary' : ''} />
-                  <span className="hidden xs:inline">{t('dashboard.map.title')}</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onViewModeChange('dashboard')}
-                  className={`flex h-8 items-center gap-2 rounded-lg px-3 text-xs font-semibold transition-all cursor-pointer ${
-                    viewMode === 'dashboard'
-                      ? 'bg-surface text-foreground shadow-xs'
-                      : 'text-muted hover:text-foreground'
-                  }`}
-                >
-                  <BarChartIcon size={14} className={viewMode === 'dashboard' ? 'text-primary' : ''} />
-                  <span className="hidden xs:inline">{t('dashboard.indicators.heading')}</span>
-                </button>
+      {/* 2. Kanan: Region Selector + Live Date & Time + Language Switcher + Theme Toggle */}
+      <div className="flex items-center gap-2 sm:gap-2.5">
+        {/* Region Selector Dropdown */}
+        {onSelectWilayah && (
+          <div className="relative w-[142px]" ref={dropdownRef}>
+            <button
+              type="button"
+              onClick={() => setIsRegionOpen((prev) => !prev)}
+              className="flex items-center justify-between w-full rounded-full border border-border/80 bg-surface hover:bg-surface-muted/60 px-2.5 py-1 text-[10px] font-medium text-foreground hover:border-primary/50 transition-all cursor-pointer shadow-2xs leading-none"
+              aria-haspopup="listbox"
+              aria-expanded={isRegionOpen}
+            >
+              <div className="flex items-center gap-1.5 min-w-0">
+                <MapPinIcon size={10} className="text-primary shrink-0" />
+                <span className="truncate text-[10px] leading-tight">{currentWilayahLabel}</span>
               </div>
-              <span className="text-[9px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-1.5 py-0.5 rounded">
-                {t('dashboard.map.exploreSoon')}
-              </span>
-            </nav>
-          ) : null}
+              <ChevronDownIcon
+                size={9}
+                className={`text-muted transition-transform shrink-0 ${isRegionOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
 
-          <div className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold">
-            <button
-              type="button"
-              onClick={() => setLanguage('id')}
-              className={`rounded-lg px-2.5 py-1 text-[11px] transition-colors cursor-pointer ${
-                language === 'id' ? 'bg-surface text-foreground shadow-xs' : 'text-muted hover:text-foreground'
-              }`}
-              title="Bahasa Indonesia"
-            >
-              ID
-            </button>
-            <button
-              type="button"
-              onClick={() => setLanguage('en')}
-              className={`rounded-lg px-2.5 py-1 text-[11px] transition-colors cursor-pointer ${
-                language === 'en' ? 'bg-surface text-foreground shadow-xs' : 'text-muted hover:text-foreground'
-              }`}
-              title="English"
-            >
-              EN
-            </button>
+            {isRegionOpen && (
+              <div className="absolute top-full left-0 right-0 mt-1 z-50 w-full rounded-xl luma-glass p-1 animate-in fade-in slide-in-from-top-1 duration-150">
+                {WILAYAH_ITEMS.map((item) => {
+                  const isSelected = activeWilayah === item.key
+                  return (
+                    <button
+                      key={item.key}
+                      type="button"
+                      onClick={() => {
+                        onSelectWilayah(item.key)
+                        setIsRegionOpen(false)
+                      }}
+                      className={`w-full flex items-center justify-between rounded-lg px-2 py-1 text-[10px] font-medium transition-colors cursor-pointer text-left ${
+                        isSelected
+                          ? 'bg-primary/10 text-primary font-semibold'
+                          : 'text-foreground hover:bg-surface-muted/80'
+                      }`}
+                    >
+                      <span className="text-[10px] leading-tight truncate">{item.label}</span>
+                      {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 ml-1" />}
+                    </button>
+                  )
+                })}
+              </div>
+            )}
           </div>
+        )}
 
-          <ThemeToggle showLabel={false} className="ml-1" />
+        {/* Live Date Time Widget */}
+        <div className="hidden md:flex items-center gap-1.5 rounded-full border border-border/80 bg-surface-muted/60 px-2.5 py-1 text-[10px] text-muted shadow-2xs">
+          <span className="flex h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+          <span className="font-mono font-bold text-foreground text-[10px]">{timeString}</span>
+          <span className="text-muted/60">•</span>
+          <span className="font-medium text-muted text-[10px]">{dateString}</span>
         </div>
+
+        {/* Language Switcher [ID | EN] */}
+        <div className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold">
+          <button
+            type="button"
+            onClick={() => setLanguage('id')}
+            className={`rounded-lg px-2 py-1 text-[11px] transition-colors cursor-pointer ${
+              language === 'id' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
+            }`}
+            title="Bahasa Indonesia"
+          >
+            ID
+          </button>
+          <button
+            type="button"
+            onClick={() => setLanguage('en')}
+            className={`rounded-lg px-2 py-1 text-[11px] transition-colors cursor-pointer ${
+              language === 'en' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
+            }`}
+            title="English"
+          >
+            EN
+          </button>
+        </div>
+
+        {/* Theme Mode Button */}
+        <ThemeToggle />
       </div>
     </header>
   )
