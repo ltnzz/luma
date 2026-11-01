@@ -323,7 +323,7 @@ export function ContextualCategoryFilterCard({
         {/* KATEGORI: AIR BERSIH */}
         {category === 'air' && (
           <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between rounded-xl bg-surface-muted/60 p-2 border border-border/60">
+            <div className="flex items-center justify-between rounded-xl luma-glass-inner p-2">
               <span className="text-[10px] text-foreground font-medium">Jalur Pipa PAM JAYA</span>
               <button
                 type="button"

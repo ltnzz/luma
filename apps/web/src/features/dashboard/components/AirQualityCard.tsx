@@ -43,7 +43,7 @@ export function AirQualityCard({
       </div>
 
       {/* 2. Nilai AQI & Status Kategori (Sesuai Mockup User) */}
-      <div className="flex items-center justify-between rounded-xl bg-surface-muted/60 px-2.5 py-1.5 border border-border/60">
+      <div className="flex items-center justify-between rounded-xl luma-glass-inner px-2.5 py-1.5">
         <div className="flex items-baseline gap-1">
           <span className="text-xl font-black text-foreground tracking-tight leading-none">
             {airAqi}
@@ -84,7 +84,7 @@ export function AirQualityCard({
       </div>
 
       {/* 4. Rekomendasi / Dampak Kesehatan Warga */}
-      <div className="rounded-lg bg-surface-muted/50 p-1.5 text-[10px] text-muted border border-border/50 leading-tight">
+      <div className="rounded-lg luma-glass-inner p-1.5 text-[10px] text-muted leading-tight">
         <span className="font-semibold text-foreground mr-1">{level.icon} Panduan:</span>
         <span>{level.advice}</span>
       </div>
