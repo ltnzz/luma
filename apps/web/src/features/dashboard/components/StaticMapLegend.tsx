@@ -25,57 +25,57 @@ export function StaticMapLegend() {
       {/* Daftar Simbol Murni (Tanpa Data Angka) */}
       <div className="flex flex-col gap-1 text-[11px]">
         {/* 1. Fasilitas Kesehatan */}
-        <div className="luma-glass-row flex items-center gap-2 rounded-lg px-1 py-0.5">
+        <div className="luma-glass-row grid grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-2 rounded-lg px-1 py-0.5">
           <CategoryIconBadge category="health" size="sm" />
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.health')}
           </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">{t('mapFirst.legend.healthSub')}</span>
+          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.healthSub')}</span>
         </div>
 
         {/* 2. Ruang Terbuka Hijau */}
-        <div className="luma-glass-row flex items-center gap-2 rounded-lg px-1 py-0.5">
+        <div className="luma-glass-row grid grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-2 rounded-lg px-1 py-0.5">
           <CategoryIconBadge category="green" size="sm" />
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.green')}
           </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">{t('mapFirst.legend.greenSub')}</span>
+          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.greenSub')}</span>
         </div>
 
         {/* 3. Sekolah Negeri */}
-        <div className="luma-glass-row flex items-center gap-2 rounded-lg px-1 py-0.5">
+        <div className="luma-glass-row grid grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-2 rounded-lg px-1 py-0.5">
           <CategoryIconBadge category="school" size="sm" />
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.school')}
           </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">{t('mapFirst.legend.schoolSub')}</span>
+          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.schoolSub')}</span>
         </div>
 
         {/* 4. Rute Transum */}
-        <div className="luma-glass-row flex items-center gap-2 rounded-lg px-1 py-0.5">
+        <div className="luma-glass-row grid grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-2 rounded-lg px-1 py-0.5">
           <CategoryIconBadge category="transit" size="sm" />
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.transit')}
           </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">{t('mapFirst.legend.transitSub')}</span>
+          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.transitSub')}</span>
         </div>
 
         {/* 5. Jaringan Pipa Air Bersih PAM JAYA */}
-        <div className="luma-glass-row flex items-center gap-2 rounded-lg px-1 py-0.5">
+        <div className="luma-glass-row grid grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-2 rounded-lg px-1 py-0.5">
           <CategoryIconBadge category="water" size="sm" />
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.water')}
           </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">{t('mapFirst.legend.waterSub')}</span>
+          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.waterSub')}</span>
         </div>
 
         {/* 6. Batas Wilayah */}
-        <div className="luma-glass-row flex items-center gap-2 rounded-lg px-1 py-0.5">
+        <div className="luma-glass-row grid grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-2 rounded-lg px-1 py-0.5">
           <CategoryIconBadge category="boundary" size="sm" />
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.boundary')}
           </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">{t('mapFirst.legend.boundarySub')}</span>
+          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.boundarySub')}</span>
         </div>
       </div>
     </div>

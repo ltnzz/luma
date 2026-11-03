@@ -178,7 +178,11 @@ export function FullScreenMapDashboard({
     return [...baseWithoutMockEdu, ...(schoolsInWilayah as unknown as FacilityItem[])]
   }, [facilities, schoolsInWilayah, activeCategoryFilter, faskesSubFilter, rthSubFilter, schoolSubFilter])
 
-  const { data: realtimeAirQuality, isLive: isAirLive } = useRealtimeAirQuality(activeWilayah)
+  const {
+    data: realtimeAirQuality,
+    status: airQualityStatus,
+    isLive: isAirLive,
+  } = useRealtimeAirQuality(activeWilayah)
 
   // Saat marker fasilitas diklik: buka tooltip pratinjau
   const handleMarkerClick = useCallback(
@@ -291,9 +295,11 @@ export function FullScreenMapDashboard({
         <aside className="pointer-events-none absolute left-2 right-2 top-2 z-30 flex max-h-[44dvh] flex-col items-start gap-2 overflow-y-auto pb-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:max-h-[calc(100vh-5.5rem)]">
           <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
           <AirQualityCard
-            airAqi={realtimeAirQuality?.aqi ?? 173}
-            airStatus={realtimeAirQuality?.category ?? 'Tidak Sehat'}
+            airAqi={realtimeAirQuality?.aqi ?? null}
             isAirLive={isAirLive}
+            status={airQualityStatus}
+            source={realtimeAirQuality?.source}
+            updatedAt={realtimeAirQuality?.updatedAt}
           />
 
           {/* Contextual Filter Card: Muncul saat salah satu card dock bawah aktif */}
@@ -336,9 +342,9 @@ export function FullScreenMapDashboard({
             waterCoverage={68}
             waterCoverageLabel={t('mapFirst.dock.access')}
             isWaterActive={showWaterNetwork}
-            faskesCount={faskesCounts.total}
-            rthCount={rthCounts.total}
-            schoolCount={schoolCounts.total > 0 ? schoolCounts.total : 1503}
+            faskesCount={facilitiesStatus === 'loading' || facilitiesStatus === 'error' ? null : faskesCounts.total}
+            rthCount={facilitiesStatus === 'loading' || facilitiesStatus === 'error' ? null : rthCounts.total}
+            schoolCount={schoolCounts.total}
             transitCorridorCount={corridorCount}
             activeCategory={activeCategoryFilter}
             onFilterCategory={handleDockCategoryClick}

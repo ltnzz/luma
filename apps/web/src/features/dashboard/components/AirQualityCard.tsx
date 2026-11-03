@@ -22,9 +22,11 @@ const ADVICE_KEYS = [
 ] as const
 
 interface AirQualityCardProps {
-  airAqi: number
-  airStatus?: string
+  airAqi: number | null
   isAirLive: boolean
+  status: 'loading' | 'success' | 'error'
+  source?: string | null
+  updatedAt?: string | null
 }
 
 /**
@@ -34,12 +36,16 @@ interface AirQualityCardProps {
 export function AirQualityCard({
   airAqi,
   isAirLive,
+  status,
+  source,
+  updatedAt,
 }: AirQualityCardProps) {
   const { t } = useTranslation()
-  const level = useMemo(() => getAqiLevel(airAqi), [airAqi])
+  const level = useMemo(() => getAqiLevel(airAqi ?? 0), [airAqi])
   const levelIndex = Math.max(0, AQI_LEVELS.indexOf(level))
   const categoryLabel = t(CATEGORY_KEYS[levelIndex])
   const advice = t(ADVICE_KEYS[levelIndex])
+  const hasData = status === 'success' && airAqi !== null
 
   return (
     <div className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2 rounded-xl luma-map-card luma-glass-hover p-3 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-64">
@@ -68,15 +74,15 @@ export function AirQualityCard({
       <div className="flex items-center justify-between border-y border-border/55 py-2">
         <div className="flex items-baseline gap-1">
           <span className="text-xl font-black text-foreground tracking-tight leading-none">
-            {airAqi}
+            {hasData ? airAqi : '—'}
           </span>
-          <span className="text-[10px] font-semibold text-muted">AQI</span>
+          <span className="text-[10px] font-semibold text-muted">{t('mapFirst.air.unit')}</span>
         </div>
 
         <span
           className={`rounded-md border px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${level.badgeBg} ${level.badgeBorder} ${level.textColor}`}
         >
-          {categoryLabel}
+          {hasData ? categoryLabel : t(status === 'loading' ? 'mapFirst.air.loading' : 'mapFirst.air.unavailable')}
         </span>
       </div>
 
@@ -84,13 +90,15 @@ export function AirQualityCard({
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between text-[9px] text-muted font-medium">
           <span>{t('mapFirst.air.healthLevel')}</span>
-          <span className="font-bold text-foreground">{categoryLabel}</span>
+          <span className="font-bold text-foreground">
+            {hasData ? categoryLabel : t('mapFirst.air.noValue')}
+          </span>
         </div>
 
         {/* Segmented Gradient Meter */}
         <div className="grid grid-cols-5 gap-1 h-1.5 w-full rounded-full overflow-hidden bg-surface-muted p-0.5">
           {AQI_LEVELS.slice(0, 5).map((lvl) => {
-            const isActive = airAqi >= lvl.min && (lvl.max ? airAqi <= lvl.max : true)
+            const isActive = hasData && airAqi >= lvl.min && (lvl.max ? airAqi <= lvl.max : true)
             return (
               <div
                 key={lvl.category}
@@ -108,8 +116,21 @@ export function AirQualityCard({
       {/* 4. Rekomendasi / Dampak Kesehatan Warga */}
       <div className="border-t border-border/60 pt-2 text-[10px] text-muted leading-relaxed">
         <span className="font-semibold text-foreground mr-1">{level.icon} {t('mapFirst.air.guide')}</span>
-        <span>{advice}</span>
+        <span>{hasData ? advice : t('mapFirst.air.unavailableAdvice')}</span>
       </div>
+
+      <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 border-t border-border/60 pt-2 text-[9px] leading-tight">
+        <dt className="text-muted">{t('mapFirst.meta.source')}</dt>
+        <dd className="truncate text-right font-medium text-foreground" title={source ?? undefined}>
+          {source ?? '—'}
+        </dd>
+        <dt className="text-muted">{t('mapFirst.meta.period')}</dt>
+        <dd className="text-right font-medium text-foreground">
+          {hasData ? t('mapFirst.meta.realtime') : '—'}
+        </dd>
+        <dt className="text-muted">{t('mapFirst.meta.updated')}</dt>
+        <dd className="text-right font-medium text-foreground">{updatedAt ?? '—'}</dd>
+      </dl>
     </div>
   )
 }

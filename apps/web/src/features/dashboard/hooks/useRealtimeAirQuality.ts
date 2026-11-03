@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 
 export interface RealtimeAirQuality {
   aqi: number
-  pm25: number
-  pm10: number
+  pm25: number | null
+  pm10: number | null
   category: string
   stationName: string
   updatedAt: string
@@ -55,8 +55,8 @@ async function fetchAirQuality(targetKey: string, signal: AbortSignal): Promise<
   }
 
   const aqi = Math.round(current.us_aqi)
-  const pm25 = typeof current.pm2_5 === 'number' ? Math.round(current.pm2_5 * 10) / 10 : 0
-  const pm10 = typeof current.pm10 === 'number' ? Math.round(current.pm10 * 10) / 10 : 0
+  const pm25 = typeof current.pm2_5 === 'number' ? Math.round(current.pm2_5 * 10) / 10 : null
+  const pm10 = typeof current.pm10 === 'number' ? Math.round(current.pm10 * 10) / 10 : null
   const category = getAqiCategory(aqi)
 
   const timeObj = current.time ? new Date(current.time) : new Date()
@@ -79,48 +79,56 @@ async function fetchAirQuality(targetKey: string, signal: AbortSignal): Promise<
 }
 
 export function useRealtimeAirQuality(wilayah: string = 'ALL') {
-  const [data, setData] = useState<RealtimeAirQuality | null>(() => {
+  const targetKey = WILAYAH_COORDINATES[wilayah] ? wilayah : 'ALL'
+  const [state, setState] = useState<{
+    key: string
+    data: RealtimeAirQuality | null
+    status: 'loading' | 'success' | 'error'
+    isLive: boolean
+  }>(() => {
     const targetKey = WILAYAH_COORDINATES[wilayah] ? wilayah : 'ALL'
     const cached = memoryCache.get(targetKey)
-    return cached && Date.now() - cached.timestamp < CACHE_TTL_MS ? cached.data : null
-  })
-  const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  const [isLive, setIsLive] = useState<boolean>(() => {
-    const targetKey = WILAYAH_COORDINATES[wilayah] ? wilayah : 'ALL'
-    const cached = memoryCache.get(targetKey)
-    return Boolean(cached && Date.now() - cached.timestamp < CACHE_TTL_MS)
+    const hasFreshCache = Boolean(cached && Date.now() - cached.timestamp < CACHE_TTL_MS)
+    return {
+      key: targetKey,
+      data: hasFreshCache ? cached?.data ?? null : null,
+      status: hasFreshCache ? 'success' : 'loading',
+      isLive: hasFreshCache,
+    }
   })
 
   useEffect(() => {
     const targetKey = WILAYAH_COORDINATES[wilayah] ? wilayah : 'ALL'
     const controller = new AbortController()
+    let disposed = false
     const timeoutId = setTimeout(() => controller.abort(), 8000)
 
     fetchAirQuality(targetKey, controller.signal)
       .then((result) => {
-        setData(result)
-        setStatus('success')
-        setIsLive(true)
+        if (disposed) return
+        setState({ key: targetKey, data: result, status: 'success', isLive: true })
       })
       .catch((err) => {
-        if (controller.signal.aborted) return
+        if (disposed) return
         console.warn('[useRealtimeAirQuality] Fetch fallback to static baseline:', err)
-        setStatus('error')
-        setIsLive(false)
+        setState({ key: targetKey, data: null, status: 'error', isLive: false })
       })
       .finally(() => {
         clearTimeout(timeoutId)
       })
 
     return () => {
+      disposed = true
       clearTimeout(timeoutId)
       controller.abort()
     }
   }, [wilayah])
 
+  const isCurrentRequest = state.key === targetKey
+
   return {
-    data,
-    status,
-    isLive,
+    data: isCurrentRequest ? state.data : null,
+    status: isCurrentRequest ? state.status : 'loading',
+    isLive: isCurrentRequest ? state.isLive : false,
   }
 }

@@ -272,6 +272,7 @@ export interface Facility {
   budget: Record<string, string>
   metrics: Record<string, unknown>
   documents: FacilityDocument[]
+  updatedAt: string | null
 }
 
 export interface FacilitiesParams {
@@ -378,6 +379,7 @@ function normalizeFacility(raw: RawFacility): Facility | null {
         ? (raw.metrics as Record<string, unknown>)
         : {},
     documents: normalizeDocuments(raw),
+    updatedAt: asString(raw.updatedAt ?? raw.updated_at),
   }
 }
 

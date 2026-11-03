@@ -7,9 +7,9 @@ interface KpiMetricsDockProps {
   waterCoverage?: number
   waterCoverageLabel?: string
   isWaterActive?: boolean
-  faskesCount: number
-  rthCount: number
-  schoolCount: number
+  faskesCount: number | null
+  rthCount: number | null
+  schoolCount: number | null
   transitCorridorCount?: number
   activeCategory?: KpiCategory | null
   onFilterCategory?: (category: KpiCategory) => void
@@ -33,7 +33,9 @@ export function KpiMetricsDock({
   activeCategory = null,
   onFilterCategory,
 }: KpiMetricsDockProps) {
-  const { t } = useTranslation()
+  const { language, t } = useTranslation()
+  const formatCount = (value: number | null) =>
+    value === null ? '—' : value.toLocaleString(language === 'id' ? 'id-ID' : 'en-US')
 
   return (
     <div
@@ -88,7 +90,7 @@ export function KpiMetricsDock({
             {activeCategory === 'kesehatan' && <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />}
           </div>
           <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {faskesCount} <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.healthUnit')}</span>
+            {formatCount(faskesCount)} <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.healthUnit')}</span>
           </span>
         </div>
       </button>
@@ -112,7 +114,7 @@ export function KpiMetricsDock({
             {activeCategory === 'rth' && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />}
           </div>
           <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {rthCount} <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.greenUnit')}</span>
+            {formatCount(rthCount)} <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.greenUnit')}</span>
           </span>
         </div>
       </button>
@@ -136,7 +138,7 @@ export function KpiMetricsDock({
             {activeCategory === 'sekolah' && <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />}
           </div>
           <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {schoolCount.toLocaleString('id-ID')}{' '}
+            {formatCount(schoolCount)}{' '}
             <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.schoolUnit')}</span>
           </span>
         </div>

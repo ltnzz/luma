@@ -104,17 +104,17 @@ export function HospitalIcon({ size = 16, className = '', ...props }: IconProps)
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="2.2"
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
       {...props}
     >
-      <path d="M12 6v4" />
-      <path d="M14 8h-4" />
-      <path d="M18 18v-7a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v7" />
-      <path d="M18 18H2" />
-      <path d="M22 18h-4v-4h4Z" />
+      <path d="M11 3v2" />
+      <path d="M5 3v2" />
+      <path d="M5 4H4a2 2 0 0 0-2 2v2a6 6 0 0 0 12 0V6a2 2 0 0 0-2-2h-1" />
+      <path d="M8 14a6 6 0 0 0 12 0v-2" />
+      <circle cx="20" cy="10" r="2" />
     </svg>
   )
 }

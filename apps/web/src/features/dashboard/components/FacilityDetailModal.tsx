@@ -23,6 +23,14 @@ const CATEGORY_BADGE_COLORS: Record<string, string> = {
   lingkungan: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border-cyan-500/40',
 }
 
+function formatMetadataDate(value: string, language: 'id' | 'en'): string {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return '—'
+  return new Intl.DateTimeFormat(language === 'id' ? 'id-ID' : 'en-US', {
+    dateStyle: 'medium',
+  }).format(date)
+}
+
 export function FacilityDetailModal({
   facilityId,
   facility: propFacility,
@@ -41,6 +49,8 @@ export function FacilityDetailModal({
         download: 'Unduh', downloadTitle: 'Unduh berkas dokumen', detail: 'Detail fasilitas',
         panelAria: 'Detail Fasilitas', close: 'Tutup detail fasilitas', loading: 'Memuat detail fasilitas',
         loadingDescription: 'Memuat informasi fasilitas dari server…',
+        dataInfo: 'Informasi Data', source: 'Sumber', period: 'Periode', updated: 'Diperbarui',
+        unavailable: 'Sebagian metadata belum dicantumkan oleh sumber.',
       }
     : {
         environment: 'Environment & Access', airQuality: 'Air Quality',
@@ -51,6 +61,8 @@ export function FacilityDetailModal({
         download: 'Download', downloadTitle: 'Download document', detail: 'Facility details',
         panelAria: 'Facility Details', close: 'Close facility details', loading: 'Loading facility details',
         loadingDescription: 'Loading facility information from the server…',
+        dataInfo: 'Data Information', source: 'Source', period: 'Period', updated: 'Updated',
+        unavailable: 'Some metadata was not provided by the source.',
       }
 
   // If facilityId is passed (e.g. from page.tsx), load it via hook
@@ -153,7 +165,7 @@ export function FacilityDetailModal({
               <div className="luma-glass-inner rounded-xl p-2.5 shadow-xs">
                 <span className="text-[9.5px] font-semibold text-muted dark:text-white/60">{copy.airQuality}</span>
                 <p className="mt-0.5 text-xs font-bold text-foreground dark:text-white">
-                  {String(metrics.aqi)} AQI{' '}
+                  {String(metrics.aqi)} {language === 'id' ? 'ISPU' : 'AQI'}{' '}
                   {Boolean(aqiStatus) && (
                     <span className="text-[10.5px] font-medium text-emerald-600 dark:text-emerald-300">({String(aqiStatus)})</span>
                   )}
@@ -197,7 +209,7 @@ export function FacilityDetailModal({
             <div className="flex flex-wrap items-baseline justify-between gap-1.5 border-b border-border/50 dark:border-white/10 pb-2">
               <span className="text-[10.5px] font-medium text-muted dark:text-white/60">{copy.totalBudget}</span>
               <span className="text-sm font-extrabold text-primary dark:text-emerald-400">
-                {budget.total ?? budget.nilai ?? 'Termasuk APBD'}
+                {budget.total ?? budget.nilai ?? '—'}
               </span>
             </div>
             <dl className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2 text-xs">
@@ -230,6 +242,33 @@ export function FacilityDetailModal({
               )}
             </dl>
           </div>
+        </section>
+      ) : null}
+
+      {/* Metadata hanya memakai nilai yang benar-benar tersedia dari sumber. */}
+      {displayFacility ? (
+        <section className="flex flex-col gap-1.5">
+          <h3 className="text-[10.5px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400 flex items-center gap-1.5">
+            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400" />
+            <span>{copy.dataInfo}</span>
+          </h3>
+          <dl className="luma-glass-inner grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-xl p-2.5 text-[10px] shadow-xs">
+            <dt className="text-muted dark:text-white/50">{copy.source}</dt>
+            <dd className="text-right font-semibold text-foreground dark:text-white/90">{budget.source ?? '—'}</dd>
+            <dt className="text-muted dark:text-white/50">{copy.period}</dt>
+            <dd className="text-right font-semibold text-foreground dark:text-white/90">{budget.year ?? '—'}</dd>
+            <dt className="text-muted dark:text-white/50">{copy.updated}</dt>
+            <dd className="text-right font-semibold text-foreground dark:text-white/90">
+              {'updatedAt' in displayFacility && displayFacility.updatedAt
+                ? formatMetadataDate(displayFacility.updatedAt, language)
+                : '—'}
+            </dd>
+          </dl>
+          {(!budget.source || !budget.year || !('updatedAt' in displayFacility) || !displayFacility.updatedAt) ? (
+            <p className="text-[9px] leading-relaxed text-muted dark:text-white/50">
+              — {copy.unavailable}
+            </p>
+          ) : null}
         </section>
       ) : null}
 
