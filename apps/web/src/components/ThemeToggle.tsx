@@ -54,6 +54,8 @@ export default function ThemeToggle({ showLabel = false, className = '' }: Theme
       className={`inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs ${className}`}
       title={resolvedDark ? t('theme.light') : t('theme.dark')}
       aria-label={resolvedDark ? t('theme.light') : t('theme.dark')}
+      data-tooltip={resolvedDark ? t('theme.light') : t('theme.dark')}
+      data-tooltip-side="bottom"
     >
       {resolvedDark ? (
         <SunIcon className="h-4 w-4 text-foreground" />

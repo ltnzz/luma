@@ -1,4 +1,6 @@
-import { CheckCircleIcon, ChevronRightIcon } from '../../../components/ui/Icons'
+import { ChevronRightIcon } from '../../../components/ui/Icons'
+import { CategoryIconBadge } from '../../../components/ui/CategoryIconBadge'
+import { useTranslation } from '../../../i18n/useTranslation'
 
 interface CompactDataSourceCardProps {
   onNavigateToDataSources?: () => void
@@ -12,24 +14,26 @@ interface CompactDataSourceCardProps {
  * - Direct action pill interaktif yang elegan dengan ChevronRightIcon presisi
  */
 export function CompactDataSourceCard({ onNavigateToDataSources }: CompactDataSourceCardProps) {
+  const { t } = useTranslation()
+
   return (
     <button
       type="button"
       onClick={onNavigateToDataSources}
-      className="group pointer-events-auto flex w-60 sm:w-64 items-center justify-between gap-2 rounded-2xl luma-glass px-2.5 sm:px-3 py-1.5 sm:py-2 hover:shadow-[0_16px_36px_rgba(0,0,0,0.16)] transition-all duration-200 select-none text-left cursor-pointer hover:border-emerald-500/50 active:scale-[0.99] animate-in fade-in slide-in-from-left-2 duration-200"
-      title="Buka katalog sumber data resmi DKI Jakarta"
+      className="group pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] items-center justify-between gap-2 rounded-xl luma-map-card luma-glass-hover px-3 py-2 select-none text-left cursor-pointer animate-in fade-in slide-in-from-left-2 sm:w-64"
+      title={t('mapFirst.data.open')}
+      data-tooltip={t('mapFirst.data.tooltip')}
+      data-tooltip-side="right"
     >
       <div className="flex items-center gap-2 min-w-0">
-        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-500/25 transition-colors">
-          <CheckCircleIcon size={12} />
-        </span>
+        <CategoryIconBadge category="verified" size="sm" className="group-hover:scale-105" />
         <span className="text-[11px] font-bold text-foreground leading-tight truncate">
-          Sumber Data Resmi
+          {t('mapFirst.data.title')}
         </span>
       </div>
 
-      <div className="inline-flex items-center gap-0.5 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-300 group-hover:bg-emerald-600 group-hover:text-white group-hover:border-emerald-600 transition-all duration-150 shrink-0 shadow-2xs">
-        <span>Detail</span>
+      <div className="inline-flex shrink-0 items-center gap-0.5 text-[10px] font-semibold text-emerald-700 transition-colors duration-150 group-hover:text-emerald-600 dark:text-emerald-300">
+        <span>{t('mapFirst.data.detail')}</span>
         <ChevronRightIcon
           size={11}
           className="stroke-[2.5] transition-transform duration-150 group-hover:translate-x-0.5"

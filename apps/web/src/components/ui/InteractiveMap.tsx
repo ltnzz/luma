@@ -14,8 +14,10 @@ import {
 import maplibreglWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import type { Facility } from '../../lib/api'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useTheme } from '../../context/useTheme'
+import { useTranslation } from '../../i18n/useTranslation'
 import { Skeleton } from './Skeleton'
-import { TargetIcon, SunIcon, MoonIcon, SatelliteIcon } from './Icons'
+import { TargetIcon, SatelliteIcon } from './Icons'
 import jakartaBoundary from '../../data/jakarta-boundary.json'
 import jakartaSubdistricts from '../../data/jakarta-subdistricts-boundary.json'
 import transitNetwork from '../../data/transit-network.json'
@@ -25,6 +27,11 @@ import { buildDeduplicatedStations } from '../../data/transit-stations-deduped'
 import { clusterNearbyItems } from '../../features/dashboard/utils/proximityClustering'
 import { SPKU_STATIONS, getAqiLevel } from '../../features/dashboard/utils/airQualityLevels'
 import { WATER_NETWORK, WATER_FACILITIES } from '../../data/water-network'
+import {
+  buildFacilityPopupHtml,
+  createFacilityMarkerElement,
+  getCategoryColor,
+} from './map-marker'
 
 // Konfigurasi Worker MapLibre GL untuk lingkungan Vite (mencegah error Worker 404)
 setWorkerUrl(maplibreglWorkerUrl)
@@ -540,24 +547,6 @@ function applyTransitLayers(map: MapLibreMap, initialFacilities: Facility[] = []
   }
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  fasum: '#16a34a', // green
-  transum: '#2563eb', // blue
-  kesehatan: '#dc2626', // red
-  pendidikan: '#7e22ce', // purple
-  lingkungan: '#06b6d4', // cyan
-}
-
-const CATEGORY_SVGS: Record<string, string> = {
-  fasum: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 3-7h-2l3-6-4 1-3-4-3 4-4-1 3 6h-2l3 7"/><path d="M12 19v3"/></svg>',
-  transum: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="12" x="3" y="6" rx="2"/><path d="M4 11V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v4"/><circle cx="7" cy="18" r="1"/><circle cx="17" cy="18" r="1"/></svg>',
-  kesehatan: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12"/><path d="M6 12h12"/></svg>',
-  pendidikan: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><circle cx="12" cy="10" r="2"/></svg>',
-  lingkungan: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>',
-}
-
-const DEFAULT_PIN_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>'
-
 export function InteractiveMap({
   initialCenter = JAKARTA_CENTER,
   initialZoom = 10.8,
@@ -582,6 +571,13 @@ export function InteractiveMap({
   onSelectCorridor,
   activeCategory = null,
 }: InteractiveMapProps) {
+  const { theme } = useTheme()
+  const { t, language } = useTranslation()
+  const themeMapMode: Exclude<MapMode, 'satellite'> =
+    theme === 'dark' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ? 'dark'
+      : 'light'
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const markersMapRef = useRef<Record<string, MarkerEntry>>({})
@@ -590,8 +586,8 @@ export function InteractiveMap({
   const lastMarkerModeRef = useRef<'provinsi' | 'kota' | null>(null)
   const lastActiveCategoryRef = useRef<string | null>(null)
   const syncCityMarkersRef = useRef<() => void>(() => {})
-  const [mapMode, setMapMode] = useState<MapMode>('light')
-  const modeRef = useRef<MapMode>('light')
+  const [mapMode, setMapMode] = useState<MapMode>(themeMapMode)
+  const modeRef = useRef<MapMode>(themeMapMode)
   const [isLoaded, setIsLoaded] = useState(false)
 
   const selectedWilayahRef = useRef(selectedWilayah)
@@ -636,7 +632,7 @@ export function InteractiveMap({
 
     const map = new MapLibreMap({
       container: mapContainerRef.current,
-      style: LIGHT_CANVAS_STYLE,
+      style: modeRef.current === 'dark' ? DARK_CANVAS_STYLE : LIGHT_CANVAS_STYLE,
       center: initialCenter,
       zoom: initialZoom,
       minZoom,
@@ -706,7 +702,8 @@ export function InteractiveMap({
     const stationPopup = new Popup({
       closeButton: false,
       closeOnClick: false,
-      offset: 12,
+      offset: 16,
+      className: 'luma-facility-popup',
     })
 
     const handleStationEnter = (e: {
@@ -741,46 +738,33 @@ export function InteractiveMap({
       }
 
       const html = `
-        <div style="padding: 10px 12px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 190px; max-width: 270px; color: #1c2620;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 3px;">
-            <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: ${color}; letter-spacing: 0.05em;">
-              ${line}
-            </span>
+        <article class="luma-popup-card w-[220px] overflow-hidden rounded-xl text-foreground sm:w-[260px]">
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="flex min-w-0 items-center gap-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.08em]" style="color:${color}">
+                <span class="h-1.5 w-1.5 shrink-0 rounded-full" style="background:${color}"></span>
+                ${line}
+              </span>
             ${
               isHub
-                ? '<span style="font-size: 9px; font-weight: 700; background: #dbeafe; color: #1e40af; padding: 1px 5px; border-radius: 4px;">TRANSFER HALTE</span>'
+                ? '<span class="shrink-0 text-[9px] font-semibold text-blue-600">Transfer</span>'
                 : ''
             }
+            </div>
+            <h4 class="m-0 mt-1.5 text-[13px] font-bold leading-snug text-foreground">${name}</h4>
+            ${allKoridors && allKoridors !== line ? `<p class="m-0 mt-1 text-[10px] font-semibold text-blue-600">${allKoridors}</p>` : ''}
+            ${lokasi ? `<p class="m-0 mt-1 text-[10.5px] leading-relaxed text-muted">${lokasi}</p>` : ''}
+            ${
+              tipeAkses || tahun
+                ? `<dl class="m-0 mt-2.5 flex flex-col gap-1 border-t border-border/70 pt-2.5 text-[10.5px]">
+                    ${tipeAkses ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">Akses</dt><dd class="m-0 text-right font-medium text-foreground">${tipeAkses}</dd></div>` : ''}
+                    ${tahun ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">Tahun</dt><dd class="m-0 text-right font-medium text-foreground">${tahun}</dd></div>` : ''}
+                  </dl>`
+                : ''
+            }
+            ${interchangeList.length > 0 ? `<p class="m-0 mt-2 text-[10px] font-semibold text-primary">Terhubung: ${interchangeList.join(' • ')}</p>` : ''}
           </div>
-          <h4 style="margin: 2px 0 4px 0; font-size: 13px; font-weight: 700; line-height: 1.3;">
-            ${name}
-          </h4>
-          ${
-            allKoridors && allKoridors !== line
-              ? `<div style="margin: 0 0 4px 0; font-size: 10px; font-weight: 600; color: #2563eb;">🚌 ${allKoridors}</div>`
-              : ''
-          }
-          ${
-            lokasi
-              ? `<p style="margin: 0 0 4px 0; font-size: 11px; color: #64748b; line-height: 1.3;">📍 ${lokasi}</p>`
-              : ''
-          }
-          ${
-            tipeAkses
-              ? `<div style="margin-top: 6px; padding-top: 5px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #334155;">
-                   <div><span style="font-weight: 600; color: #0f172a;">Akses:</span> ${tipeAkses}</div>
-                   ${tahun ? `<div style="margin-top: 2px;"><span style="font-weight: 600; color: #0f172a;">Tahun:</span> ${tahun}</div>` : ''}
-                 </div>`
-              : ''
-          }
-          ${
-            interchangeList.length > 0
-              ? `<div style="margin-top: 4px; font-size: 10px; color: #16a34a; font-weight: 600;">
-                   ${interchangeList.join(' • ')}
-                 </div>`
-              : ''
-          }
-        </div>
+        </article>
       `
       stationPopup.setLngLat(coords).setHTML(html).addTo(map)
     }
@@ -949,42 +933,42 @@ export function InteractiveMap({
       }
 
       // Hitung metrik dinamis se-DKI sesuai kategori yang aktif di dock bawah
-      let badgeText = '1.740 Fasilitas'
+      let badgeText = `1.740 ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
       let cardBorder = 'border-primary/50 group-hover:border-primary'
       let dotColor = 'bg-primary'
 
       if (activeCategory === 'kesehatan') {
         const totalFaskes = facilities.filter((f) => f.category === 'kesehatan').length
-        badgeText = `${totalFaskes > 0 ? totalFaskes : 47} Faskes`
+        badgeText = `${totalFaskes > 0 ? totalFaskes : 47} ${t('mapFirst.dock.health')}`
         badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
         cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
         dotColor = 'bg-rose-500'
       } else if (activeCategory === 'rth') {
         const totalRth = facilities.filter((f) => f.category === 'fasum').length
-        badgeText = `${totalRth > 0 ? totalRth : 24} RTH`
+        badgeText = `${totalRth > 0 ? totalRth : 24} ${t('mapFirst.dock.green')}`
         badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
         cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
         dotColor = 'bg-emerald-500'
       } else if (activeCategory === 'sekolah') {
-        badgeText = '1.503 Sekolah'
+        badgeText = `1.503 ${t('mapFirst.dock.school')}`
         badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
         cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
         dotColor = 'bg-blue-500'
       } else if (activeCategory === 'transum') {
-        badgeText = '13 Koridor BRT'
+        badgeText = `13 ${t('mapFirst.dock.transitUnit')} BRT`
         badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
         cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
         dotColor = 'bg-purple-500'
       } else if (activeCategory === 'air') {
-        badgeText = '68% Air Bersih'
+        badgeText = `68% ${t('mapFirst.dock.water')}`
         badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
         cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
         dotColor = 'bg-sky-500'
       }
 
       const aqiInfo = getAqiLevel(173) // Rata-rata AQI DKI Jakarta
-      const aqiBadge = `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo.color}18; color: ${aqiInfo.color}; border: 1px solid ${aqiInfo.color}40;" title="Kualitas Udara SPKU DKI: 173 AQI (${aqiInfo.category})">
+      const aqiBadge = `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo.color}18; color: ${aqiInfo.color}; border: 1px solid ${aqiInfo.color}40;" title="${t('mapFirst.air.title')}: 173 AQI">
         <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo.color}"></span>
         173 AQI
       </span>`
@@ -994,7 +978,7 @@ export function InteractiveMap({
       wrapperEl.style.transformOrigin = 'center bottom'
 
       const cardEl = document.createElement('div')
-      cardEl.className = `flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+      cardEl.className = `luma-region-card flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
 
       cardEl.innerHTML = `
         <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
@@ -1071,7 +1055,7 @@ export function InteractiveMap({
       const station = SPKU_STATIONS.find((s) => s.code === city.code)
       const aqiInfo = station ? getAqiLevel(station.aqi) : null
 
-      let badgeText = `${city.counts.facilities} Fasilitas`
+      let badgeText = `${city.counts.facilities} ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
       let cardBorder = 'border-primary/50 group-hover:border-primary'
       let dotColor = 'bg-primary'
@@ -1079,32 +1063,32 @@ export function InteractiveMap({
       if (activeCategory === 'kesehatan') {
         const cityFaskes = facilities.filter((f) => f.wilayah === city.code && f.category === 'kesehatan').length
         const count = cityFaskes > 0 ? cityFaskes : (defaultCounts[city.code]?.faskes ?? 8)
-        badgeText = `${count} Faskes`
+        badgeText = `${count} ${t('mapFirst.dock.health')}`
         badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
         cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
         dotColor = 'bg-rose-500'
       } else if (activeCategory === 'rth') {
         const cityRth = facilities.filter((f) => f.wilayah === city.code && f.category === 'fasum').length
         const count = cityRth > 0 ? cityRth : (defaultCounts[city.code]?.rth ?? 6)
-        badgeText = `${count} RTH`
+        badgeText = `${count} ${t('mapFirst.dock.green')}`
         badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
         cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
         dotColor = 'bg-emerald-500'
       } else if (activeCategory === 'sekolah') {
         const count = defaultCounts[city.code]?.sekolah ?? 200
-        badgeText = `${count} Sekolah`
+        badgeText = `${count} ${t('mapFirst.dock.school')}`
         badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
         cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
         dotColor = 'bg-blue-500'
       } else if (activeCategory === 'transum') {
         const count = city.corridors.length
-        badgeText = `${count} Koridor BRT`
+        badgeText = `${count} ${t('mapFirst.dock.transitUnit')} BRT`
         badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
         cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
         dotColor = 'bg-purple-500'
       } else if (activeCategory === 'air') {
         const pct = defaultCounts[city.code]?.air ?? 68
-        badgeText = `${pct}% Air Bersih`
+        badgeText = `${pct}% ${t('mapFirst.dock.water')}`
         badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
         cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
         dotColor = 'bg-sky-500'
@@ -1117,10 +1101,10 @@ export function InteractiveMap({
 
       // Card dalam tempat styling, hover effect, dan konten
       const cardEl = document.createElement('div')
-      cardEl.className = `flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+      cardEl.className = `luma-region-card flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
 
       const aqiBadge = station
-        ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo?.color}18; color: ${aqiInfo?.color}; border: 1px solid ${aqiInfo?.color}40;" title="Kualitas Udara SPKU: ${station.aqi} AQI (${station.category})">
+        ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo?.color}18; color: ${aqiInfo?.color}; border: 1px solid ${aqiInfo?.color}40;" title="${t('mapFirst.air.title')}: ${station.aqi} AQI">
             <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo?.color}"></span>
             ${station.aqi} AQI
           </span>`
@@ -1164,7 +1148,7 @@ export function InteractiveMap({
 
       cityMarkersRef.current[city.code] = marker
     })
-  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities])
+  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities, t])
 
   useEffect(() => {
     syncCityMarkersRef.current = syncCityMarkers
@@ -1230,7 +1214,7 @@ export function InteractiveMap({
           wrapperEl.style.height = '36px'
 
           const sampleCategory = group.items[0]?.category || 'fasum'
-          const clusterColor = CATEGORY_COLORS[sampleCategory] || '#16a34a'
+          const clusterColor = getCategoryColor(sampleCategory)
 
           const innerEl = document.createElement('div')
           innerEl.className =
@@ -1250,28 +1234,32 @@ export function InteractiveMap({
             .join('')
           const moreCount =
             group.count > 4
-              ? `<li style="color:#64748b;font-style:italic;">+${group.count - 4} fasilitas lainnya</li>`
+              ? `<li style="color:#64748b;font-style:italic;">+${group.count - 4} ${language === 'id' ? 'fasilitas lainnya' : 'more facilities'}</li>`
               : ''
 
           const popupHtml = `
-            <div style="padding: 10px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 190px; max-width: 250px; color: #1c2620;">
-              <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #16a34a; letter-spacing: 0.05em;">
-                Kelompok Fasilitas
-              </span>
-              <h4 style="margin: 4px 0 6px 0; font-size: 13px; font-weight: 700; line-height: 1.3;">
-                ${group.count} Fasilitas di Area Ini
-              </h4>
-              <ul style="margin: 0; padding-left: 14px; font-size: 11px; color: #475569; line-height: 1.4;">
-                ${previewList}
-                ${moreCount}
-              </ul>
-              <p style="margin: 8px 0 0 0; font-size: 10px; font-weight: 600; color: #16a34a;">
-                Klik untuk memperbesar (zoom in)
-              </p>
-            </div>
+            <article class="luma-popup-card w-[220px] overflow-hidden rounded-xl text-foreground sm:w-[250px]">
+              <div class="p-3.5">
+                <div class="flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-[0.08em]" style="color:${clusterColor}">
+                  <span class="h-1.5 w-1.5 rounded-full" style="background:${clusterColor}"></span>
+                  ${language === 'id' ? 'Kelompok fasilitas' : 'Facility cluster'}
+                </div>
+                <h4 class="m-0 mt-1.5 text-[13px] font-bold leading-snug text-foreground">${group.count} ${language === 'id' ? 'fasilitas di area ini' : 'facilities in this area'}</h4>
+                <ul class="m-0 mt-2 space-y-0.5 border-t border-border/70 pt-2 pl-4 text-[10.5px] leading-relaxed text-muted">
+                  ${previewList}
+                  ${moreCount}
+                </ul>
+                <p class="m-0 mt-2 text-[9.5px] font-semibold text-primary">${t('mapFirst.map.clusterHint')}</p>
+              </div>
+            </article>
           `
 
-          const popup = new Popup({ offset: 20, closeButton: false, closeOnClick: false }).setHTML(popupHtml)
+          const popup = new Popup({
+            offset: 22,
+            closeButton: false,
+            closeOnClick: false,
+            className: 'luma-facility-popup',
+          }).setHTML(popupHtml)
 
           wrapperEl.addEventListener('mouseenter', () => {
             popup.setLngLat([group.lng, group.lat]).addTo(map)
@@ -1302,44 +1290,19 @@ export function InteractiveMap({
         } else {
           // Render Single Facility Pin
           const f = group.items[0]
-          const color = CATEGORY_COLORS[f.category] ?? '#16a34a'
-          const iconSvg = CATEGORY_SVGS[f.category] ?? DEFAULT_PIN_SVG
+          const { wrapperEl, innerEl } = createFacilityMarkerElement(f.category)
+          const popupHtml = buildFacilityPopupHtml(f, {
+            categoryLabel: f.subCategory || f.category,
+            budget: t('mapFirst.map.funding'),
+            airQuality: t('mapFirst.map.airQuality'),
+          })
 
-          const wrapperEl = document.createElement('div')
-          wrapperEl.className = 'relative flex items-center justify-center cursor-pointer select-none'
-          wrapperEl.style.width = '36px'
-          wrapperEl.style.height = '36px'
-
-          const innerEl = document.createElement('div')
-          innerEl.className =
-            'flex items-center justify-center rounded-full shadow-md transition-all duration-200 hover:scale-125'
-          innerEl.style.backgroundColor = color
-          innerEl.style.width = '28px'
-          innerEl.style.height = '28px'
-          innerEl.style.border = '2px solid white'
-          innerEl.innerHTML = iconSvg
-          wrapperEl.appendChild(innerEl)
-
-          const popupHtml = `
-            <div style="padding: 10px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 180px; max-width: 240px; color: #1c2620;">
-              <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: ${color}; letter-spacing: 0.05em;">
-                ${f.subCategory || f.category}
-              </span>
-              <h4 style="margin: 4px 0 2px 0; font-size: 13px; font-weight: 700; line-height: 1.3;">
-                ${f.name}
-              </h4>
-              <p style="margin: 0; font-size: 11px; color: #5d6962; line-height: 1.4;">
-                ${f.address || f.wilayah}
-              </p>
-              <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 11px; font-weight: 600; color: #16a34a;">
-                  ${f.budget && 'total' in f.budget ? (f.budget as Record<string, string>)['total'] : 'Fasilitas Publik'}
-                </span>
-              </div>
-            </div>
-          `
-
-          const popup = new Popup({ offset: 20, closeButton: false, closeOnClick: false }).setHTML(popupHtml)
+          const popup = new Popup({
+            offset: 22,
+            closeButton: false,
+            closeOnClick: false,
+            className: 'luma-facility-popup',
+          }).setHTML(popupHtml)
 
           wrapperEl.addEventListener('mouseenter', () => {
             popup.setLngLat([group.lng, group.lat]).addTo(map)
@@ -1378,7 +1341,7 @@ export function InteractiveMap({
       map.off('zoomend', renderMarkers)
       clearOldMarkers()
     }
-  }, [facilities, selectedWilayah, isLoaded, onSelectFacility, onFacilitySelect, onOpenDetail, onSelectWilayah])
+  }, [facilities, selectedWilayah, isLoaded, onSelectFacility, onFacilitySelect, onOpenDetail, onSelectWilayah, t, language])
 
   // =========================================================================
   // DYNAMIC TRANSIT, BOUNDARY HIGHLIGHT & DIMMING FILTER
@@ -1597,8 +1560,8 @@ export function InteractiveMap({
         innerEl.style.height = '34px'
         innerEl.classList.add('ring-4', 'ring-primary', 'ring-offset-2', 'scale-115')
       } else {
-        innerEl.style.width = '28px'
-        innerEl.style.height = '28px'
+        innerEl.style.width = '30px'
+        innerEl.style.height = '30px'
         innerEl.classList.remove('ring-4', 'ring-primary', 'ring-offset-2', 'scale-115')
       }
     })
@@ -1620,6 +1583,14 @@ export function InteractiveMap({
     },
     [mapMode]
   )
+
+  // Tema kanvas mengikuti kontrol tema global di header. Mode satelit tetap
+  // dipertahankan sampai user menonaktifkannya melalui satu tombol peta.
+  useEffect(() => {
+    if (mapMode !== 'satellite' && mapMode !== themeMapMode) {
+      switchMode(themeMapMode)
+    }
+  }, [mapMode, switchMode, themeMapMode])
 
   const handleResetView = useCallback(() => {
     if (!mapRef.current) return
@@ -1677,8 +1648,8 @@ export function InteractiveMap({
             type="button"
             onClick={() => mapRef.current?.zoomIn()}
             className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
-            title="Perbesar (Zoom In)"
-            aria-label="Perbesar"
+            title={t('mapFirst.map.zoomIn')}
+            aria-label={t('mapFirst.map.zoomIn')}
           >
             +
           </button>
@@ -1686,8 +1657,8 @@ export function InteractiveMap({
             type="button"
             onClick={() => mapRef.current?.zoomOut()}
             className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
-            title="Perkecil (Zoom Out)"
-            aria-label="Perkecil"
+            title={t('mapFirst.map.zoomOut')}
+            aria-label={t('mapFirst.map.zoomOut')}
           >
             −
           </button>
@@ -1695,55 +1666,27 @@ export function InteractiveMap({
             type="button"
             onClick={handleResetView}
             className="flex h-8 w-8 items-center justify-center text-primary hover:bg-surface-muted transition-colors cursor-pointer"
-            title="Reset ke pandangan seluruh Jakarta"
-            aria-label="Reset Pandangan"
+            title={t('mapFirst.map.reset')}
+            aria-label={t('mapFirst.map.reset')}
           >
             <TargetIcon size={15} />
           </button>
         </div>
 
-        {/* 3-Icon Mode Switcher (Matahari / Bulan / Satelit) */}
-        <div className="flex items-center rounded-xl border border-border bg-surface p-0.5 shadow-md">
-          <button
-            type="button"
-            onClick={() => switchMode('light')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
-              mapMode === 'light'
-                ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-            title="Kanvas Terang (Light Gray Canvas)"
-            aria-label="Kanvas Terang"
-          >
-            <SunIcon size={14} />
-          </button>
-          <button
-            type="button"
-            onClick={() => switchMode('dark')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
-              mapMode === 'dark'
-                ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-            title="Kanvas Gelap (Dark Gray Canvas)"
-            aria-label="Kanvas Gelap"
-          >
-            <MoonIcon size={14} />
-          </button>
-          <button
-            type="button"
-            onClick={() => switchMode('satellite')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
-              mapMode === 'satellite'
-                ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-            title="Citra Satelit (Satellite Imagery)"
-            aria-label="Citra Satelit"
-          >
-            <SatelliteIcon size={14} />
-          </button>
-        </div>
+        {/* Satu kontrol tambahan untuk beralih antara kanvas tema dan citra satelit. */}
+        <button
+          type="button"
+          onClick={() => switchMode(mapMode === 'satellite' ? themeMapMode : 'satellite')}
+          className={`flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-surface shadow-md transition-colors cursor-pointer ${
+            mapMode === 'satellite'
+              ? 'bg-primary text-on-primary'
+              : 'text-muted hover:text-foreground hover:bg-surface-muted'
+          }`}
+          title={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
+          aria-label={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
+        >
+          <SatelliteIcon size={14} />
+        </button>
       </div>
     </div>
   )

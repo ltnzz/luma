@@ -74,40 +74,39 @@ export function DashboardHeader({
 
   const currentWilayahLabel = useMemo(() => {
     const found = WILAYAH_ITEMS.find((item) => item.key === activeWilayah)
+    if (found?.key === 'ALL') return t('dashboard.region.ALL')
     return found ? found.label : activeWilayah
-  }, [activeWilayah])
+  }, [activeWilayah, t])
 
   return (
-    <header className="z-30 flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-4 sm:px-6 shadow-2xs select-none">
+    <header className="z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border bg-surface px-2.5 sm:px-6 shadow-2xs select-none">
       {/* 1. Kiri: Brand Logo & Title */}
-      <div className="flex items-center gap-2.5">
-        <span
-          aria-hidden="true"
-          className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary text-sm font-black text-on-primary shadow-xs select-none"
-        >
-          L
-        </span>
-        <div className="flex flex-col justify-center">
-          <span className="text-sm sm:text-base font-bold tracking-tight text-foreground leading-none">
-            {t('app.name')}
-          </span>
-          <span className="text-[10px] font-medium text-muted leading-tight whitespace-nowrap mt-0.5">
-            {t('app.tagline')}
-          </span>
-        </div>
-      </div>
+      <a
+        href="#"
+        aria-label={t('common.brandA11y')}
+        className="flex min-w-0 shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+      >
+        <img
+          src="/luma-logo.png"
+          alt="Luma"
+          className="h-auto w-[86px] object-contain transition-[filter] duration-200 sm:w-[112px] dark:brightness-[2.15] dark:contrast-[1.08] dark:saturate-[1.25] dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.20)] dark:hover:drop-shadow-[0_0_7px_rgba(255,255,255,0.27)]"
+        />
+      </a>
 
       {/* 2. Kanan: Region Selector + Live Date & Time + Language Switcher + Theme Toggle */}
-      <div className="flex items-center gap-2 sm:gap-2.5">
+      <div className="flex min-w-0 items-center gap-1 sm:gap-2.5">
         {/* Region Selector Dropdown */}
         {onSelectWilayah && (
-          <div className="relative w-[142px]" ref={dropdownRef}>
+          <div className="relative w-[108px] xs:w-[118px] sm:w-[142px]" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setIsRegionOpen((prev) => !prev)}
               className="flex items-center justify-between w-full rounded-full border border-border/80 bg-surface hover:bg-surface-muted/60 px-2.5 py-1 text-[10px] font-medium text-foreground hover:border-primary/50 transition-all cursor-pointer shadow-2xs leading-none"
               aria-haspopup="listbox"
               aria-expanded={isRegionOpen}
+              aria-label={`${t('mapFirst.header.selectRegion')}. ${t('mapFirst.header.current')} ${currentWilayahLabel}`}
+              data-tooltip={t('mapFirst.header.regionTooltip')}
+              data-tooltip-side="bottom"
             >
               <div className="flex items-center gap-1.5 min-w-0">
                 <MapPinIcon size={10} className="text-primary shrink-0" />
@@ -137,7 +136,9 @@ export function DashboardHeader({
                           : 'text-foreground hover:bg-surface-muted/80'
                       }`}
                     >
-                      <span className="text-[10px] leading-tight truncate">{item.label}</span>
+                      <span className="text-[10px] leading-tight truncate">
+                        {item.key === 'ALL' ? t('dashboard.region.ALL') : item.label}
+                      </span>
                       {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 ml-1" />}
                     </button>
                   )
@@ -160,7 +161,7 @@ export function DashboardHeader({
           <button
             type="button"
             onClick={() => setLanguage('id')}
-            className={`rounded-lg px-2 py-1 text-[11px] transition-colors cursor-pointer ${
+            className={`rounded-lg px-1.5 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
               language === 'id' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
             }`}
             title="Bahasa Indonesia"
@@ -170,7 +171,7 @@ export function DashboardHeader({
           <button
             type="button"
             onClick={() => setLanguage('en')}
-            className={`rounded-lg px-2 py-1 text-[11px] transition-colors cursor-pointer ${
+            className={`rounded-lg px-1.5 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
               language === 'en' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
             }`}
             title="English"

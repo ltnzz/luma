@@ -1,13 +1,8 @@
-import {
-  CloseIcon,
-  HospitalIcon,
-  TreeIcon,
-  SchoolIcon,
-  BusIcon,
-  DropletIcon,
-} from '../../../components/ui/Icons'
+import { CloseIcon } from '../../../components/ui/Icons'
+import { CategoryIconBadge, type CategoryIconKind } from '../../../components/ui/CategoryIconBadge'
 import { TRANSJAKARTA_CORRIDORS, type CorridorInfo } from '../../../data/transit-corridors'
 import type { KpiCategory } from './KpiMetricsDock'
+import { useTranslation } from '../../../i18n/useTranslation'
 
 export type FaskesSubFilter = 'all' | 'rsud' | 'puskesmas' | 'other'
 export type RthSubFilter = 'all' | 'taman' | 'hutan' | 'jalur'
@@ -59,45 +54,67 @@ export function ContextualCategoryFilterCard({
   schoolCounts = { total: 1503, sma: 117, smp: 289, sd: 1097 },
   onClose,
 }: ContextualCategoryFilterCardProps) {
+  const { language } = useTranslation()
+  const copy = language === 'id'
+    ? {
+        healthTitle: 'Filter Faskes', healthSubtitle: 'Fasilitas Kesehatan',
+        greenTitle: 'Filter Ruang Hijau', greenSubtitle: 'Area Terbuka Hijau',
+        schoolTitle: 'Filter Sekolah Negeri', schoolSubtitle: 'Satuan Pendidikan',
+        transitTitle: 'Filter Rute BRT', transitSubtitle: 'Koridor Transjakarta',
+        waterTitle: 'Filter Jaringan Air', waterSubtitle: 'Pipa Akses PAM JAYA',
+        close: 'Tutup filter kategori', all: 'Semua', corridor: 'Koridor',
+        noRoutes: 'Tidak ada rute BRT di wilayah ini', pipeline: 'Jalur Pipa PAM JAYA',
+        show: 'Tampil', hide: 'Sembunyi',
+        waterDescription: 'Menampilkan jaringan pipa air bersih PAM JAYA yang melayani 68% populasi warga DKI Jakarta.',
+        soloMode: 'Mode Solo Filter Aktif', reset: 'Reset Filter',
+      }
+    : {
+        healthTitle: 'Healthcare Filter', healthSubtitle: 'Healthcare Facilities',
+        greenTitle: 'Green Space Filter', greenSubtitle: 'Green Open Spaces',
+        schoolTitle: 'Public School Filter', schoolSubtitle: 'Education Units',
+        transitTitle: 'BRT Route Filter', transitSubtitle: 'Transjakarta Corridors',
+        waterTitle: 'Water Network Filter', waterSubtitle: 'PAM JAYA Access Pipes',
+        close: 'Close category filter', all: 'All', corridor: 'Corridors',
+        noRoutes: 'No BRT routes in this region', pipeline: 'PAM JAYA Pipeline',
+        show: 'Visible', hide: 'Hidden',
+        waterDescription: 'Shows the PAM JAYA clean-water network serving 68% of DKI Jakarta residents.',
+        soloMode: 'Solo Filter Active', reset: 'Reset Filter',
+      }
+
   // Category config (title, color, icon)
   const config = {
     kesehatan: {
-      title: 'Filter Faskes',
-      subtitle: `${faskesCounts.total} Fasilitas Kesehatan`,
-      icon: <HospitalIcon size={12} />,
-      iconColor: 'bg-rose-500/15 text-rose-600',
+      title: copy.healthTitle,
+      subtitle: `${faskesCounts.total} ${copy.healthSubtitle}`,
+      iconCategory: 'health' as CategoryIconKind,
       borderColor: 'border-rose-500/30',
       chipActive: 'bg-rose-500 text-white font-bold',
     },
     rth: {
-      title: 'Filter Ruang Hijau',
-      subtitle: `${rthCounts.total} Area Terbuka Hijau`,
-      icon: <TreeIcon size={12} />,
-      iconColor: 'bg-emerald-500/15 text-emerald-600',
+      title: copy.greenTitle,
+      subtitle: `${rthCounts.total} ${copy.greenSubtitle}`,
+      iconCategory: 'green' as CategoryIconKind,
       borderColor: 'border-emerald-500/30',
       chipActive: 'bg-emerald-600 text-white font-bold',
     },
     sekolah: {
-      title: 'Filter Sekolah Negeri',
-      subtitle: `${schoolCounts.total.toLocaleString('id-ID')} Satuan Pendidikan`,
-      icon: <SchoolIcon size={12} />,
-      iconColor: 'bg-blue-500/15 text-blue-600',
+      title: copy.schoolTitle,
+      subtitle: `${schoolCounts.total.toLocaleString(language === 'id' ? 'id-ID' : 'en-US')} ${copy.schoolSubtitle}`,
+      iconCategory: 'school' as CategoryIconKind,
       borderColor: 'border-blue-500/30',
       chipActive: 'bg-blue-600 text-white font-bold',
     },
     transum: {
-      title: 'Filter Rute BRT',
-      subtitle: `${corridors.length} Koridor Transjakarta`,
-      icon: <BusIcon size={12} />,
-      iconColor: 'bg-purple-500/15 text-purple-600',
+      title: copy.transitTitle,
+      subtitle: `${corridors.length} ${copy.transitSubtitle}`,
+      iconCategory: 'transit' as CategoryIconKind,
       borderColor: 'border-purple-500/30',
       chipActive: 'bg-purple-600 text-white font-bold',
     },
     air: {
-      title: 'Filter Jaringan Air',
-      subtitle: 'Pipa Akses PAM JAYA',
-      icon: <DropletIcon size={12} />,
-      iconColor: 'bg-sky-500/15 text-sky-600',
+      title: copy.waterTitle,
+      subtitle: copy.waterSubtitle,
+      iconCategory: 'water' as CategoryIconKind,
       borderColor: 'border-sky-500/30',
       chipActive: 'bg-sky-600 text-white font-bold',
     },
@@ -105,16 +122,12 @@ export function ContextualCategoryFilterCard({
 
   return (
     <div
-      className="pointer-events-auto flex flex-col gap-1.5 rounded-2xl luma-glass p-2.5 sm:p-3 select-none w-60 sm:w-64 animate-in fade-in slide-in-from-left-2 duration-200"
+      className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2 rounded-xl luma-map-card luma-glass-hover p-3 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-64"
     >
       {/* 1. Header: Ikon Kategori, Judul, Scope Badge, dan Tombol Close */}
       <div className="flex items-center justify-between border-b border-border/50 pb-1.5">
         <div className="flex items-center gap-2 min-w-0">
-          <span
-            className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-lg ${config.iconColor}`}
-          >
-            {config.icon}
-          </span>
+          <CategoryIconBadge category={config.iconCategory} />
           <div className="flex flex-col min-w-0">
             <span className="text-[11px] font-bold text-foreground leading-tight truncate">
               {config.title}
@@ -129,7 +142,9 @@ export function ContextualCategoryFilterCard({
           type="button"
           onClick={onClose}
           className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-muted hover:text-foreground hover:bg-surface-muted transition-colors cursor-pointer"
-          title="Tutup filter kategori (kembali ke semua fasilitas)"
+          title={copy.close}
+          aria-label={copy.close}
+          data-tooltip={copy.close}
         >
           <CloseIcon size={11} />
         </button>
@@ -149,7 +164,7 @@ export function ContextualCategoryFilterCard({
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
             >
-              Semua ({faskesCounts.total})
+              {copy.all} ({faskesCounts.total})
             </button>
             <button
               type="button"
@@ -188,7 +203,7 @@ export function ContextualCategoryFilterCard({
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
             >
-              Semua ({rthCounts.total})
+              {copy.all} ({rthCounts.total})
             </button>
             <button
               type="button"
@@ -227,7 +242,7 @@ export function ContextualCategoryFilterCard({
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
             >
-              Semua
+              {copy.all}
             </button>
             <button
               type="button"
@@ -279,8 +294,8 @@ export function ContextualCategoryFilterCard({
             >
               <span>
                 {scopeLabel && scopeLabel !== 'DKI Jakarta'
-                  ? `Semua ${corridors.length} Koridor ${scopeLabel}`
-                  : `Semua ${corridors.length} Koridor BRT`}
+                  ? `${copy.all} ${corridors.length} ${copy.corridor} ${scopeLabel}`
+                  : `${copy.all} ${corridors.length} ${copy.corridor} BRT`}
               </span>
               {!selectedCorridorId && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
             </button>
@@ -288,7 +303,7 @@ export function ContextualCategoryFilterCard({
             <div className="max-h-24 sm:max-h-28 overflow-y-auto scrollbar-thin flex flex-col gap-0.5 pr-0.5">
               {corridors.length === 0 ? (
                 <div className="p-2 text-center text-[10px] text-muted">
-                  Tidak ada rute BRT di wilayah ini
+                  {copy.noRoutes}
                 </div>
               ) : (
                 corridors.map((corridor) => {
@@ -324,7 +339,7 @@ export function ContextualCategoryFilterCard({
         {category === 'air' && (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between rounded-xl luma-glass-inner p-2">
-              <span className="text-[10px] text-foreground font-medium">Jalur Pipa PAM JAYA</span>
+              <span className="text-[10px] text-foreground font-medium">{copy.pipeline}</span>
               <button
                 type="button"
                 onClick={onToggleWaterNetwork}
@@ -334,12 +349,11 @@ export function ContextualCategoryFilterCard({
                     : 'bg-surface-muted text-muted border border-border'
                 }`}
               >
-                {isWaterNetworkVisible ? 'Tampil' : 'Sembunyi'}
+                {isWaterNetworkVisible ? copy.show : copy.hide}
               </button>
             </div>
             <p className="text-[9.5px] text-muted leading-relaxed">
-              Menampilkan jaringan pipa air bersih PAM JAYA yang melayani 68% populasi warga DKI
-              Jakarta.
+              {copy.waterDescription}
             </p>
           </div>
         )}
@@ -347,7 +361,7 @@ export function ContextualCategoryFilterCard({
 
       {/* 3. Footer Reset Cepat */}
       <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[9.5px]">
-        <span className="text-muted">Mode Solo Filter Aktif</span>
+        <span className="text-muted">{copy.soloMode}</span>
         <button
           type="button"
           onClick={() => {
@@ -359,7 +373,7 @@ export function ContextualCategoryFilterCard({
           }}
           className="text-primary font-bold hover:underline cursor-pointer"
         >
-          Reset Filter &times;
+          {copy.reset} &times;
         </button>
       </div>
     </div>

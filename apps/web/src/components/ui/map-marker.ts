@@ -34,9 +34,9 @@ export const FACILITY_CATEGORIES: FacilityCategory[] = [
 /** Warna kategori — dipertahankan dari implementasi marker yang sudah ada. */
 export const CATEGORY_COLORS: Record<FacilityCategory, string> = {
   fasum: '#16a34a', // green
-  transum: '#2563eb', // blue
+  transum: '#7c3aed', // violet
   kesehatan: '#dc2626', // red
-  pendidikan: '#7e22ce', // purple
+  pendidikan: '#2563eb', // blue
   lingkungan: '#06b6d4', // cyan
 }
 
@@ -101,11 +101,12 @@ export function createFacilityMarkerElement(category: string | null | undefined)
 
   const innerEl = document.createElement('div')
   innerEl.className =
-    'flex items-center justify-center rounded-full shadow-md transition-all duration-200 hover:scale-125'
+    'flex items-center justify-center rounded-[10px] transition-all duration-200 hover:-translate-y-0.5 hover:scale-110'
   innerEl.style.backgroundColor = color
-  innerEl.style.width = '28px'
-  innerEl.style.height = '28px'
+  innerEl.style.width = '30px'
+  innerEl.style.height = '30px'
   innerEl.style.border = '2px solid white'
+  innerEl.style.boxShadow = `0 5px 14px rgba(15, 23, 42, 0.2), 0 0 0 3px ${withAlpha(color, '1f')}`
   innerEl.innerHTML = iconSvg
 
   wrapperEl.appendChild(innerEl)
@@ -255,8 +256,6 @@ export function buildFacilityPointCollection(facilities: Facility[]): FacilityPo
 export interface FacilityPopupTexts {
   /** Label kategori yang ramah (mis. "Kesehatan"). */
   categoryLabel: string
-  /** Label tombol "Lihat Detail Transparansi". */
-  viewDetail: string
   /** Label anggaran. */
   budget: string
   /** Label kualitas udara. */
@@ -297,7 +296,7 @@ function readMetricString(metrics: Record<string, unknown> | undefined, keys: st
  * - name, badge kategori (subCategory bila ada), wilayah/address
  * - budget.total (transparansi) bila ada
  * - metrics.aqiStatus (+ metrics.aqi bila angka) bila ada
- * - tombol "Lihat Detail Transparansi" (data-luma-popup-detail)
+ * - ringkasan metrik yang tersedia
  *
  * Tema dipakai via design tokens (bg-surface/text-foreground/border-border)
  * sehingga popup otomatis mendukung light & dark tanpa warna hardcoded.
@@ -331,32 +330,33 @@ export function buildFacilityPopupHtml(facility: Facility, texts: FacilityPopupT
   ].filter((row): row is { label: string; value: string; strong: boolean } => row !== null)
 
   return `
-    <div class="w-[210px] sm:w-[240px] overflow-hidden rounded-xl border border-border bg-surface text-foreground shadow-xl">
-      <div style="height:3px;background:${color}" aria-hidden="true"></div>
-      <div class="p-3">
-        <span
-          class="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-          style="background:${withAlpha(color)};color:${color}"
-        >
-          <span class="h-2 w-2 rounded-full" style="background:${color}" aria-hidden="true"></span>
-          ${badge}
-        </span>
-        <h4 class="m-0 mt-1.5 text-[13px] font-bold leading-snug text-foreground">${name}</h4>
+    <article class="luma-popup-card w-[220px] overflow-hidden rounded-xl text-foreground sm:w-[250px]">
+      <div class="p-3.5">
+        <div class="flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-[0.08em]" style="color:${color}">
+          <span class="h-1.5 w-1.5 shrink-0 rounded-full" style="background:${color}" aria-hidden="true"></span>
+          <span class="min-w-0 truncate">${badge}</span>
+        </div>
+
+        <h4 class="m-0 mt-1.5 text-[13px] font-bold leading-snug tracking-tight text-foreground">${name}</h4>
         ${
           location
-            ? `<p class="m-0 mt-0.5 text-[11px] leading-snug text-muted">${location}</p>`
+            ? `<p class="m-0 mt-1 flex items-start gap-1.5 text-[10.5px] leading-relaxed text-muted">
+                <svg class="mt-0.5 h-3 w-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 10c0 5-5.5 10.2-7.4 11.8a1 1 0 0 1-1.2 0C9.5 20.2 4 15 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                <span>${location}</span>
+              </p>`
             : ''
         }
+
         ${
           metricRows.length > 0
-            ? `<dl class="m-0 mt-2 flex flex-col gap-1 border-t border-border pt-2 text-[11px]">
+            ? `<dl class="m-0 mt-2.5 flex flex-col gap-1.5 border-t border-border/70 pt-2.5 text-[10.5px]">
                 ${metricRows
                   .map(
                     (row) => `
-                    <div class="flex items-baseline justify-between gap-2">
+                    <div class="flex items-baseline justify-between gap-3">
                       <dt class="shrink-0 font-semibold text-muted">${escapeHtml(row.label)}</dt>
                       <dd class="m-0 text-right ${
-                        row.strong ? 'font-bold text-primary' : 'font-medium text-foreground'
+                        row.strong ? 'font-extrabold text-primary' : 'font-bold text-foreground'
                       }">${escapeHtml(row.value)}</dd>
                     </div>`,
                   )
@@ -364,13 +364,8 @@ export function buildFacilityPopupHtml(facility: Facility, texts: FacilityPopupT
               </dl>`
             : ''
         }
-        <button
-          type="button"
-          data-luma-popup-detail="1"
-          class="mt-2 flex min-h-10 w-full cursor-pointer items-center justify-center gap-1 rounded-lg bg-primary px-3 py-2 text-xs font-bold text-on-primary transition-colors hover:bg-primary-hover"
-          aria-label="${escapeHtml(texts.viewDetail)}"
-        >${escapeHtml(texts.viewDetail)}</button>
+
       </div>
-    </div>
+    </article>
   `
 }

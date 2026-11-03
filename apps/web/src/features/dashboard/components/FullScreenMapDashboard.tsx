@@ -1,5 +1,8 @@
 import { useState, useCallback, useMemo } from 'react'
 import { InteractiveMap } from '../../../components/ui/InteractiveMap'
+import { EmptyState } from '../../../components/ui/EmptyState'
+import { ErrorBanner } from '../../../components/ui/ErrorBanner'
+import { Skeleton } from '../../../components/ui/Skeleton'
 import { FacilityDetailModal } from './FacilityDetailModal'
 import { TransitRoutesWidget } from './TransitRoutesWidget'
 import { AirQualityCard } from './AirQualityCard'
@@ -18,6 +21,7 @@ import { useSchoolsData } from '../hooks/useSchoolsData'
 import { CITY_AGGREGATES } from '../../../data/city-aggregates'
 import { TRANSJAKARTA_CORRIDORS } from '../../../data/transit-corridors'
 import type { FacilityItem } from '../types/facility.types'
+import { useTranslation } from '../../../i18n/useTranslation'
 
 const WILAYAH_COORDINATES: Record<string, { center: [number, number]; zoom: number }> = {
   ALL: { center: [106.8272, -6.185], zoom: 10.8 },
@@ -46,6 +50,7 @@ export function FullScreenMapDashboard({
   onSelectWilayah: propOnSelectWilayah,
   onNavigateToDataSources,
 }: FullScreenMapDashboardProps = {}) {
+  const { t } = useTranslation()
   const [internalWilayah, setInternalWilayah] = useState<string>('ALL')
   const activeWilayah = propActiveWilayah ?? internalWilayah
 
@@ -99,7 +104,12 @@ export function FullScreenMapDashboard({
     )
   }, [cityAggregate])
 
-  const { facilities } = useFacilities({
+  const {
+    facilities,
+    status: facilitiesStatus,
+    error: facilitiesError,
+    refetch: refetchFacilities,
+  } = useFacilities({
     wilayah: activeWilayah === 'ALL' ? undefined : activeWilayah,
   })
 
@@ -207,6 +217,9 @@ export function FullScreenMapDashboard({
   // Visibilitas Layer Berdasarkan Filter Solo
   const isTransitVisible = activeCategoryFilter === null || activeCategoryFilter === 'transum'
   const isWaterVisible = showWaterNetwork && (activeCategoryFilter === null || activeCategoryFilter === 'air')
+  const usesFacilityMarkers = activeCategoryFilter !== 'transum' && activeCategoryFilter !== 'air'
+  const markerDataIsEmpty =
+    usesFacilityMarkers && facilitiesStatus !== 'loading' && combinedFacilities.length === 0
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-surface-muted select-none">
@@ -228,10 +241,54 @@ export function FullScreenMapDashboard({
         onSelectCorridor={setFocusedCorridorId}
       />
 
+      {/* Feedback data peta: loading, error, dan hasil kosong. */}
+      <div
+        className="pointer-events-none absolute inset-x-3 top-1/2 z-40 mx-auto max-w-sm -translate-y-1/2"
+        aria-live="polite"
+      >
+        {facilitiesStatus === 'loading' ? (
+          <div
+            role="status"
+            aria-label={t('mapFirst.loading.facilities')}
+            className="pointer-events-auto rounded-2xl luma-map-card p-4"
+          >
+            <div className="flex items-center gap-3">
+              <Skeleton variant="circle" className="h-10 w-10 shrink-0" />
+              <div className="flex flex-1 flex-col gap-2">
+                <Skeleton className="h-3.5 w-36" />
+                <Skeleton className="h-2.5 w-full" />
+              </div>
+            </div>
+            <div className="mt-3 grid grid-cols-3 gap-2">
+              <Skeleton className="h-8 rounded-lg" />
+              <Skeleton className="h-8 rounded-lg" />
+              <Skeleton className="h-8 rounded-lg" />
+            </div>
+            <span className="sr-only">{t('mapFirst.loading.markers')}</span>
+          </div>
+        ) : null}
+
+        {facilitiesStatus === 'error' ? (
+          <ErrorBanner
+            error={facilitiesError}
+            onRetry={refetchFacilities}
+            className="pointer-events-auto rounded-2xl border border-danger/30 bg-surface/90 px-4 py-3 shadow-xl backdrop-blur-lg"
+          />
+        ) : null}
+
+        {facilitiesStatus !== 'error' && markerDataIsEmpty ? (
+          <EmptyState
+            title={t('mapFirst.empty.title')}
+            description={t('mapFirst.empty.description')}
+            className="pointer-events-auto rounded-2xl border border-dashed border-border bg-surface/90 px-5 py-6 text-center shadow-xl backdrop-blur-lg"
+          />
+        ) : null}
+      </div>
+
 
       {/* 3. Panel Kolom Kiri: Sumber Data Resmi, Kualitas Udara, dan Contextual Filter / Legenda */}
       {!isTransitMode && (
-        <aside className="pointer-events-none absolute top-3.5 left-3 sm:top-4 sm:left-4 z-30 flex flex-col gap-2 max-h-[calc(100vh-5.5rem)] overflow-y-auto scrollbar-none pb-2">
+        <aside className="pointer-events-none absolute left-2 right-2 top-2 z-30 flex max-h-[44dvh] flex-col items-start gap-2 overflow-y-auto pb-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:max-h-[calc(100vh-5.5rem)]">
           <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
           <AirQualityCard
             airAqi={realtimeAirQuality?.aqi ?? 173}
@@ -277,7 +334,7 @@ export function FullScreenMapDashboard({
         <div className="pointer-events-none absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 animate-in fade-in slide-in-from-bottom-3 duration-300 max-w-[calc(100vw-1.5rem)]">
           <KpiMetricsDock
             waterCoverage={68}
-            waterCoverageLabel="Akses"
+            waterCoverageLabel={t('mapFirst.dock.access')}
             isWaterActive={showWaterNetwork}
             faskesCount={faskesCounts.total}
             rthCount={rthCounts.total}
