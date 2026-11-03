@@ -1,5 +1,4 @@
-import { useState, useCallback, useMemo } from 'react'
-import { InteractiveMap } from '../../../components/ui/InteractiveMap'
+import { lazy, Suspense, useState, useCallback, useMemo } from 'react'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { ErrorBanner } from '../../../components/ui/ErrorBanner'
 import { Skeleton } from '../../../components/ui/Skeleton'
@@ -22,6 +21,12 @@ import { CITY_AGGREGATES } from '../../../data/city-aggregates'
 import { TRANSJAKARTA_CORRIDORS } from '../../../data/transit-corridors'
 import type { FacilityItem } from '../types/facility.types'
 import { useTranslation } from '../../../i18n/useTranslation'
+
+const InteractiveMap = lazy(() =>
+  import('../../../components/ui/InteractiveMap').then((module) => ({
+    default: module.InteractiveMap,
+  })),
+)
 
 const WILAYAH_COORDINATES: Record<string, { center: [number, number]; zoom: number }> = {
   ALL: { center: [106.8272, -6.185], zoom: 10.8 },
@@ -130,7 +135,13 @@ export function FullScreenMapDashboard({
     return { total: list.length, taman, hutan }
   }, [facilities])
 
-  const { schoolCounts, schoolsInWilayah } = useSchoolsData(activeWilayah)
+  const {
+    schoolCounts,
+    schoolsInWilayah,
+    status: schoolsStatus,
+    error: schoolsError,
+    refetch: refetchSchools,
+  } = useSchoolsData(activeWilayah)
 
   // Filter Fasilitas Dinamis Berdasarkan activeCategoryFilter & Sub-filter
   const combinedFacilities = useMemo(() => {
@@ -222,35 +233,57 @@ export function FullScreenMapDashboard({
   const isTransitVisible = activeCategoryFilter === null || activeCategoryFilter === 'transum'
   const isWaterVisible = showWaterNetwork && (activeCategoryFilter === null || activeCategoryFilter === 'air')
   const usesFacilityMarkers = activeCategoryFilter !== 'transum' && activeCategoryFilter !== 'air'
+  const markerDataIsLoading = activeCategoryFilter === 'sekolah'
+    ? schoolsStatus === 'loading'
+    : facilitiesStatus === 'loading'
+  const markerDataError = activeCategoryFilter === 'sekolah' ? schoolsError : facilitiesError
+  const markerDataHasError = markerDataError !== null
   const markerDataIsEmpty =
-    usesFacilityMarkers && facilitiesStatus !== 'loading' && combinedFacilities.length === 0
+    usesFacilityMarkers && !markerDataIsLoading && !markerDataHasError && combinedFacilities.length === 0
+  const refetchMarkerData = activeCategoryFilter === 'sekolah' ? refetchSchools : refetchFacilities
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-surface-muted select-none">
       {/* 1. Base Layer: Full-Screen Interactive Map Canvas */}
-      <InteractiveMap
-        height="100%"
-        className="h-full w-full"
-        facilities={combinedFacilities}
-        selectedFacilityId={selectedFacility?.id}
-        onSelectFacility={handleMarkerClick}
-        focusCoords={focusCoords}
-        focusZoom={focusZoom}
-        showWaterNetwork={isWaterVisible}
-        showTransit={isTransitVisible}
-        activeTransitModes={activeTransitModes}
-        selectedWilayah={activeWilayah}
-        onSelectWilayah={handleSelectWilayah}
-        focusedCorridorId={focusedCorridorId}
-        onSelectCorridor={setFocusedCorridorId}
-      />
+      <Suspense
+        fallback={
+          <div
+            className="flex h-full w-full items-center justify-center bg-surface-muted"
+            role="status"
+            aria-label={t('mapFirst.loading.map')}
+          >
+            <div className="w-full max-w-sm space-y-3 px-6">
+              <Skeleton className="mx-auto h-4 w-40 rounded-full" />
+              <Skeleton className="h-48 w-full rounded-3xl" />
+              <span className="sr-only">{t('mapFirst.loading.map')}</span>
+            </div>
+          </div>
+        }
+      >
+        <InteractiveMap
+          height="100%"
+          className="h-full w-full"
+          facilities={combinedFacilities}
+          selectedFacilityId={selectedFacility?.id}
+          onSelectFacility={handleMarkerClick}
+          focusCoords={focusCoords}
+          focusZoom={focusZoom}
+          showWaterNetwork={isWaterVisible}
+          showTransit={isTransitVisible}
+          activeTransitModes={activeTransitModes}
+          selectedWilayah={activeWilayah}
+          onSelectWilayah={handleSelectWilayah}
+          focusedCorridorId={focusedCorridorId}
+          onSelectCorridor={setFocusedCorridorId}
+        />
+      </Suspense>
 
       {/* Feedback data peta: loading, error, dan hasil kosong. */}
       <div
         className="pointer-events-none absolute inset-x-3 top-1/2 z-40 mx-auto max-w-sm -translate-y-1/2"
         aria-live="polite"
       >
-        {facilitiesStatus === 'loading' ? (
+        {markerDataIsLoading ? (
           <div
             role="status"
             aria-label={t('mapFirst.loading.facilities')}
@@ -272,15 +305,15 @@ export function FullScreenMapDashboard({
           </div>
         ) : null}
 
-        {facilitiesStatus === 'error' ? (
+        {markerDataHasError ? (
           <ErrorBanner
-            error={facilitiesError}
-            onRetry={refetchFacilities}
+            error={markerDataError}
+            onRetry={refetchMarkerData}
             className="pointer-events-auto rounded-2xl border border-danger/30 bg-surface/90 px-4 py-3 shadow-xl backdrop-blur-lg"
           />
         ) : null}
 
-        {facilitiesStatus !== 'error' && markerDataIsEmpty ? (
+        {markerDataIsEmpty ? (
           <EmptyState
             title={t('mapFirst.empty.title')}
             description={t('mapFirst.empty.description')}
@@ -344,7 +377,7 @@ export function FullScreenMapDashboard({
             isWaterActive={showWaterNetwork}
             faskesCount={facilitiesStatus === 'loading' || facilitiesStatus === 'error' ? null : faskesCounts.total}
             rthCount={facilitiesStatus === 'loading' || facilitiesStatus === 'error' ? null : rthCounts.total}
-            schoolCount={schoolCounts.total}
+            schoolCount={schoolsStatus === 'loading' || schoolsStatus === 'error' ? null : schoolCounts.total}
             transitCorridorCount={corridorCount}
             activeCategory={activeCategoryFilter}
             onFilterCategory={handleDockCategoryClick}

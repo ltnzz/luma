@@ -53,6 +53,7 @@ export function KpiMetricsDock({
         } ${isWaterActive ? 'opacity-100' : 'opacity-60'}`}
         title={t('mapFirst.dock.water')}
         data-tooltip={t('mapFirst.dock.water')}
+        aria-pressed={activeCategory === 'air'}
       >
         <CategoryIconBadge category="water" active={activeCategory === 'air'} />
         <div className="flex flex-col whitespace-nowrap">
@@ -82,6 +83,7 @@ export function KpiMetricsDock({
         }`}
         title={t('mapFirst.dock.health')}
         data-tooltip={t('mapFirst.dock.health')}
+        aria-pressed={activeCategory === 'kesehatan'}
       >
         <CategoryIconBadge category="health" active={activeCategory === 'kesehatan'} />
         <div className="flex flex-col whitespace-nowrap">
@@ -106,6 +108,7 @@ export function KpiMetricsDock({
         }`}
         title={t('mapFirst.dock.green')}
         data-tooltip={t('mapFirst.dock.green')}
+        aria-pressed={activeCategory === 'rth'}
       >
         <CategoryIconBadge category="green" active={activeCategory === 'rth'} />
         <div className="flex flex-col whitespace-nowrap">
@@ -130,6 +133,7 @@ export function KpiMetricsDock({
         }`}
         title={t('mapFirst.dock.school')}
         data-tooltip={t('mapFirst.dock.school')}
+        aria-pressed={activeCategory === 'sekolah'}
       >
         <CategoryIconBadge category="school" active={activeCategory === 'sekolah'} />
         <div className="flex flex-col whitespace-nowrap">
@@ -155,6 +159,7 @@ export function KpiMetricsDock({
         }`}
         title={t('mapFirst.dock.transit')}
         data-tooltip={t('mapFirst.dock.transit')}
+        aria-pressed={activeCategory === 'transum'}
       >
         <CategoryIconBadge category="transit" active={activeCategory === 'transum'} />
         <div className="flex flex-col whitespace-nowrap">

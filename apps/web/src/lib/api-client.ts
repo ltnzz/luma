@@ -133,7 +133,7 @@ export async function apiRequestJson<T>(
   }
 
   if (!response.ok) {
-    if (response.status === 503 || response.status === 504) {
+    if (response.status >= 500) {
       publishConnectionState('unavailable')
     } else {
       publishConnectionState('available')

@@ -1,6 +1,11 @@
 import { CloseIcon } from '../../../components/ui/Icons'
 import { CategoryIconBadge, type CategoryIconKind } from '../../../components/ui/CategoryIconBadge'
-import { TRANSJAKARTA_CORRIDORS, type CorridorInfo } from '../../../data/transit-corridors'
+import {
+  TRANSIT_DATA_META,
+  TRANSJAKARTA_CORRIDORS,
+  type CorridorInfo,
+} from '../../../data/transit-corridors'
+import { WATER_DATA_META } from '../../../data/water-network'
 import type { KpiCategory } from './KpiMetricsDock'
 import { useTranslation } from '../../../i18n/useTranslation'
 
@@ -49,9 +54,9 @@ export function ContextualCategoryFilterCard({
   corridors = TRANSJAKARTA_CORRIDORS,
   isWaterNetworkVisible = true,
   onToggleWaterNetwork,
-  faskesCounts = { total: 34, rsud: 26, puskesmas: 7, other: 1 },
-  rthCounts = { total: 24, taman: 19, hutan: 5, jalur: 0 },
-  schoolCounts = { total: 1503, sma: 117, smp: 289, sd: 1097 },
+  faskesCounts = { total: 0, rsud: 0, puskesmas: 0, other: 0 },
+  rthCounts = { total: 0, taman: 0, hutan: 0, jalur: 0 },
+  schoolCounts = { total: 0, sma: 0, smp: 0, sd: 0 },
   onClose,
 }: ContextualCategoryFilterCardProps) {
   const { language } = useTranslation()
@@ -67,6 +72,7 @@ export function ContextualCategoryFilterCard({
         show: 'Tampil', hide: 'Sembunyi',
         waterDescription: 'Menampilkan jaringan pipa air bersih PAM JAYA yang melayani 68% populasi warga DKI Jakarta.',
         soloMode: 'Mode Solo Filter Aktif', reset: 'Reset Filter',
+        source: 'Sumber', period: 'Periode', updated: 'Diperbarui', unavailable: 'Belum tersedia',
       }
     : {
         healthTitle: 'Healthcare Filter', healthSubtitle: 'Healthcare Facilities',
@@ -79,7 +85,14 @@ export function ContextualCategoryFilterCard({
         show: 'Visible', hide: 'Hidden',
         waterDescription: 'Shows the PAM JAYA clean-water network serving 68% of DKI Jakarta residents.',
         soloMode: 'Solo Filter Active', reset: 'Reset Filter',
+        source: 'Source', period: 'Period', updated: 'Updated', unavailable: 'Not available',
       }
+
+  const activeMetadata = category === 'transum'
+    ? TRANSIT_DATA_META
+    : category === 'air'
+      ? WATER_DATA_META
+      : null
 
   // Category config (title, color, icon)
   const config = {
@@ -163,6 +176,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={faskesFilter === 'all'}
             >
               {copy.all} ({faskesCounts.total})
             </button>
@@ -174,6 +188,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={faskesFilter === 'rsud'}
             >
               RSUD ({faskesCounts.rsud})
             </button>
@@ -185,6 +200,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={faskesFilter === 'puskesmas'}
             >
               Pusk. ({faskesCounts.puskesmas})
             </button>
@@ -202,6 +218,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={rthFilter === 'all'}
             >
               {copy.all} ({rthCounts.total})
             </button>
@@ -213,6 +230,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={rthFilter === 'taman'}
             >
               Taman ({rthCounts.taman})
             </button>
@@ -224,6 +242,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={rthFilter === 'hutan'}
             >
               Hutan ({rthCounts.hutan})
             </button>
@@ -241,6 +260,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={schoolFilter === 'all'}
             >
               {copy.all}
             </button>
@@ -252,6 +272,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={schoolFilter === 'sma'}
             >
               SMA ({schoolCounts.sma})
             </button>
@@ -263,6 +284,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={schoolFilter === 'smp'}
             >
               SMP ({schoolCounts.smp})
             </button>
@@ -274,6 +296,7 @@ export function ContextualCategoryFilterCard({
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
               }`}
+              aria-pressed={schoolFilter === 'sd'}
             >
               SD ({schoolCounts.sd})
             </button>
@@ -291,6 +314,7 @@ export function ContextualCategoryFilterCard({
                   ? 'bg-purple-600 text-white font-bold'
                   : 'bg-surface-muted/70 text-foreground hover:bg-surface-muted'
               }`}
+              aria-pressed={!selectedCorridorId}
             >
               <span>
                 {scopeLabel && scopeLabel !== 'DKI Jakarta'
@@ -318,6 +342,7 @@ export function ContextualCategoryFilterCard({
                           ? 'bg-purple-600 text-white font-bold'
                           : 'text-foreground hover:bg-surface-muted'
                       }`}
+                      aria-pressed={isSelected}
                     >
                       <div className="flex items-center gap-1.5 min-w-0">
                         <span
@@ -348,6 +373,7 @@ export function ContextualCategoryFilterCard({
                     ? 'bg-sky-600 text-white shadow-2xs'
                     : 'bg-surface-muted text-muted border border-border'
                 }`}
+                aria-pressed={isWaterNetworkVisible}
               >
                 {isWaterNetworkVisible ? copy.show : copy.hide}
               </button>
@@ -358,6 +384,23 @@ export function ContextualCategoryFilterCard({
           </div>
         )}
       </div>
+
+      {activeMetadata ? (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 border-t border-border/40 pt-1.5 text-[9px] leading-tight">
+          <dt className="text-muted">{copy.source}</dt>
+          <dd className="truncate text-right font-medium text-foreground" title={activeMetadata.source}>
+            {activeMetadata.source}
+          </dd>
+          <dt className="text-muted">{copy.period}</dt>
+          <dd className="text-right font-medium text-foreground">
+            {activeMetadata.period ?? `— ${copy.unavailable}`}
+          </dd>
+          <dt className="text-muted">{copy.updated}</dt>
+          <dd className="text-right font-medium text-foreground">
+            {activeMetadata.updatedAt ?? `— ${copy.unavailable}`}
+          </dd>
+        </dl>
+      ) : null}
 
       {/* 3. Footer Reset Cepat */}
       <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[9.5px]">
@@ -372,6 +415,7 @@ export function ContextualCategoryFilterCard({
             onClose()
           }}
           className="text-primary font-bold hover:underline cursor-pointer"
+          aria-label={copy.reset}
         >
           {copy.reset} &times;
         </button>

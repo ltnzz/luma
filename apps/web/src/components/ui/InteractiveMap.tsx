@@ -40,6 +40,15 @@ type GeoJSONData = GeoJSONSourceSpecification['data']
 
 export type MapMode = 'light' | 'dark' | 'satellite'
 
+const CITY_NAME_EN: Record<string, string> = {
+  'JAKARTA PUSAT': 'Central Jakarta',
+  'JAKARTA SELATAN': 'South Jakarta',
+  'JAKARTA BARAT': 'West Jakarta',
+  'JAKARTA UTARA': 'North Jakarta',
+  'JAKARTA TIMUR': 'East Jakarta',
+  'KEP. SERIBU': 'Thousand Islands',
+}
+
 // Clean Minimalist Light Gray Canvas (Esri World Light Gray Base + Reference Halus)
 const LIGHT_CANVAS_STYLE: StyleSpecification = {
   version: 8,
@@ -50,6 +59,7 @@ const LIGHT_CANVAS_STYLE: StyleSpecification = {
         'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
       ],
       tileSize: 256,
+      maxzoom: 16,
       attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
     },
     'esri-light-ref': {
@@ -58,6 +68,7 @@ const LIGHT_CANVAS_STYLE: StyleSpecification = {
         'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
       ],
       tileSize: 256,
+      maxzoom: 16,
     },
   },
   layers: [
@@ -66,14 +77,14 @@ const LIGHT_CANVAS_STYLE: StyleSpecification = {
       type: 'raster',
       source: 'esri-light-base',
       minzoom: 0,
-      maxzoom: 18,
+      maxzoom: 24,
     },
     {
       id: 'esri-light-ref-layer',
       type: 'raster',
       source: 'esri-light-ref',
       minzoom: 0,
-      maxzoom: 18,
+      maxzoom: 24,
     },
   ],
 }
@@ -88,6 +99,7 @@ const DARK_CANVAS_STYLE: StyleSpecification = {
         'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
       ],
       tileSize: 256,
+      maxzoom: 16,
       attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
     },
     'esri-dark-ref': {
@@ -96,6 +108,7 @@ const DARK_CANVAS_STYLE: StyleSpecification = {
         'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
       ],
       tileSize: 256,
+      maxzoom: 16,
     },
   },
   layers: [
@@ -104,14 +117,14 @@ const DARK_CANVAS_STYLE: StyleSpecification = {
       type: 'raster',
       source: 'esri-dark-base',
       minzoom: 0,
-      maxzoom: 18,
+      maxzoom: 24,
     },
     {
       id: 'esri-dark-ref-layer',
       type: 'raster',
       source: 'esri-dark-ref',
       minzoom: 0,
-      maxzoom: 18,
+      maxzoom: 24,
     },
   ],
 }
@@ -126,6 +139,7 @@ const SATELLITE_STYLE: StyleSpecification = {
         'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
       ],
       tileSize: 256,
+      maxzoom: 19,
       attribution: '&copy; Esri, Maxar, Earthstar Geographics',
     },
   },
@@ -135,7 +149,7 @@ const SATELLITE_STYLE: StyleSpecification = {
       type: 'raster',
       source: 'esri-satellite',
       minzoom: 0,
-      maxzoom: 19,
+      maxzoom: 24,
     },
   ],
 }
@@ -969,35 +983,32 @@ export function InteractiveMap({
 
       const aqiInfo = getAqiLevel(173) // Rata-rata indeks kualitas udara DKI Jakarta
       const airQualityUnit = t('mapFirst.air.unit')
-      const aqiBadge = `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo.color}18; color: ${aqiInfo.color}; border: 1px solid ${aqiInfo.color}40;" title="${t('mapFirst.air.title')}: 173 ${airQualityUnit}">
-        <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo.color}"></span>
-        173 ${airQualityUnit}
-      </span>`
+      const aqiDot = `<span class="h-2 w-2 shrink-0 rounded-full ring-2 ring-white/70 dark:ring-black/30" style="background-color:${aqiInfo.color}" title="${t('mapFirst.air.title')}: 173 ${airQualityUnit}" aria-label="${t('mapFirst.air.title')}: 173 ${airQualityUnit}"></span>`
 
       const wrapperEl = document.createElement('div')
       wrapperEl.className = 'group relative flex flex-col items-center cursor-pointer select-none z-10'
       wrapperEl.style.transformOrigin = 'center bottom'
 
       const cardEl = document.createElement('div')
-      cardEl.className = `luma-region-card flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+      cardEl.className = `luma-region-card min-w-[150px] px-3 py-2 luma-map-card border ${cardBorder} rounded-xl transition-all`
 
       cardEl.innerHTML = `
-        <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full ${dotColor} opacity-60"></span>
-          <span class="relative inline-flex h-1.5 w-1.5 rounded-full ${dotColor}"></span>
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex min-w-0 items-center gap-2">
+            <span class="h-2 w-2 shrink-0 rounded-full ${dotColor} shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"></span>
+            <span class="truncate text-[11px] font-bold text-foreground tracking-tight">DKI Jakarta</span>
+          </div>
+          ${aqiDot}
         </div>
-        <div class="flex items-center gap-1.5 whitespace-nowrap">
-          <span class="text-xs font-bold text-foreground tracking-tight">DKI Jakarta</span>
-          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">
-            ${badgeText}
-          </span>
-          ${aqiBadge}
-        </div>
+        <span class="mt-1.5 inline-flex max-w-full px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">${badgeText}</span>
       `
       wrapperEl.setAttribute('data-scope', 'DKI')
+      wrapperEl.setAttribute('role', 'button')
+      wrapperEl.setAttribute('tabindex', '0')
+      wrapperEl.setAttribute('aria-label', `DKI Jakarta, ${badgeText}`)
 
       const notchEl = document.createElement('div')
-      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b${cardBorder}`
+      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b ${cardBorder}`
 
       wrapperEl.appendChild(cardEl)
       wrapperEl.appendChild(notchEl)
@@ -1012,6 +1023,9 @@ export function InteractiveMap({
       wrapperEl.addEventListener('mousedown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('pointerdown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('click', handleProvinceClick)
+      wrapperEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleProvinceClick(e as unknown as MouseEvent)
+      })
 
       const marker = new Marker({ element: wrapperEl, anchor: 'bottom' })
         .setLngLat([106.8272, -6.185])
@@ -1106,11 +1120,12 @@ export function InteractiveMap({
 
       const airQualityUnit = t('mapFirst.air.unit')
       const aqiBadge = station
-        ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo?.color}18; color: ${aqiInfo?.color}; border: 1px solid ${aqiInfo?.color}40;" title="${t('mapFirst.air.title')}: ${station.aqi} ${airQualityUnit}">
-            <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo?.color}"></span>
+        ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color:${aqiInfo?.color}18;color:${aqiInfo?.color};border:1px solid ${aqiInfo?.color}40" title="${t('mapFirst.air.title')}: ${station.aqi} ${airQualityUnit}">
+            <span class="h-1.5 w-1.5 rounded-full" style="background-color:${aqiInfo?.color}"></span>
             ${station.aqi} ${airQualityUnit}
           </span>`
         : ''
+      const displayCityName = language === 'en' ? (CITY_NAME_EN[city.code] ?? city.name) : city.name
 
       cardEl.innerHTML = `
         <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
@@ -1118,17 +1133,18 @@ export function InteractiveMap({
           <span class="relative inline-flex h-1.5 w-1.5 rounded-full ${dotColor}"></span>
         </div>
         <div class="flex items-center gap-1.5 whitespace-nowrap">
-          <span class="text-xs font-bold text-foreground tracking-tight">${city.name}</span>
-          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">
-            ${badgeText}
-          </span>
+          <span class="text-xs font-bold text-foreground tracking-tight">${displayCityName}</span>
+          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">${badgeText}</span>
           ${aqiBadge}
         </div>
       `
       wrapperEl.setAttribute('data-city-code', city.code)
+      wrapperEl.setAttribute('role', 'button')
+      wrapperEl.setAttribute('tabindex', '0')
+      wrapperEl.setAttribute('aria-label', `${displayCityName}, ${badgeText}`)
 
       const notchEl = document.createElement('div')
-      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b${cardBorder}`
+      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b ${cardBorder}`
 
       wrapperEl.appendChild(cardEl)
       wrapperEl.appendChild(notchEl)
@@ -1143,6 +1159,9 @@ export function InteractiveMap({
       wrapperEl.addEventListener('mousedown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('pointerdown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('click', handleCityClick)
+      wrapperEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleCityClick(e as unknown as MouseEvent)
+      })
 
       const marker = new Marker({ element: wrapperEl, anchor: 'bottom' })
         .setLngLat(city.center)
@@ -1150,7 +1169,7 @@ export function InteractiveMap({
 
       cityMarkersRef.current[city.code] = marker
     })
-  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities, t])
+  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities, t, language])
 
   useEffect(() => {
     syncCityMarkersRef.current = syncCityMarkers
@@ -1220,7 +1239,7 @@ export function InteractiveMap({
 
           const innerEl = document.createElement('div')
           innerEl.className =
-            'flex items-center justify-center rounded-full text-white font-extrabold text-xs shadow-lg transition-transform hover:scale-125 border-2 border-surface'
+            'flex items-center justify-center rounded-full text-white font-extrabold text-xs shadow-[0_8px_18px_rgba(0,0,0,0.24)] transition-transform hover:scale-110 border-2 border-surface ring-2 ring-black/10'
           innerEl.style.backgroundColor = clusterColor
           innerEl.style.width = '30px'
           innerEl.style.height = '30px'

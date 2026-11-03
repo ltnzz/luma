@@ -11,6 +11,12 @@ export interface CorridorInfo {
   description: string
 }
 
+export const TRANSIT_DATA_META = {
+  source: 'PT Transportasi Jakarta (Transjakarta)',
+  period: null,
+  updatedAt: null,
+} as const
+
 export const TRANSJAKARTA_CORRIDORS: CorridorInfo[] = [
   {
     id: 'route-tj-1',

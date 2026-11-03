@@ -273,6 +273,7 @@ export interface Facility {
   metrics: Record<string, unknown>
   documents: FacilityDocument[]
   updatedAt: string | null
+  level?: 'SD' | 'SMP' | 'SMA'
 }
 
 export interface FacilitiesParams {
@@ -361,6 +362,11 @@ function normalizeFacility(raw: RawFacility): Facility | null {
 
   if (!id || !name || !category || !wilayah || lat === null || lng === null) return null
 
+  const rawLevel = asString(raw.level)?.toUpperCase()
+  const level = rawLevel === 'SD' || rawLevel === 'SMP' || rawLevel === 'SMA'
+    ? rawLevel
+    : undefined
+
   return {
     id,
     slug: asString(raw.slug),
@@ -380,6 +386,7 @@ function normalizeFacility(raw: RawFacility): Facility | null {
         : {},
     documents: normalizeDocuments(raw),
     updatedAt: asString(raw.updatedAt ?? raw.updated_at),
+    level,
   }
 }
 
@@ -412,6 +419,34 @@ export async function getFacilities(
     },
     source: envelope.source ?? null,
   }
+}
+
+/**
+ * Mengambil seluruh sekolah untuk satu wilayah melalui endpoint fasilitas.
+ * Backend tetap memakai pagination agar response tidak membebani request lain.
+ */
+export async function getSchoolFacilities(
+  wilayah = 'ALL',
+  signal?: AbortSignal,
+): Promise<Facility[]> {
+  const limit = 250
+  const params: FacilitiesParams = {
+    wilayah: wilayah === 'ALL' ? undefined : wilayah,
+    category: 'pendidikan',
+    page: 1,
+    limit,
+  }
+  const firstPage = await getFacilities(params, signal)
+  const remainingPages = Array.from(
+    { length: Math.max(0, firstPage.pagination.totalPages - 1) },
+    (_, index) => index + 2,
+  )
+  if (remainingPages.length === 0) return firstPage.items
+
+  const additionalPages = await Promise.all(
+    remainingPages.map((page) => getFacilities({ ...params, page }, signal)),
+  )
+  return [firstPage, ...additionalPages].flatMap((result) => result.items)
 }
 
 export async function getFacility(id: string, signal?: AbortSignal): Promise<Facility> {

@@ -1,33 +1,18 @@
 import { Snackbar, type SnackbarTone } from './ui/Snackbar'
 import { useNetworkStatus, type NetworkStatus } from '../hooks/useNetworkStatus'
-
-const copy: Record<NetworkStatus, { title: string; message: string; tone: SnackbarTone }> = {
-  online: { title: '', message: '', tone: 'success' },
-  offline: {
-    title: 'Koneksi internet terputus',
-    message: 'Data terbaru belum dapat dimuat. Periksa koneksi internet Anda.',
-    tone: 'error',
-  },
-  'server-unreachable': {
-    title: 'Koneksi ke server terputus',
-    message: 'Luma tetap dapat digunakan. Coba lagi untuk memuat data terbaru.',
-    tone: 'error',
-  },
-  checking: {
-    title: 'Menghubungkan kembali…',
-    message: 'Luma sedang memeriksa koneksi ke server.',
-    tone: 'warning',
-  },
-  recovered: {
-    title: 'Koneksi kembali normal',
-    message: 'Data Luma sedang diperbarui.',
-    tone: 'success',
-  },
-}
+import { useTranslation } from '../i18n/useTranslation'
 
 export function ConnectionSnackbar() {
+  const { t } = useTranslation()
   const { status, isVisible, retry } = useNetworkStatus()
-  const content = copy[status]
+  const tone: Record<NetworkStatus, SnackbarTone> = {
+    online: 'success', offline: 'error', 'server-unreachable': 'error', checking: 'warning', recovered: 'success',
+  }
+  const content = {
+    title: t(`connection.${status}.title`),
+    message: t(`connection.${status}.message`),
+    tone: tone[status],
+  }
   const canRetry = status === 'offline' || status === 'server-unreachable'
 
   return (
@@ -41,9 +26,10 @@ export function ConnectionSnackbar() {
           <button
             type="button"
             onClick={() => void retry()}
-            className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/15"
+            className="rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-xs font-semibold text-white transition hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            aria-label={t('connection.retry')}
           >
-            Coba Lagi
+            {t('connection.retry')}
           </button>
         ) : undefined
       }

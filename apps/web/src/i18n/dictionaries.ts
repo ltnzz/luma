@@ -183,6 +183,7 @@ const id = {
   'mapFirst.map.satellite': 'Tampilkan citra satelit',
   'mapFirst.map.canvas': 'Kembali ke kanvas peta',
   'mapFirst.loading.facilities': 'Memuat data fasilitas',
+  'mapFirst.loading.map': 'Memuat peta interaktif',
   'mapFirst.loading.markers': 'Memuat marker dan informasi fasilitas…',
   'mapFirst.empty.title': 'Belum ada fasilitas pada pilihan ini',
   'mapFirst.empty.description': 'Coba pilih kategori, subkategori, atau wilayah lain.',
@@ -196,6 +197,17 @@ const id = {
   'error.notFound': 'Data tidak ditemukan.',
   'error.generic': 'Terjadi kesalahan. Coba lagi.',
   'error.retrying': 'Memuat ulang...',
+  'connection.online.title': '',
+  'connection.online.message': '',
+  'connection.offline.title': 'Koneksi internet terputus',
+  'connection.offline.message': 'Data terbaru belum dapat dimuat. Periksa koneksi internet Anda.',
+  'connection.server-unreachable.title': 'Koneksi ke server terputus',
+  'connection.server-unreachable.message': 'Luma tetap dapat digunakan. Coba lagi untuk memuat data terbaru.',
+  'connection.checking.title': 'Menghubungkan kembali…',
+  'connection.checking.message': 'Luma sedang memeriksa koneksi ke server.',
+  'connection.recovered.title': 'Koneksi kembali normal',
+  'connection.recovered.message': 'Data Luma sedang diperbarui.',
+  'connection.retry': 'Coba Lagi',
 } as const
 
 export type TranslationKey = keyof typeof id
@@ -383,6 +395,7 @@ const en: Record<TranslationKey, string> = {
   'mapFirst.map.satellite': 'Show satellite imagery',
   'mapFirst.map.canvas': 'Return to map canvas',
   'mapFirst.loading.facilities': 'Loading facilities',
+  'mapFirst.loading.map': 'Loading interactive map',
   'mapFirst.loading.markers': 'Loading markers and facility information…',
   'mapFirst.empty.title': 'No facilities in this selection',
   'mapFirst.empty.description': 'Try another category, subcategory, or region.',
@@ -396,6 +409,17 @@ const en: Record<TranslationKey, string> = {
   'error.notFound': 'Data not found.',
   'error.generic': 'Something went wrong. Try again.',
   'error.retrying': 'Reloading...',
+  'connection.online.title': '',
+  'connection.online.message': '',
+  'connection.offline.title': 'Internet connection lost',
+  'connection.offline.message': 'The latest data could not be loaded. Check your internet connection.',
+  'connection.server-unreachable.title': 'Server connection lost',
+  'connection.server-unreachable.message': 'Luma remains available. Retry to load the latest data.',
+  'connection.checking.title': 'Reconnecting…',
+  'connection.checking.message': 'Luma is checking the server connection.',
+  'connection.recovered.title': 'Connection restored',
+  'connection.recovered.message': 'Luma data is being refreshed.',
+  'connection.retry': 'Retry',
 }
 
 export const DEFAULT_LANGUAGE: Language = 'id'

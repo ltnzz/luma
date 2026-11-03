@@ -3,6 +3,7 @@ import { db } from '../db';
 import { facilities } from '../db/schema';
 import { eq, ilike, and, sql } from 'drizzle-orm';
 import { kotaterbacaPayload } from '../data/datasets';
+import schoolsPayload from '../data/schools-full.json';
 import crypto from 'crypto';
 
 const router = Router();
@@ -33,6 +34,22 @@ interface FallbackFacility {
   budget?: Record<string, string>;
   metrics?: Record<string, unknown>;
   docs?: Array<{ title: string; size: string; dept: string; file_url?: string }>;
+  level?: 'SD' | 'SMP' | 'SMA';
+}
+
+interface RawSchoolFacility {
+  id: string;
+  name: string;
+  level: 'SD' | 'SMP' | 'SMA';
+  category: string;
+  subCategory: string;
+  wilayah: string;
+  kecamatan?: string;
+  address?: string;
+  lat: number;
+  lng: number;
+  specs?: Record<string, string>;
+  budget?: Record<string, string>;
 }
 
 async function getFallbackFacilities(): Promise<FallbackFacility[]> {
@@ -50,6 +67,43 @@ async function getFallbackFacilities(): Promise<FallbackFacility[]> {
   }
 }
 
+function getSchoolFacilities(): FallbackFacility[] {
+  return (schoolsPayload as RawSchoolFacility[]).map((school) => ({
+    id: slugToUuid(school.id),
+    slug: school.id,
+    name: school.name,
+    category: 'pendidikan',
+    sub_category: school.subCategory,
+    wilayah: school.wilayah,
+    kecamatan: school.kecamatan,
+    address: school.address,
+    lat: school.lat,
+    lng: school.lng,
+    specs: school.specs,
+    budget: school.budget,
+    level: school.level,
+  }));
+}
+
+function filterFallbackFacilities(
+  source: FallbackFacility[],
+  wilayah: unknown,
+  search: unknown,
+): FallbackFacility[] {
+  let filtered = source;
+  if (typeof wilayah === 'string' && wilayah.trim() !== '' && wilayah.toUpperCase() !== 'ALL') {
+    filtered = filtered.filter((facility) =>
+      facility.wilayah.toLowerCase().includes(wilayah.trim().toLowerCase())
+    );
+  }
+  if (typeof search === 'string' && search.trim() !== '') {
+    filtered = filtered.filter((facility) =>
+      facility.name.toLowerCase().includes(search.trim().toLowerCase())
+    );
+  }
+  return filtered;
+}
+
 /**
  * GET /api/v1/facilities
  * Daftar fasilitas dengan query filter (wilayah, category, search) dan pagination
@@ -59,6 +113,26 @@ router.get('/api/v1/facilities', async (req: Request, res: Response) => {
   const page = Math.max(1, parseInt(String(req.query.page || '1'), 10) || 1);
   const limit = Math.max(1, Math.min(250, parseInt(String(req.query.limit || '10'), 10) || 10));
   const offset = (page - 1) * limit;
+  const normalizedCategory = typeof category === 'string' ? category.trim().toLowerCase() : '';
+
+  // Dataset sekolah lengkap disimpan di backend agar frontend hanya menerima
+  // data wilayah/halaman yang sedang dibutuhkan, bukan mengunduh seluruh JSON.
+  if (normalizedCategory === 'pendidikan' || normalizedCategory === 'sekolah') {
+    const filtered = filterFallbackFacilities(getSchoolFacilities(), wilayah, search);
+    const total = filtered.length;
+    res.status(200).json({
+      status: 'success',
+      data: filtered.slice(offset, offset + limit),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+      source: 'official_school_dataset',
+    });
+    return;
+  }
 
   try {
     // 1. Coba query dari PostgreSQL via Drizzle ORM
@@ -108,21 +182,10 @@ router.get('/api/v1/facilities', async (req: Request, res: Response) => {
   } catch {
     // 2. Graceful fallback ke JSON dataset jika database belum terhubung
     const all = await getFallbackFacilities();
-    let filtered = all;
-
-    if (typeof wilayah === 'string' && wilayah.trim() !== '' && wilayah.toUpperCase() !== 'ALL') {
-      filtered = filtered.filter((f) =>
-        f.wilayah.toLowerCase().includes(wilayah.trim().toLowerCase())
-      );
-    }
+    let filtered = filterFallbackFacilities(all, wilayah, search);
     if (typeof category === 'string' && category.trim() !== '') {
       filtered = filtered.filter(
         (f) => f.category.toLowerCase() === category.trim().toLowerCase()
-      );
-    }
-    if (typeof search === 'string' && search.trim() !== '') {
-      filtered = filtered.filter((f) =>
-        f.name.toLowerCase().includes(search.trim().toLowerCase())
       );
     }
 
@@ -174,7 +237,7 @@ router.get('/api/v1/facilities/:id', async (req: Request, res: Response) => {
   }
 
   // Fallback ke JSON jika tidak ditemukan di DB atau DB error
-  const all = await getFallbackFacilities();
+  const all = [...getSchoolFacilities(), ...(await getFallbackFacilities())];
   const fallbackItem = all.find((f) => (isUuid ? f.id === id : f.slug === id || f.id === id));
 
   if (!fallbackItem) {

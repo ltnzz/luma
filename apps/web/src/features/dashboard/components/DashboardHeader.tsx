@@ -4,13 +4,13 @@ import ThemeToggle from '../../../components/ThemeToggle'
 import { MapPinIcon, ChevronDownIcon } from '../../../components/ui/Icons'
 
 const WILAYAH_ITEMS = [
-  { key: 'ALL', label: 'Seluruh DKI Jakarta' },
-  { key: 'JAKARTA PUSAT', label: 'Jakarta Pusat' },
-  { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan' },
-  { key: 'JAKARTA BARAT', label: 'Jakarta Barat' },
-  { key: 'JAKARTA UTARA', label: 'Jakarta Utara' },
-  { key: 'JAKARTA TIMUR', label: 'Jakarta Timur' },
-  { key: 'KEP. SERIBU', label: 'Kep. Seribu' },
+  { key: 'ALL', label: 'Seluruh DKI Jakarta', logoSrc: '/region-logos/dki-jakarta.png', districts: 6 },
+  { key: 'JAKARTA PUSAT', label: 'Jakarta Pusat', logoSrc: '/region-logos/jakarta-pusat.png', districts: 8 },
+  { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan', logoSrc: '/region-logos/jakarta-selatan.png', districts: 10 },
+  { key: 'JAKARTA BARAT', label: 'Jakarta Barat', logoSrc: '/region-logos/jakarta-barat.png', districts: 8 },
+  { key: 'JAKARTA UTARA', label: 'Jakarta Utara', logoSrc: '/region-logos/jakarta-utara.png', districts: 6 },
+  { key: 'JAKARTA TIMUR', label: 'Jakarta Timur', logoSrc: '/region-logos/jakarta-timur.png', districts: 10 },
+  { key: 'KEP. SERIBU', label: 'Kep. Seribu', logoSrc: '/region-logos/kepulauan-seribu.png', districts: 2 },
 ] as const
 
 interface DashboardHeaderProps {
@@ -47,10 +47,17 @@ export function DashboardHeader({
         setIsRegionOpen(false)
       }
     }
+    function handleEscape(e: KeyboardEvent) {
+      if (e.key === 'Escape') setIsRegionOpen(false)
+    }
     if (isRegionOpen) {
       document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('keydown', handleEscape)
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
+    }
   }, [isRegionOpen])
 
   const timeString = useMemo(() => {
@@ -72,14 +79,24 @@ export function DashboardHeader({
     })
   }, [currentTime, language])
 
-  const currentWilayahLabel = useMemo(() => {
+  const currentWilayah = useMemo(() => {
     const found = WILAYAH_ITEMS.find((item) => item.key === activeWilayah)
-    if (found?.key === 'ALL') return t('dashboard.region.ALL')
-    return found ? found.label : activeWilayah
-  }, [activeWilayah, t])
+    return found ?? WILAYAH_ITEMS[0]
+  }, [activeWilayah])
+
+  const currentWilayahLabel = currentWilayah.key === 'ALL'
+    ? t('dashboard.region.ALL')
+    : currentWilayah.label
+
+  const getRegionMeta = (item: (typeof WILAYAH_ITEMS)[number]) => {
+    if (item.key === 'ALL') {
+      return language === 'id' ? '5 kota + Kep. Seribu' : '5 cities + Thousand Islands'
+    }
+    return `${item.districts} ${language === 'id' ? 'kecamatan' : 'districts'}`
+  }
 
   return (
-    <header className="z-30 flex h-14 shrink-0 items-center justify-between gap-2 border-b border-border bg-surface px-2.5 sm:px-6 shadow-2xs select-none">
+    <header className="relative z-[60] flex h-14 shrink-0 items-center justify-between gap-1.5 border-b border-border bg-surface px-2 sm:gap-2 sm:px-6 shadow-2xs select-none">
       {/* 1. Kiri: Brand Logo & Title */}
       <a
         href="#"
@@ -89,7 +106,7 @@ export function DashboardHeader({
         <img
           src="/luma-logo.png"
           alt="Luma"
-          className="h-auto w-[86px] object-contain transition-[filter] duration-200 sm:w-[112px] dark:brightness-[2.15] dark:contrast-[1.08] dark:saturate-[1.25] dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.20)] dark:hover:drop-shadow-[0_0_7px_rgba(255,255,255,0.27)]"
+          className="h-auto w-[72px] object-contain transition-[filter] duration-200 sm:w-[112px] dark:brightness-[2.15] dark:contrast-[1.08] dark:saturate-[1.25] dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.20)] dark:hover:drop-shadow-[0_0_7px_rgba(255,255,255,0.27)]"
         />
       </a>
 
@@ -97,52 +114,101 @@ export function DashboardHeader({
       <div className="flex min-w-0 items-center gap-1 sm:gap-2.5">
         {/* Region Selector Dropdown */}
         {onSelectWilayah && (
-          <div className="relative w-[108px] xs:w-[118px] sm:w-[142px]" ref={dropdownRef}>
+          <div className="relative w-[112px] sm:w-[176px]" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setIsRegionOpen((prev) => !prev)}
-              className="flex items-center justify-between w-full rounded-full border border-border/80 bg-surface hover:bg-surface-muted/60 px-2.5 py-1 text-[10px] font-medium text-foreground hover:border-primary/50 transition-all cursor-pointer shadow-2xs leading-none"
+              className={`group flex h-9 w-full items-center justify-between rounded-xl border px-1.5 pr-2 text-left transition-all cursor-pointer ${
+                isRegionOpen
+                  ? 'border-primary/45 bg-primary/[0.06] shadow-[0_0_0_3px_rgba(34,197,94,0.08)]'
+                  : 'border-border/80 bg-surface hover:border-primary/35 hover:bg-surface-muted/55 shadow-2xs'
+              }`}
               aria-haspopup="listbox"
               aria-expanded={isRegionOpen}
               aria-label={`${t('mapFirst.header.selectRegion')}. ${t('mapFirst.header.current')} ${currentWilayahLabel}`}
               data-tooltip={t('mapFirst.header.regionTooltip')}
               data-tooltip-side="bottom"
             >
-              <div className="flex items-center gap-1.5 min-w-0">
-                <MapPinIcon size={10} className="text-primary shrink-0" />
-                <span className="truncate text-[10px] leading-tight">{currentWilayahLabel}</span>
+              <div className="flex min-w-0 items-center gap-2">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/90 p-0.5 shadow-2xs ring-1 ring-inset ring-border/70 dark:bg-white/85">
+                  <img
+                    src={currentWilayah.logoSrc}
+                    alt=""
+                    aria-hidden="true"
+                    className="h-full w-full object-contain"
+                  />
+                </span>
+                <span className="min-w-0 truncate text-[10px] font-semibold leading-tight text-foreground sm:text-[11px]">
+                  {currentWilayahLabel}
+                </span>
               </div>
               <ChevronDownIcon
-                size={9}
-                className={`text-muted transition-transform shrink-0 ${isRegionOpen ? 'rotate-180' : ''}`}
+                size={10}
+                className={`shrink-0 text-muted transition-transform group-hover:text-foreground ${isRegionOpen ? 'rotate-180' : ''}`}
               />
             </button>
 
             {isRegionOpen && (
-              <div className="absolute top-full left-0 right-0 mt-1 z-50 w-full rounded-xl luma-glass p-1 animate-in fade-in slide-in-from-top-1 duration-150">
-                {WILAYAH_ITEMS.map((item) => {
-                  const isSelected = activeWilayah === item.key
-                  return (
-                    <button
-                      key={item.key}
-                      type="button"
-                      onClick={() => {
-                        onSelectWilayah(item.key)
-                        setIsRegionOpen(false)
-                      }}
-                      className={`w-full flex items-center justify-between rounded-lg px-2 py-1 text-[10px] font-medium transition-colors cursor-pointer text-left ${
-                        isSelected
-                          ? 'bg-primary/10 text-primary font-semibold'
-                          : 'text-foreground hover:bg-surface-muted/80'
-                      }`}
-                    >
-                      <span className="text-[10px] leading-tight truncate">
-                        {item.key === 'ALL' ? t('dashboard.region.ALL') : item.label}
-                      </span>
-                      {isSelected && <span className="h-1.5 w-1.5 rounded-full bg-primary shrink-0 ml-1" />}
-                    </button>
-                  )
-                })}
+              <div
+                role="listbox"
+                aria-label={t('mapFirst.header.selectRegion')}
+                className="fixed inset-x-2 top-[3.75rem] z-[80] overflow-hidden rounded-2xl luma-map-card p-1.5 animate-in fade-in slide-in-from-top-1 duration-150 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[288px]"
+              >
+                <div className="mb-1 flex items-center justify-between border-b border-border/50 px-2.5 py-2">
+                  <div>
+                    <p className="text-[11px] font-bold text-foreground">{t('mapFirst.header.selectRegion')}</p>
+                    <p className="mt-0.5 text-[9px] text-muted">
+                      {language === 'id' ? 'Peta dan indikator akan menyesuaikan' : 'Map and indicators will update'}
+                    </p>
+                  </div>
+                  <MapPinIcon size={14} className="text-primary" />
+                </div>
+
+                <div className="grid gap-0.5">
+                  {WILAYAH_ITEMS.map((item) => {
+                    const isSelected = activeWilayah === item.key
+                    const label = item.key === 'ALL' ? t('dashboard.region.ALL') : item.label
+                    return (
+                      <button
+                        key={item.key}
+                        type="button"
+                        onClick={() => {
+                          onSelectWilayah(item.key)
+                          setIsRegionOpen(false)
+                        }}
+                        className={`group/region flex w-full items-center gap-2.5 rounded-xl px-2 py-1.5 text-left transition-all cursor-pointer ${
+                          isSelected
+                            ? 'bg-primary/10 text-primary ring-1 ring-inset ring-primary/15'
+                            : 'text-foreground hover:bg-surface-muted/75'
+                        }`}
+                        role="option"
+                        aria-selected={isSelected}
+                      >
+                        <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/90 p-1 shadow-2xs ring-1 ring-inset transition-colors dark:bg-white/85 ${
+                          isSelected
+                            ? 'ring-primary/55'
+                            : 'ring-border/70 group-hover/region:ring-primary/30'
+                        }`}>
+                          <img
+                            src={item.logoSrc}
+                            alt=""
+                            aria-hidden="true"
+                            className="h-full w-full object-contain transition-transform duration-150 group-hover/region:scale-105"
+                          />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-[11px] font-semibold leading-tight">{label}</span>
+                          <span className="mt-0.5 block truncate text-[9px] font-normal text-muted">{getRegionMeta(item)}</span>
+                        </span>
+                        <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold transition ${
+                          isSelected ? 'bg-primary text-white' : 'text-transparent'
+                        }`} aria-hidden="true">
+                          ✓
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
               </div>
             )}
           </div>
@@ -161,20 +227,22 @@ export function DashboardHeader({
           <button
             type="button"
             onClick={() => setLanguage('id')}
-            className={`rounded-lg px-1.5 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
+            className={`rounded-lg px-1 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
               language === 'id' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
             }`}
             title="Bahasa Indonesia"
+            aria-pressed={language === 'id'}
           >
             ID
           </button>
           <button
             type="button"
             onClick={() => setLanguage('en')}
-            className={`rounded-lg px-1.5 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
+            className={`rounded-lg px-1 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
               language === 'en' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
             }`}
             title="English"
+            aria-pressed={language === 'en'}
           >
             EN
           </button>
