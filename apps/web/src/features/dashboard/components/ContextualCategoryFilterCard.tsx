@@ -1,13 +1,10 @@
 import { CloseIcon } from '../../../components/ui/Icons'
 import { CategoryIconBadge, type CategoryIconKind } from '../../../components/ui/CategoryIconBadge'
-import {
-  TRANSIT_DATA_META,
-  TRANSJAKARTA_CORRIDORS,
-  type CorridorInfo,
-} from '../../../data/transit-corridors'
-import { WATER_DATA_META } from '../../../data/water-network'
+import { TRANSJAKARTA_CORRIDORS, type CorridorInfo } from '../../../data/transit-corridors'
+import { DATA_CATALOG } from '../../../data/data-catalog'
 import type { KpiCategory } from './KpiMetricsDock'
 import { useTranslation } from '../../../i18n/useTranslation'
+import { HistoricalTrendMini } from './HistoricalTrendMini'
 
 export type FaskesSubFilter = 'all' | 'rsud' | 'puskesmas' | 'other'
 export type RthSubFilter = 'all' | 'taman' | 'hutan' | 'jalur'
@@ -72,7 +69,8 @@ export function ContextualCategoryFilterCard({
         show: 'Tampil', hide: 'Sembunyi',
         waterDescription: 'Menampilkan jaringan pipa air bersih PAM JAYA yang melayani 68% populasi warga DKI Jakarta.',
         soloMode: 'Mode Solo Filter Aktif', reset: 'Reset Filter',
-        source: 'Sumber', period: 'Periode', updated: 'Diperbarui', unavailable: 'Belum tersedia',
+        source: 'Sumber', coverage: 'Cakupan', unit: 'Satuan', method: 'Metode', period: 'Periode', updated: 'Diperbarui',
+        transparency: 'Transparansi data', openSource: 'Buka sumber resmi', unavailable: 'Belum tersedia',
       }
     : {
         healthTitle: 'Healthcare Filter', healthSubtitle: 'Healthcare Facilities',
@@ -85,14 +83,11 @@ export function ContextualCategoryFilterCard({
         show: 'Visible', hide: 'Hidden',
         waterDescription: 'Shows the PAM JAYA clean-water network serving 68% of DKI Jakarta residents.',
         soloMode: 'Solo Filter Active', reset: 'Reset Filter',
-        source: 'Source', period: 'Period', updated: 'Updated', unavailable: 'Not available',
+        source: 'Source', coverage: 'Coverage', unit: 'Unit', method: 'Method', period: 'Period', updated: 'Updated',
+        transparency: 'Data transparency', openSource: 'Open official source', unavailable: 'Not available',
       }
 
-  const activeMetadata = category === 'transum'
-    ? TRANSIT_DATA_META
-    : category === 'air'
-      ? WATER_DATA_META
-      : null
+  const activeMetadata = DATA_CATALOG[category]
 
   // Category config (title, color, icon)
   const config = {
@@ -142,10 +137,10 @@ export function ContextualCategoryFilterCard({
         <div className="flex items-center gap-2 min-w-0">
           <CategoryIconBadge category={config.iconCategory} />
           <div className="flex flex-col min-w-0">
-            <span className="text-[11px] font-bold text-foreground leading-tight truncate">
+            <span className="truncate text-xs font-bold leading-tight text-foreground">
               {config.title}
             </span>
-            <span className="text-[9.5px] text-muted leading-tight truncate">
+            <span className="truncate text-[10.5px] font-medium leading-tight text-muted">
               {scopeLabel} &bull; {config.subtitle}
             </span>
           </div>
@@ -171,7 +166,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onFaskesFilterChange?.('all')}
-              className={`flex items-center justify-center rounded-lg px-1.5 py-1 text-[10px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-all cursor-pointer ${
                 faskesFilter === 'all'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -183,7 +178,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onFaskesFilterChange?.('rsud')}
-              className={`flex items-center justify-center rounded-lg px-1.5 py-1 text-[10px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-all cursor-pointer ${
                 faskesFilter === 'rsud'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -195,7 +190,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onFaskesFilterChange?.('puskesmas')}
-              className={`flex items-center justify-center rounded-lg px-1.5 py-1 text-[10px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-all cursor-pointer ${
                 faskesFilter === 'puskesmas'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -213,7 +208,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onRthFilterChange?.('all')}
-              className={`flex items-center justify-center rounded-lg px-1.5 py-1 text-[10px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-all cursor-pointer ${
                 rthFilter === 'all'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -225,7 +220,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onRthFilterChange?.('taman')}
-              className={`flex items-center justify-center rounded-lg px-1.5 py-1 text-[10px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-all cursor-pointer ${
                 rthFilter === 'taman'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -237,7 +232,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onRthFilterChange?.('hutan')}
-              className={`flex items-center justify-center rounded-lg px-1.5 py-1 text-[10px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-all cursor-pointer ${
                 rthFilter === 'hutan'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -255,7 +250,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onSchoolFilterChange?.('all')}
-              className={`flex items-center justify-center rounded-lg px-1 py-1 text-[9.5px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1 py-1.5 text-[10.5px] font-semibold transition-all cursor-pointer ${
                 schoolFilter === 'all'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -267,7 +262,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onSchoolFilterChange?.('sma')}
-              className={`flex items-center justify-center rounded-lg px-1 py-1 text-[9.5px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1 py-1.5 text-[10.5px] font-semibold transition-all cursor-pointer ${
                 schoolFilter === 'sma'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -279,7 +274,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onSchoolFilterChange?.('smp')}
-              className={`flex items-center justify-center rounded-lg px-1 py-1 text-[9.5px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1 py-1.5 text-[10.5px] font-semibold transition-all cursor-pointer ${
                 schoolFilter === 'smp'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -291,7 +286,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onSchoolFilterChange?.('sd')}
-              className={`flex items-center justify-center rounded-lg px-1 py-1 text-[9.5px] transition-all cursor-pointer ${
+              className={`flex items-center justify-center rounded-lg px-1 py-1.5 text-[10.5px] font-semibold transition-all cursor-pointer ${
                 schoolFilter === 'sd'
                   ? config.chipActive
                   : 'bg-surface-muted/80 text-foreground/80 hover:bg-surface-muted'
@@ -309,7 +304,7 @@ export function ContextualCategoryFilterCard({
             <button
               type="button"
               onClick={() => onSelectCorridor?.(null)}
-              className={`w-full flex items-center justify-between rounded-lg px-2 py-1 text-[10px] font-semibold transition-colors cursor-pointer text-left ${
+              className={`w-full flex items-center justify-between rounded-lg px-2 py-1.5 text-[11px] font-semibold transition-colors cursor-pointer text-left ${
                 !selectedCorridorId
                   ? 'bg-purple-600 text-white font-bold'
                   : 'bg-surface-muted/70 text-foreground hover:bg-surface-muted'
@@ -337,7 +332,7 @@ export function ContextualCategoryFilterCard({
                       key={corridor.id}
                       type="button"
                       onClick={() => onSelectCorridor?.(corridor)}
-                      className={`w-full flex items-center justify-between gap-1.5 rounded-md px-1.5 py-0.5 text-[9.5px] font-medium transition-colors cursor-pointer text-left ${
+                      className={`w-full flex items-center justify-between gap-1.5 rounded-md px-2 py-1 text-[10.5px] font-medium transition-colors cursor-pointer text-left ${
                         isSelected
                           ? 'bg-purple-600 text-white font-bold'
                           : 'text-foreground hover:bg-surface-muted'
@@ -364,11 +359,11 @@ export function ContextualCategoryFilterCard({
         {category === 'air' && (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between rounded-xl luma-glass-inner p-2">
-              <span className="text-[10px] text-foreground font-medium">{copy.pipeline}</span>
+              <span className="text-[11px] font-semibold text-foreground">{copy.pipeline}</span>
               <button
                 type="button"
                 onClick={onToggleWaterNetwork}
-                className={`rounded-full px-2.5 py-0.5 text-[9.5px] font-bold transition-all cursor-pointer ${
+                className={`rounded-full px-2.5 py-1 text-[10.5px] font-bold transition-all cursor-pointer ${
                   isWaterNetworkVisible
                     ? 'bg-sky-600 text-white shadow-2xs'
                     : 'bg-surface-muted text-muted border border-border'
@@ -378,19 +373,42 @@ export function ContextualCategoryFilterCard({
                 {isWaterNetworkVisible ? copy.show : copy.hide}
               </button>
             </div>
-            <p className="text-[9.5px] text-muted leading-relaxed">
+            <p className="text-[10.5px] font-medium leading-relaxed text-muted">
               {copy.waterDescription}
             </p>
           </div>
         )}
       </div>
 
-      {activeMetadata ? (
-        <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 border-t border-border/40 pt-1.5 text-[9px] leading-tight">
+      {activeMetadata.trendSector ? (
+        <HistoricalTrendMini
+          sector={activeMetadata.trendSector}
+          accent={category === 'rth' ? '#22c55e' : category === 'transum' ? '#a855f7' : '#0ea5e9'}
+        />
+      ) : null}
+
+      <details className="group border-t border-border/50 pt-1.5">
+        <summary className="flex cursor-pointer list-none items-center justify-between text-[10.5px] font-bold text-foreground">
+          <span>{copy.transparency}</span>
+          <span className="text-primary transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-[10px] leading-tight">
           <dt className="text-muted">{copy.source}</dt>
-          <dd className="truncate text-right font-medium text-foreground" title={activeMetadata.source}>
-            {activeMetadata.source}
+          <dd className="text-right font-semibold text-foreground">
+            <a
+              href={activeMetadata.sourceUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-primary hover:underline"
+              title={copy.openSource}
+            >
+              {activeMetadata.source} ↗
+            </a>
           </dd>
+          <dt className="text-muted">{copy.coverage}</dt>
+          <dd className="text-right font-medium text-foreground">{activeMetadata.coverage}</dd>
+          <dt className="text-muted">{copy.unit}</dt>
+          <dd className="text-right font-medium text-foreground">{activeMetadata.unit}</dd>
           <dt className="text-muted">{copy.period}</dt>
           <dd className="text-right font-medium text-foreground">
             {activeMetadata.period ?? `— ${copy.unavailable}`}
@@ -399,12 +417,14 @@ export function ContextualCategoryFilterCard({
           <dd className="text-right font-medium text-foreground">
             {activeMetadata.updatedAt ?? `— ${copy.unavailable}`}
           </dd>
+          <dt className="text-muted">{copy.method}</dt>
+          <dd className="text-right font-medium leading-relaxed text-foreground">{activeMetadata.method}</dd>
         </dl>
-      ) : null}
+      </details>
 
       {/* 3. Footer Reset Cepat */}
-      <div className="flex items-center justify-between pt-1 border-t border-border/40 text-[9.5px]">
-        <span className="text-muted">{copy.soloMode}</span>
+      <div className="flex items-center justify-between gap-2 border-t border-border/50 pt-2 text-[10.5px]">
+        <span className="font-medium text-muted">{copy.soloMode}</span>
         <button
           type="button"
           onClick={() => {
@@ -414,7 +434,7 @@ export function ContextualCategoryFilterCard({
             onSchoolFilterChange?.('all')
             onClose()
           }}
-          className="text-primary font-bold hover:underline cursor-pointer"
+          className="inline-flex shrink-0 cursor-pointer items-center rounded-md border border-emerald-800/20 bg-emerald-700 px-2 py-1 text-[10px] font-bold text-white transition-colors hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 dark:border-emerald-300/20 dark:bg-emerald-400 dark:text-emerald-950 dark:hover:bg-emerald-300"
           aria-label={copy.reset}
         >
           {copy.reset} &times;
