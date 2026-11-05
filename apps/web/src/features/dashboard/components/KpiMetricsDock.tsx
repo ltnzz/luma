@@ -19,7 +19,7 @@ interface KpiMetricsDockProps {
  * KpiMetricsDock — Dock Ringkasan Metrik Makro Utama & Kontroler Filter Kategori
  * Didesain proporsional, ringkas, dan responsif:
  * - 5 kategori lengkap (Air Bersih, Faskes, Ruang Hijau, Sekolah, Transum) selalu terlihat utuh
- * - Status aktif jelas dengan highlight tema warna dan titik indikator
+ * - Status aktif jelas melalui highlight tema warna tanpa indikator dekoratif berulang
  * - Dimensi seimbang dan tidak bertabrakan dengan legenda di kolom kiri
  */
 export function KpiMetricsDock({
@@ -39,7 +39,7 @@ export function KpiMetricsDock({
 
   return (
     <div
-      className="pointer-events-auto flex w-[calc(100vw-1rem)] items-center justify-start gap-0.5 overflow-x-auto rounded-xl luma-map-card luma-glass-hover pl-3.5 pr-2.5 py-1.5 select-none scrollbar-none snap-x snap-mandatory animate-in fade-in slide-in-from-bottom-3 duration-300 sm:w-max sm:max-w-[96vw] sm:justify-between sm:gap-1"
+      className="pointer-events-auto flex w-[calc(100vw-1rem)] items-center justify-start gap-0.5 overflow-x-auto rounded-xl luma-map-card luma-glass-hover pl-3.5 pr-2.5 py-1.5 select-none scrollbar-none snap-x snap-mandatory animate-in fade-in slide-in-from-bottom-3 duration-300 sm:w-max sm:max-w-[96vw] sm:justify-between sm:gap-1 sm:overflow-visible"
       aria-label={t('mapFirst.dock.aria')}
     >
       {/* 1. Air Bersih */}
@@ -57,17 +57,10 @@ export function KpiMetricsDock({
       >
         <CategoryIconBadge category="water" active={activeCategory === 'air'} />
         <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">{t('mapFirst.dock.water')}</span>
-            <span
-              className={`flex h-1.5 w-1.5 rounded-full ${
-                isWaterActive ? 'bg-sky-500' : 'bg-muted'
-              }`}
-            />
-          </div>
-          <span className="flex items-baseline gap-1 text-xs sm:text-[13px] font-bold text-foreground leading-tight">
+          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.water')}</span>
+          <span className="flex items-baseline gap-1 text-sm font-bold leading-tight text-foreground">
             <span>{waterCoverage}%</span>
-            <span className="text-[8.5px] font-medium text-muted">{waterCoverageLabel === 'Akses' ? t('mapFirst.dock.access') : waterCoverageLabel}</span>
+            <span className="text-[9.5px] font-medium text-muted">{waterCoverageLabel === 'Akses' ? t('mapFirst.dock.access') : waterCoverageLabel}</span>
           </span>
         </div>
       </button>
@@ -87,12 +80,9 @@ export function KpiMetricsDock({
       >
         <CategoryIconBadge category="health" active={activeCategory === 'kesehatan'} />
         <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">{t('mapFirst.dock.health')}</span>
-            {activeCategory === 'kesehatan' && <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {formatCount(faskesCount)} <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.healthUnit')}</span>
+          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.health')}</span>
+          <span className="text-sm font-bold leading-tight text-foreground">
+            {formatCount(faskesCount)} <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.healthUnit')}</span>
           </span>
         </div>
       </button>
@@ -112,12 +102,9 @@ export function KpiMetricsDock({
       >
         <CategoryIconBadge category="green" active={activeCategory === 'rth'} />
         <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">{t('mapFirst.dock.green')}</span>
-            {activeCategory === 'rth' && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {formatCount(rthCount)} <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.greenUnit')}</span>
+          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.green')}</span>
+          <span className="text-sm font-bold leading-tight text-foreground">
+            {formatCount(rthCount)} <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.greenUnit')}</span>
           </span>
         </div>
       </button>
@@ -137,13 +124,10 @@ export function KpiMetricsDock({
       >
         <CategoryIconBadge category="school" active={activeCategory === 'sekolah'} />
         <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">{t('mapFirst.dock.school')}</span>
-            {activeCategory === 'sekolah' && <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
+          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.school')}</span>
+          <span className="text-sm font-bold leading-tight text-foreground">
             {formatCount(schoolCount)}{' '}
-            <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.schoolUnit')}</span>
+            <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.schoolUnit')}</span>
           </span>
         </div>
       </button>
@@ -163,13 +147,10 @@ export function KpiMetricsDock({
       >
         <CategoryIconBadge category="transit" active={activeCategory === 'transum'} />
         <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">{t('mapFirst.dock.transit')}</span>
-            {activeCategory === 'transum' && <span className="h-1.5 w-1.5 rounded-full bg-purple-500" />}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
+          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.transit')}</span>
+          <span className="text-sm font-bold leading-tight text-foreground">
             {transitCorridorCount}{' '}
-            <span className="text-[8.5px] font-medium text-muted">{t('mapFirst.dock.transitUnit')}</span>
+            <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.transitUnit')}</span>
           </span>
         </div>
       </button>

@@ -986,7 +986,7 @@ export function InteractiveMap({
       const aqiDot = `<span class="h-2 w-2 shrink-0 rounded-full ring-2 ring-white/70 dark:ring-black/30" style="background-color:${aqiInfo.color}" title="${t('mapFirst.air.title')}: 173 ${airQualityUnit}" aria-label="${t('mapFirst.air.title')}: 173 ${airQualityUnit}"></span>`
 
       const wrapperEl = document.createElement('div')
-      wrapperEl.className = 'group relative flex flex-col items-center cursor-pointer select-none z-10'
+      wrapperEl.className = 'luma-region-marker group relative flex flex-col items-center cursor-pointer select-none z-10'
       wrapperEl.style.transformOrigin = 'center bottom'
 
       const cardEl = document.createElement('div')
@@ -996,7 +996,7 @@ export function InteractiveMap({
         <div class="flex items-center justify-between gap-2">
           <div class="flex min-w-0 items-center gap-2">
             <span class="h-2 w-2 shrink-0 rounded-full ${dotColor} shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"></span>
-            <span class="truncate text-[11px] font-bold text-foreground tracking-tight">DKI Jakarta</span>
+            <span class="luma-map-label-text truncate text-[11px] font-bold text-foreground tracking-tight">DKI Jakarta</span>
           </div>
           ${aqiDot}
         </div>
@@ -1073,7 +1073,6 @@ export function InteractiveMap({
       let badgeText = `${city.counts.facilities} ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
       let cardBorder = 'border-primary/50 group-hover:border-primary'
-      let dotColor = 'bg-primary'
 
       if (activeCategory === 'kesehatan') {
         const cityFaskes = facilities.filter((f) => f.wilayah === city.code && f.category === 'kesehatan').length
@@ -1081,37 +1080,32 @@ export function InteractiveMap({
         badgeText = `${count} ${t('mapFirst.dock.health')}`
         badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
         cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
-        dotColor = 'bg-rose-500'
       } else if (activeCategory === 'rth') {
         const cityRth = facilities.filter((f) => f.wilayah === city.code && f.category === 'fasum').length
         const count = cityRth > 0 ? cityRth : (defaultCounts[city.code]?.rth ?? 6)
         badgeText = `${count} ${t('mapFirst.dock.green')}`
         badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
         cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
-        dotColor = 'bg-emerald-500'
       } else if (activeCategory === 'sekolah') {
         const count = defaultCounts[city.code]?.sekolah ?? 200
         badgeText = `${count} ${t('mapFirst.dock.school')}`
         badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
         cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
-        dotColor = 'bg-blue-500'
       } else if (activeCategory === 'transum') {
         const count = city.corridors.length
         badgeText = `${count} ${t('mapFirst.dock.transitUnit')} BRT`
         badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
         cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
-        dotColor = 'bg-purple-500'
       } else if (activeCategory === 'air') {
         const pct = defaultCounts[city.code]?.air ?? 68
         badgeText = `${pct}% ${t('mapFirst.dock.water')}`
         badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
         cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
-        dotColor = 'bg-sky-500'
       }
 
       // Wrapper luar khusus untuk positioning MapLibre (TIDAK BOLEH ada CSS transition-transform atau scale)
       const wrapperEl = document.createElement('div')
-      wrapperEl.className = 'group relative flex flex-col items-center cursor-pointer select-none z-10'
+      wrapperEl.className = 'luma-region-marker group relative flex flex-col items-center cursor-pointer select-none z-10'
       wrapperEl.style.transformOrigin = 'center bottom'
 
       // Card dalam tempat styling, hover effect, dan konten
@@ -1120,20 +1114,15 @@ export function InteractiveMap({
 
       const airQualityUnit = t('mapFirst.air.unit')
       const aqiBadge = station
-        ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color:${aqiInfo?.color}18;color:${aqiInfo?.color};border:1px solid ${aqiInfo?.color}40" title="${t('mapFirst.air.title')}: ${station.aqi} ${airQualityUnit}">
-            <span class="h-1.5 w-1.5 rounded-full" style="background-color:${aqiInfo?.color}"></span>
+        ? `<span class="inline-flex items-center px-1.5 py-0.5 text-[10px] font-extrabold rounded-md" style="background-color:${aqiInfo?.color}2b;color:${aqiInfo?.color};border:1px solid ${aqiInfo?.color}70;box-shadow:0 0 10px ${aqiInfo?.color}28" title="${t('mapFirst.air.title')}: ${station.aqi} ${airQualityUnit}">
             ${station.aqi} ${airQualityUnit}
           </span>`
         : ''
       const displayCityName = language === 'en' ? (CITY_NAME_EN[city.code] ?? city.name) : city.name
 
       cardEl.innerHTML = `
-        <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full ${dotColor} opacity-60"></span>
-          <span class="relative inline-flex h-1.5 w-1.5 rounded-full ${dotColor}"></span>
-        </div>
         <div class="flex items-center gap-1.5 whitespace-nowrap">
-          <span class="text-xs font-bold text-foreground tracking-tight">${displayCityName}</span>
+          <span class="luma-map-label-text text-xs font-bold text-foreground tracking-tight">${displayCityName}</span>
           <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">${badgeText}</span>
           ${aqiBadge}
         </div>
@@ -1698,15 +1687,15 @@ export function InteractiveMap({
         <button
           type="button"
           onClick={() => switchMode(mapMode === 'satellite' ? themeMapMode : 'satellite')}
-          className={`flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-surface shadow-md transition-colors cursor-pointer ${
+          className={`flex h-8 w-8 items-center justify-center rounded-xl border shadow-md transition-colors cursor-pointer ${
             mapMode === 'satellite'
-              ? 'bg-primary text-on-primary'
-              : 'text-muted hover:text-foreground hover:bg-surface-muted'
+              ? 'border-primary/70 bg-primary text-white hover:bg-primary-hover'
+              : 'border-border bg-surface text-muted hover:bg-surface-muted hover:text-foreground'
           }`}
           title={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
           aria-label={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
         >
-          <SatelliteIcon size={14} />
+          <SatelliteIcon size={14} className="shrink-0" aria-hidden="true" />
         </button>
       </div>
     </div>

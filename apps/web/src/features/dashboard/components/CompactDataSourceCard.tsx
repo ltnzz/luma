@@ -20,19 +20,17 @@ export function CompactDataSourceCard({ onNavigateToDataSources }: CompactDataSo
     <button
       type="button"
       onClick={onNavigateToDataSources}
-      className="group pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] items-center justify-between gap-2 rounded-xl luma-map-card luma-glass-hover px-3 py-2 select-none text-left cursor-pointer animate-in fade-in slide-in-from-left-2 sm:w-64"
-      title={t('mapFirst.data.open')}
-      data-tooltip={t('mapFirst.data.tooltip')}
-      data-tooltip-side="right"
+      className="group pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] items-center justify-between gap-2 rounded-xl luma-map-card luma-glass-hover luma-no-lift px-3.5 py-2.5 select-none text-left cursor-pointer animate-in fade-in slide-in-from-left-2 sm:w-64"
+      aria-label={t('mapFirst.data.open')}
     >
       <div className="flex items-center gap-2 min-w-0">
         <CategoryIconBadge category="verified" size="sm" className="group-hover:scale-105" />
-        <span className="text-[11px] font-bold text-foreground leading-tight truncate">
+        <span className="truncate text-xs font-bold leading-tight text-foreground">
           {t('mapFirst.data.title')}
         </span>
       </div>
 
-      <div className="inline-flex shrink-0 items-center gap-0.5 text-[10px] font-semibold text-emerald-700 transition-colors duration-150 group-hover:text-emerald-600 dark:text-emerald-300">
+      <div className="inline-flex shrink-0 items-center gap-0.5 text-[11px] font-bold text-emerald-700 transition-colors duration-150 group-hover:text-emerald-600 dark:text-emerald-300">
         <span>{t('mapFirst.data.detail')}</span>
         <ChevronRightIcon
           size={11}

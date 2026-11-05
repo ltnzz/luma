@@ -6,31 +6,43 @@ import { useTranslation } from '../../../i18n/useTranslation'
  * Memberikan informasi murni makna simbol/layer tanpa data angka,
  * didesain sangat ramping agar pas di layar tanpa memicu scrollbar.
  */
-export function StaticMapLegend() {
+interface StaticMapLegendProps {
+  isOpen?: boolean
+  onOpenChange?: (isOpen: boolean) => void
+}
+
+export function StaticMapLegend({ isOpen = false, onOpenChange }: StaticMapLegendProps) {
   const { t } = useTranslation()
 
   return (
-    <div className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2 rounded-xl luma-map-card luma-glass-hover p-3 select-none animate-in fade-in slide-in-from-left-2 duration-300 sm:w-64">
-      {/* Header Legenda */}
-      <div className="flex items-center justify-between border-b border-border/60 pb-1.5">
+    <details
+      open={isOpen}
+      onToggle={(event) => onOpenChange?.(event.currentTarget.open)}
+      className="group pointer-events-auto w-[calc(100vw-1rem)] max-w-[330px] overflow-hidden rounded-xl luma-map-card luma-glass-hover select-none animate-in fade-in slide-in-from-left-2 duration-300 sm:w-64"
+    >
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3.5 py-3 marker:content-none">
         <div className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          <h4 className="text-[10.5px] font-bold text-foreground uppercase tracking-wider">
+          <h4 className="text-xs font-bold uppercase tracking-wide text-foreground">
             {t('dashboard.legend.title')}
           </h4>
         </div>
-        <span className="text-[9.5px] text-muted">{t('mapFirst.legend.symbols')}</span>
-      </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[10.5px] font-medium text-muted">{t('mapFirst.legend.symbols')}</span>
+          <svg className="size-3.5 text-muted transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+      </summary>
 
       {/* Daftar Simbol Murni (Tanpa Data Angka) */}
-      <div className="flex flex-col gap-1 text-[11px]">
+      <div className="mx-3.5 flex flex-col gap-1 border-t border-border/60 pb-3 pt-2 text-xs">
         {/* 1. Fasilitas Kesehatan */}
         <div className="luma-glass-row grid grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-2 rounded-lg px-1 py-0.5">
           <CategoryIconBadge category="health" size="sm" />
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.health')}
           </span>
-          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.healthSub')}</span>
+          <span className="text-right text-[10.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.healthSub')}</span>
         </div>
 
         {/* 2. Ruang Terbuka Hijau */}
@@ -39,7 +51,7 @@ export function StaticMapLegend() {
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.green')}
           </span>
-          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.greenSub')}</span>
+          <span className="text-right text-[10.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.greenSub')}</span>
         </div>
 
         {/* 3. Sekolah Negeri */}
@@ -48,7 +60,7 @@ export function StaticMapLegend() {
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.school')}
           </span>
-          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.schoolSub')}</span>
+          <span className="text-right text-[10.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.schoolSub')}</span>
         </div>
 
         {/* 4. Rute Transum */}
@@ -57,7 +69,7 @@ export function StaticMapLegend() {
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.transit')}
           </span>
-          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.transitSub')}</span>
+          <span className="text-right text-[10.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.transitSub')}</span>
         </div>
 
         {/* 5. Jaringan Pipa Air Bersih PAM JAYA */}
@@ -66,7 +78,7 @@ export function StaticMapLegend() {
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.water')}
           </span>
-          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.waterSub')}</span>
+          <span className="text-right text-[10.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.waterSub')}</span>
         </div>
 
         {/* 6. Batas Wilayah */}
@@ -75,9 +87,9 @@ export function StaticMapLegend() {
           <span className="font-medium text-foreground leading-none">
             {t('mapFirst.legend.boundary')}
           </span>
-          <span className="text-right text-[9.5px] leading-tight text-muted font-normal">{t('mapFirst.legend.boundarySub')}</span>
+          <span className="text-right text-[10.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.boundarySub')}</span>
         </div>
       </div>
-    </div>
+    </details>
   )
 }

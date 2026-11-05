@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { CategoryIconBadge } from '../../../components/ui/CategoryIconBadge'
 import { getAqiLevel, AQI_LEVELS } from '../utils/airQualityLevels'
 import { useTranslation } from '../../../i18n/useTranslation'
+import { DATA_CATALOG } from '../../../data/data-catalog'
 
 const CATEGORY_KEYS = [
   'mapFirst.air.good',
@@ -40,7 +41,11 @@ export function AirQualityCard({
   source,
   updatedAt,
 }: AirQualityCardProps) {
-  const { t } = useTranslation()
+  const { t, language } = useTranslation()
+  const metadata = DATA_CATALOG.airQuality
+  const metaCopy = language === 'id'
+    ? { transparency: 'Transparansi data', coverage: 'Cakupan', unit: 'Satuan', method: 'Metode' }
+    : { transparency: 'Data transparency', coverage: 'Coverage', unit: 'Unit', method: 'Method' }
   const level = useMemo(() => getAqiLevel(airAqi ?? 0), [airAqi])
   const levelIndex = Math.max(0, AQI_LEVELS.indexOf(level))
   const categoryLabel = t(CATEGORY_KEYS[levelIndex])
@@ -48,19 +53,19 @@ export function AirQualityCard({
   const hasData = status === 'success' && airAqi !== null
 
   return (
-    <div className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2 rounded-xl luma-map-card luma-glass-hover p-3 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-64">
+    <div className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2.5 rounded-xl luma-map-card luma-glass-hover p-3.5 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-64">
       {/* 1. Header Card */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2.5">
+        <div className="flex min-w-0 items-center gap-1.5">
           <CategoryIconBadge category="air" size="sm" />
-          <span className="text-[11px] font-bold text-foreground">
+          <span className="min-w-0 text-[11px] font-bold leading-tight text-foreground sm:text-xs">
             {t('mapFirst.air.title')}
           </span>
         </div>
 
         {isAirLive && (
           <span
-            className="flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.2 text-[9px] font-bold text-emerald-600"
+            className="flex shrink-0 items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/12 px-1.5 py-0.5 text-[9.5px] font-bold text-emerald-700 dark:text-emerald-300 sm:px-2 sm:text-[10px]"
             title={t('mapFirst.air.liveTitle')}
             data-tooltip={t('mapFirst.air.liveTitle')}
           >
@@ -71,24 +76,26 @@ export function AirQualityCard({
       </div>
 
       {/* 2. Nilai AQI & Status Kategori (Sesuai Mockup User) */}
-      <div className="flex items-center justify-between border-y border-border/55 py-2">
-        <div className="flex items-baseline gap-1">
-          <span className="text-xl font-black text-foreground tracking-tight leading-none">
+      <div className="flex items-center justify-between gap-2 py-1">
+        <span
+          className="flex h-8 w-8 shrink-0 items-center justify-center text-xl leading-none"
+          role="img"
+          aria-label={hasData ? categoryLabel : t(status === 'loading' ? 'mapFirst.air.loading' : 'mapFirst.air.unavailable')}
+          title={hasData ? categoryLabel : t(status === 'loading' ? 'mapFirst.air.loading' : 'mapFirst.air.unavailable')}
+        >
+          {hasData ? level.icon : '🌫️'}
+        </span>
+        <div className="ml-auto flex min-w-0 items-baseline justify-end gap-1.5 text-right">
+          <span className={`text-2xl font-extrabold tracking-tight leading-none ${hasData ? level.textColor : 'text-muted'}`}>
             {hasData ? airAqi : '—'}
           </span>
-          <span className="text-[10px] font-semibold text-muted">{t('mapFirst.air.unit')}</span>
+          <span className="text-[11px] font-semibold text-foreground">{t('mapFirst.air.unit')}</span>
         </div>
-
-        <span
-          className={`rounded-md border px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider ${level.badgeBg} ${level.badgeBorder} ${level.textColor}`}
-        >
-          {hasData ? categoryLabel : t(status === 'loading' ? 'mapFirst.air.loading' : 'mapFirst.air.unavailable')}
-        </span>
       </div>
 
       {/* 3. Bar Meter Level Kesehatan Udara (5 Tingkatan) */}
       <div className="flex flex-col gap-1">
-        <div className="flex items-center justify-between text-[9px] text-muted font-medium">
+        <div className="flex items-center justify-between text-[10.5px] font-medium text-muted">
           <span>{t('mapFirst.air.healthLevel')}</span>
           <span className="font-bold text-foreground">
             {hasData ? categoryLabel : t('mapFirst.air.noValue')}
@@ -96,15 +103,18 @@ export function AirQualityCard({
         </div>
 
         {/* Segmented Gradient Meter */}
-        <div className="grid grid-cols-5 gap-1 h-1.5 w-full rounded-full overflow-hidden bg-surface-muted p-0.5">
+        <div className="grid h-2 w-full grid-cols-5 gap-1 overflow-visible rounded-full bg-surface-muted/70 p-0.5">
           {AQI_LEVELS.slice(0, 5).map((lvl) => {
             const isActive = hasData && airAqi >= lvl.min && (lvl.max ? airAqi <= lvl.max : true)
             return (
               <div
                 key={lvl.category}
-                style={{ backgroundColor: lvl.color }}
+                style={{
+                  backgroundColor: lvl.color,
+                  boxShadow: isActive ? `0 0 4px ${lvl.color}, 0 0 9px ${lvl.color}a6` : undefined,
+                }}
                 className={`h-full rounded-xs transition-all ${
-                  isActive ? 'ring-1.5 ring-foreground shadow-xs' : 'opacity-40'
+                  isActive ? 'z-10 scale-y-150 opacity-100 ring-1 ring-white/80' : 'opacity-35'
                 }`}
                 title={`${t(CATEGORY_KEYS[AQI_LEVELS.indexOf(lvl)])} (${lvl.min}–${lvl.max})`}
               />
@@ -114,23 +124,35 @@ export function AirQualityCard({
       </div>
 
       {/* 4. Rekomendasi / Dampak Kesehatan Warga */}
-      <div className="border-t border-border/60 pt-2 text-[10px] text-muted leading-relaxed">
-        <span className="font-semibold text-foreground mr-1">{level.icon} {t('mapFirst.air.guide')}</span>
+      <div className="border-t border-border/50 pt-2 text-[10.5px] leading-relaxed text-muted">
+        <span className="mr-1 font-bold text-foreground">{t('mapFirst.air.guide')}</span>
         <span>{hasData ? advice : t('mapFirst.air.unavailableAdvice')}</span>
       </div>
 
-      <dl className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 border-t border-border/60 pt-2 text-[9px] leading-tight">
-        <dt className="text-muted">{t('mapFirst.meta.source')}</dt>
-        <dd className="truncate text-right font-medium text-foreground" title={source ?? undefined}>
-          {source ?? '—'}
-        </dd>
-        <dt className="text-muted">{t('mapFirst.meta.period')}</dt>
-        <dd className="text-right font-medium text-foreground">
-          {hasData ? t('mapFirst.meta.realtime') : '—'}
-        </dd>
-        <dt className="text-muted">{t('mapFirst.meta.updated')}</dt>
-        <dd className="text-right font-medium text-foreground">{updatedAt ?? '—'}</dd>
-      </dl>
+      <details className="group border-t border-border/60 pt-1.5">
+        <summary className="flex cursor-pointer list-none items-center justify-between text-[10.5px] font-bold text-foreground">
+          <span>{metaCopy.transparency}</span>
+          <span className="text-primary transition-transform group-open:rotate-45" aria-hidden="true">+</span>
+        </summary>
+        <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 text-[10px] leading-tight">
+          <dt className="text-muted">{t('mapFirst.meta.source')}</dt>
+          <dd className="text-right font-semibold text-foreground">
+            <a href={metadata.sourceUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+              {source ?? metadata.source} ↗
+            </a>
+          </dd>
+          <dt className="text-muted">{metaCopy.coverage}</dt>
+          <dd className="text-right font-medium text-foreground">{metadata.coverage}</dd>
+          <dt className="text-muted">{metaCopy.unit}</dt>
+          <dd className="text-right font-medium text-foreground">{metadata.unit}</dd>
+          <dt className="text-muted">{t('mapFirst.meta.period')}</dt>
+          <dd className="text-right font-medium text-foreground">{hasData ? t('mapFirst.meta.realtime') : '—'}</dd>
+          <dt className="text-muted">{t('mapFirst.meta.updated')}</dt>
+          <dd className="text-right font-medium text-foreground">{updatedAt ?? '—'}</dd>
+          <dt className="text-muted">{metaCopy.method}</dt>
+          <dd className="text-right font-medium leading-relaxed text-foreground">{metadata.method}</dd>
+        </dl>
+      </details>
     </div>
   )
 }

@@ -3,7 +3,6 @@ import type { ReactNode } from 'react'
 import {
   BusIcon,
   CheckCircleIcon,
-  DropletIcon,
   HospitalIcon,
   SchoolIcon,
   TreeIcon,
@@ -57,7 +56,7 @@ function CategoryGlyph({ category }: { category: CategoryIconKind }): ReactNode 
     case 'transit':
       return <BusIcon />
     case 'water':
-      return <DropletIcon />
+      return <span className="h-0.5 w-3.5 rounded-full bg-current shadow-[0_0_5px_currentColor]" />
     case 'air':
       return <WindIcon />
     case 'verified':

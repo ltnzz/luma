@@ -126,8 +126,6 @@ export function DashboardHeader({
               aria-haspopup="listbox"
               aria-expanded={isRegionOpen}
               aria-label={`${t('mapFirst.header.selectRegion')}. ${t('mapFirst.header.current')} ${currentWilayahLabel}`}
-              data-tooltip={t('mapFirst.header.regionTooltip')}
-              data-tooltip-side="bottom"
             >
               <div className="flex min-w-0 items-center gap-2">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/90 p-0.5 shadow-2xs ring-1 ring-inset ring-border/70 dark:bg-white/85">
@@ -138,7 +136,7 @@ export function DashboardHeader({
                     className="h-full w-full object-contain"
                   />
                 </span>
-                <span className="min-w-0 truncate text-[10px] font-semibold leading-tight text-foreground sm:text-[11px]">
+                <span className="min-w-0 truncate text-[11px] font-semibold leading-tight text-foreground sm:text-xs">
                   {currentWilayahLabel}
                 </span>
               </div>
@@ -152,12 +150,12 @@ export function DashboardHeader({
               <div
                 role="listbox"
                 aria-label={t('mapFirst.header.selectRegion')}
-                className="fixed inset-x-2 top-[3.75rem] z-[80] overflow-hidden rounded-2xl luma-map-card p-1.5 animate-in fade-in slide-in-from-top-1 duration-150 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[288px]"
+                className="fixed inset-x-2 top-[3.75rem] z-[80] overflow-hidden rounded-2xl luma-map-card luma-region-dropdown p-1.5 animate-in fade-in slide-in-from-top-1 duration-150 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[288px]"
               >
                 <div className="mb-1 flex items-center justify-between border-b border-border/50 px-2.5 py-2">
                   <div>
-                    <p className="text-[11px] font-bold text-foreground">{t('mapFirst.header.selectRegion')}</p>
-                    <p className="mt-0.5 text-[9px] text-muted">
+                    <p className="text-xs font-bold text-foreground">{t('mapFirst.header.selectRegion')}</p>
+                    <p className="mt-0.5 text-[10.5px] font-medium text-muted">
                       {language === 'id' ? 'Peta dan indikator akan menyesuaikan' : 'Map and indicators will update'}
                     </p>
                   </div>
@@ -197,8 +195,8 @@ export function DashboardHeader({
                           />
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block truncate text-[11px] font-semibold leading-tight">{label}</span>
-                          <span className="mt-0.5 block truncate text-[9px] font-normal text-muted">{getRegionMeta(item)}</span>
+                          <span className="block truncate text-xs font-semibold leading-tight">{label}</span>
+                          <span className="mt-0.5 block truncate text-[10.5px] font-medium text-muted">{getRegionMeta(item)}</span>
                         </span>
                         <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold transition ${
                           isSelected ? 'bg-primary text-white' : 'text-transparent'
@@ -216,7 +214,6 @@ export function DashboardHeader({
 
         {/* Live Date Time Widget */}
         <div className="hidden md:flex items-center gap-1.5 rounded-full border border-border/80 bg-surface-muted/60 px-2.5 py-1 text-[10px] text-muted shadow-2xs">
-          <span className="flex h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
           <span className="font-mono font-bold text-foreground text-[10px]">{timeString}</span>
           <span className="text-muted/60">•</span>
           <span className="font-medium text-muted text-[10px]">{dateString}</span>

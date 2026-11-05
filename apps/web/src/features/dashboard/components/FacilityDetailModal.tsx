@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, type ReactNode } from 'react'
 import { ErrorBanner } from '../../../components/ui/ErrorBanner'
 import { Modal } from '../../../components/ui/Modal'
 import { Skeleton } from '../../../components/ui/Skeleton'
@@ -6,6 +6,7 @@ import type { Facility } from '../../../lib/api'
 import type { FacilityItem } from '../types/facility.types'
 import { useFacilityDetail } from '../hooks/useFacilityDetail'
 import { useTranslation } from '../../../i18n/useTranslation'
+import { DATA_CATALOG, type DataCatalogEntry } from '../../../data/data-catalog'
 
 interface FacilityDetailModalProps {
   facilityId?: string | null
@@ -31,6 +32,48 @@ function formatMetadataDate(value: string, language: 'id' | 'en'): string {
   }).format(date)
 }
 
+function catalogForFacility(category?: string | null): DataCatalogEntry | null {
+  switch (category?.toLowerCase()) {
+    case 'kesehatan': return DATA_CATALOG.kesehatan
+    case 'fasum': return DATA_CATALOG.rth
+    case 'pendidikan': return DATA_CATALOG.sekolah
+    case 'transum': return DATA_CATALOG.transum
+    case 'lingkungan': return DATA_CATALOG.airQuality
+    default: return null
+  }
+}
+
+function DetailDisclosure({
+  title,
+  preview,
+  children,
+}: {
+  title: string
+  preview?: ReactNode
+  children: ReactNode
+}) {
+  return (
+    <details className="group overflow-hidden rounded-lg border border-border/55 bg-surface/20 dark:border-white/10 dark:bg-black/10">
+      <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 marker:content-none">
+        <span className="min-w-0 text-[11px] font-semibold text-foreground dark:text-white/90">{title}</span>
+        <span className="flex min-w-0 items-center gap-2">
+          {preview ? (
+            <span className="max-w-28 truncate text-right text-[10px] font-medium text-muted dark:text-white/55">
+              {preview}
+            </span>
+          ) : null}
+          <svg className="size-3.5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </span>
+      </summary>
+      <div className="border-t border-border/40 bg-surface/15 px-3 pb-3 pt-2.5 dark:border-white/10 dark:bg-black/10">
+        {children}
+      </div>
+    </details>
+  )
+}
+
 export function FacilityDetailModal({
   facilityId,
   facility: propFacility,
@@ -49,8 +92,11 @@ export function FacilityDetailModal({
         download: 'Unduh', downloadTitle: 'Unduh berkas dokumen', detail: 'Detail fasilitas',
         panelAria: 'Detail Fasilitas', close: 'Tutup detail fasilitas', loading: 'Memuat detail fasilitas',
         loadingDescription: 'Memuat informasi fasilitas dari server…',
-        dataInfo: 'Informasi Data', source: 'Sumber', period: 'Periode', updated: 'Diperbarui',
+        dataInfo: 'Informasi Data', source: 'Sumber', coverage: 'Cakupan', unit: 'Satuan', method: 'Metode',
+        period: 'Periode', updated: 'Diperbarui',
         unavailable: 'Sebagian metadata belum dicantumkan oleh sumber.',
+        moreDetails: 'Detail lainnya', budgetShort: 'Anggaran', sourceShort: 'Sumber data',
+        facilitiesShort: 'Fasilitas & layanan', documentsShort: 'Dokumen publik',
       }
     : {
         environment: 'Environment & Access', airQuality: 'Air Quality',
@@ -61,8 +107,11 @@ export function FacilityDetailModal({
         download: 'Download', downloadTitle: 'Download document', detail: 'Facility details',
         panelAria: 'Facility Details', close: 'Close facility details', loading: 'Loading facility details',
         loadingDescription: 'Loading facility information from the server…',
-        dataInfo: 'Data Information', source: 'Source', period: 'Period', updated: 'Updated',
+        dataInfo: 'Data Information', source: 'Source', coverage: 'Coverage', unit: 'Unit', method: 'Method',
+        period: 'Period', updated: 'Updated',
         unavailable: 'Some metadata was not provided by the source.',
+        moreDetails: 'More details', budgetShort: 'Budget', sourceShort: 'Data source',
+        facilitiesShort: 'Facilities & services', documentsShort: 'Public documents',
       }
 
   // If facilityId is passed (e.g. from page.tsx), load it via hook
@@ -147,72 +196,72 @@ export function FacilityDetailModal({
   const aqiStatus = metrics.aqiStatus ?? metrics.aqi_status
   const transitAccess = metrics.transitAccess ?? metrics.transit_access
   const budget = (displayFacility?.budget ?? {}) as Record<string, string | null | undefined>
+  const catalogEntry = catalogForFacility(displayFacility?.category)
 
   // =========================================================================
   // ISI DETAIL LENGKAP FASILITAS (Reused across side-glass & center modal)
   // =========================================================================
   const renderDetailContent = () => (
     <div className="flex flex-col gap-3 py-0.5">
-      {/* 1. Metrik Lingkungan & Walkability (Glass Cards) */}
+      {/* 1. Ringkasan utama selalu terlihat; dibuat satu card agar mudah dipindai. */}
       {Object.keys(metrics).length > 0 ? (
         <section className="flex flex-col gap-1.5">
           <h3 className="text-[10.5px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400 flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400" />
             <span>{copy.environment}</span>
           </h3>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          <dl className="divide-y divide-border/50 overflow-hidden rounded-xl border border-border/60 bg-surface/25 px-3 dark:divide-white/10 dark:border-white/10 dark:bg-black/10">
             {metrics.aqi !== undefined && (
-              <div className="luma-glass-inner rounded-xl p-2.5 shadow-xs">
-                <span className="text-[9.5px] font-semibold text-muted dark:text-white/60">{copy.airQuality}</span>
-                <p className="mt-0.5 text-xs font-bold text-foreground dark:text-white">
-                  {String(metrics.aqi)} {language === 'id' ? 'ISPU' : 'AQI'}{' '}
-                  {Boolean(aqiStatus) && (
-                    <span className="text-[10.5px] font-medium text-emerald-600 dark:text-emerald-300">({String(aqiStatus)})</span>
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2.5">
+                <dt className="text-[10.5px] font-medium text-muted dark:text-white/60">{copy.airQuality}</dt>
+                <dd className="text-right">
+                  <p className="text-xs font-bold text-foreground dark:text-white">
+                    {String(metrics.aqi)} {language === 'id' ? 'ISPU' : 'AQI'}{' '}
+                    {Boolean(aqiStatus) && (
+                      <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-300">({String(aqiStatus)})</span>
+                    )}
+                  </p>
+                  {metrics.pm25 !== undefined && (
+                    <p className="mt-0.5 text-[9.5px] text-muted dark:text-white/50">PM2.5: {String(metrics.pm25)}</p>
                   )}
-                </p>
-                {metrics.pm25 !== undefined && (
-                  <p className="mt-0.5 text-[9px] text-muted dark:text-white/50">PM2.5: {String(metrics.pm25)}</p>
-                )}
+                </dd>
               </div>
             )}
 
             {metrics.walkability !== undefined && (
-              <div className="luma-glass-inner rounded-xl p-2.5 shadow-xs">
-                <span className="text-[9.5px] font-semibold text-muted dark:text-white/60">Walkability</span>
-                <p className="mt-0.5 text-xs font-bold text-foreground dark:text-white">
-                  {String(metrics.walkability)}
-                </p>
-                <p className="mt-0.5 text-[9px] text-muted dark:text-white/50">{copy.scale}</p>
+              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2.5">
+                <dt className="text-[10.5px] font-medium text-muted dark:text-white/60">Walkability</dt>
+                <dd className="text-right">
+                  <p className="text-xs font-bold text-foreground dark:text-white">{String(metrics.walkability)}</p>
+                  <p className="mt-0.5 text-[9.5px] text-muted dark:text-white/50">{copy.scale}</p>
+                </dd>
               </div>
             )}
 
             {transitAccess !== undefined && (
-              <div className="col-span-2 sm:col-span-1 luma-glass-inner rounded-xl p-2.5 shadow-xs">
-                <span className="text-[9.5px] font-semibold text-muted dark:text-white/60">{copy.transit}</span>
-                <p className="mt-0.5 text-[11px] font-semibold text-foreground dark:text-white/90 line-clamp-2">
+              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 py-2.5">
+                <dt className="text-[10.5px] font-medium text-muted dark:text-white/60">{copy.transit}</dt>
+                <dd className="text-right text-[10.5px] font-semibold leading-snug text-foreground dark:text-white/90">
                   {String(transitAccess)}
-                </p>
+                </dd>
               </div>
             )}
-          </div>
+          </dl>
         </section>
       ) : null}
 
-      {/* 2. Detail Realisasi Anggaran (Glass Budget Card) */}
+      <section className="flex flex-col gap-1.5">
+        <h3 className="px-0.5 text-[10px] font-semibold text-muted dark:text-white/55">{copy.moreDetails}</h3>
+        <div className="flex flex-col gap-1.5">
+      {/* 2. Detail Realisasi Anggaran */}
       {Object.keys(budget).length > 0 ? (
-        <section className="flex flex-col gap-1.5">
-          <h3 className="text-[10.5px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400 flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400" />
-            <span>{copy.budget}</span>
-          </h3>
-          <div className="luma-glass-inner rounded-xl p-3 shadow-xs">
-            <div className="flex flex-wrap items-baseline justify-between gap-1.5 border-b border-border/50 dark:border-white/10 pb-2">
-              <span className="text-[10.5px] font-medium text-muted dark:text-white/60">{copy.totalBudget}</span>
-              <span className="text-sm font-extrabold text-primary dark:text-emerald-400">
+        <DetailDisclosure title={copy.budgetShort} preview={budget.year ?? undefined}>
+          <dl className="grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
+            <div className="flex items-baseline justify-between gap-3 border-b border-border/40 pb-2 sm:col-span-2 dark:border-white/10">
+              <dt className="text-[10px] text-muted dark:text-white/50">{copy.totalBudget}</dt>
+              <dd className="text-sm font-extrabold text-primary dark:text-emerald-400">
                 {budget.total ?? budget.nilai ?? '—'}
-              </span>
+              </dd>
             </div>
-            <dl className="mt-2 grid grid-cols-1 gap-1.5 sm:grid-cols-2 text-xs">
               {budget.source && (
                 <div>
                   <dt className="text-[10px] text-muted dark:text-white/50">{copy.funding}</dt>
@@ -234,69 +283,73 @@ export function FacilityDetailModal({
               {budget.status && (
                 <div>
                   <dt className="text-[10px] text-muted dark:text-white/50">{copy.status}</dt>
-                  <dd className="font-semibold text-primary dark:text-emerald-400 flex items-center gap-1 mt-0.5 text-[11px]">
-                    <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400 animate-pulse" />
-                    <span>{budget.status}</span>
-                  </dd>
+                  <dd className="mt-0.5 text-[11px] font-semibold text-primary dark:text-emerald-400">{budget.status}</dd>
                 </div>
               )}
-            </dl>
-          </div>
-        </section>
+          </dl>
+        </DetailDisclosure>
       ) : null}
 
       {/* Metadata hanya memakai nilai yang benar-benar tersedia dari sumber. */}
       {displayFacility ? (
-        <section className="flex flex-col gap-1.5">
-          <h3 className="text-[10.5px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400 flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400" />
-            <span>{copy.dataInfo}</span>
-          </h3>
-          <dl className="luma-glass-inner grid grid-cols-[auto_1fr] gap-x-3 gap-y-1.5 rounded-xl p-2.5 text-[10px] shadow-xs">
+        <DetailDisclosure title={copy.sourceShort} preview={catalogEntry?.source.split(' / ')[0] ?? undefined}>
+          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-[10px]">
             <dt className="text-muted dark:text-white/50">{copy.source}</dt>
-            <dd className="text-right font-semibold text-foreground dark:text-white/90">{budget.source ?? '—'}</dd>
+            <dd className="text-right font-semibold text-foreground dark:text-white/90">
+              {catalogEntry ? (
+                <a href={catalogEntry.sourceUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                  {catalogEntry.source} ↗
+                </a>
+              ) : '—'}
+            </dd>
+            <dt className="text-muted dark:text-white/50">{copy.coverage}</dt>
+            <dd className="text-right font-semibold text-foreground dark:text-white/90">
+              {catalogEntry?.coverage ?? displayFacility.wilayah ?? '—'}
+            </dd>
+            <dt className="text-muted dark:text-white/50">{copy.unit}</dt>
+            <dd className="text-right font-semibold text-foreground dark:text-white/90">{catalogEntry?.unit ?? '—'}</dd>
             <dt className="text-muted dark:text-white/50">{copy.period}</dt>
-            <dd className="text-right font-semibold text-foreground dark:text-white/90">{budget.year ?? '—'}</dd>
+            <dd className="text-right font-semibold text-foreground dark:text-white/90">{catalogEntry?.period ?? budget.year ?? '—'}</dd>
             <dt className="text-muted dark:text-white/50">{copy.updated}</dt>
             <dd className="text-right font-semibold text-foreground dark:text-white/90">
               {'updatedAt' in displayFacility && displayFacility.updatedAt
                 ? formatMetadataDate(displayFacility.updatedAt, language)
                 : '—'}
             </dd>
+            <dt className="text-muted dark:text-white/50">{copy.method}</dt>
+            <dd className="text-right font-semibold leading-relaxed text-foreground dark:text-white/90">{catalogEntry?.method ?? '—'}</dd>
           </dl>
-          {(!budget.source || !budget.year || !('updatedAt' in displayFacility) || !displayFacility.updatedAt) ? (
-            <p className="text-[9px] leading-relaxed text-muted dark:text-white/50">
+          {(!catalogEntry || !('updatedAt' in displayFacility) || !displayFacility.updatedAt) ? (
+            <p className="mt-2 border-t border-border/40 pt-2 text-[9px] leading-relaxed text-muted dark:border-white/10 dark:text-white/50">
               — {copy.unavailable}
             </p>
           ) : null}
-        </section>
+        </DetailDisclosure>
       ) : null}
 
       {/* 3. Spesifikasi Teknis Fasilitas */}
       {Object.keys(specs).length > 0 ? (
-        <section className="flex flex-col gap-1.5">
-          <h3 className="text-[10.5px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400 flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400" />
-            <span>{copy.specifications}</span>
-          </h3>
+        <DetailDisclosure
+          title={copy.facilitiesShort}
+          preview={`${Object.keys(specs).length} ${language === 'id' ? 'item' : 'items'}`}
+        >
           <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
             {Object.entries(specs).map(([key, val]) => (
-              <div key={key} className="flex flex-col luma-glass-inner rounded-xl p-2 shadow-xs">
+              <div key={key} className="flex flex-col rounded-lg border border-border/50 bg-surface/20 p-2 dark:border-white/10 dark:bg-black/10">
                 <span className="text-[9.5px] font-medium text-muted dark:text-white/50">{key}</span>
                 <span className="mt-0.5 text-[11px] font-semibold text-foreground dark:text-white/95">{val}</span>
               </div>
             ))}
           </div>
-        </section>
+        </DetailDisclosure>
       ) : null}
 
       {/* 4. Dokumen Keterbukaan Publik (Direct Download Support) */}
       {docs.length > 0 ? (
-        <section className="flex flex-col gap-1.5">
-          <h3 className="text-[10.5px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400 flex items-center gap-1.5">
-            <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400" />
-            <span>{copy.documents}</span>
-          </h3>
+        <DetailDisclosure
+          title={copy.documentsShort}
+          preview={`${docs.length} ${language === 'id' ? 'dokumen' : docs.length === 1 ? 'document' : 'documents'}`}
+        >
           <div className="flex flex-col gap-1.5">
             {docs.map((doc, idx) => {
               const title = 'title' in doc ? doc.title : copy.publicDocument
@@ -337,8 +390,10 @@ export function FacilityDetailModal({
               )
             })}
           </div>
-        </section>
+        </DetailDisclosure>
       ) : null}
+        </div>
+      </section>
     </div>
   )
 
@@ -366,12 +421,12 @@ export function FacilityDetailModal({
               {displayFacility.name}
             </h2>
             {displayFacility.address && (
-              <p className="flex items-start gap-1 text-[11px] text-muted dark:text-white/70 line-clamp-2 mt-0.5">
+              <p className="mt-0.5 flex min-w-0 items-start gap-1 text-[11px] leading-relaxed text-muted dark:text-white/70">
                 <svg className="size-3 shrink-0 text-primary dark:text-emerald-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                   <circle cx="12" cy="10" r="3" />
                 </svg>
-                <span className="truncate">{displayFacility.address}</span>
+                <span className="min-w-0 whitespace-normal break-words">{displayFacility.address}</span>
               </p>
             )}
           </div>
@@ -411,7 +466,10 @@ export function FacilityDetailModal({
         {/* Footer Glass */}
         <footer className="flex shrink-0 items-center border-t border-border/50 dark:border-white/10 bg-white/[0.02] px-3 py-2 sm:px-3.5 text-xs text-muted dark:text-white/60">
           <span className="font-mono text-[10px] flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary dark:bg-emerald-400 animate-pulse" />
+            <svg className="size-3 text-primary dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
             {typeof displayFacility.lat === 'number' && typeof displayFacility.lng === 'number'
               ? `GPS: ${displayFacility.lat.toFixed(4)}, ${displayFacility.lng.toFixed(4)}`
               : ''}
@@ -462,7 +520,10 @@ export function FacilityDetailModal({
       footer={
         <div className="flex items-center w-full text-xs text-white/60">
           <span className="font-mono text-[11px] text-white/50 flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <svg className="size-3 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="3" />
+            </svg>
             {displayFacility && typeof displayFacility.lat === 'number' && typeof displayFacility.lng === 'number'
               ? `GPS: ${displayFacility.lat.toFixed(4)}, ${displayFacility.lng.toFixed(4)}`
               : ''}
