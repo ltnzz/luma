@@ -33,14 +33,15 @@ function renderSnackbar(language: Language) {
 describe('ConnectionSnackbar', () => {
   it('menampilkan copy Indonesia dan menjalankan Retry', () => {
     renderSnackbar('id')
-    expect(screen.getByRole('alert')).toHaveTextContent('Koneksi internet terputus')
+    expect(screen.getByRole('alert')).toHaveTextContent('Tidak ada koneksi internet')
+    expect(screen.getByRole('alert')).toHaveTextContent('Periksa Wi-Fi atau data seluler Anda')
     fireEvent.click(screen.getByRole('button', { name: 'Coba Lagi' }))
     expect(retry).toHaveBeenCalledOnce()
   })
 
   it('menampilkan copy Inggris saat bahasa EN aktif', () => {
     renderSnackbar('en')
-    expect(screen.getByRole('alert')).toHaveTextContent('Internet connection lost')
+    expect(screen.getByRole('alert')).toHaveTextContent('No internet connection')
     expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument()
   })
 })

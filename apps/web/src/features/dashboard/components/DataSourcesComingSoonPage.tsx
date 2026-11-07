@@ -1,5 +1,5 @@
 import { CategoryIconBadge, type CategoryIconKind } from '../../../components/ui/CategoryIconBadge'
-import { DATA_CATALOG_LIST, type CatalogCategory } from '../../../data/data-catalog'
+import { getDataCatalogList, type CatalogCategory } from '../../../data/data-catalog'
 import { useTranslation } from '../../../i18n/useTranslation'
 
 interface DataSourcesComingSoonPageProps {
@@ -17,6 +17,7 @@ const ICON_BY_CATEGORY: Record<CatalogCategory, CategoryIconKind> = {
 
 export function DataSourcesComingSoonPage({ onBack }: DataSourcesComingSoonPageProps) {
   const { language } = useTranslation()
+  const dataCatalog = getDataCatalogList(language)
   const copy = language === 'id'
     ? {
         back: 'Kembali ke Peta', eyebrow: 'Provenansi data aktif',
@@ -52,7 +53,7 @@ export function DataSourcesComingSoonPage({ onBack }: DataSourcesComingSoonPageP
             <span>{copy.back}</span>
           </button>
           <span className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
-            {DATA_CATALOG_LIST.length} {copy.datasets}
+            {dataCatalog.length} {copy.datasets}
           </span>
         </div>
 
@@ -63,7 +64,7 @@ export function DataSourcesComingSoonPage({ onBack }: DataSourcesComingSoonPageP
         </header>
 
         <section className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label={copy.title}>
-          {DATA_CATALOG_LIST.map((item) => {
+          {dataCatalog.map((item) => {
             const statusLabel = item.status === 'live' ? copy.live : item.status === 'active' ? copy.active : copy.curated
             return (
               <article key={item.category} className="luma-map-card luma-glass-hover flex flex-col gap-4 rounded-2xl p-4">

@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { CategoryIconBadge } from '../../../components/ui/CategoryIconBadge'
 import { getAqiLevel, AQI_LEVELS } from '../utils/airQualityLevels'
 import { useTranslation } from '../../../i18n/useTranslation'
-import { DATA_CATALOG } from '../../../data/data-catalog'
+import { getDataCatalogEntry } from '../../../data/data-catalog'
 
 const CATEGORY_KEYS = [
   'mapFirst.air.good',
@@ -42,7 +42,7 @@ export function AirQualityCard({
   updatedAt,
 }: AirQualityCardProps) {
   const { t, language } = useTranslation()
-  const metadata = DATA_CATALOG.airQuality
+  const metadata = getDataCatalogEntry('airQuality', language)
   const metaCopy = language === 'id'
     ? { transparency: 'Transparansi data', coverage: 'Cakupan', unit: 'Satuan', method: 'Metode' }
     : { transparency: 'Data transparency', coverage: 'Coverage', unit: 'Unit', method: 'Method' }

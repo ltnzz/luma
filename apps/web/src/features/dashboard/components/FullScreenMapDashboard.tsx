@@ -1,6 +1,5 @@
 import { lazy, Suspense, useState, useCallback, useEffect, useMemo } from 'react'
 import { EmptyState } from '../../../components/ui/EmptyState'
-import { ErrorBanner } from '../../../components/ui/ErrorBanner'
 import { Skeleton } from '../../../components/ui/Skeleton'
 import { FacilityDetailModal } from './FacilityDetailModal'
 import { TransitRoutesWidget } from './TransitRoutesWidget'
@@ -115,7 +114,13 @@ export function FullScreenMapDashboard({
     return CITY_AGGREGATES.find((c) => c.code === activeWilayah) ?? null
   }, [activeWilayah])
 
-  const scopeLabel = cityAggregate ? cityAggregate.name : 'DKI Jakarta'
+  const scopeLabel = cityAggregate
+    ? language === 'en'
+      ? cityAggregate.nameEn
+      : cityAggregate.name
+    : language === 'en'
+      ? 'All DKI Jakarta'
+      : 'DKI Jakarta'
   const corridorCount = cityAggregate ? cityAggregate.corridors.length : 13
 
   const availableCorridors = useMemo(() => {
@@ -252,6 +257,10 @@ export function FullScreenMapDashboard({
   const handleMarkerClick = useCallback(
     (facility: FacilityItem) => {
       setSelectedFacility(facility)
+      // Fokus fasilitas tidak boleh mewarisi zoom wilayah/rute sebelumnya.
+      // `null` membuat peta mempertahankan zoom dekat yang sudah aktif atau
+      // mendekat ke zoom minimum fasilitas di InteractiveMap.
+      setFocusZoom(null)
       setFocusCoords([facility.lng, facility.lat])
     },
     []
@@ -310,6 +319,7 @@ export function FullScreenMapDashboard({
   const markerDataIsEmpty =
     usesFacilityMarkers && !markerDataIsLoading && !markerDataHasError && combinedFacilities.length === 0
   const refetchMarkerData = activeCategoryFilter === 'sekolah' ? refetchSchools : refetchFacilities
+  const hasExpandedLeftPanel = isLegendOpen || activeCategoryFilter !== null
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-surface-muted select-none">
@@ -374,14 +384,6 @@ export function FullScreenMapDashboard({
           </div>
         ) : null}
 
-        {markerDataHasError ? (
-          <ErrorBanner
-            error={markerDataError}
-            onRetry={refetchMarkerData}
-            className="pointer-events-auto rounded-2xl border border-danger/30 bg-surface/90 px-4 py-3 shadow-xl backdrop-blur-lg"
-          />
-        ) : null}
-
         {markerDataIsEmpty ? (
           <EmptyState
             title={t('mapFirst.empty.title')}
@@ -394,15 +396,17 @@ export function FullScreenMapDashboard({
 
       {/* 3. Panel Kolom Kiri: Sumber Data Resmi, Kualitas Udara, dan Contextual Filter / Legenda */}
       {!isTransitMode && (
-        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[44dvh] flex-col items-start gap-2 overflow-y-auto pb-2 pt-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:max-h-[calc(100dvh-9rem)] sm:overflow-y-auto sm:pb-1 sm:pr-1 sm:pt-0">
-          <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
-          <AirQualityCard
-            airAqi={realtimeAirQuality?.aqi ?? null}
-            isAirLive={isAirLive}
-            status={airQualityStatus}
-            source={realtimeAirQuality?.source}
-            updatedAt={realtimeAirQuality?.updatedAt}
-          />
+        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[calc(100dvh-8.75rem)] flex-col items-start gap-2 overflow-y-auto overscroll-contain pb-2 pt-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:max-h-[calc(100dvh-9rem)] sm:pb-1 sm:pr-1 sm:pt-0">
+          <div className={hasExpandedLeftPanel ? 'hidden sm:contents' : 'contents'}>
+            <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
+            <AirQualityCard
+              airAqi={realtimeAirQuality?.aqi ?? null}
+              isAirLive={isAirLive}
+              status={airQualityStatus}
+              source={realtimeAirQuality?.source}
+              updatedAt={realtimeAirQuality?.updatedAt}
+            />
+          </div>
 
           {/* Legenda tetap tersedia sebagai dropdown compact. */}
           <StaticMapLegend isOpen={isLegendOpen} onOpenChange={setIsLegendOpen} />
@@ -432,6 +436,8 @@ export function FullScreenMapDashboard({
               faskesCounts={faskesCounts}
               rthCounts={rthCounts}
               schoolCounts={schoolCounts}
+              hasDataError={markerDataHasError}
+              onRetry={refetchMarkerData}
               onClose={() => setActiveCategoryFilter(null)}
             />
           ) : activeCategoryFilter ? (
@@ -492,6 +498,7 @@ export function FullScreenMapDashboard({
       {selectedFacility && !isTransitMode && (
         <FacilityDetailModal
           facility={selectedFacility}
+          regionalAirQuality={realtimeAirQuality}
           isOpen={Boolean(selectedFacility)}
           onClose={() => setSelectedFacility(null)}
           variant="side-glass"
