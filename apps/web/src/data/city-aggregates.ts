@@ -1,6 +1,7 @@
 export interface CityAggregate {
   code: string
   name: string
+  nameEn: string
   subdistrictName: string
   center: [number, number]
   zoom: number
@@ -17,6 +18,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
   {
     code: 'JAKARTA PUSAT',
     name: 'Jakarta Pusat',
+    nameEn: 'Central Jakarta',
     subdistrictName: 'JakartaPusat',
     center: [106.8420, -6.1820],
     zoom: 13.0,
@@ -45,6 +47,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
   {
     code: 'JAKARTA SELATAN',
     name: 'Jakarta Selatan',
+    nameEn: 'South Jakarta',
     subdistrictName: 'JakartaSelatan',
     center: [106.8097, -6.2615],
     zoom: 12.6,
@@ -69,6 +72,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
   {
     code: 'JAKARTA BARAT',
     name: 'Jakarta Barat',
+    nameEn: 'West Jakarta',
     subdistrictName: 'JakartaBarat',
     center: [106.7320, -6.1620],
     zoom: 12.6,
@@ -86,6 +90,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
   {
     code: 'JAKARTA TIMUR',
     name: 'Jakarta Timur',
+    nameEn: 'East Jakarta',
     subdistrictName: 'JakartaTimur',
     center: [106.9004, -6.225],
     zoom: 12.6,
@@ -111,6 +116,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
   {
     code: 'JAKARTA UTARA',
     name: 'Jakarta Utara',
+    nameEn: 'North Jakarta',
     subdistrictName: 'JakartaUtara',
     center: [106.8926, -6.1214],
     zoom: 12.6,
@@ -128,6 +134,7 @@ export const CITY_AGGREGATES: CityAggregate[] = [
   {
     code: 'KEP. SERIBU',
     name: 'Kep. Seribu',
+    nameEn: 'Thousand Islands',
     subdistrictName: 'KepulauanSeribu',
     center: [106.5615, -5.6122],
     zoom: 11.0,

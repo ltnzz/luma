@@ -6,7 +6,19 @@ import type { Facility } from '../../../lib/api'
 import type { FacilityItem } from '../types/facility.types'
 import { useFacilityDetail } from '../hooks/useFacilityDetail'
 import { useTranslation } from '../../../i18n/useTranslation'
-import { DATA_CATALOG, type DataCatalogEntry } from '../../../data/data-catalog'
+import { getDataCatalogEntry, type DataCatalogEntry } from '../../../data/data-catalog'
+import type { Language } from '../../../i18n/dictionaries'
+import type { RealtimeAirQuality } from '../hooks/useRealtimeAirQuality'
+import { AQI_LEVELS, getAqiLevel } from '../utils/airQualityLevels'
+
+const AQI_CATEGORY_KEYS = [
+  'mapFirst.air.good',
+  'mapFirst.air.moderate',
+  'mapFirst.air.sensitive',
+  'mapFirst.air.unhealthy',
+  'mapFirst.air.veryUnhealthy',
+  'mapFirst.air.hazardous',
+] as const
 
 interface FacilityDetailModalProps {
   facilityId?: string | null
@@ -14,6 +26,7 @@ interface FacilityDetailModalProps {
   isOpen?: boolean
   onClose: () => void
   variant?: 'center' | 'side-glass'
+  regionalAirQuality?: RealtimeAirQuality | null
 }
 
 const CATEGORY_BADGE_COLORS: Record<string, string> = {
@@ -32,13 +45,13 @@ function formatMetadataDate(value: string, language: 'id' | 'en'): string {
   }).format(date)
 }
 
-function catalogForFacility(category?: string | null): DataCatalogEntry | null {
+function catalogForFacility(category: string | null | undefined, language: Language): DataCatalogEntry | null {
   switch (category?.toLowerCase()) {
-    case 'kesehatan': return DATA_CATALOG.kesehatan
-    case 'fasum': return DATA_CATALOG.rth
-    case 'pendidikan': return DATA_CATALOG.sekolah
-    case 'transum': return DATA_CATALOG.transum
-    case 'lingkungan': return DATA_CATALOG.airQuality
+    case 'kesehatan': return getDataCatalogEntry('kesehatan', language)
+    case 'fasum': return getDataCatalogEntry('rth', language)
+    case 'pendidikan': return getDataCatalogEntry('sekolah', language)
+    case 'transum': return getDataCatalogEntry('transum', language)
+    case 'lingkungan': return getDataCatalogEntry('airQuality', language)
     default: return null
   }
 }
@@ -53,21 +66,21 @@ function DetailDisclosure({
   children: ReactNode
 }) {
   return (
-    <details className="group overflow-hidden rounded-lg border border-border/55 bg-surface/20 dark:border-white/10 dark:bg-black/10">
-      <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 marker:content-none">
+    <details className="group overflow-hidden rounded-lg border border-border/55 bg-surface/20 transition-[transform,border-color,background-color,box-shadow] duration-200 motion-safe:hover:-translate-y-0.5 hover:border-primary/30 hover:bg-surface/35 hover:shadow-[0_8px_22px_-16px_rgba(29,69,51,0.45)] focus-within:border-primary/35 dark:border-white/10 dark:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/[0.04]">
+      <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 px-3 py-2.5 transition-colors duration-200 marker:content-none hover:bg-primary/[0.035] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary/35 dark:hover:bg-white/[0.035]">
         <span className="min-w-0 text-[11px] font-semibold text-foreground dark:text-white/90">{title}</span>
         <span className="flex min-w-0 items-center gap-2">
           {preview ? (
-            <span className="max-w-28 truncate text-right text-[10px] font-medium text-muted dark:text-white/55">
+            <span className="max-w-28 truncate text-right text-[10.5px] font-semibold text-muted dark:text-white/70">
               {preview}
             </span>
           ) : null}
-          <svg className="size-3.5 shrink-0 text-muted transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg className="size-3.5 shrink-0 text-foreground/65 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="m6 9 6 6 6-6" />
           </svg>
         </span>
       </summary>
-      <div className="border-t border-border/40 bg-surface/15 px-3 pb-3 pt-2.5 dark:border-white/10 dark:bg-black/10">
+      <div className="border-t border-border/40 bg-surface/15 px-3 pb-3 pt-2.5 group-open:animate-in group-open:fade-in group-open:slide-in-from-top-1 group-open:duration-200 dark:border-white/10 dark:bg-black/10">
         {children}
       </div>
     </details>
@@ -80,8 +93,9 @@ export function FacilityDetailModal({
   isOpen,
   onClose,
   variant = 'center',
+  regionalAirQuality,
 }: FacilityDetailModalProps) {
-  const { language } = useTranslation()
+  const { language, t } = useTranslation()
   const copy = language === 'id'
     ? {
         environment: 'Kondisi Lingkungan & Akses', airQuality: 'Kualitas Udara',
@@ -97,6 +111,7 @@ export function FacilityDetailModal({
         unavailable: 'Sebagian metadata belum dicantumkan oleh sumber.',
         moreDetails: 'Detail lainnya', budgetShort: 'Anggaran', sourceShort: 'Sumber data',
         facilitiesShort: 'Fasilitas & layanan', documentsShort: 'Dokumen publik',
+        regionalAirQuality: 'Kualitas udara wilayah', regionalStation: 'Acuan wilayah',
       }
     : {
         environment: 'Environment & Access', airQuality: 'Air Quality',
@@ -112,6 +127,7 @@ export function FacilityDetailModal({
         unavailable: 'Some metadata was not provided by the source.',
         moreDetails: 'More details', budgetShort: 'Budget', sourceShort: 'Data source',
         facilitiesShort: 'Facilities & services', documentsShort: 'Public documents',
+        regionalAirQuality: 'Regional air quality', regionalStation: 'Regional reference',
       }
 
   // If facilityId is passed (e.g. from page.tsx), load it via hook
@@ -193,10 +209,28 @@ export function FacilityDetailModal({
     : []
 
   const metrics = (displayFacility?.metrics ?? {}) as Record<string, unknown>
-  const aqiStatus = metrics.aqiStatus ?? metrics.aqi_status
+  const hasFacilityAqi = metrics.aqi !== undefined && metrics.aqi !== null
+  const displayedAqi = hasFacilityAqi ? metrics.aqi : regionalAirQuality?.aqi
+  const displayedPm25 = metrics.pm25 ?? regionalAirQuality?.pm25
+  const aqiStatus = metrics.aqiStatus ?? metrics.aqi_status ?? regionalAirQuality?.category
   const transitAccess = metrics.transitAccess ?? metrics.transit_access
+  const hasEnvironmentData =
+    (displayedAqi !== undefined && displayedAqi !== null) ||
+    metrics.walkability !== undefined ||
+    transitAccess !== undefined
+  const numericAqi = Number(displayedAqi)
+  const aqiStatusClass = !Number.isFinite(numericAqi)
+    ? 'text-muted'
+    : numericAqi <= 50
+      ? 'text-emerald-600 dark:text-emerald-300'
+      : numericAqi <= 100
+        ? 'text-amber-600 dark:text-amber-300'
+        : 'text-danger'
+  const localizedAqiStatus = Number.isFinite(numericAqi)
+    ? t(AQI_CATEGORY_KEYS[Math.max(0, AQI_LEVELS.indexOf(getAqiLevel(numericAqi)))])
+    : aqiStatus
   const budget = (displayFacility?.budget ?? {}) as Record<string, string | null | undefined>
-  const catalogEntry = catalogForFacility(displayFacility?.category)
+  const catalogEntry = catalogForFacility(displayFacility?.category, language)
 
   // =========================================================================
   // ISI DETAIL LENGKAP FASILITAS (Reused across side-glass & center modal)
@@ -204,42 +238,49 @@ export function FacilityDetailModal({
   const renderDetailContent = () => (
     <div className="flex flex-col gap-3 py-0.5">
       {/* 1. Ringkasan utama selalu terlihat; dibuat satu card agar mudah dipindai. */}
-      {Object.keys(metrics).length > 0 ? (
+      {hasEnvironmentData ? (
         <section className="flex flex-col gap-1.5">
           <h3 className="text-[10.5px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400 flex items-center gap-1.5">
             <span>{copy.environment}</span>
           </h3>
-          <dl className="divide-y divide-border/50 overflow-hidden rounded-xl border border-border/60 bg-surface/25 px-3 dark:divide-white/10 dark:border-white/10 dark:bg-black/10">
-            {metrics.aqi !== undefined && (
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2.5">
-                <dt className="text-[10.5px] font-medium text-muted dark:text-white/60">{copy.airQuality}</dt>
+          <dl className="divide-y divide-border/50 overflow-hidden rounded-xl border border-border/60 bg-surface/25 px-3 transition-[transform,border-color,background-color,box-shadow] duration-200 motion-safe:hover:-translate-y-0.5 hover:border-primary/25 hover:bg-surface/40 hover:shadow-[0_10px_26px_-18px_rgba(29,69,51,0.5)] dark:divide-white/10 dark:border-white/10 dark:bg-black/10 dark:hover:border-white/20 dark:hover:bg-white/[0.04]">
+            {displayedAqi !== undefined && displayedAqi !== null && (
+              <div className="-mx-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 transition-colors duration-200 hover:bg-primary/[0.04] dark:hover:bg-white/[0.035]">
+                <dt className="text-[11px] font-semibold text-muted dark:text-white/75">
+                  {hasFacilityAqi ? copy.airQuality : copy.regionalAirQuality}
+                </dt>
                 <dd className="text-right">
                   <p className="text-xs font-bold text-foreground dark:text-white">
-                    {String(metrics.aqi)} {language === 'id' ? 'ISPU' : 'AQI'}{' '}
-                    {Boolean(aqiStatus) && (
-                      <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-300">({String(aqiStatus)})</span>
+                    {String(displayedAqi)} AQI{' '}
+                    {Boolean(localizedAqiStatus) && (
+                      <span className={`text-[10px] font-semibold ${aqiStatusClass}`}>({String(localizedAqiStatus)})</span>
                     )}
                   </p>
-                  {metrics.pm25 !== undefined && (
-                    <p className="mt-0.5 text-[9.5px] text-muted dark:text-white/50">PM2.5: {String(metrics.pm25)}</p>
+                  {displayedPm25 !== undefined && displayedPm25 !== null && (
+                    <p className="mt-0.5 text-[10px] font-medium text-muted dark:text-white/65">PM2.5: {String(displayedPm25)}</p>
                   )}
+                  {!hasFacilityAqi && regionalAirQuality ? (
+                    <p className="mt-1 max-w-40 text-[10px] font-medium leading-snug text-muted dark:text-white/65">
+                      {copy.regionalStation}: {regionalAirQuality.stationName.replace(/^SPKU\s*/i, '')} · {regionalAirQuality.source} · {regionalAirQuality.updatedAt}
+                    </p>
+                  ) : null}
                 </dd>
               </div>
             )}
 
             {metrics.walkability !== undefined && (
-              <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2.5">
-                <dt className="text-[10.5px] font-medium text-muted dark:text-white/60">Walkability</dt>
+              <div className="-mx-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 transition-colors duration-200 hover:bg-primary/[0.04] dark:hover:bg-white/[0.035]">
+                <dt className="text-[11px] font-semibold text-muted dark:text-white/75">Walkability</dt>
                 <dd className="text-right">
                   <p className="text-xs font-bold text-foreground dark:text-white">{String(metrics.walkability)}</p>
-                  <p className="mt-0.5 text-[9.5px] text-muted dark:text-white/50">{copy.scale}</p>
+                  <p className="mt-0.5 text-[10px] font-medium text-muted dark:text-white/65">{copy.scale}</p>
                 </dd>
               </div>
             )}
 
             {transitAccess !== undefined && (
-              <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 py-2.5">
-                <dt className="text-[10.5px] font-medium text-muted dark:text-white/60">{copy.transit}</dt>
+              <div className="-mx-3 grid grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)] items-center gap-3 px-3 py-2.5 transition-colors duration-200 hover:bg-primary/[0.04] dark:hover:bg-white/[0.035]">
+                <dt className="text-[11px] font-semibold text-muted dark:text-white/75">{copy.transit}</dt>
                 <dd className="text-right text-[10.5px] font-semibold leading-snug text-foreground dark:text-white/90">
                   {String(transitAccess)}
                 </dd>
@@ -250,39 +291,39 @@ export function FacilityDetailModal({
       ) : null}
 
       <section className="flex flex-col gap-1.5">
-        <h3 className="px-0.5 text-[10px] font-semibold text-muted dark:text-white/55">{copy.moreDetails}</h3>
+        <h3 className="px-0.5 text-[11px] font-semibold text-foreground/70 dark:text-white/75">{copy.moreDetails}</h3>
         <div className="flex flex-col gap-1.5">
       {/* 2. Detail Realisasi Anggaran */}
       {Object.keys(budget).length > 0 ? (
         <DetailDisclosure title={copy.budgetShort} preview={budget.year ?? undefined}>
           <dl className="grid grid-cols-1 gap-2 text-xs sm:grid-cols-2">
             <div className="flex items-baseline justify-between gap-3 border-b border-border/40 pb-2 sm:col-span-2 dark:border-white/10">
-              <dt className="text-[10px] text-muted dark:text-white/50">{copy.totalBudget}</dt>
+              <dt className="text-[10.5px] font-medium text-muted dark:text-white/70">{copy.totalBudget}</dt>
               <dd className="text-sm font-extrabold text-primary dark:text-emerald-400">
                 {budget.total ?? budget.nilai ?? '—'}
               </dd>
             </div>
               {budget.source && (
                 <div>
-                  <dt className="text-[10px] text-muted dark:text-white/50">{copy.funding}</dt>
+                  <dt className="text-[10.5px] font-medium text-muted dark:text-white/70">{copy.funding}</dt>
                   <dd className="font-semibold text-foreground dark:text-white/90 text-[11px] mt-0.5">{budget.source}</dd>
                 </div>
               )}
               {budget.year && (
                 <div>
-                  <dt className="text-[10px] text-muted dark:text-white/50">{copy.year}</dt>
+                  <dt className="text-[10.5px] font-medium text-muted dark:text-white/70">{copy.year}</dt>
                   <dd className="font-semibold text-foreground dark:text-white/90 text-[11px] mt-0.5">{budget.year}</dd>
                 </div>
               )}
               {budget.contractor && (
                 <div className="sm:col-span-2">
-                  <dt className="text-[10px] text-muted dark:text-white/50">{copy.contractor}</dt>
+                  <dt className="text-[10.5px] font-medium text-muted dark:text-white/70">{copy.contractor}</dt>
                   <dd className="font-semibold text-foreground dark:text-white/90 text-[11px] mt-0.5">{budget.contractor}</dd>
                 </div>
               )}
               {budget.status && (
                 <div>
-                  <dt className="text-[10px] text-muted dark:text-white/50">{copy.status}</dt>
+                  <dt className="text-[10.5px] font-medium text-muted dark:text-white/70">{copy.status}</dt>
                   <dd className="mt-0.5 text-[11px] font-semibold text-primary dark:text-emerald-400">{budget.status}</dd>
                 </div>
               )}
@@ -293,7 +334,7 @@ export function FacilityDetailModal({
       {/* Metadata hanya memakai nilai yang benar-benar tersedia dari sumber. */}
       {displayFacility ? (
         <DetailDisclosure title={copy.sourceShort} preview={catalogEntry?.source.split(' / ')[0] ?? undefined}>
-          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-[10px]">
+          <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-2 text-[10.5px]">
             <dt className="text-muted dark:text-white/50">{copy.source}</dt>
             <dd className="text-right font-semibold text-foreground dark:text-white/90">
               {catalogEntry ? (
@@ -336,7 +377,7 @@ export function FacilityDetailModal({
           <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
             {Object.entries(specs).map(([key, val]) => (
               <div key={key} className="flex flex-col rounded-lg border border-border/50 bg-surface/20 p-2 dark:border-white/10 dark:bg-black/10">
-                <span className="text-[9.5px] font-medium text-muted dark:text-white/50">{key}</span>
+                <span className="text-[10px] font-semibold text-muted dark:text-white/70">{key}</span>
                 <span className="mt-0.5 text-[11px] font-semibold text-foreground dark:text-white/95">{val}</span>
               </div>
             ))}
@@ -406,7 +447,7 @@ export function FacilityDetailModal({
     return (
       <aside
         aria-label={copy.panelAria}
-        className="fixed inset-x-2 bottom-[4.75rem] z-40 flex max-h-[58dvh] flex-col overflow-hidden rounded-2xl luma-map-card text-foreground dark:text-white animate-in fade-in slide-in-from-bottom-4 duration-250 select-text sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-18 sm:w-[310px] sm:max-h-[calc(100dvh-15.5rem)] sm:slide-in-from-right-4"
+        className="luma-facility-detail fixed inset-x-2 bottom-[4.75rem] z-40 flex max-h-[58dvh] flex-col overflow-hidden rounded-2xl luma-map-card text-foreground dark:text-white animate-in fade-in slide-in-from-bottom-4 duration-250 select-text sm:inset-x-auto sm:bottom-auto sm:right-4 sm:top-18 sm:w-[310px] sm:max-h-[calc(100dvh-15.5rem)] sm:slide-in-from-right-4"
       >
         {/* Header Glass */}
         <header className="flex shrink-0 items-start justify-between gap-2.5 border-b border-border/50 dark:border-white/10 bg-white/[0.04] p-3 sm:p-3.5">
@@ -415,13 +456,13 @@ export function FacilityDetailModal({
               <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm ${categoryBadge}`}>
                 {displayFacility.subCategory || displayFacility.category}
               </span>
-              <span className="text-[11px] font-medium text-muted dark:text-white/60">{displayFacility.wilayah}</span>
+              <span className="text-[11px] font-semibold text-muted dark:text-white/75">{displayFacility.wilayah}</span>
             </div>
             <h2 className="text-sm sm:text-base font-bold text-foreground dark:text-white tracking-tight leading-snug line-clamp-2 mt-0.5">
               {displayFacility.name}
             </h2>
             {displayFacility.address && (
-              <p className="mt-0.5 flex min-w-0 items-start gap-1 text-[11px] leading-relaxed text-muted dark:text-white/70">
+              <p className="mt-0.5 flex min-w-0 items-start gap-1 text-[11px] font-medium leading-relaxed text-muted dark:text-white/75">
                 <svg className="size-3 shrink-0 text-primary dark:text-emerald-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                   <circle cx="12" cy="10" r="3" />
@@ -435,7 +476,7 @@ export function FacilityDetailModal({
             type="button"
             aria-label={copy.close}
             onClick={onClose}
-            className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-border/60 dark:border-white/15 bg-surface/80 dark:bg-white/10 text-muted hover:text-foreground dark:text-white/70 dark:hover:text-white transition cursor-pointer"
+            className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-border/60 bg-surface/80 text-muted transition-[transform,color,background-color,border-color] duration-200 motion-safe:hover:rotate-90 motion-safe:hover:scale-105 hover:border-primary/35 hover:bg-primary/10 hover:text-foreground active:scale-95 dark:border-white/15 dark:bg-white/10 dark:text-white/70 dark:hover:text-white"
           >
             <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 6 6 18M6 6l12 12" />
@@ -464,7 +505,7 @@ export function FacilityDetailModal({
         </div>
 
         {/* Footer Glass */}
-        <footer className="flex shrink-0 items-center border-t border-border/50 dark:border-white/10 bg-white/[0.02] px-3 py-2 sm:px-3.5 text-xs text-muted dark:text-white/60">
+        <footer className="flex shrink-0 items-center border-t border-border/50 dark:border-white/10 bg-white/[0.02] px-3 py-2 sm:px-3.5 text-xs font-medium text-muted dark:text-white/70">
           <span className="font-mono text-[10px] flex items-center gap-1.5">
             <svg className="size-3 text-primary dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
               <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 1 1 16 0Z" />

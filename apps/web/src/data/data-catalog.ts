@@ -1,4 +1,5 @@
 import type { AnalyticsSector } from '../lib/api'
+import type { Language } from '../i18n/dictionaries'
 
 export type CatalogCategory = 'airQuality' | 'kesehatan' | 'rth' | 'sekolah' | 'transum' | 'air'
 
@@ -100,3 +101,71 @@ export const DATA_CATALOG: Record<CatalogCategory, DataCatalogEntry> = {
 }
 
 export const DATA_CATALOG_LIST = Object.values(DATA_CATALOG)
+
+const DATA_CATALOG_EN_COPY: Record<
+  CatalogCategory,
+  Pick<DataCatalogEntry, 'title' | 'coverage' | 'unit' | 'method' | 'period' | 'updatedAt'>
+> = {
+  airQuality: {
+    title: 'Air Quality',
+    coverage: 'Representative coordinates for DKI Jakarta and its six administrative regions',
+    unit: 'US AQI; PM2.5 and PM10 (µg/m³)',
+    method: 'Model samples at regional coordinates, cached for 15 minutes; not direct SPKU sensor readings.',
+    period: 'Real-time',
+    updatedAt: 'Automatically every 15 minutes',
+  },
+  kesehatan: {
+    title: 'Healthcare Facilities',
+    coverage: 'DKI Jakarta down to district attributes',
+    unit: 'Facility locations',
+    method: 'Names, types, regions, and coordinates are normalized; duplicate locations are removed during curation.',
+    period: '2023–2024 snapshot',
+    updatedAt: 'October 24, 2026',
+  },
+  rth: {
+    title: 'Green Open Spaces',
+    coverage: 'DKI Jakarta down to district attributes',
+    unit: 'Green-space locations',
+    method: 'Locations are aggregated by type and region from a normalized green-space dataset.',
+    period: '2022–2023',
+    updatedAt: 'October 24, 2026',
+  },
+  sekolah: {
+    title: 'Public Schools',
+    coverage: 'DKI Jakarta down to district attributes',
+    unit: 'Education units',
+    method: 'Public primary, middle, and high schools with valid coordinates are filtered and recalculated for each selected region.',
+    period: '2024 academic year',
+    updatedAt: 'October 24, 2026',
+  },
+  transum: {
+    title: 'Public Transport',
+    coverage: 'Main BRT corridors in DKI Jakarta',
+    unit: 'Corridors and stops',
+    method: 'Routes are grouped by corridor; regional coverage follows the areas each corridor crosses.',
+    period: '2024–2025',
+    updatedAt: 'October 24, 2026',
+  },
+  air: {
+    title: 'Clean Water Network',
+    coverage: 'Main network corridors currently available in Luma',
+    unit: 'Access percentage and pipe diameter',
+    method: 'Curated digitization for visualization; it does not yet represent the complete pipe asset inventory.',
+    period: null,
+    updatedAt: null,
+  },
+}
+
+export function getDataCatalogEntry(
+  category: CatalogCategory,
+  language: Language,
+): DataCatalogEntry {
+  const entry = DATA_CATALOG[category]
+  return language === 'id' ? entry : { ...entry, ...DATA_CATALOG_EN_COPY[category] }
+}
+
+export function getDataCatalogList(language: Language): DataCatalogEntry[] {
+  return (Object.keys(DATA_CATALOG) as CatalogCategory[]).map((category) =>
+    getDataCatalogEntry(category, language),
+  )
+}
