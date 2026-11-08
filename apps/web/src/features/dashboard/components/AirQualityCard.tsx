@@ -124,7 +124,7 @@ export function AirQualityCard({
       </div>
 
       {/* 4. Rekomendasi / Dampak Kesehatan Warga */}
-      <div className="border-t border-border/50 pt-2 text-[10.5px] leading-relaxed text-muted">
+      <div className="border-t border-border/50 pt-2 text-[10.5px] leading-relaxed text-muted min-h-[3rem]">
         <span className="mr-1 font-bold text-foreground">{t('mapFirst.air.guide')}</span>
         <span>{hasData ? advice : t('mapFirst.air.unavailableAdvice')}</span>
       </div>

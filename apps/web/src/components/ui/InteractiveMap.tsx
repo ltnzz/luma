@@ -4,11 +4,7 @@ import {
   Marker,
   Popup,
   setWorkerUrl,
-  type StyleSpecification,
-  type GeoJSONSourceSpecification,
   type GeoJSONSource,
-  type FilterSpecification,
-  type ExpressionSpecification,
   type MapLayerMouseEvent,
 } from 'maplibre-gl'
 import maplibreglWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
@@ -36,7 +32,10 @@ import {
 // Konfigurasi Worker MapLibre GL untuk lingkungan Vite (mencegah error Worker 404)
 setWorkerUrl(maplibreglWorkerUrl)
 
-type GeoJSONData = GeoJSONSourceSpecification['data']
+type StyleSpecification = Exclude<NonNullable<Parameters<MapLibreMap['setStyle']>[0]>, string>
+type FilterSpecification = NonNullable<Parameters<MapLibreMap['setFilter']>[1]>
+type GeoJSONData = Parameters<GeoJSONSource['setData']>[0]
+type ExpressionSpecification = Parameters<MapLibreMap['setPaintProperty']>[2]
 
 export type MapMode = 'light' | 'dark' | 'satellite'
 
@@ -629,6 +628,11 @@ export function InteractiveMap({
     modeRef.current = mapMode
   }, [mapMode])
 
+  const languageRef = useRef(language)
+  useEffect(() => {
+    languageRef.current = language
+  }, [language])
+
   // Sinkronisasi data halte terdeduplikasi setiap kali facilities diperbarui
   useEffect(() => {
     if (!mapRef.current || !isLoaded) return
@@ -771,7 +775,7 @@ export function InteractiveMap({
             ${
               tipeAkses || tahun
                 ? `<dl class="m-0 mt-2.5 flex flex-col gap-1 border-t border-border/70 pt-2.5 text-[10.5px]">
-                    ${tipeAkses ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">${language === 'id' ? 'Akses' : 'Access'}</dt><dd class="m-0 text-right font-medium text-foreground">${tipeAkses}</dd></div>` : ''}
+                    ${tipeAkses ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">${languageRef.current === 'id' ? 'Akses' : 'Access'}</dt><dd class="m-0 text-right font-medium text-foreground">${tipeAkses}</dd></div>` : ''}
                     ${tahun ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">Tahun</dt><dd class="m-0 text-right font-medium text-foreground">${tahun}</dd></div>` : ''}
                   </dl>`
                 : ''
@@ -879,7 +883,7 @@ export function InteractiveMap({
       map.remove()
       mapRef.current = null
     }
-  }, [initialCenter, initialZoom, minZoom, maxZoom, maxBounds, language])
+  }, [initialCenter, initialZoom, minZoom, maxZoom, maxBounds])
 
   // Fly to focus coordinate if updated
   useEffect(() => {
@@ -1110,7 +1114,7 @@ export function InteractiveMap({
 
       // Card dalam tempat styling, hover effect, dan konten
       const cardEl = document.createElement('div')
-      cardEl.className = `luma-region-card flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+      cardEl.className = `luma-region-card flex items-center justify-center gap-2 px-2.5 py-1.5 min-w-[120px] bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
 
       const airQualityUnit = t('mapFirst.air.unit')
       const aqiBadge = station
