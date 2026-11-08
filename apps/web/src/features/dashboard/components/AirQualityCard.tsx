@@ -66,8 +66,8 @@ export function AirQualityCard({
         {isAirLive && (
           <span
             className="flex shrink-0 items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/12 px-1.5 py-0.5 text-[9.5px] font-bold text-emerald-700 dark:text-emerald-300 sm:px-2 sm:text-[10px]"
-            title={t('mapFirst.air.liveTitle')}
             data-tooltip={t('mapFirst.air.liveTitle')}
+            data-tooltip-align="right"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             {t('mapFirst.air.live')}

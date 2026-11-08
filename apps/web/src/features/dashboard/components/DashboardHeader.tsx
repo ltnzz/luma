@@ -264,10 +264,10 @@ export function DashboardHeader({
             onClick={onRestartTutorial}
             data-tour="help-tour"
             className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs"
-            title={t('tour.restartTitle')}
             aria-label={t('tour.restartTitle')}
             data-tooltip={t('tour.restartTitle')}
             data-tooltip-side="bottom"
+            data-tooltip-align="right"
           >
             <HelpCircleIcon size={16} className="text-foreground" />
           </button>

@@ -214,11 +214,48 @@ select:focus-visible {
     transform: translate(-50%, -0.2rem);
   }
 
+  /* Perataan Kanan: untuk tombol di tepi kanan layar agar tooltip tidak terpotong */
+  [data-tooltip][data-tooltip-align="right"]::after {
+    left: auto;
+    right: 0;
+    transform: translate(0, 0.2rem);
+  }
+
+  [data-tooltip][data-tooltip-side="bottom"][data-tooltip-align="right"]::after {
+    top: calc(100% + 0.5rem);
+    bottom: auto;
+    left: auto;
+    right: 0;
+    transform: translate(0, -0.2rem);
+  }
+
+  /* Perataan Kiri: untuk tombol di tepi kiri layar */
+  [data-tooltip][data-tooltip-align="left"]::after {
+    left: 0;
+    right: auto;
+    transform: translate(0, 0.2rem);
+  }
+
+  [data-tooltip][data-tooltip-side="bottom"][data-tooltip-align="left"]::after {
+    top: calc(100% + 0.5rem);
+    bottom: auto;
+    left: 0;
+    right: auto;
+    transform: translate(0, -0.2rem);
+  }
+
   [data-tooltip]:hover::after,
   [data-tooltip]:focus-visible::after {
     opacity: 1;
     visibility: visible;
     transform: translate(-50%, 0);
+  }
+
+  [data-tooltip][data-tooltip-align="right"]:hover::after,
+  [data-tooltip][data-tooltip-align="right"]:focus-visible::after,
+  [data-tooltip][data-tooltip-align="left"]:hover::after,
+  [data-tooltip][data-tooltip-align="left"]:focus-visible::after {
+    transform: translate(0, 0);
   }
 }
 
