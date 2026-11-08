@@ -221,10 +221,10 @@ export function DashboardHeader({
         )}
 
         {/* Live Date Time Widget */}
-        <div data-dashboard="clock" className="hidden md:flex items-center gap-1.5 rounded-full border border-border/80 bg-surface-muted/60 px-2.5 py-1 text-[10px] text-muted shadow-2xs">
-          <span className="font-mono font-bold text-foreground text-[10px]">{timeString}</span>
-          <span className="text-muted/60">•</span>
-          <span className="font-medium text-muted text-[10px] inline-block min-w-[155px] text-center">{dateString}</span>
+        <div data-dashboard="clock" className="hidden md:flex h-9 items-center gap-2.5 rounded-xl border border-border/80 bg-surface px-3 text-xs text-muted shadow-2xs">
+          <span className="font-mono font-bold text-foreground text-[11px]">{timeString}</span>
+          <span className="h-3.5 w-px bg-border/80 shrink-0" aria-hidden="true" />
+          <span className="font-medium text-muted text-[11px] inline-block min-w-[155px] text-center">{dateString}</span>
         </div>
 
         {/* Language Switcher [ID | EN] */}
@@ -232,12 +232,12 @@ export function DashboardHeader({
           data-tour="language-switcher"
           role="group"
           aria-label={t('common.language')}
-          className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold"
+          className="flex h-9 items-center rounded-xl border border-border/80 bg-surface-muted p-0.5 text-xs font-semibold shadow-2xs"
         >
           <button
             type="button"
             onClick={() => setLanguage('id')}
-            className={`rounded-lg px-1 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
+            className={`flex h-full items-center justify-center rounded-lg px-2 text-[10.5px] sm:text-[11px] transition-colors cursor-pointer ${
               language === 'id' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
             }`}
             title="Bahasa Indonesia"
@@ -248,7 +248,7 @@ export function DashboardHeader({
           <button
             type="button"
             onClick={() => setLanguage('en')}
-            className={`rounded-lg px-1 sm:px-2 py-1 text-[10px] sm:text-[11px] transition-colors cursor-pointer ${
+            className={`flex h-full items-center justify-center rounded-lg px-2 text-[10.5px] sm:text-[11px] transition-colors cursor-pointer ${
               language === 'en' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
             }`}
             title="English"
@@ -267,7 +267,7 @@ export function DashboardHeader({
             type="button"
             onClick={onRestartTutorial}
             data-tour="help-tour"
-            className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs"
+            className="inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border/80 bg-surface text-foreground transition-colors hover:bg-surface-muted shadow-2xs"
             aria-label={t('tour.restartTitle')}
             data-tooltip={t('tour.restartTitle')}
             data-tooltip-side="bottom"
