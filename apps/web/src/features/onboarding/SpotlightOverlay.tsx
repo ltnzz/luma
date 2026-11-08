@@ -12,7 +12,16 @@ interface SpotlightOverlayProps {
   rect: TourRect | null
 }
 
-function getHolePath(rect: TourRect, viewportWidth: number, viewportHeight: number): string | null {
+interface HoleBox {
+  x: number
+  y: number
+  right: number
+  bottom: number
+  width: number
+  height: number
+}
+
+function getHoleBox(rect: TourRect, viewportWidth: number, viewportHeight: number): HoleBox | null {
   const x = Math.max(0, rect.left - HOLE_PAD)
   const y = Math.max(0, rect.top - HOLE_PAD)
   const right = Math.min(viewportWidth, rect.left + rect.width + HOLE_PAD)
@@ -20,13 +29,17 @@ function getHolePath(rect: TourRect, viewportWidth: number, viewportHeight: numb
   const width = right - x
   const height = bottom - y
   if (width <= 0 || height <= 0) return null
-  const r = Math.min(HOLE_RADIUS, width / 2, height / 2)
+  return { x, y, right, bottom, width, height }
+}
+
+function getHolePath(box: HoleBox, viewportWidth: number, viewportHeight: number): string {
+  const r = Math.min(HOLE_RADIUS, box.width / 2, box.height / 2)
   return (
     `M0 0 H${viewportWidth} V${viewportHeight} H0 Z ` +
-    `M${x + r} ${y} H${right - r} A${r} ${r} 0 0 1 ${right} ${y + r} V${bottom - r} ` +
-    `A${r} ${r} 0 0 1 ${right - r} ${bottom} H${x + r} ` +
-    `A${r} ${r} 0 0 1 ${x} ${bottom - r} V${y + r} ` +
-    `A${r} ${r} 0 0 1 ${x + r} ${y} Z`
+    `M${box.x + r} ${box.y} H${box.right - r} A${r} ${r} 0 0 1 ${box.right} ${box.y + r} V${box.bottom - r} ` +
+    `A${r} ${r} 0 0 1 ${box.right - r} ${box.bottom} H${box.x + r} ` +
+    `A${r} ${r} 0 0 1 ${box.x} ${box.bottom - r} V${box.y + r} ` +
+    `A${r} ${r} 0 0 1 ${box.x + r} ${box.y} Z`
   )
 }
 
@@ -34,24 +47,51 @@ function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max)
 }
 
-function getRingRect(rect: TourRect, viewportWidth: number, viewportHeight: number): TourRect | null {
-  const width = clamp(rect.width + HOLE_PAD * 2, 0, viewportWidth)
-  const height = clamp(rect.height + HOLE_PAD * 2, 0, viewportHeight)
-  if (width <= 0 || height <= 0) return null
-  return {
-    left: clamp(rect.left - HOLE_PAD, 0, viewportWidth - width),
-    top: clamp(rect.top - HOLE_PAD, 0, viewportHeight - height),
-    width,
-    height,
+function getRingRect(box: HoleBox): TourRect {
+  return { left: box.x, top: box.y, width: box.width, height: box.height }
+}
+
+/**
+ * Rear masks that block pointer interactions on the dimmed area only.
+ * The hole region stays free, so steps that target interactive controls
+ * (language switcher, theme toggle) let the user actually use them.
+ */
+function getBlockerRects(
+  box: HoleBox | null,
+  viewportWidth: number,
+  viewportHeight: number,
+): TourRect[] {
+  if (!box) {
+    return [{ left: 0, top: 0, width: viewportWidth, height: viewportHeight }]
   }
+  return [
+    // Above the hole
+    { left: 0, top: 0, width: viewportWidth, height: Math.max(0, box.y) },
+    // Below the hole
+    {
+      left: 0,
+      top: box.bottom,
+      width: viewportWidth,
+      height: Math.max(0, viewportHeight - box.bottom),
+    },
+    // Left of the hole
+    { left: 0, top: box.y, width: Math.max(0, box.x), height: box.height },
+    // Right of the hole
+    {
+      left: box.right,
+      top: box.y,
+      width: Math.max(0, viewportWidth - box.right),
+      height: box.height,
+    },
+  ].filter((blocker) => blocker.width > 0 && blocker.height > 0)
 }
 
 /**
  * Fixed overlay layer above the whole application UI.
- * Renders a semi-transparent backdrop with an evenodd punch-through hole at
- * the target, plus an emerald focus ring around the hole. The backdrop
- * intercepts all pointer events, so the underlying dashboard is not
- * interactive while the mandatory tour is open; there is no dismiss path.
+ * Visual pass: semi-transparent backdrop with an evenodd punch-through hole at
+ * the target plus an emerald focus ring. Interaction pass: four masks that
+ * swallow clicks on the dimmed dashboard while leaving the hole click-through
+ * for interactive tour targets. No dismiss path exists anywhere in the layer.
  *
  * The spotlight never touches MapLibre internals — it is a standalone layer.
  */
@@ -69,35 +109,62 @@ export function SpotlightOverlay({ rect }: SpotlightOverlayProps) {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const holePath =
-    rect !== null ? getHolePath(rect, viewport.width, viewport.height) : null
-  const ringRect = rect !== null ? getRingRect(rect, viewport.width, viewport.height) : null
+  const holeBox = rect !== null ? getHoleBox(rect, viewport.width, viewport.height) : null
 
-  const backdropPath =
-    holePath ??
-    `M0 0 H${viewport.width} V${viewport.height} H0 Z`
+  const backdropPath = holeBox
+    ? getHolePath(holeBox, viewport.width, viewport.height)
+    : `M0 0 H${viewport.width} V${viewport.height} H0 Z`
+
+  const ringRect = holeBox !== null ? getRingRect(holeBox) : null
+  const blockers = getBlockerRects(holeBox, viewport.width, viewport.height)
 
   return (
-    <div className="fixed inset-0 z-[90]" aria-hidden="true" data-testid="tour-spotlight">
-      <svg width={viewport.width} height={viewport.height} className="block">
-        <path
-          d={backdropPath}
-          fill={OVERLAY_DIM_COLOR}
-          fillRule="evenodd"
-          className="luma-tour-backdrop"
-        />
-      </svg>
-      {ringRect ? (
-        <div
-          className="luma-tour-ring pointer-events-none absolute rounded-[14px] border-2 border-primary shadow-[0_0_0_5px_rgba(34,197,94,0.22),0_0_24px_rgba(34,197,94,0.18)]"
-          style={{
-            left: ringRect.left,
-            top: ringRect.top,
-            width: ringRect.width,
-            height: ringRect.height,
-          }}
-        />
-      ) : null}
-    </div>
+    <>
+      {/* Visual layer: dim + spotlight hole + ring (never captures events). */}
+      <div
+        className="pointer-events-none fixed inset-0 z-[90]"
+        aria-hidden="true"
+        data-testid="tour-spotlight"
+      >
+        <svg width={viewport.width} height={viewport.height} className="block">
+          <path
+            d={backdropPath}
+            fill={OVERLAY_DIM_COLOR}
+            fillRule="evenodd"
+            className="luma-tour-backdrop"
+          />
+        </svg>
+        {ringRect ? (
+          <div
+            className="luma-tour-ring pointer-events-none absolute rounded-[14px] border-2 border-primary shadow-[0_0_0_5px_rgba(34,197,94,0.22),0_0_24px_rgba(34,197,94,0.18)]"
+            style={{
+              left: ringRect.left,
+              top: ringRect.top,
+              width: ringRect.width,
+              height: ringRect.height,
+            }}
+          />
+        ) : null}
+      </div>
+
+      {/* Interaction layer: blocks clicks everywhere except the spotlight hole. */}
+      <div className="pointer-events-none fixed inset-0 z-[90]" data-testid="tour-blockers">
+        {blockers.map((blocker, index) => (
+          <div
+            key={
+              `${Math.round(blocker.left)}-${Math.round(blocker.top)}-` +
+              `${Math.round(blocker.width)}-${Math.round(blocker.height)}-${index}`
+            }
+            className="pointer-events-auto absolute"
+            style={{
+              left: clamp(blocker.left, 0, viewport.width),
+              top: clamp(blocker.top, 0, viewport.height),
+              width: blocker.width,
+              height: blocker.height,
+            }}
+          />
+        ))}
+      </div>
+    </>
   )
 }

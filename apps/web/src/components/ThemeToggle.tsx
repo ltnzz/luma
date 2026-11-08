@@ -26,12 +26,14 @@ function SunIcon({ className }: { className?: string }) {
 interface ThemeToggleProps {
   showLabel?: boolean
   className?: string
+  /** Optional data-tour marker for the onboarding spotlight. */
+  dataTour?: string
 }
 
 /**
  * Compact icon-only ThemeToggle with optional text label support.
  */
-export default function ThemeToggle({ showLabel = false, className = '' }: ThemeToggleProps) {
+export default function ThemeToggle({ showLabel = false, className = '', dataTour }: ThemeToggleProps) {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
   const [systemPrefersDark, setSystemPrefersDark] = useState(
@@ -56,6 +58,7 @@ export default function ThemeToggle({ showLabel = false, className = '' }: Theme
       aria-label={resolvedDark ? t('theme.light') : t('theme.dark')}
       data-tooltip={resolvedDark ? t('theme.light') : t('theme.dark')}
       data-tooltip-side="bottom"
+      data-tour={dataTour}
     >
       {resolvedDark ? (
         <SunIcon className="h-4 w-4 text-foreground" />

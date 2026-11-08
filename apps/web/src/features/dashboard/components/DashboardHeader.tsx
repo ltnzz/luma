@@ -223,7 +223,12 @@ export function DashboardHeader({
         </div>
 
         {/* Language Switcher [ID | EN] */}
-        <div className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold">
+        <div
+          data-tour="language-switcher"
+          role="group"
+          aria-label={t('common.language')}
+          className="flex items-center rounded-xl border border-border bg-surface-muted p-0.5 text-xs font-semibold"
+        >
           <button
             type="button"
             onClick={() => setLanguage('id')}
@@ -249,7 +254,7 @@ export function DashboardHeader({
         </div>
 
         {/* Theme Mode Button */}
-        <ThemeToggle />
+        <ThemeToggle dataTour="theme-toggle" />
 
         {/* Help Button: restarts the guided tour */}
         {onRestartTutorial && (

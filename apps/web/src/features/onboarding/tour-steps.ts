@@ -28,6 +28,20 @@ export const TOUR_STEPS: TourStep[] = [
     placement: 'bottom',
   },
   {
+    id: 'language',
+    selector: '[data-tour="language-switcher"]',
+    titleKey: 'tour.stepLanguage.title',
+    bodyKey: 'tour.stepLanguage.body',
+    placement: 'bottom',
+  },
+  {
+    id: 'theme',
+    selector: '[data-tour="theme-toggle"]',
+    titleKey: 'tour.stepTheme.title',
+    bodyKey: 'tour.stepTheme.body',
+    placement: 'bottom',
+  },
+  {
     id: 'categories',
     selector: '[data-tour="facility-dock"]',
     titleKey: 'tour.step4.title',

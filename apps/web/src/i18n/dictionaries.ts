@@ -223,19 +223,25 @@ const id = {
     'Eksplorasi peta dengan drag, tombol +/−, dan reset di sini. Saat zoom rendah, pin yang berdekatan membentuk cluster — klik cluster untuk memperbesar. Tombol citra satelit berada tepat di bawah.',
   'tour.step3.title': 'Pilih Wilayah',
   'tour.step3.body':
-    'Gunakan pemilih wilayah untuk fokus pada satu kota administrasi — peta dan semua data akan menyesuaikan. Di sebelahnya tersedia pengalih Bahasa (ID/EN) dan tema terang/gelap.',
+    'Gunakan pemilih wilayah untuk fokus pada satu kota administrasi, peta dan semua data akan menyesuaikan.',
+  'tour.stepLanguage.title': 'Pilih Bahasa Kamu',
+  'tour.stepLanguage.body':
+    'Kamu dapat mengganti bahasa antarmuka Luma antara Bahasa Indonesia dan Inggris melalui tombol ini.',
+  'tour.stepTheme.title': 'Sesuaikan Tampilan',
+  'tour.stepTheme.body':
+    'Sesuaikan tampilan Luma dengan memilih Dark Mode atau Light Mode sesuai preferensi kamu.',
   'tour.step4.title': 'Kategori Fasilitas Publik',
   'tour.step4.body':
-    'Dock ini memfilter data peta: Faskes, Ruang Hijau, Sekolah, Transum, dan Air Bersih. Klik satu kategori untuk mengaktifkan filter; panel sub-filter muncul di kiri layar.',
+    'Ringkasan ini menyajikan indikator fasilitas dan infrastruktur berdasarkan cakupan wilayah yang sedang dipilih.',
   'tour.step5.title': 'Detail Fasilitas',
   'tour.step5.body':
     'Klik pin fasilitas di peta untuk membuka panel detailnya di sisi kanan: nama, alamat, kategori, dan data rinci fasilitas tersebut.',
   'tour.step6.title': 'Informasi Lingkungan',
   'tour.step6.body':
     'Panel kiri menampilkan kualitas udara (ISPU) secara real-time beserta panduan kesehatan warga. Setiap indikator selalu mencantumkan sumber resminya agar transparan.',
-  'tour.step7.title': 'Sumber Data & Navigasi',
+  'tour.step7.title': 'Selamat Bereksplorasi!',
   'tour.step7.body':
-    'Terakhir: kartu "Sumber Data Resmi" membuka halaman katalog data lengkap untuk eksplorasi lebih dalam. Ingin melihat tur ini lagi? Buka tombol Bantuan (?) di navbar kapan pun.',
+    'Luma siap membantu kamu memahami informasi perkotaan. Temukan sumber data di setiap informasi, lalu jelajahi detailnya melalui tombol Detail. Kamu bisa membuka panduan ini kembali kapan saja melalui menu Bantuan',
 } as const
 
 export type TranslationKey = keyof typeof id
@@ -464,6 +470,12 @@ const en: Record<TranslationKey, string> = {
   'tour.step3.title': 'Choose a Region',
   'tour.step3.body':
     'Use the region selector to focus on one administrative city — the map and all data follow your choice. Right next to it you will find the language (ID/EN) and light/dark theme toggles.',
+  'tour.stepLanguage.title': 'Choose Your Language',
+  'tour.stepLanguage.body':
+    'You can switch the Luma interface between Indonesian and English using this control.',
+  'tour.stepTheme.title': 'Customize Your Appearance',
+  'tour.stepTheme.body':
+    'Customize the Luma interface by switching between Dark Mode and Light Mode according to your preference.',
   'tour.step4.title': 'Public Facility Categories',
   'tour.step4.body':
     'This dock filters the map data: healthcare, green space, schools, transit, and clean water. Click one category to activate the filter; a sub-filter panel appears on the left.',

@@ -49,6 +49,25 @@ describe('mandatory onboarding', () => {
     window.localStorage.clear()
   })
 
+  it('includes language and theme steps between region and categories', () => {
+    expect(TOUR_STEPS).toHaveLength(9)
+    expect(TOUR_STEPS.map((step) => step.id)).toEqual([
+      'welcome',
+      'map',
+      'region',
+      'language',
+      'theme',
+      'categories',
+      'details',
+      'environment',
+      'data-sources',
+    ])
+    expect(TOUR_STEPS[3].selector).toBe('[data-tour="language-switcher"]')
+    expect(TOUR_STEPS[3].titleKey).toBe('tour.stepLanguage.title')
+    expect(TOUR_STEPS[4].selector).toBe('[data-tour="theme-toggle"]')
+    expect(TOUR_STEPS[4].titleKey).toBe('tour.stepTheme.title')
+  })
+
   it('starts automatically on the first visit', () => {
     renderTour()
     const dialog = screen.getByRole('dialog')
