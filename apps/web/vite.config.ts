@@ -14,6 +14,11 @@ export default defineConfig({
               test: /node_modules[\\/]maplibre-gl[\\/]/,
               priority: 20,
             },
+            {
+              name: 'charts-vendor',
+              test: /node_modules[\\/](apexcharts|react-apexcharts)[\\/]/,
+              priority: 15,
+            },
           ],
         },
       },
