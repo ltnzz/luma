@@ -109,6 +109,10 @@ export function DashboardHeader({
         <img
           src="/luma-logo.png"
           alt="Luma"
+          width={112}
+          height={37}
+          fetchPriority="high"
+          decoding="async"
           className="luma-brand-logo h-auto w-[72px] object-contain transition-[filter] duration-200 sm:w-[112px]"
         />
       </a>
