@@ -220,7 +220,7 @@ export function DashboardHeader({
         <div data-dashboard="clock" className="hidden md:flex items-center gap-1.5 rounded-full border border-border/80 bg-surface-muted/60 px-2.5 py-1 text-[10px] text-muted shadow-2xs">
           <span className="font-mono font-bold text-foreground text-[10px]">{timeString}</span>
           <span className="text-muted/60">•</span>
-          <span className="font-medium text-muted text-[10px]">{dateString}</span>
+          <span className="font-medium text-muted text-[10px] inline-block min-w-[155px] text-center">{dateString}</span>
         </div>
 
         {/* Language Switcher [ID | EN] */}

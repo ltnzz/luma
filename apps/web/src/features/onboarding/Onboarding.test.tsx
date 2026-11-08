@@ -105,9 +105,9 @@ describe('mandatory onboarding', () => {
     expect(within(dialog).getByText(/Luma · Local Urban Mapping and Analytics/)).toBeInTheDocument()
     expect(within(dialog).getAllByText('Faskes').length).toBeGreaterThan(0)
     expect(within(dialog).getByRole('button', { name: 'Mulai Tur' })).toBeInTheDocument()
-    // Mandatory: no Finish before the final step, Back disabled on step one.
+    // Mandatory: no Finish before the final step, no Back on step one.
     expect(within(dialog).queryByRole('button', { name: 'Selesai' })).not.toBeInTheDocument()
-    expect(within(dialog).getByRole('button', { name: 'Kembali' })).toBeDisabled()
+    expect(within(dialog).queryByRole('button', { name: 'Kembali' })).not.toBeInTheDocument()
   })
 
   it('the hero CTA advances to the standard spotlight step card', () => {

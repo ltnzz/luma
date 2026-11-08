@@ -47,7 +47,7 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('air')}
-        className={`luma-glass-item ml-0.5 snap-start flex min-w-[116px] items-center gap-2 shrink-0 text-left rounded-lg px-2.5 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`luma-glass-item ml-0.5 snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-2 shrink-0 text-left rounded-lg px-2.5 py-1 cursor-pointer border whitespace-nowrap ${
           activeCategory === 'air'
             ? 'bg-sky-500/[0.08] border-transparent'
             : 'border-transparent hover:bg-surface-muted/45'
@@ -70,7 +70,7 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('kesehatan')}
-        className={`luma-glass-item snap-start flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
           activeCategory === 'kesehatan'
             ? 'bg-rose-500/[0.08] border-transparent'
             : 'border-transparent hover:bg-surface-muted/45'
@@ -92,7 +92,7 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('rth')}
-        className={`luma-glass-item snap-start flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
           activeCategory === 'rth'
             ? 'bg-emerald-500/[0.08] border-transparent'
             : 'border-transparent hover:bg-surface-muted/45'
@@ -114,7 +114,7 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('sekolah')}
-        className={`luma-glass-item snap-start flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
           activeCategory === 'sekolah'
             ? 'bg-blue-500/[0.08] border-transparent'
             : 'border-transparent hover:bg-surface-muted/45'
@@ -137,7 +137,7 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('transum')}
-        className={`luma-glass-item snap-start flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2.5 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2.5 py-1 cursor-pointer border whitespace-nowrap ${
           activeCategory === 'transum'
             ? 'bg-purple-500/[0.08] border-transparent'
             : 'border-transparent hover:bg-surface-muted/45'
