@@ -19,6 +19,11 @@ export default defineConfig({
               test: /node_modules[\\/](apexcharts|react-apexcharts)[\\/]/,
               priority: 15,
             },
+            {
+              name: 'transit-data',
+              test: /transit-network\.json/,
+              priority: 25,
+            },
           ],
         },
       },

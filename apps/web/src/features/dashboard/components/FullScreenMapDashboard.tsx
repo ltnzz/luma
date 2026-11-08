@@ -1,12 +1,18 @@
 import { lazy, Suspense, useState, useCallback, useEffect, useMemo } from 'react'
 import { EmptyState } from '../../../components/ui/EmptyState'
 import { Skeleton } from '../../../components/ui/Skeleton'
-import { FacilityDetailModal } from './FacilityDetailModal'
-import { TransitRoutesWidget } from './TransitRoutesWidget'
 import { AirQualityCard } from './AirQualityCard'
 import { StaticMapLegend } from './StaticMapLegend'
 import { KpiMetricsDock, type KpiCategory } from './KpiMetricsDock'
 import { CompactDataSourceCard } from './CompactDataSourceCard'
+
+const FacilityDetailModal = lazy(() =>
+  import('./FacilityDetailModal').then((m) => ({ default: m.FacilityDetailModal }))
+)
+
+const TransitRoutesWidget = lazy(() =>
+  import('./TransitRoutesWidget').then((m) => ({ default: m.TransitRoutesWidget }))
+)
 import {
   ContextualCategoryFilterCard,
   type FaskesSubFilter,
@@ -655,32 +661,36 @@ export function FullScreenMapDashboard({
       {/* Mode Transum Khusus (jika dibuka dari panel rute) */}
       {isTransitMode && (
         <div className="pointer-events-none absolute top-16 left-3 sm:top-16 sm:left-4 z-20 animate-in fade-in slide-in-from-left-4 duration-300">
-          <TransitRoutesWidget
-            showTransit={isTransitVisible}
-            onToggleShowTransit={handleToggleShowTransit}
-            onFocusRoute={handleFocusRoute}
-            focusedCorridorId={focusedCorridorId}
-            onResetFocus={handleResetFocusCorridor}
-            isCollapsed={isTransitPanelCollapsed}
-            onToggleCollapse={(collapsed) => {
-              setIsTransitPanelCollapsed(collapsed)
-              if (collapsed) {
-                setIsTransitMode(false)
-              }
-            }}
-          />
+          <Suspense fallback={null}>
+            <TransitRoutesWidget
+              showTransit={isTransitVisible}
+              onToggleShowTransit={handleToggleShowTransit}
+              onFocusRoute={handleFocusRoute}
+              focusedCorridorId={focusedCorridorId}
+              onResetFocus={handleResetFocusCorridor}
+              isCollapsed={isTransitPanelCollapsed}
+              onToggleCollapse={(collapsed) => {
+                setIsTransitPanelCollapsed(collapsed)
+                if (collapsed) {
+                  setIsTransitMode(false)
+                }
+              }}
+            />
+          </Suspense>
         </div>
       )}
 
       {/* Modal Detail Fasilitas Glass (Muncul langsung di Kanan saat marker diklik) */}
       {selectedFacility && !isTransitMode && (
-        <FacilityDetailModal
-          facility={selectedFacility}
-          regionalAirQuality={realtimeAirQuality}
-          isOpen={Boolean(selectedFacility)}
-          onClose={() => setSelectedFacility(null)}
-          variant="side-glass"
-        />
+        <Suspense fallback={null}>
+          <FacilityDetailModal
+            facility={selectedFacility}
+            regionalAirQuality={realtimeAirQuality}
+            isOpen={Boolean(selectedFacility)}
+            onClose={() => setSelectedFacility(null)}
+            variant="side-glass"
+          />
+        </Suspense>
       )}
     </div>
   )

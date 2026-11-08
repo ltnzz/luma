@@ -1,10 +1,20 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { FullScreenMapDashboard } from './features/dashboard/components/FullScreenMapDashboard'
 import { DashboardHeader } from './features/dashboard/components/DashboardHeader'
-import { DataSourcesComingSoonPage } from './features/dashboard/components/DataSourcesComingSoonPage'
-import { OnboardingOverlay } from './features/onboarding/OnboardingOverlay'
 import { useOnboarding } from './features/onboarding/useOnboarding'
 import { TOUR_STEPS } from './features/onboarding/tour-steps'
+
+const OnboardingOverlay = lazy(() =>
+  import('./features/onboarding/OnboardingOverlay').then((m) => ({
+    default: m.OnboardingOverlay,
+  }))
+)
+
+const DataSourcesComingSoonPage = lazy(() =>
+  import('./features/dashboard/components/DataSourcesComingSoonPage').then((m) => ({
+    default: m.DataSourcesComingSoonPage,
+  }))
+)
 
 export default function App() {
   const [activeWilayah, setActiveWilayah] = useState<string>('ALL')
@@ -60,12 +70,18 @@ export default function App() {
             onNavigateToDataSources={handleNavigateToDataSources}
           />
         ) : (
-          <DataSourcesComingSoonPage onBack={handleBackToDashboard} />
+          <Suspense fallback={null}>
+            <DataSourcesComingSoonPage onBack={handleBackToDashboard} />
+          </Suspense>
         )}
       </main>
 
       {/* 3. Mandatory first-visit guided tour (spotlight layer above all UI) */}
-      {onboarding.isActive ? <OnboardingOverlay controller={onboarding} steps={TOUR_STEPS} /> : null}
+      {onboarding.isActive ? (
+        <Suspense fallback={null}>
+          <OnboardingOverlay controller={onboarding} steps={TOUR_STEPS} />
+        </Suspense>
+      ) : null}
     </div>
   )
 }
