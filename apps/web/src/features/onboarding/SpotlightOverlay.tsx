@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import type { TourRect } from './types'
 
@@ -7,9 +7,16 @@ const HOLE_RADIUS = 14
 
 export const OVERLAY_DIM_COLOR = 'rgba(5, 12, 8, 0.68)'
 
+type BackdropMode = 'solid' | 'vignette'
+
 interface SpotlightOverlayProps {
   /** Rect of the highlighted target in viewport space, or `null` for full dim. */
   rect: TourRect | null
+  /**
+   * `solid` = uniform dim (default). `vignette` = soft-edged dim that keeps
+   * the map visible in the middle; only used for target-less hero steps.
+   */
+  backdrop?: BackdropMode
 }
 
 interface HoleBox {
@@ -95,7 +102,7 @@ function getBlockerRects(
  *
  * The spotlight never touches MapLibre internals — it is a standalone layer.
  */
-export function SpotlightOverlay({ rect }: SpotlightOverlayProps) {
+export function SpotlightOverlay({ rect, backdrop = 'solid' }: SpotlightOverlayProps) {
   const [viewport, setViewport] = useState(() => ({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -105,18 +112,24 @@ export function SpotlightOverlay({ rect }: SpotlightOverlayProps) {
     const handleResize = () => {
       setViewport({ width: window.innerWidth, height: window.innerHeight })
     }
-    window.addEventListener('resize', handleResize)
+    // Passive: reads only; layout work stays inside the coalesced measure.
+    window.addEventListener('resize', handleResize, { passive: true })
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const holeBox = rect !== null ? getHoleBox(rect, viewport.width, viewport.height) : null
-
-  const backdropPath = holeBox
-    ? getHolePath(holeBox, viewport.width, viewport.height)
-    : `M0 0 H${viewport.width} V${viewport.height} H0 Z`
-
-  const ringRect = holeBox !== null ? getRingRect(holeBox) : null
-  const blockers = getBlockerRects(holeBox, viewport.width, viewport.height)
+  // Geometry recomputes only when rect or viewport actually change.
+  const geometry = useMemo(() => {
+    const holeBox = rect !== null ? getHoleBox(rect, viewport.width, viewport.height) : null
+    const backdropPath = holeBox
+      ? getHolePath(holeBox, viewport.width, viewport.height)
+      : `M0 0 H${viewport.width} V${viewport.height} H0 Z`
+    return {
+      holeBox,
+      backdropPath,
+      ringRect: holeBox !== null ? getRingRect(holeBox) : null,
+      blockers: getBlockerRects(holeBox, viewport.width, viewport.height),
+    }
+  }, [rect, viewport.width, viewport.height])
 
   return (
     <>
@@ -126,22 +139,21 @@ export function SpotlightOverlay({ rect }: SpotlightOverlayProps) {
         aria-hidden="true"
         data-testid="tour-spotlight"
       >
-        <svg width={viewport.width} height={viewport.height} className="block">
-          <path
-            d={backdropPath}
-            fill={OVERLAY_DIM_COLOR}
-            fillRule="evenodd"
-            className="luma-tour-backdrop"
-          />
-        </svg>
-        {ringRect ? (
+        {backdrop === 'vignette' && rect === null ? (
+          <div className="luma-tour-vignette absolute inset-0" />
+        ) : (
+          <svg width={viewport.width} height={viewport.height} className="block">
+            <path d={geometry.backdropPath} fill={OVERLAY_DIM_COLOR} fillRule="evenodd" className="luma-tour-backdrop" />
+          </svg>
+        )}
+        {geometry.ringRect ? (
           <div
-            className="luma-tour-ring pointer-events-none absolute rounded-[14px] border-2 border-primary shadow-[0_0_0_5px_rgba(34,197,94,0.22),0_0_24px_rgba(34,197,94,0.18)]"
+            className="luma-tour-ring pointer-events-none absolute rounded-[14px] border-2 border-primary shadow-[0_0_0_5px_rgba(34,197,94,0.22),0_0_24px_rgba(34,197,94,0.18)] transition-[left,top,width,height] duration-200 ease-out motion-reduce:transition-none"
             style={{
-              left: ringRect.left,
-              top: ringRect.top,
-              width: ringRect.width,
-              height: ringRect.height,
+              left: geometry.ringRect.left,
+              top: geometry.ringRect.top,
+              width: geometry.ringRect.width,
+              height: geometry.ringRect.height,
             }}
           />
         ) : null}
@@ -149,12 +161,11 @@ export function SpotlightOverlay({ rect }: SpotlightOverlayProps) {
 
       {/* Interaction layer: blocks clicks everywhere except the spotlight hole. */}
       <div className="pointer-events-none fixed inset-0 z-[90]" data-testid="tour-blockers">
-        {blockers.map((blocker, index) => (
+        {geometry.blockers.map((blocker, index) => (
+          // Stable keys: geometry stays in the style prop, so rect updates
+          // mutate in place instead of remounting the four masks.
           <div
-            key={
-              `${Math.round(blocker.left)}-${Math.round(blocker.top)}-` +
-              `${Math.round(blocker.width)}-${Math.round(blocker.height)}-${index}`
-            }
+            key={`blocker-${index}`}
             className="pointer-events-auto absolute"
             style={{
               left: clamp(blocker.left, 0, viewport.width),

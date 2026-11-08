@@ -214,10 +214,12 @@ const id = {
   'tour.back': 'Kembali',
   'tour.next': 'Lanjut',
   'tour.finish': 'Selesai',
+  'tour.skip': 'Lewati Tur',
   'tour.restartTitle': 'Ulang tur pengenalan',
-  'tour.step1.title': 'Selamat datang di Luma',
+  'tour.step1.title': 'Pahami kotamu, lewat data.',
   'tour.step1.body':
-    'Luma adalah platform pemetaan & analitik perkotaan DKI Jakarta. Ikuti tur singkat ini untuk mengenal peta interaktif, fasilitas publik, data lingkungan, dan sumber data resmi.',
+    'Jelajahi peta DKI Jakarta: fasilitas publik, kualitas udara & air, dan sumber data resmi — ikuti tur singkat ini.',
+  'tour.welcome.cta': 'Mulai Tur',
   'tour.step2.title': 'Peta Interaktif',
   'tour.step2.body':
     'Eksplorasi peta dengan drag, tombol +/−, dan reset di sini. Saat zoom rendah, pin yang berdekatan membentuk cluster — klik cluster untuk memperbesar. Tombol citra satelit berada tepat di bawah.',
@@ -460,10 +462,12 @@ const en: Record<TranslationKey, string> = {
   'tour.back': 'Back',
   'tour.next': 'Next',
   'tour.finish': 'Finish',
+  'tour.skip': 'Skip Tour',
   'tour.restartTitle': 'Replay the guided tour',
-  'tour.step1.title': 'Welcome to Luma',
+  'tour.step1.title': 'Understand your city, through data.',
   'tour.step1.body':
-    'Luma is the urban mapping & analytics platform for DKI Jakarta. Follow this short tour to get to know the interactive map, public facilities, environmental data, and official data sources.',
+    "Explore DKI Jakarta's map: public facilities, air & water quality, and official data sources — take this short tour.",
+  'tour.welcome.cta': 'Start Tour',
   'tour.step2.title': 'Interactive Map',
   'tour.step2.body':
     'Explore the map with drag, the +/− and reset controls here. At low zoom levels, nearby markers merge into clusters — click a cluster to zoom in. The satellite toggle sits right below.',

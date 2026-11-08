@@ -216,7 +216,7 @@ export function DashboardHeader({
         )}
 
         {/* Live Date Time Widget */}
-        <div className="hidden md:flex items-center gap-1.5 rounded-full border border-border/80 bg-surface-muted/60 px-2.5 py-1 text-[10px] text-muted shadow-2xs">
+        <div data-dashboard="clock" className="hidden md:flex items-center gap-1.5 rounded-full border border-border/80 bg-surface-muted/60 px-2.5 py-1 text-[10px] text-muted shadow-2xs">
           <span className="font-mono font-bold text-foreground text-[10px]">{timeString}</span>
           <span className="text-muted/60">•</span>
           <span className="font-medium text-muted text-[10px]">{dateString}</span>
@@ -261,6 +261,7 @@ export function DashboardHeader({
           <button
             type="button"
             onClick={onRestartTutorial}
+            data-tour="help-tour"
             className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs"
             title={t('tour.restartTitle')}
             aria-label={t('tour.restartTitle')}

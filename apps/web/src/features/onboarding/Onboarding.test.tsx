@@ -36,10 +36,38 @@ function ProbeFixture() {
   )
 }
 
+function ReplayFixture() {
+  const controller = useOnboarding(TOUR_STEPS.length)
+  if (!controller.isActive) {
+    return (
+      <div data-testid="tour-inactive">
+        <button type="button" onClick={controller.restart}>
+          Bantuan
+        </button>
+      </div>
+    )
+  }
+  return (
+    <div>
+      <OnboardingOverlay controller={controller} steps={TOUR_STEPS} />
+      <button type="button">Bantuan</button>
+    </div>
+  )
+}
+
 function renderTour() {
   return render(
     <I18nProvider>
       <Fixture />
+    </I18nProvider>,
+  )
+}
+
+/** Simulate a Help-button replay session over the full tour skeleton. */
+function renderReplay() {
+  return render(
+    <I18nProvider>
+      <ReplayFixture />
     </I18nProvider>,
   )
 }
@@ -68,19 +96,43 @@ describe('mandatory onboarding', () => {
     expect(TOUR_STEPS[4].titleKey).toBe('tour.stepTheme.title')
   })
 
-  it('starts automatically on the first visit', () => {
+  it('starts automatically on the first visit with the hero panel', () => {
     renderTour()
     const dialog = screen.getByRole('dialog')
-    expect(within(dialog).getByText(/Selamat datang di Luma/)).toBeInTheDocument()
-    expect(within(dialog).getByRole('button', { name: 'Lanjut' })).toBeInTheDocument()
+    expect(dialog).toHaveAttribute('data-variant', 'hero')
+    expect(document.body.dataset.tourStep).toBe('1')
+    expect(within(dialog).getByText(/Pahami kotamu, lewat data\./)).toBeInTheDocument()
+    expect(within(dialog).getByText(/Luma · Local Urban Mapping and Analytics/)).toBeInTheDocument()
+    expect(within(dialog).getAllByText('Faskes').length).toBeGreaterThan(0)
+    expect(within(dialog).getByRole('button', { name: 'Mulai Tur' })).toBeInTheDocument()
     // Mandatory: no Finish before the final step, Back disabled on step one.
     expect(within(dialog).queryByRole('button', { name: 'Selesai' })).not.toBeInTheDocument()
     expect(within(dialog).getByRole('button', { name: 'Kembali' })).toBeDisabled()
   })
 
+  it('the hero CTA advances to the standard spotlight step card', () => {
+    renderTour()
+    fireEvent.click(screen.getByRole('button', { name: 'Mulai Tur' }))
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toHaveAttribute('data-variant', 'default')
+    expect(dialog).toHaveAttribute('data-step', '2')
+    expect(document.body.dataset.tourStep).toBe('2')
+  })
+
+  it('publishes the progressive reveal step on <body> and restores it after finishing', () => {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ version: 1, completed: false, currentStep: TOUR_STEPS.length - 1 }),
+    )
+    renderTour()
+    expect(document.body.dataset.tourStep).toBe(String(TOUR_STEPS.length))
+    fireEvent.click(screen.getByRole('button', { name: 'Selesai' }))
+    expect(document.body.dataset.tourStep).toBeUndefined()
+  })
+
   it('advances steps with Next and persists progress', () => {
     renderTour()
-    fireEvent.click(screen.getByRole('button', { name: 'Lanjut' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Mulai Tur' }))
     expect(screen.getByRole('dialog')).toHaveAttribute('data-step', '2')
     expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}')).toMatchObject({
       version: 1,
@@ -121,13 +173,92 @@ describe('mandatory onboarding', () => {
     expect(screen.getByTestId('tour-inactive')).toBeInTheDocument()
   })
 
+  it('never renders Skip during a mandatory first-visit tour', () => {
+    renderTour()
+    expect(screen.queryByRole('button', { name: 'Lewati Tur' })).not.toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Mulai Tur' }))
+    expect(screen.queryByRole('button', { name: 'Lewati Tur' })).not.toBeInTheDocument()
+  })
+
+  it('Help opens a replay session from step one and offers Skip', () => {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ version: 1, completed: true, currentStep: 0 }),
+    )
+    renderReplay()
+    expect(screen.getByTestId('tour-inactive')).toBeInTheDocument()
+    fireEvent.click(screen.getByRole('button', { name: 'Bantuan' }))
+    const dialog = screen.getByRole('dialog')
+    expect(dialog).toHaveAttribute('data-variant', 'hero')
+    expect(dialog).toHaveAttribute('data-step', '1')
+    expect(document.body.dataset.tourStep).toBe('1')
+    expect(within(dialog).getByRole('button', { name: 'Lewati Tur' })).toBeInTheDocument()
+  })
+
+  it('Skip in replay closes the tour, keeps completed, and stays closed on refresh', () => {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ version: 1, completed: true, currentStep: 0 }),
+    )
+    const view = renderReplay()
+    fireEvent.click(screen.getByRole('button', { name: 'Bantuan' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Lewati Tur' }))
+    expect(screen.getByTestId('tour-inactive')).toBeInTheDocument()
+    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}')).toMatchObject({
+      version: 1,
+      completed: true,
+    })
+    // A "refresh" (fresh mount) returns straight to the dashboard.
+    view.unmount()
+    renderReplay()
+    expect(screen.getByTestId('tour-inactive')).toBeInTheDocument()
+  })
+
+  it('a completed replay keeps its completed status', () => {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ version: 1, completed: true, currentStep: 0 }),
+    )
+    renderReplay()
+    fireEvent.click(screen.getByRole('button', { name: 'Bantuan' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Mulai Tur' }))
+    // Re-query per step: content is keyed by step and remounts through a
+    // light enter animation, so a captured node goes stale after one click.
+    for (let index = 0; index < TOUR_STEPS.length - 2; index += 1) {
+      fireEvent.click(screen.getByRole('button', { name: 'Lanjut' }))
+    }
+    fireEvent.click(screen.getByRole('button', { name: 'Selesai' }))
+    expect(screen.getByTestId('tour-inactive')).toBeInTheDocument()
+    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}')).toMatchObject({
+      version: 1,
+      completed: true,
+    })
+  })
+
+  it('Skip works on every replay step, not only the first', () => {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ version: 1, completed: true, currentStep: 0 }),
+    )
+    renderReplay()
+    fireEvent.click(screen.getByRole('button', { name: 'Bantuan' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Mulai Tur' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Lanjut' }))
+    expect(screen.getByRole('dialog')).toHaveAttribute('data-step', '3')
+    fireEvent.click(screen.getByRole('button', { name: 'Lewati Tur' }))
+    expect(screen.getByTestId('tour-inactive')).toBeInTheDocument()
+    expect(JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? '{}')).toMatchObject({
+      completed: true,
+    })
+  })
+
   it('renders the card with a live target element present', () => {
     render(
       <I18nProvider>
         <ProbeFixture />
       </I18nProvider>,
     )
-    expect(screen.getByRole('dialog', { name: /Selamat datang di Luma/ })).toBeInTheDocument()
+    expect(screen.getByRole('dialog', { name: /Pahami kotamu/ })).toBeInTheDocument()
   })
 
   it('ignores corrupted and outdated stored state', () => {

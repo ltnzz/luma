@@ -1219,7 +1219,8 @@ export function InteractiveMap({
         if (group.isCluster) {
           // Render Cluster Badge untuk titik-titik yang berdekatan
           const wrapperEl = document.createElement('div')
-          wrapperEl.className = 'relative flex items-center justify-center cursor-pointer select-none group'
+          wrapperEl.className =
+            'luma-facility-marker relative flex items-center justify-center cursor-pointer select-none group'
           wrapperEl.style.width = '36px'
           wrapperEl.style.height = '36px'
 

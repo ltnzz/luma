@@ -94,8 +94,11 @@ export function createFacilityMarkerElement(category: string | null | undefined)
 
   // Wrapper luar khusus positioning MapLibre — TIDAK BOLEH ada CSS
   // transition-transform atau scale di wrapper ini.
+  // `luma-facility-marker` murni hook visibilitas (CSS onboarding), tanpa
+  // efek visual apa pun.
   const wrapperEl = document.createElement('div')
-  wrapperEl.className = 'relative flex items-center justify-center cursor-pointer select-none'
+  wrapperEl.className =
+    'luma-facility-marker relative flex items-center justify-center cursor-pointer select-none'
   wrapperEl.style.width = '36px'
   wrapperEl.style.height = '36px'
 

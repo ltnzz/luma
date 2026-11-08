@@ -349,7 +349,7 @@ export function FullScreenMapDashboard({
 
       {/* Feedback data peta: loading, error, dan hasil kosong. */}
       <div
-        className="pointer-events-none absolute inset-x-3 top-1/2 z-40 mx-auto max-w-sm -translate-y-1/2"
+        className="luma-map-feedback pointer-events-none absolute inset-x-3 top-1/2 z-40 mx-auto max-w-sm -translate-y-1/2"
         aria-live="polite"
       >
         {markerDataIsLoading ? (
