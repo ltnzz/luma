@@ -522,7 +522,7 @@ export function FullScreenMapDashboard({
 
       {/* 3. Panel Kolom Kiri: Sumber Data Resmi, Kualitas Udara, dan Contextual Filter / Legenda */}
       {!isTransitMode && (
-        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[calc(100dvh-8.75rem)] flex-col items-start gap-2 overflow-y-auto overscroll-contain pb-2 pt-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:max-h-[calc(100dvh-9rem)] sm:pb-1 sm:pr-1 sm:pt-0">
+        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[calc(100dvh-6.5rem)] flex-col items-start gap-2 overflow-y-auto overscroll-contain pb-2 pt-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:max-h-[calc(100dvh-6.5rem)] sm:pb-1 sm:pr-1 sm:pt-0 sm:pointer-events-auto sm:scrollbar-none">
           <div className={hasExpandedLeftPanel ? 'hidden sm:contents' : 'contents'}>
             <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
             <AirQualityCard
@@ -585,7 +585,7 @@ export function FullScreenMapDashboard({
 
       {/* 4. Bottom Center — Horizontal KPI Metrics Overview Dock & Filter Controller (Selalu Tampil) */}
       {!isTransitMode && (
-        <div className="pointer-events-none absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 animate-in fade-in slide-in-from-bottom-3 duration-300 max-w-[calc(100vw-1.5rem)]">
+        <div className="pointer-events-none absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 sm:left-[calc(50%+2.5rem)] z-20 animate-in fade-in slide-in-from-bottom-3 duration-300 max-w-[calc(100vw-1.5rem)]">
           <KpiMetricsDock
             waterCoverage={68}
             waterCoverageLabel={t('mapFirst.dock.access')}

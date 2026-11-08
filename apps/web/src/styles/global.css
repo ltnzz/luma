@@ -214,6 +214,15 @@ select:focus-visible {
     transform: translate(-50%, -0.2rem);
   }
 
+  /* Posisi Kanan: tooltip melayang keluar dari kartu ke arah peta */
+  [data-tooltip][data-tooltip-side="right"]::after {
+    top: 50%;
+    bottom: auto;
+    left: calc(100% + 0.6rem);
+    right: auto;
+    transform: translate(-0.25rem, -50%);
+  }
+
   /* Perataan Kanan: untuk tombol di tepi kanan layar agar tooltip tidak terpotong */
   [data-tooltip][data-tooltip-align="right"]::after {
     left: auto;
@@ -257,6 +266,25 @@ select:focus-visible {
   [data-tooltip][data-tooltip-align="left"]:focus-visible::after {
     transform: translate(0, 0);
   }
+
+  [data-tooltip][data-tooltip-side="right"]:hover::after,
+  [data-tooltip][data-tooltip-side="right"]:focus-visible::after {
+    transform: translate(0, -50%);
+  }
+}
+
+.luma-portal-tooltip {
+  border: 1px solid color-mix(in srgb, var(--luma-border) 75%, transparent);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--luma-surface-dark) 94%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--luma-on-surface-dark);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  white-space: nowrap;
 }
 
 .luma-snackbar {
