@@ -52,109 +52,104 @@ const CITY_NAME_EN: Record<string, string> = {
   'KEP. SERIBU': 'Thousand Islands',
 }
 
-// Clean Minimalist Light Gray Canvas (Esri World Light Gray Base + Reference Halus)
-const LIGHT_CANVAS_STYLE: StyleSpecification = {
-  version: 8,
-  sources: {
-    'esri-light-base': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      maxzoom: 16,
-      attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
-    },
-    'esri-light-ref': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      maxzoom: 16,
-    },
-  },
-  layers: [
-    {
-      id: 'esri-light-base-layer',
-      type: 'raster',
-      source: 'esri-light-base',
-      minzoom: 0,
-      maxzoom: 24,
-    },
-    {
-      id: 'esri-light-ref-layer',
-      type: 'raster',
-      source: 'esri-light-ref',
-      minzoom: 0,
-      maxzoom: 24,
-    },
-  ],
-}
+// Style Kanvas Terpadu (Light, Dark, dan Satelit dalam 1 Style Specification)
+// Menghilangkan kebutuhan memanggil map.setStyle() saat pergantian tema,
+// sehingga WebGL layers dan GeoJSON tidak terhapus dan kanvas tidak berkedip.
+function createBaseStyle(initialMode: MapMode): StyleSpecification {
+  const isLight = initialMode === 'light'
+  const isDark = initialMode === 'dark'
+  const isSat = initialMode === 'satellite'
 
-// Clean Minimalist Dark Gray Canvas (Esri World Dark Gray Base + Reference Halus)
-const DARK_CANVAS_STYLE: StyleSpecification = {
-  version: 8,
-  sources: {
-    'esri-dark-base': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      maxzoom: 16,
-      attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+  return {
+    version: 8,
+    sources: {
+      'esri-light-base': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+        attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+      },
+      'esri-light-ref': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+      },
+      'esri-dark-base': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+        attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+      },
+      'esri-dark-ref': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+      },
+      'esri-satellite': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 19,
+        attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+      },
     },
-    'esri-dark-ref': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      maxzoom: 16,
-    },
-  },
-  layers: [
-    {
-      id: 'esri-dark-base-layer',
-      type: 'raster',
-      source: 'esri-dark-base',
-      minzoom: 0,
-      maxzoom: 24,
-    },
-    {
-      id: 'esri-dark-ref-layer',
-      type: 'raster',
-      source: 'esri-dark-ref',
-      minzoom: 0,
-      maxzoom: 24,
-    },
-  ],
-}
-
-// Citra Satelit Beresolusi Tinggi (Esri World Imagery)
-const SATELLITE_STYLE: StyleSpecification = {
-  version: 8,
-  sources: {
-    'esri-satellite': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      maxzoom: 19,
-      attribution: '&copy; Esri, Maxar, Earthstar Geographics',
-    },
-  },
-  layers: [
-    {
-      id: 'esri-satellite-layer',
-      type: 'raster',
-      source: 'esri-satellite',
-      minzoom: 0,
-      maxzoom: 24,
-    },
-  ],
+    layers: [
+      {
+        id: 'esri-light-base-layer',
+        type: 'raster',
+        source: 'esri-light-base',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isLight ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-light-ref-layer',
+        type: 'raster',
+        source: 'esri-light-ref',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isLight ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-dark-base-layer',
+        type: 'raster',
+        source: 'esri-dark-base',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isDark ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-dark-ref-layer',
+        type: 'raster',
+        source: 'esri-dark-ref',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isDark ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-satellite-layer',
+        type: 'raster',
+        source: 'esri-satellite',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isSat ? 'visible' : 'none' },
+      },
+    ],
+  }
 }
 
 const JAKARTA_CENTER: [number, number] = [106.8272, -6.185]
@@ -195,6 +190,33 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
   try {
     const boundaryColor = mode === 'dark' ? '#a5d6a7' : (mode === 'satellite' ? '#66bb6a' : '#1b5e20')
     const glowColor = mode === 'dark' ? '#2b5748' : '#e8f5e9'
+
+    // Update warna dinamis pada layer batas yang sudah terpasang saat mode berubah
+    if (map.getLayer('jakarta-province-fill')) {
+      map.setPaintProperty('jakarta-province-fill', 'fill-color', boundaryColor)
+      map.setPaintProperty('jakarta-province-fill', 'fill-opacity', mode === 'satellite' ? 0.04 : 0.035)
+    }
+    if (map.getLayer('jakarta-province-glow')) {
+      map.setPaintProperty('jakarta-province-glow', 'line-color', glowColor)
+    }
+    if (map.getLayer('jakarta-province-line')) {
+      map.setPaintProperty('jakarta-province-line', 'line-color', boundaryColor)
+    }
+    if (map.getLayer('jakarta-city-dim-fill')) {
+      map.setPaintProperty('jakarta-city-dim-fill', 'fill-color', mode === 'dark' ? '#000000' : '#0f172a')
+    }
+    if (map.getLayer('jakarta-city-focus-fill')) {
+      map.setPaintProperty('jakarta-city-focus-fill', 'fill-color', boundaryColor)
+    }
+    if (map.getLayer('jakarta-city-line')) {
+      map.setPaintProperty('jakarta-city-line', 'line-color', boundaryColor)
+    }
+    if (map.getLayer('jakarta-city-focus-glow')) {
+      map.setPaintProperty('jakarta-city-focus-glow', 'line-color', glowColor)
+    }
+    if (map.getLayer('jakarta-city-focus-line')) {
+      map.setPaintProperty('jakarta-city-focus-line', 'line-color', boundaryColor)
+    }
 
     // 1. Source Batas Provinsi DKI Jakarta
     if (!map.getSource('jakarta-province-boundary')) {
@@ -661,7 +683,7 @@ export function InteractiveMap({
 
     const map = new MapLibreMap({
       container: mapContainerRef.current,
-      style: modeRef.current === 'dark' ? DARK_CANVAS_STYLE : LIGHT_CANVAS_STYLE,
+      style: createBaseStyle(modeRef.current),
       center: initialCenter,
       zoom: initialZoom,
       minZoom,
@@ -1595,19 +1617,37 @@ export function InteractiveMap({
     })
   }, [selectedFacilityId])
 
-  // Ganti Style (Light Canvas vs Dark Canvas vs Satelit)
+  // Ganti Mode Kanvas (Light Canvas vs Dark Canvas vs Satelit) tanpa reload map.setStyle()
+  // Menghindari penghancuran layer kustom dan kedipan canvas kosong
   const switchMode = useCallback(
     (mode: MapMode) => {
       if (!mapRef.current || mode === mapMode) return
       setMapMode(mode)
+      modeRef.current = mode
 
-      if (mode === 'dark') {
-        mapRef.current.setStyle(DARK_CANVAS_STYLE)
-      } else if (mode === 'satellite') {
-        mapRef.current.setStyle(SATELLITE_STYLE)
-      } else {
-        mapRef.current.setStyle(LIGHT_CANVAS_STYLE)
+      const map = mapRef.current
+      const isLight = mode === 'light'
+      const isDark = mode === 'dark'
+      const isSat = mode === 'satellite'
+
+      if (map.getLayer('esri-light-base-layer')) {
+        map.setLayoutProperty('esri-light-base-layer', 'visibility', isLight ? 'visible' : 'none')
       }
+      if (map.getLayer('esri-light-ref-layer')) {
+        map.setLayoutProperty('esri-light-ref-layer', 'visibility', isLight ? 'visible' : 'none')
+      }
+      if (map.getLayer('esri-dark-base-layer')) {
+        map.setLayoutProperty('esri-dark-base-layer', 'visibility', isDark ? 'visible' : 'none')
+      }
+      if (map.getLayer('esri-dark-ref-layer')) {
+        map.setLayoutProperty('esri-dark-ref-layer', 'visibility', isDark ? 'visible' : 'none')
+      }
+      if (map.getLayer('esri-satellite-layer')) {
+        map.setLayoutProperty('esri-satellite-layer', 'visibility', isSat ? 'visible' : 'none')
+      }
+
+      applyJakartaBoundary(map, mode)
+      syncCityMarkersRef.current()
     },
     [mapMode]
   )
