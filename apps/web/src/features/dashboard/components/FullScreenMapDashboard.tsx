@@ -447,41 +447,69 @@ export function FullScreenMapDashboard({
   const refetchMarkerData = activeCategoryFilter === 'sekolah' ? refetchSchools : refetchFacilities
   const hasExpandedLeftPanel = isLegendOpen || activeCategoryFilter !== null
 
+  // Progressive map mount: tunda inisialisasi context WebGL MapLibre
+  // agar main-thread browser dapat menyelesaikan initial layout dan render frame pertama (FCP/LCP)
+  // tanpa terblokir (memangkas Total Blocking Time / TBT secara drastis).
+  const [shouldMountMap, setShouldMountMap] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    if ('requestIdleCallback' in window) {
+      const handle = (window as Window & { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(
+        () => setShouldMountMap(true),
+        { timeout: 350 },
+      )
+      return () => {
+        if ('cancelIdleCallback' in window) {
+          (window as Window & { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(handle)
+        }
+      }
+    }
+
+    const timer = setTimeout(() => setShouldMountMap(true), 200)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const mapFallback = (
+    <div
+      className="flex h-full w-full items-center justify-center bg-surface-muted"
+      role="status"
+      aria-label={t('mapFirst.loading.map')}
+    >
+      <div className="w-full max-w-sm space-y-3 px-6">
+        <Skeleton className="mx-auto h-4 w-40 rounded-full" />
+        <Skeleton className="h-48 w-full rounded-3xl" />
+        <span className="sr-only">{t('mapFirst.loading.map')}</span>
+      </div>
+    </div>
+  )
+
   return (
     <div className="relative h-full w-full overflow-hidden bg-surface-muted select-none">
       {/* 1. Base Layer: Full-Screen Interactive Map Canvas */}
-      <Suspense
-        fallback={
-          <div
-            className="flex h-full w-full items-center justify-center bg-surface-muted"
-            role="status"
-            aria-label={t('mapFirst.loading.map')}
-          >
-            <div className="w-full max-w-sm space-y-3 px-6">
-              <Skeleton className="mx-auto h-4 w-40 rounded-full" />
-              <Skeleton className="h-48 w-full rounded-3xl" />
-              <span className="sr-only">{t('mapFirst.loading.map')}</span>
-            </div>
-          </div>
-        }
-      >
-        <InteractiveMap
-          height="100%"
-          className="h-full w-full"
-          facilities={combinedFacilities}
-          selectedFacilityId={selectedFacility?.id}
-          onSelectFacility={handleMarkerClick}
-          focusCoords={focusCoords}
-          focusZoom={focusZoom}
-          showWaterNetwork={isWaterVisible}
-          showTransit={isTransitVisible}
-          activeTransitModes={activeTransitModes}
-          selectedWilayah={activeWilayah}
-          onSelectWilayah={handleSelectWilayah}
-          focusedCorridorId={focusedCorridorId}
-          onSelectCorridor={setFocusedCorridorId}
-        />
-      </Suspense>
+      {shouldMountMap ? (
+        <Suspense fallback={mapFallback}>
+          <InteractiveMap
+            height="100%"
+            className="h-full w-full"
+            facilities={combinedFacilities}
+            selectedFacilityId={selectedFacility?.id}
+            onSelectFacility={handleMarkerClick}
+            focusCoords={focusCoords}
+            focusZoom={focusZoom}
+            showWaterNetwork={isWaterVisible}
+            showTransit={isTransitVisible}
+            activeTransitModes={activeTransitModes}
+            selectedWilayah={activeWilayah}
+            onSelectWilayah={handleSelectWilayah}
+            focusedCorridorId={focusedCorridorId}
+            onSelectCorridor={setFocusedCorridorId}
+          />
+        </Suspense>
+      ) : (
+        mapFallback
+      )}
 
       {/* Feedback data peta: loading, error, dan hasil kosong. */}
       <div
