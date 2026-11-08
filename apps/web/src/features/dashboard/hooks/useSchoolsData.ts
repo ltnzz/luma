@@ -1,5 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ApiError, getSchoolFacilities, isAbortError, type Facility } from '../../../lib/api'
+import {
+  ApiError,
+  getSchoolFacilities,
+  isAbortError,
+  type Facility,
+  type SchoolLevelBreakdown,
+} from '../../../lib/api'
 
 export interface SchoolLevelsFilter {
   sma: boolean
@@ -12,8 +18,12 @@ export type SchoolFacility = Facility & { level: 'SMA' | 'SMP' | 'SD' }
 const schoolsCache = new Map<string, SchoolFacility[]>()
 const EMPTY_SCHOOLS: SchoolFacility[] = []
 
-export function useSchoolsData(activeWilayah = 'ALL') {
-  const cachedSchools = schoolsCache.get(activeWilayah)
+export function useSchoolsData(
+  activeWilayah = 'ALL',
+  breakdown?: SchoolLevelBreakdown,
+) {
+  const isAll = !activeWilayah || activeWilayah === 'ALL'
+  const cachedSchools = !isAll ? schoolsCache.get(activeWilayah) : undefined
   const [schools, setSchools] = useState<SchoolFacility[]>(() => cachedSchools ?? [])
   const [loadedWilayah, setLoadedWilayah] = useState<string | null>(() =>
     cachedSchools ? activeWilayah : null,
@@ -25,10 +35,13 @@ export function useSchoolsData(activeWilayah = 'ALL') {
   const [reloadToken, setReloadToken] = useState(0)
 
   useEffect(() => {
+    if (isAll) return
+
     const cached = schoolsCache.get(activeWilayah)
     if (cached) return
 
     const controller = new AbortController()
+
     getSchoolFacilities(activeWilayah, controller.signal)
       .then((items) => {
         if (controller.signal.aborted) return
@@ -50,23 +63,33 @@ export function useSchoolsData(activeWilayah = 'ALL') {
         setError(new ApiError('network', 'Gagal memuat dataset sekolah'))
       })
     return () => controller.abort()
-  }, [activeWilayah, reloadToken])
+  }, [activeWilayah, isAll, reloadToken])
 
   const refetch = useCallback(() => {
+    if (isAll) return
     schoolsCache.delete(activeWilayah)
     setStatus('loading')
     setError(null)
     setReloadToken((token) => token + 1)
-  }, [activeWilayah])
+  }, [activeWilayah, isAll])
 
-  const cachedForWilayah = schoolsCache.get(activeWilayah)
-  const resolvedSchools = useMemo(
-    () => cachedForWilayah ?? (loadedWilayah === activeWilayah ? schools : EMPTY_SCHOOLS),
-    [activeWilayah, cachedForWilayah, loadedWilayah, schools],
-  )
-  const resolvedStatus = cachedForWilayah
-    ? cachedForWilayah.length > 0 ? 'success' : 'empty'
-    : loadedWilayah === activeWilayah ? status : 'loading'
+  const cachedForWilayah = !isAll ? schoolsCache.get(activeWilayah) : undefined
+  const resolvedSchools = useMemo(() => {
+    if (isAll) return EMPTY_SCHOOLS
+    return cachedForWilayah ?? (loadedWilayah === activeWilayah ? schools : EMPTY_SCHOOLS)
+  }, [isAll, cachedForWilayah, loadedWilayah, activeWilayah, schools])
+
+  const resolvedStatus = isAll
+    ? ('success' as const)
+    : cachedForWilayah
+      ? cachedForWilayah.length > 0
+        ? ('success' as const)
+        : ('empty' as const)
+      : loadedWilayah === activeWilayah
+        ? status
+        : ('loading' as const)
+
+  const resolvedError = isAll || cachedForWilayah ? null : (loadedWilayah === activeWilayah ? error : null)
 
   // Default: SEMUA FALSE (hidden by default, exactly per user request)
   const [levelFilters, setLevelFilters] = useState<SchoolLevelsFilter>({
@@ -92,47 +115,47 @@ export function useSchoolsData(activeWilayah = 'ALL') {
 
   // Hitung jumlah sekolah di wilayah aktif untuk badge filter
   const schoolCounts = useMemo(() => {
-    const inWilayah =
-      activeWilayah === 'ALL'
-        ? resolvedSchools
-        : resolvedSchools.filter((s) => s.wilayah === activeWilayah)
-
-    let sma = 0
-    let smp = 0
-    let sd = 0
-    for (let i = 0; i < inWilayah.length; i++) {
-      const lvl = inWilayah[i].level
-      if (lvl === 'SMA') sma++
-      else if (lvl === 'SMP') smp++
-      else if (lvl === 'SD') sd++
+    if (resolvedSchools.length > 0) {
+      let sma = 0
+      let smp = 0
+      let sd = 0
+      for (let i = 0; i < resolvedSchools.length; i++) {
+        const lvl = resolvedSchools[i].level
+        if (lvl === 'SMA') sma++
+        else if (lvl === 'SMP') smp++
+        else if (lvl === 'SD') sd++
+      }
+      return { sma, smp, sd, total: resolvedSchools.length }
     }
-    return { sma, smp, sd, total: inWilayah.length }
-  }, [activeWilayah, resolvedSchools])
+
+    if (breakdown) {
+      return breakdown
+    }
+
+    return isAll
+      ? { sma: 117, smp: 289, sd: 1097, total: 1503 }
+      : { sma: 0, smp: 0, sd: 0, total: 0 }
+  }, [breakdown, isAll, resolvedSchools])
 
   // Seluruh sekolah di wilayah aktif (lengkap untuk disaring oleh subfilter jenjang)
   const schoolsInWilayah = useMemo(() => {
-    return activeWilayah === 'ALL'
-      ? resolvedSchools
-      : resolvedSchools.filter((s) => s.wilayah === activeWilayah)
-  }, [activeWilayah, resolvedSchools])
+    if (isAll) return EMPTY_SCHOOLS
+    return resolvedSchools
+  }, [isAll, resolvedSchools])
 
   // Sekolah yang aktif berdasarkan toggle filter & wilayah
   const activeSchools = useMemo(() => {
+    if (isAll) return EMPTY_SCHOOLS
     const isAnyActive = levelFilters.sma || levelFilters.smp || levelFilters.sd
     if (!isAnyActive) return []
 
     return resolvedSchools.filter((s) => {
-      // 1. Filter wilayah
-      if (activeWilayah !== 'ALL' && s.wilayah !== activeWilayah) {
-        return false
-      }
-      // 2. Filter jenjang
       if (s.level === 'SMA' && !levelFilters.sma) return false
       if (s.level === 'SMP' && !levelFilters.smp) return false
       if (s.level === 'SD' && !levelFilters.sd) return false
       return true
     })
-  }, [activeWilayah, levelFilters, resolvedSchools])
+  }, [isAll, levelFilters, resolvedSchools])
 
   return {
     levelFilters,
@@ -143,7 +166,7 @@ export function useSchoolsData(activeWilayah = 'ALL') {
     schoolsInWilayah,
     hasActiveSchools: levelFilters.sma || levelFilters.smp || levelFilters.sd,
     status: resolvedStatus,
-    error,
+    error: resolvedError,
     refetch,
   }
 }

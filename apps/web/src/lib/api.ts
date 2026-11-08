@@ -297,6 +297,77 @@ export interface FacilitiesResult {
   source: string | null
 }
 
+export interface SchoolLevelBreakdown {
+  total: number
+  sd: number
+  smp: number
+  sma: number
+}
+
+export interface FaskesSummaryBreakdown {
+  total: number
+  rsud: number
+  puskesmas: number
+}
+
+export interface RthSummaryBreakdown {
+  total: number
+  taman: number
+  hutan: number
+}
+
+export interface FacilityCategoryTotals {
+  kesehatan: number
+  rth: number
+  sekolah: number
+  transum: number
+  air: number
+  fasum?: number
+  schoolBreakdown?: SchoolLevelBreakdown
+  faskesBreakdown?: FaskesSummaryBreakdown
+  rthBreakdown?: RthSummaryBreakdown
+}
+
+export interface WilayahSummary {
+  kesehatan: number
+  rth: number
+  sekolah: number
+  fasum?: number
+  schoolBreakdown?: SchoolLevelBreakdown
+  faskesBreakdown?: FaskesSummaryBreakdown
+  rthBreakdown?: RthSummaryBreakdown
+}
+
+export interface FacilitiesSummary {
+  totals: FacilityCategoryTotals
+  byWilayah: Record<string, WilayahSummary>
+}
+
+let summaryCache: Promise<FacilitiesSummary> | null = null
+
+/**
+ * GET /api/v1/facilities/summary
+ * Ringkasan agregasi makro fasilitas dan sekolah per wilayah.
+ * Dicache per sesi untuk menghindari over-fetching.
+ */
+export function getFacilitiesSummary(signal?: AbortSignal): Promise<FacilitiesSummary> {
+  if (!summaryCache) {
+    summaryCache = requestEnvelope<FacilitiesSummary>('/api/v1/facilities/summary', { signal })
+      .then((envelope) => {
+        const body = envelope.data
+        if (!body || typeof body !== 'object' || !body.totals) {
+          throw new ApiError('empty', 'Facilities summary response is incomplete')
+        }
+        return body
+      })
+      .catch((error: unknown) => {
+        summaryCache = null
+        throw error
+      })
+  }
+  return summaryCache
+}
+
 type RawFacility = Record<string, unknown>
 
 function asString(value: unknown): string | null {
@@ -443,8 +514,9 @@ export async function getSchoolFacilities(
   signal?: AbortSignal,
 ): Promise<Facility[]> {
   const limit = 250
+  const normalizedWilayah = !wilayah || wilayah === 'ALL' ? undefined : wilayah.trim()
   const params: FacilitiesParams = {
-    wilayah: wilayah === 'ALL' ? undefined : wilayah,
+    wilayah: normalizedWilayah,
     category: 'pendidikan',
     page: 1,
     limit,
@@ -495,4 +567,5 @@ export async function getSectorAnalytics(
 /** Reset module-level caches (error recovery / tests). */
 export function clearApiCaches(): void {
   overviewCache = null
+  summaryCache = null
 }

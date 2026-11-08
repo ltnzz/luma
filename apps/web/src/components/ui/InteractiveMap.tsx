@@ -4,11 +4,7 @@ import {
   Marker,
   Popup,
   setWorkerUrl,
-  type StyleSpecification,
-  type GeoJSONSourceSpecification,
   type GeoJSONSource,
-  type FilterSpecification,
-  type ExpressionSpecification,
   type MapLayerMouseEvent,
 } from 'maplibre-gl'
 import maplibreglWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
@@ -37,7 +33,10 @@ import {
 // Konfigurasi Worker MapLibre GL untuk lingkungan Vite (mencegah error Worker 404)
 setWorkerUrl(maplibreglWorkerUrl)
 
-type GeoJSONData = GeoJSONSourceSpecification['data']
+type StyleSpecification = Exclude<NonNullable<Parameters<MapLibreMap['setStyle']>[0]>, string>
+type FilterSpecification = NonNullable<Parameters<MapLibreMap['setFilter']>[1]>
+type GeoJSONData = Parameters<GeoJSONSource['setData']>[0]
+type ExpressionSpecification = Parameters<MapLibreMap['setPaintProperty']>[2]
 
 const CITY_BOUNDARY_SOURCE_ID = 'jakarta-city-boundary'
 const CITY_BOUNDARY_VALIDATION = validateJakartaBoundaryData(jakartaCityBoundaries)
