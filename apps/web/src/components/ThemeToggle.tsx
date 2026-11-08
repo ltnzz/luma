@@ -53,7 +53,7 @@ export default function ThemeToggle({ showLabel = false, className = '', dataTou
     <button
       type="button"
       onClick={() => setTheme(resolvedDark ? 'light' : 'dark')}
-      className={`inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs ${className}`}
+      className={`inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border/80 bg-surface text-foreground transition-colors hover:bg-surface-muted shadow-2xs ${className}`}
       aria-label={resolvedDark ? t('theme.light') : t('theme.dark')}
       data-tooltip={resolvedDark ? t('theme.light') : t('theme.dark')}
       data-tooltip-side="bottom"
