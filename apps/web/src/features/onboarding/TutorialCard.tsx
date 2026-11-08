@@ -115,6 +115,8 @@ interface TutorialCardProps {
   totalSteps: number
   isFirst: boolean
   isLast: boolean
+  /** Whether the tour finale exit animation is currently playing. */
+  isExiting?: boolean
   /**
    * `default` = standard spotlight step card (steps 2–9).
    * `hero` = editorial opening panel anchored to the bottom edge (step 1).
@@ -146,6 +148,7 @@ export function TutorialCard({
   totalSteps,
   isFirst,
   isLast,
+  isExiting = false,
   variant = 'default',
   onBack,
   onNext,
@@ -223,7 +226,9 @@ export function TutorialCard({
       aria-describedby={descriptionId}
       data-step={stepNumber}
       data-variant={variant}
-      className="luma-tour-card fixed z-[100] flex flex-col gap-2.5 overflow-hidden rounded-2xl border border-border bg-surface/95 p-4 text-foreground shadow-[0_24px_60px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-[top,left,width] duration-300 ease-out motion-reduce:transition-none"
+      className={`luma-tour-card fixed z-[100] flex flex-col gap-2.5 overflow-hidden rounded-2xl border border-border bg-surface/95 p-4 text-foreground shadow-[0_24px_60px_-12px_rgba(0,0,0,0.45)] backdrop-blur-xl transition-[top,left,width] duration-300 ease-out motion-reduce:transition-none ${
+        isExiting ? 'luma-tour-card-exit' : ''
+      }`}
       style={{
         left: position.left,
         top: position.top,
@@ -291,20 +296,29 @@ export function TutorialCard({
         <>
           {/* Header: step counter + progress */}
           <div className="flex flex-col gap-2">
-            <span className="inline-flex w-fit items-center rounded-full border border-primary/25 bg-primary-soft px-2.5 py-1 text-[10px] font-bold tracking-wide text-primary-soft-text">
-              {t('tour.stepLabel')} {stepNumber}/{totalSteps}
-            </span>
+            {isLast ? (
+              <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-primary/35 bg-primary-soft px-2.5 py-1 text-[10px] font-bold tracking-wide text-primary-soft-text shadow-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                {t('tour.completedBadge')}
+              </span>
+            ) : (
+              <span className="inline-flex w-fit items-center rounded-full border border-primary/25 bg-primary-soft px-2.5 py-1 text-[10px] font-bold tracking-wide text-primary-soft-text">
+                {t('tour.stepLabel')} {stepNumber}/{totalSteps}
+              </span>
+            )}
             <div
               className="h-1 w-full overflow-hidden rounded-full bg-border"
               role="progressbar"
               aria-label={t('tour.progressAria')}
               aria-valuemin={0}
               aria-valuemax={totalSteps}
-              aria-valuenow={stepNumber}
+              aria-valuenow={isLast ? totalSteps : stepNumber}
             >
               <div
-                className="h-full rounded-full bg-primary transition-[width] duration-300 ease-out motion-reduce:transition-none"
-                style={{ width: `${progress}%` }}
+                className={`h-full rounded-full bg-primary transition-[width] duration-300 ease-out motion-reduce:transition-none ${
+                  isLast ? 'shadow-[0_0_8px_rgba(34,197,94,0.5)]' : ''
+                }`}
+                style={{ width: isLast ? '100%' : `${progress}%` }}
               />
             </div>
           </div>
@@ -356,8 +370,11 @@ export function TutorialCard({
         <button
           ref={actionRef}
           type="button"
+          disabled={isExiting}
           onClick={isLast ? onFinish : onNext}
-          className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-on-primary shadow-[0_6px_18px_-4px_rgba(16,163,74,0.4)] transition-colors hover:bg-primary-hover"
+          className={`rounded-xl bg-primary px-4 py-2 text-xs font-bold text-on-primary shadow-[0_6px_18px_-4px_rgba(16,163,74,0.4)] transition-all hover:bg-primary-hover ${
+            isExiting ? 'opacity-70 cursor-not-allowed scale-95' : 'active:scale-95'
+          } ${isLast ? 'shadow-[0_6px_20px_-4px_rgba(16,163,74,0.55)]' : ''}`}
           aria-label={isLast ? t('tour.finish') : isHero ? t('tour.welcome.cta') : t('tour.next')}
         >
           {isLast

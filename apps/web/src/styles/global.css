@@ -549,6 +549,108 @@ body[data-tour-step] .luma-region-marker {
   animation: luma-tour-step-enter 180ms ease-out both;
 }
 
+/* Tutorial card graceful slide-down & fade on Selesai */
+@keyframes luma-tour-card-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+
+.luma-tour-card-exit {
+  animation: luma-tour-card-exit 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  pointer-events: none !important;
+}
+
+/* Backdrop and vignette dissolve on Selesai */
+@keyframes luma-tour-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.luma-tour-backdrop-exit {
+  animation: luma-tour-fade-out 850ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Spotlight ring expanding dissolve on Selesai */
+@keyframes luma-tour-ring-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+.luma-tour-ring-exit {
+  animation: luma-tour-ring-exit 500ms ease-out forwards !important;
+}
+
+/* Finale: Pulse / ripple wave expanding from the spotlight across the map */
+@keyframes luma-tour-pulse-wave {
+  0% {
+    width: 36px;
+    height: 36px;
+    opacity: 0.95;
+    box-shadow: 0 0 0 2px var(--color-primary), 0 0 24px var(--color-primary);
+  }
+  60% {
+    opacity: 0.45;
+  }
+  100% {
+    width: 1600px;
+    height: 1600px;
+    opacity: 0;
+    box-shadow: 0 0 0 1px var(--color-primary), 0 0 60px var(--color-primary);
+  }
+}
+
+.luma-tour-pulse-wave {
+  animation: luma-tour-pulse-wave 950ms cubic-bezier(0.15, 0.85, 0.35, 1) forwards;
+}
+
+/* Finale: Atmospheric Horizon Green Light Sweep across the entire map */
+@keyframes luma-tour-final-sweep {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(180%);
+    opacity: 0;
+  }
+}
+
+.luma-tour-final-sweep {
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(34, 197, 94, 0.18) 50%,
+    transparent 65%
+  );
+  animation: luma-tour-final-sweep 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* The spotlight ring glides between targets instead of teleporting; the
    ring is a tiny fixed-position element, so the cost is negligible and the
    visual parity with the sliding card is what removes the per-step judder. */
@@ -565,7 +667,12 @@ body[data-tour-step] .luma-region-marker {
   .luma-tour-chip,
   .luma-tour-step-enter,
   .luma-tour-route-dash,
-  .luma-tour-vignette::after {
+  .luma-tour-vignette::after,
+  .luma-tour-card-exit,
+  .luma-tour-backdrop-exit,
+  .luma-tour-ring-exit,
+  .luma-tour-pulse-wave,
+  .luma-tour-final-sweep {
     animation-duration: 1ms !important;
   }
 

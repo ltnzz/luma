@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useTranslation } from '../../i18n/useTranslation'
 import { SpotlightOverlay } from './SpotlightOverlay'
@@ -68,6 +68,7 @@ interface OnboardingOverlayProps {
  */
 export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps) {
   const { t } = useTranslation()
+  const [isExiting, setIsExiting] = useState(false)
   const stepCount = steps.length
 
   const stepIndex = Math.min(
@@ -90,12 +91,44 @@ export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps)
   // can show only components already introduced (see data-tour rules in
   // global.css). Elements stay mounted (visibility only) so no state resets.
   useEffect(() => {
-    if (!controller.isActive || !step) return
+    if (!controller.isActive || !step || isExiting) return
     document.body.dataset.tourStep = String(stepIndex + 1)
     return () => {
       delete document.body.dataset.tourStep
     }
-  }, [controller.isActive, stepIndex, step])
+  }, [controller.isActive, stepIndex, step, isExiting])
+
+  // Coordinated finale exit animation: plays the combined Pulse Wave &
+  // Atmospheric Horizon Lift sequence before executing controller.finish().
+  const handleFinish = useCallback(() => {
+    if (isExiting) return
+
+    const isReducedMotion =
+      typeof window !== 'undefined' &&
+      (window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ||
+        import.meta.env.MODE === 'test')
+
+    if (isReducedMotion) {
+      delete document.body.dataset.tourStep
+      delete document.body.dataset.tourExiting
+      controller.finish()
+      return
+    }
+
+    setIsExiting(true)
+
+    // Unveil all dashboard components immediately so they are revealed
+    // under the dissolving backdrop and horizon sweep
+    delete document.body.dataset.tourStep
+    document.body.dataset.tourExiting = 'true'
+
+    const timer = window.setTimeout(() => {
+      delete document.body.dataset.tourExiting
+      controller.finish()
+    }, 1050)
+
+    return () => window.clearTimeout(timer)
+  }, [isExiting, controller])
 
   // Block page scrolling only while the mandatory tour is open.
   useEffect(() => {
@@ -104,6 +137,8 @@ export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps)
     document.body.style.overflow = 'hidden'
     return () => {
       document.body.style.overflow = previousOverflow
+      delete document.body.dataset.tourStep
+      delete document.body.dataset.tourExiting
     }
   }, [controller.isActive])
 
@@ -114,6 +149,7 @@ export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps)
       <SpotlightOverlay
         rect={rect}
         backdrop={isHeroStep && mapReady ? 'vignette' : 'solid'}
+        isExiting={isExiting}
       />
       <TutorialCard
         rect={rect}
@@ -124,10 +160,11 @@ export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps)
         totalSteps={stepCount}
         isFirst={stepIndex === 0}
         isLast={stepIndex === stepCount - 1}
+        isExiting={isExiting}
         variant={isHeroStep ? 'hero' : 'default'}
         onBack={controller.back}
         onNext={controller.next}
-        onFinish={controller.finish}
+        onFinish={handleFinish}
         onSkip={controller.canSkip ? controller.skip : undefined}
         labelId={`luma-tour-title-${step.id}`}
         descriptionId={`luma-tour-body-${step.id}`}

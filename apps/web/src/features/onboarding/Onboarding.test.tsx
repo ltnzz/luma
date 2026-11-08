@@ -150,6 +150,20 @@ describe('mandatory onboarding', () => {
     expect(screen.getByRole('dialog')).toHaveAttribute('data-step', '4')
   })
 
+  it('renders the celebratory finale badge on the final step without extra category chips', () => {
+    window.localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ version: 1, completed: false, currentStep: TOUR_STEPS.length - 1 }),
+    )
+    renderTour()
+    const dialog = screen.getByRole('dialog')
+    expect(within(dialog).getByText('TUR SELESAI · 9/9')).toBeInTheDocument()
+    expect(within(dialog).getByText(/Selamat Bereksplorasi!/)).toBeInTheDocument()
+    expect(within(dialog).queryByText('Faskes')).not.toBeInTheDocument()
+    expect(within(dialog).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '9')
+    expect(within(dialog).getByRole('button', { name: 'Selesai' })).toBeInTheDocument()
+  })
+
   it('only shows Finish on the final step and marks the tour completed', () => {
     window.localStorage.setItem(
       STORAGE_KEY,

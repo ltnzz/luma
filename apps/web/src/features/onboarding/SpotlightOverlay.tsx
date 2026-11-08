@@ -17,6 +17,8 @@ interface SpotlightOverlayProps {
    * the map visible in the middle; only used for target-less hero steps.
    */
   backdrop?: BackdropMode
+  /** Whether the tour finale exit animation is currently playing. */
+  isExiting?: boolean
 }
 
 interface HoleBox {
@@ -102,7 +104,11 @@ function getBlockerRects(
  *
  * The spotlight never touches MapLibre internals — it is a standalone layer.
  */
-export function SpotlightOverlay({ rect, backdrop = 'solid' }: SpotlightOverlayProps) {
+export function SpotlightOverlay({
+  rect,
+  backdrop = 'solid',
+  isExiting = false,
+}: SpotlightOverlayProps) {
   const [viewport, setViewport] = useState(() => ({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -135,20 +141,31 @@ export function SpotlightOverlay({ rect, backdrop = 'solid' }: SpotlightOverlayP
     <>
       {/* Visual layer: dim + spotlight hole + ring (never captures events). */}
       <div
-        className="pointer-events-none fixed inset-0 z-[90]"
+        className="pointer-events-none fixed inset-0 z-[90] overflow-hidden"
         aria-hidden="true"
         data-testid="tour-spotlight"
       >
         {backdrop === 'vignette' && rect === null ? (
-          <div className="luma-tour-vignette absolute inset-0" />
+          <div
+            className={`luma-tour-vignette absolute inset-0 ${
+              isExiting ? 'luma-tour-backdrop-exit' : ''
+            }`}
+          />
         ) : (
           <svg width={viewport.width} height={viewport.height} className="block">
-            <path d={geometry.backdropPath} fill={OVERLAY_DIM_COLOR} fillRule="evenodd" className="luma-tour-backdrop" />
+            <path
+              d={geometry.backdropPath}
+              fill={OVERLAY_DIM_COLOR}
+              fillRule="evenodd"
+              className={isExiting ? 'luma-tour-backdrop-exit' : 'luma-tour-backdrop'}
+            />
           </svg>
         )}
         {geometry.ringRect ? (
           <div
-            className="luma-tour-ring pointer-events-none absolute rounded-[14px] border-2 border-primary shadow-[0_0_0_5px_rgba(34,197,94,0.22),0_0_24px_rgba(34,197,94,0.18)] transition-[left,top,width,height] duration-200 ease-out motion-reduce:transition-none"
+            className={`luma-tour-ring pointer-events-none absolute rounded-[14px] border-2 border-primary shadow-[0_0_0_5px_rgba(34,197,94,0.22),0_0_24px_rgba(34,197,94,0.18)] transition-[left,top,width,height] duration-200 ease-out motion-reduce:transition-none ${
+              isExiting ? 'luma-tour-ring-exit' : ''
+            }`}
             style={{
               left: geometry.ringRect.left,
               top: geometry.ringRect.top,
@@ -157,25 +174,44 @@ export function SpotlightOverlay({ rect, backdrop = 'solid' }: SpotlightOverlayP
             }}
           />
         ) : null}
-      </div>
 
-      {/* Interaction layer: blocks clicks everywhere except the spotlight hole. */}
-      <div className="pointer-events-none fixed inset-0 z-[90]" data-testid="tour-blockers">
-        {geometry.blockers.map((blocker, index) => (
-          // Stable keys: geometry stays in the style prop, so rect updates
-          // mutate in place instead of remounting the four masks.
+        {/* Finale: pulse ripple wave expanding from the spotlight target across the map */}
+        {isExiting && geometry.ringRect ? (
           <div
-            key={`blocker-${index}`}
-            className="pointer-events-auto absolute"
+            className="luma-tour-pulse-wave pointer-events-none absolute rounded-full"
             style={{
-              left: clamp(blocker.left, 0, viewport.width),
-              top: clamp(blocker.top, 0, viewport.height),
-              width: blocker.width,
-              height: blocker.height,
+              left: geometry.ringRect.left + geometry.ringRect.width / 2,
+              top: geometry.ringRect.top + geometry.ringRect.height / 2,
+              transform: 'translate(-50%, -50%)',
             }}
           />
-        ))}
+        ) : null}
+
+        {/* Finale: Atmospheric Horizon Green Light Sweep across the entire map */}
+        {isExiting ? (
+          <div className="luma-tour-final-sweep pointer-events-none absolute inset-0" />
+        ) : null}
       </div>
+
+      {/* Interaction layer: blocks clicks everywhere except the spotlight hole. Disabled during exit. */}
+      {!isExiting && (
+        <div className="pointer-events-none fixed inset-0 z-[90]" data-testid="tour-blockers">
+          {geometry.blockers.map((blocker, index) => (
+            // Stable keys: geometry stays in the style prop, so rect updates
+            // mutate in place instead of remounting the four masks.
+            <div
+              key={`blocker-${index}`}
+              className="pointer-events-auto absolute"
+              style={{
+                left: clamp(blocker.left, 0, viewport.width),
+                top: clamp(blocker.top, 0, viewport.height),
+                width: blocker.width,
+                height: blocker.height,
+              }}
+            />
+          ))}
+        </div>
+      )}
     </>
   )
 }
