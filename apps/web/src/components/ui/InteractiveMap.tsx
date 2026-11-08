@@ -693,24 +693,40 @@ export function InteractiveMap({
     })
 
     // Mark as loaded when map triggers 'load' or 'idle'
+    // Task Slicing: pecah penambahan layer menjadi tugas bertahap di bawah 50ms (Zero TBT)
     const handleLoaded = () => {
-      if (!isDisposed) {
-        setIsLoaded(true)
-        map.resize()
+      if (isDisposed) return
+      setIsLoaded(true)
+      map.resize()
+
+      // Frame 1: Batas wilayah dan marker kota
+      requestAnimationFrame(() => {
+        if (isDisposed) return
         applyJakartaBoundary(map, modeRef.current)
-        applyTransitLayers(map, facilitiesRef.current)
-        applyWaterLayers(map)
         syncCityMarkersRef.current()
-      }
+
+        // Frame 2: Layer infrastruktur (transit & air) di frame berikutnya
+        requestAnimationFrame(() => {
+          if (isDisposed) return
+          applyTransitLayers(map, facilitiesRef.current)
+          applyWaterLayers(map)
+        })
+      })
     }
 
     map.on('style.load', () => {
-      if (!isDisposed) {
+      if (isDisposed) return
+      requestAnimationFrame(() => {
+        if (isDisposed) return
         applyJakartaBoundary(map, modeRef.current)
-        applyTransitLayers(map, facilitiesRef.current)
-        applyWaterLayers(map)
         syncCityMarkersRef.current()
-      }
+
+        requestAnimationFrame(() => {
+          if (isDisposed) return
+          applyTransitLayers(map, facilitiesRef.current)
+          applyWaterLayers(map)
+        })
+      })
     })
 
     map.on('idle', () => {
