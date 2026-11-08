@@ -1,7 +1,7 @@
 import { CloseIcon } from '../../../components/ui/Icons'
 import { CategoryIconBadge, type CategoryIconKind } from '../../../components/ui/CategoryIconBadge'
 import { TRANSJAKARTA_CORRIDORS, type CorridorInfo } from '../../../data/transit-corridors'
-import { DATA_CATALOG } from '../../../data/data-catalog'
+import { getDataCatalogEntry } from '../../../data/data-catalog'
 import type { KpiCategory } from './KpiMetricsDock'
 import { useTranslation } from '../../../i18n/useTranslation'
 import { HistoricalTrendMini } from './HistoricalTrendMini'
@@ -29,6 +29,8 @@ interface ContextualCategoryFilterCardProps {
   faskesCounts?: { total: number; rsud: number; puskesmas: number; other?: number }
   rthCounts?: { total: number; taman: number; hutan: number; jalur?: number }
   schoolCounts?: { total: number; sma: number; smp: number; sd: number }
+  hasDataError?: boolean
+  onRetry?: () => void
   onClose: () => void
 }
 
@@ -54,6 +56,8 @@ export function ContextualCategoryFilterCard({
   faskesCounts = { total: 0, rsud: 0, puskesmas: 0, other: 0 },
   rthCounts = { total: 0, taman: 0, hutan: 0, jalur: 0 },
   schoolCounts = { total: 0, sma: 0, smp: 0, sd: 0 },
+  hasDataError = false,
+  onRetry,
   onClose,
 }: ContextualCategoryFilterCardProps) {
   const { language } = useTranslation()
@@ -71,6 +75,7 @@ export function ContextualCategoryFilterCard({
         soloMode: 'Mode Solo Filter Aktif', reset: 'Reset Filter',
         source: 'Sumber', coverage: 'Cakupan', unit: 'Satuan', method: 'Metode', period: 'Periode', updated: 'Diperbarui',
         transparency: 'Transparansi data', openSource: 'Buka sumber resmi', unavailable: 'Belum tersedia',
+        loadError: 'Data kategori belum dapat dimuat.', retry: 'Coba lagi',
       }
     : {
         healthTitle: 'Healthcare Filter', healthSubtitle: 'Healthcare Facilities',
@@ -85,9 +90,10 @@ export function ContextualCategoryFilterCard({
         soloMode: 'Solo Filter Active', reset: 'Reset Filter',
         source: 'Source', coverage: 'Coverage', unit: 'Unit', method: 'Method', period: 'Period', updated: 'Updated',
         transparency: 'Data transparency', openSource: 'Open official source', unavailable: 'Not available',
+        loadError: 'Category data could not be loaded.', retry: 'Retry',
       }
 
-  const activeMetadata = DATA_CATALOG[category]
+  const activeMetadata = getDataCatalogEntry(category, language)
 
   // Category config (title, color, icon)
   const config = {
@@ -157,6 +163,22 @@ export function ContextualCategoryFilterCard({
           <CloseIcon size={11} />
         </button>
       </div>
+
+      {hasDataError ? (
+        <div
+          role="alert"
+          className="flex items-center justify-between gap-2 rounded-lg border border-danger/25 bg-danger/8 px-2.5 py-2 text-[10.5px]"
+        >
+          <span className="font-medium leading-snug text-foreground">{copy.loadError}</span>
+          <button
+            type="button"
+            onClick={onRetry}
+            className="shrink-0 rounded-md border border-danger/25 px-2 py-1 font-bold text-danger transition hover:bg-danger/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-danger/35"
+          >
+            {copy.retry}
+          </button>
+        </div>
+      ) : null}
 
       {/* 2. Sub-filter Controls Berdasarkan Kategori Aktif */}
       <div className="flex flex-col gap-1.5 text-xs">
@@ -434,7 +456,7 @@ export function ContextualCategoryFilterCard({
             onSchoolFilterChange?.('all')
             onClose()
           }}
-          className="inline-flex shrink-0 cursor-pointer items-center rounded-md border border-emerald-800/20 bg-emerald-700 px-2 py-1 text-[10px] font-bold text-white transition-colors hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50 dark:border-emerald-300/20 dark:bg-emerald-400 dark:text-emerald-950 dark:hover:bg-emerald-300"
+          className="inline-flex shrink-0 cursor-pointer items-center rounded-md border border-primary/25 bg-primary px-2 py-1 text-[10px] font-bold text-on-primary transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/45"
           aria-label={copy.reset}
         >
           {copy.reset} &times;

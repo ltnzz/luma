@@ -57,7 +57,7 @@ type RawIndicator = Record<string, unknown>
 function pickString(raw: RawIndicator, ...keys: string[]): string | null {
   for (const key of keys) {
     const value = raw[key]
-    if (typeof value === 'string' && value.trim() !== '') return value
+    if (typeof value === 'string' && value.trim() !== '') return value.trim()
   }
   return null
 }
@@ -118,7 +118,9 @@ async function fetchIndicators(
   const lookup: Record<string, RegionalIndicator> = {}
   for (const [code, raw] of Object.entries(data)) {
     if (!raw || typeof raw !== 'object') continue
-    lookup[code] = normalizeIndicator(code, raw as RawIndicator, inferredSource)
+    const normalizedCode = code.trim().toUpperCase()
+    if (!normalizedCode) continue
+    lookup[normalizedCode] = normalizeIndicator(normalizedCode, raw as RawIndicator, inferredSource)
   }
   return { lookup, source: inferredSource }
 }
@@ -298,7 +300,7 @@ export interface FacilitiesResult {
 type RawFacility = Record<string, unknown>
 
 function asString(value: unknown): string | null {
-  return typeof value === 'string' && value.trim() ? value : null
+  return typeof value === 'string' && value.trim() ? value.trim() : null
 }
 
 function asNumber(value: unknown): number | null {
@@ -360,7 +362,18 @@ function normalizeFacility(raw: RawFacility): Facility | null {
   const lat = asNumber(raw.lat)
   const lng = asNumber(raw.lng)
 
-  if (!id || !name || !category || !wilayah || lat === null || lng === null) return null
+  if (
+    !id ||
+    !name ||
+    !category ||
+    !wilayah ||
+    lat === null ||
+    lng === null ||
+    lat < -90 ||
+    lat > 90 ||
+    lng < -180 ||
+    lng > 180
+  ) return null
 
   const rawLevel = asString(raw.level)?.toUpperCase()
   const level = rawLevel === 'SD' || rawLevel === 'SMP' || rawLevel === 'SMA'
@@ -371,10 +384,10 @@ function normalizeFacility(raw: RawFacility): Facility | null {
     id,
     slug: asString(raw.slug),
     name,
-    category,
+    category: category.toLowerCase(),
     subCategory: asString(raw.subCategory ?? raw.sub_category),
-    wilayah,
-    kecamatan: asString(raw.kecamatan),
+    wilayah: wilayah.toUpperCase(),
+    kecamatan: asString(raw.kecamatan)?.toUpperCase() ?? null,
     address: asString(raw.address),
     lat,
     lng,

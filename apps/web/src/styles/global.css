@@ -15,6 +15,9 @@
   --color-on-primary: var(--luma-on-primary);
   --color-primary-soft: var(--luma-primary-soft);
   --color-primary-soft-text: var(--luma-primary-soft-text);
+  --color-secondary: var(--luma-secondary);
+  --color-accent: var(--luma-accent);
+  --color-accent-soft: var(--luma-accent-soft);
   --color-danger: var(--luma-danger);
   --color-surface-dark: var(--luma-surface-dark);
   --color-on-surface-dark: var(--luma-on-surface-dark);
@@ -37,10 +40,10 @@
 
 body {
   margin: 0;
-  min-width: 320px;
+  min-width: 0;
   background: var(--luma-background);
   color: var(--luma-text);
-  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
@@ -64,6 +67,38 @@ select:focus-visible {
 ::selection {
   background: var(--luma-primary);
   color: var(--luma-on-primary);
+}
+
+/* Pertahankan warna asli logo pada kedua tema. Di header gelap,
+   keterbacaan dibantu outline/glow netral tanpa recolor. */
+.luma-brand-logo {
+  filter: drop-shadow(0 0 2px rgba(27, 94, 32, 0.12));
+}
+
+[data-theme="dark"] .luma-brand-logo {
+  filter:
+    brightness(1.3)
+    saturate(1.14)
+    contrast(1.06)
+    drop-shadow(1px 0 0 rgba(232, 245, 233, 0.38))
+    drop-shadow(-1px 0 0 rgba(232, 245, 233, 0.38))
+    drop-shadow(0 1px 0 rgba(232, 245, 233, 0.32))
+    drop-shadow(0 -1px 0 rgba(232, 245, 233, 0.32))
+    drop-shadow(0 0 5px rgba(232, 245, 233, 0.34));
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .luma-brand-logo:hover {
+    filter:
+      brightness(1.38)
+      saturate(1.18)
+      contrast(1.08)
+      drop-shadow(1px 0 0 rgba(232, 245, 233, 0.48))
+      drop-shadow(-1px 0 0 rgba(232, 245, 233, 0.48))
+      drop-shadow(0 1px 0 rgba(232, 245, 233, 0.42))
+      drop-shadow(0 -1px 0 rgba(232, 245, 233, 0.42))
+      drop-shadow(0 0 7px rgba(232, 245, 233, 0.46));
+  }
 }
 
 @keyframes luma-modal-overlay-in {
@@ -519,20 +554,20 @@ body[data-tour-step] .luma-region-marker {
 /* Layered glass system: the map remains visible while every surface keeps
    enough contrast for dense civic data. */
 .luma-map-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.72), rgba(246, 252, 248, 0.52)) !important;
+  background: linear-gradient(145deg, rgba(232, 245, 233, 0.84), rgba(165, 214, 167, 0.58)) !important;
   backdrop-filter: blur(20px) saturate(142%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(142%) !important;
   border: 1px solid rgba(255, 255, 255, 0.58) !important;
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.78),
-    inset 0 -1px 0 rgba(30, 74, 47, 0.05),
-    0 10px 30px rgba(20, 45, 31, 0.11),
-    0 2px 6px rgba(20, 45, 31, 0.05) !important;
+    inset 0 -1px 0 rgba(27, 94, 32, 0.07),
+    0 10px 30px rgba(43, 87, 72, 0.14),
+    0 2px 6px rgba(27, 94, 32, 0.07) !important;
   transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 [data-theme="dark"] .luma-map-card {
-  background: linear-gradient(145deg, rgba(12, 25, 17, 0.68), rgba(9, 18, 13, 0.54)) !important;
+  background: linear-gradient(145deg, rgba(43, 87, 72, 0.82), rgba(39, 51, 56, 0.72)) !important;
   backdrop-filter: blur(20px) saturate(132%) !important;
   -webkit-backdrop-filter: blur(20px) saturate(132%) !important;
   border: 1px solid rgba(255, 255, 255, 0.13) !important;
@@ -543,41 +578,51 @@ body[data-tour-step] .luma-region-marker {
     0 2px 8px rgba(0, 0, 0, 0.2) !important;
 }
 
+/* Panel detail berada di atas citra satelit yang ramai. Tingkatkan kontras
+   teks sekundernya secara lokal tanpa mengubah hierarki seluruh dashboard. */
+.luma-facility-detail {
+  --luma-text-muted: #2b5748;
+}
+
+[data-theme="dark"] .luma-facility-detail {
+  --luma-text-muted: #a5d6a7;
+}
+
 /* Card pada panel kiri berdiri sendiri. Menghapus bayangan luar mencegah
    shadow antarkartu menyatu menjadi kotak besar di belakang seluruh stack. */
-.luma-map-stack > .luma-map-card {
+.luma-map-stack .luma-map-card {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.72),
     inset 0 -1px 0 rgba(30, 74, 47, 0.05) !important;
 }
 
-[data-theme="dark"] .luma-map-stack > .luma-map-card {
+[data-theme="dark"] .luma-map-stack .luma-map-card {
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.1),
     inset 0 -1px 0 rgba(0, 0, 0, 0.22) !important;
 }
 
 .luma-region-dropdown {
-  background: linear-gradient(145deg, rgba(248, 252, 249, 0.48), rgba(232, 242, 236, 0.34)) !important;
+  background: linear-gradient(145deg, rgba(232, 245, 233, 0.76), rgba(165, 214, 167, 0.52)) !important;
   backdrop-filter: blur(18px) saturate(138%) !important;
   -webkit-backdrop-filter: blur(18px) saturate(138%) !important;
   border-color: rgba(255, 255, 255, 0.62) !important;
 }
 
 [data-theme="dark"] .luma-region-dropdown {
-  background: linear-gradient(145deg, rgba(12, 25, 17, 0.54), rgba(9, 18, 13, 0.38)) !important;
+  background: linear-gradient(145deg, rgba(43, 87, 72, 0.78), rgba(39, 51, 56, 0.64)) !important;
   border-color: rgba(255, 255, 255, 0.16) !important;
 }
 
 @media (hover: hover) {
   .luma-glass-hover:hover {
     transform: translateY(-2px);
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(246, 252, 248, 0.66)) !important;
+    background: linear-gradient(145deg, rgba(232, 245, 233, 0.94), rgba(165, 214, 167, 0.74)) !important;
     border-color: rgba(255, 255, 255, 0.9) !important;
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.9),
-      0 16px 36px rgba(20, 45, 31, 0.15),
-      0 3px 8px rgba(20, 45, 31, 0.07) !important;
+      0 16px 36px rgba(43, 87, 72, 0.18),
+      0 3px 8px rgba(27, 94, 32, 0.09) !important;
   }
 
   .luma-glass-hover.luma-no-lift:hover {
@@ -585,18 +630,18 @@ body[data-tour-step] .luma-region-marker {
   }
 
   [data-theme="dark"] .luma-glass-hover:hover {
-    background: linear-gradient(145deg, rgba(19, 38, 26, 0.76), rgba(10, 23, 15, 0.64)) !important;
+    background: linear-gradient(145deg, rgba(97, 135, 100, 0.76), rgba(39, 51, 56, 0.82)) !important;
     border-color: rgba(255, 255, 255, 0.2) !important;
     box-shadow:
       inset 0 1px 0 rgba(255, 255, 255, 0.15),
       0 18px 42px rgba(0, 0, 0, 0.4) !important;
   }
 
-  .luma-map-stack > .luma-glass-hover:hover {
+  .luma-map-stack .luma-glass-hover:hover {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
   }
 
-  [data-theme="dark"] .luma-map-stack > .luma-glass-hover:hover {
+  [data-theme="dark"] .luma-map-stack .luma-glass-hover:hover {
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
   }
 }
@@ -610,16 +655,16 @@ body[data-tour-step] .luma-region-marker {
 }
 
 .luma-popup-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(242, 250, 245, 0.62));
+  background: linear-gradient(145deg, rgba(232, 245, 233, 0.92), rgba(165, 214, 167, 0.7));
   backdrop-filter: blur(20px) saturate(140%);
   -webkit-backdrop-filter: blur(20px) saturate(140%);
   border: 1px solid rgba(255, 255, 255, 0.76);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 14px 34px rgba(20, 45, 31, 0.17);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 14px 34px rgba(43, 87, 72, 0.2);
   transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
 
 [data-theme="dark"] .luma-popup-card {
-  background: linear-gradient(145deg, rgba(16, 32, 22, 0.76), rgba(8, 18, 12, 0.64));
+  background: linear-gradient(145deg, rgba(43, 87, 72, 0.8), rgba(39, 51, 56, 0.76));
   border-color: rgba(255, 255, 255, 0.15);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.11), 0 16px 38px rgba(0, 0, 0, 0.4);
 }
@@ -640,25 +685,25 @@ body[data-tour-step] .luma-region-marker {
 .luma-facility-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
 .luma-facility-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
 .luma-facility-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
-  border-top-color: rgba(249, 252, 250, 0.94);
+  border-top-color: rgba(232, 245, 233, 0.96);
 }
 
 .luma-facility-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
 .luma-facility-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
 .luma-facility-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
-  border-bottom-color: rgba(255, 255, 255, 0.94);
+  border-bottom-color: rgba(165, 214, 167, 0.94);
 }
 
 [data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
 [data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
 [data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
-  border-top-color: rgba(12, 21, 15, 0.94);
+  border-top-color: rgba(39, 51, 56, 0.96);
 }
 
 [data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
 [data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
 [data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
-  border-bottom-color: rgba(18, 30, 22, 0.94);
+  border-bottom-color: rgba(43, 87, 72, 0.96);
 }
 
 .luma-glass {

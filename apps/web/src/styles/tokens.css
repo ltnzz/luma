@@ -1,19 +1,22 @@
 :root {
-  /* Light theme — on-white surfaces with a subtle green tint (per Figma). */
-  --luma-background: #f3f6f3;
-  --luma-surface: #ffffff;
-  --luma-surface-muted: #e9f0ea;
-  --luma-text: #1c2620;
-  --luma-text-muted: #5d6962;
-  --luma-border: #dce4dd;
-  --luma-primary: #16a34a;
-  --luma-primary-hover: #15803d;
+  /* Luma 60/30/10 palette — mint base, sage support, deep civic green. */
+  --luma-background: #e8f5e9;
+  --luma-surface: #f6fbf6;
+  --luma-surface-muted: #d7ebd9;
+  --luma-text: #273338;
+  --luma-text-muted: #2b5748;
+  --luma-border: #a5d6a7;
+  --luma-primary: #1b5e20;
+  --luma-primary-hover: #2b5748;
   --luma-on-primary: #ffffff;
-  --luma-primary-soft: #dcfce7;
-  --luma-primary-soft-text: #14532d;
+  --luma-primary-soft: #a5d6a7;
+  --luma-primary-soft-text: #1b5e20;
+  --luma-secondary: #618764;
+  --luma-accent: #66bb6a;
+  --luma-accent-soft: #d7ebd9;
   --luma-danger: #dc2626;
-  --luma-surface-dark: #0e1712;
-  --luma-on-surface-dark: #e7efe9;
+  --luma-surface-dark: #2b5748;
+  --luma-on-surface-dark: #e8f5e9;
 
   /* Map/visualization category accents (Figma legend: education, health,
      RTH, public transport). Used by map markers on screens 2 & 3. */
@@ -24,21 +27,24 @@
 }
 
 [data-theme="dark"] {
-  /* Dark theme — near-black with a green tint (per Figma). */
-  --luma-background: #0a0f0c;
-  --luma-surface: #101711;
-  --luma-surface-muted: #1b241e;
-  --luma-text: #e8eee9;
-  --luma-text-muted: #8ea296;
-  --luma-border: #243126;
-  --luma-primary: #22c55e;
-  --luma-primary-hover: #4ade80;
-  --luma-on-primary: #05270f;
-  --luma-primary-soft: #143120;
-  --luma-primary-soft-text: #86efac;
+  /* Dark mode keeps the same hue family with stronger readable contrast. */
+  --luma-background: #273338;
+  --luma-surface: #2b5748;
+  --luma-surface-muted: #365f50;
+  --luma-text: #e8f5e9;
+  --luma-text-muted: #a5d6a7;
+  --luma-border: #618764;
+  --luma-primary: #a5d6a7;
+  --luma-primary-hover: #e8f5e9;
+  --luma-on-primary: #1b5e20;
+  --luma-primary-soft: #1b5e20;
+  --luma-primary-soft-text: #e8f5e9;
+  --luma-secondary: #618764;
+  --luma-accent: #66bb6a;
+  --luma-accent-soft: #2b5748;
   --luma-danger: #f87171;
-  --luma-surface-dark: #101711;
-  --luma-on-surface-dark: #e8eee9;
+  --luma-surface-dark: #2b5748;
+  --luma-on-surface-dark: #e8f5e9;
 
   --luma-map-education: #60a5fa;
   --luma-map-health: #f87171;
