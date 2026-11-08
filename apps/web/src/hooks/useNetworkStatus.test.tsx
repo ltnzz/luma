@@ -47,4 +47,18 @@ describe('useNetworkStatus', () => {
     expect(result.current.status).toBe('online')
     expect(result.current.isVisible).toBe(false)
   })
+
+  it('membedakan perangkat offline tanpa mencoba menghubungi API', async () => {
+    Object.defineProperty(navigator, 'onLine', { configurable: true, value: false })
+
+    const { result } = renderHook(() => useNetworkStatus())
+    expect(result.current.status).toBe('offline')
+
+    await act(async () => {
+      await result.current.retry()
+    })
+
+    expect(result.current.status).toBe('offline')
+    expect(getApiHealth).not.toHaveBeenCalled()
+  })
 })

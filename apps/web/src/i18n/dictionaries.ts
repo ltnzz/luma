@@ -41,7 +41,7 @@ const id = {
   'dashboard.kpi.airValueLabel': 'catatan data',
   'dashboard.kpi.airSubLabel': 'sungai dipantau',
   'dashboard.kpi.airScopeNote': 'Agregat DKI Jakarta — nilai per wilayah belum tersedia',
-  'dashboard.kpi.aqiUnit': 'ISPU',
+  'dashboard.kpi.aqiUnit': 'AQI US',
   'dashboard.kpi.ratioLabel': 'siswa per guru',
   'dashboard.kpi.schoolsLabel': 'sekolah',
   'dashboard.kpi.studentsLabel': 'siswa',
@@ -116,15 +116,15 @@ const id = {
   'dashboard.legend.transit': 'Transportasi Publik',
   'dashboard.legend.transitSub': 'Koridor Transjakarta & Halte',
   'dashboard.legend.environment': 'Pemantauan Lingkungan',
-  'dashboard.legend.environmentSub': 'Sensor ISPU & Titik Pantau Air',
+  'dashboard.legend.environmentSub': 'AQI US & Titik Pantau Air',
   'dashboard.legend.boundary': 'Batas Administrasi',
   'dashboard.legend.boundarySub': '5 Kota & Kepulauan Seribu',
   'mapFirst.data.title': 'Sumber Data Resmi',
   'mapFirst.data.detail': 'Detail',
   'mapFirst.data.open': 'Buka katalog sumber data resmi DKI Jakarta',
   'mapFirst.data.tooltip': 'Lihat sumber data resmi',
-  'mapFirst.air.title': 'Kualitas Udara (ISPU)',
-  'mapFirst.air.unit': 'ISPU',
+  'mapFirst.air.title': 'Kualitas Udara (AQI US)',
+  'mapFirst.air.unit': 'AQI',
   'mapFirst.air.liveTitle': 'Data kualitas udara diperbarui secara real-time',
   'mapFirst.air.live': 'Real-time',
   'mapFirst.air.loading': 'Memuat',
@@ -199,10 +199,10 @@ const id = {
   'error.retrying': 'Memuat ulang...',
   'connection.online.title': '',
   'connection.online.message': '',
-  'connection.offline.title': 'Koneksi internet terputus',
-  'connection.offline.message': 'Data terbaru belum dapat dimuat. Periksa koneksi internet Anda.',
+  'connection.offline.title': 'Tidak ada koneksi internet',
+  'connection.offline.message': 'Periksa Wi-Fi atau data seluler Anda. Peta tetap dapat digunakan dengan data terakhir yang tersedia.',
   'connection.server-unreachable.title': 'Koneksi ke server terputus',
-  'connection.server-unreachable.message': 'Luma tetap dapat digunakan. Coba lagi untuk memuat data terbaru.',
+  'connection.server-unreachable.message': 'Internet Anda aktif, tetapi server Luma belum dapat dijangkau. Data terakhir tetap ditampilkan jika tersedia.',
   'connection.checking.title': 'Menghubungkan kembali…',
   'connection.checking.message': 'Luma sedang memeriksa koneksi ke server.',
   'connection.recovered.title': 'Koneksi kembali normal',
@@ -243,7 +243,7 @@ const id = {
     'Panel kiri menampilkan kualitas udara (ISPU) secara real-time beserta panduan kesehatan warga. Setiap indikator selalu mencantumkan sumber resminya agar transparan.',
   'tour.step7.title': 'Selamat Bereksplorasi!',
   'tour.step7.body':
-    'Luma siap membantu kamu memahami informasi perkotaan. Temukan sumber data di setiap informasi, lalu jelajahi detailnya melalui tombol Detail. Kamu bisa membuka panduan ini kembali kapan saja melalui menu Bantuan',
+    ' kembali kapan saja melalui menu Bantuan',
 } as const
 
 export type TranslationKey = keyof typeof id
@@ -289,7 +289,7 @@ const en: Record<TranslationKey, string> = {
   'dashboard.kpi.airValueLabel': 'data records',
   'dashboard.kpi.airSubLabel': 'monitored rivers',
   'dashboard.kpi.airScopeNote': 'DKI Jakarta-wide aggregate — per-region values unavailable',
-  'dashboard.kpi.aqiUnit': 'ISPU index',
+  'dashboard.kpi.aqiUnit': 'US AQI',
   'dashboard.kpi.ratioLabel': 'students per teacher',
   'dashboard.kpi.schoolsLabel': 'schools',
   'dashboard.kpi.studentsLabel': 'students',
@@ -371,7 +371,7 @@ const en: Record<TranslationKey, string> = {
   'mapFirst.data.detail': 'Details',
   'mapFirst.data.open': 'Open the official DKI Jakarta data catalog',
   'mapFirst.data.tooltip': 'View official data sources',
-  'mapFirst.air.title': 'Air Quality (AQI)',
+  'mapFirst.air.title': 'Air Quality (US AQI)',
   'mapFirst.air.unit': 'AQI',
   'mapFirst.air.liveTitle': 'Air quality data is updated in real time',
   'mapFirst.air.live': 'Real-time',
@@ -447,10 +447,10 @@ const en: Record<TranslationKey, string> = {
   'error.retrying': 'Reloading...',
   'connection.online.title': '',
   'connection.online.message': '',
-  'connection.offline.title': 'Internet connection lost',
-  'connection.offline.message': 'The latest data could not be loaded. Check your internet connection.',
+  'connection.offline.title': 'No internet connection',
+  'connection.offline.message': 'Check your Wi-Fi or mobile data. The map remains available with the latest saved data.',
   'connection.server-unreachable.title': 'Server connection lost',
-  'connection.server-unreachable.message': 'Luma remains available. Retry to load the latest data.',
+  'connection.server-unreachable.message': 'Your internet is active, but the Luma server cannot be reached. The latest saved data remains available.',
   'connection.checking.title': 'Reconnecting…',
   'connection.checking.message': 'Luma is checking the server connection.',
   'connection.recovered.title': 'Connection restored',
@@ -473,7 +473,7 @@ const en: Record<TranslationKey, string> = {
     'Explore the map with drag, the +/− and reset controls here. At low zoom levels, nearby markers merge into clusters — click a cluster to zoom in. The satellite toggle sits right below.',
   'tour.step3.title': 'Choose a Region',
   'tour.step3.body':
-    'Use the region selector to focus on one administrative city — the map and all data follow your choice. Right next to it you will find the language (ID/EN) and light/dark theme toggles.',
+    'Use the region selector to focus on one administrative city, the map and all data follow your choice.',
   'tour.stepLanguage.title': 'Choose Your Language',
   'tour.stepLanguage.body':
     'You can switch the Luma interface between Indonesian and English using this control.',
@@ -489,9 +489,9 @@ const en: Record<TranslationKey, string> = {
   'tour.step6.title': 'Environmental Information',
   'tour.step6.body':
     'The left panel shows real-time air quality (AQI) with health guidance for residents. Every indicator always lists its official data source for transparency.',
-  'tour.step7.title': 'Data Sources & Navigation',
+  'tour.step7.title': 'Start Exploring!',
   'tour.step7.body':
-    'Last: the "Official Data Sources" card opens the full data catalog page for deeper exploration. Want to see this tour again? Use the Help (?) button in the navbar anytime.',
+    'Luma helps you understand urban information. Explore the sources behind each piece of information and discover more through the Detail button. You can revisit this guide anytime from the Help menu.',
 }
 
 export const DEFAULT_LANGUAGE: Language = 'id'

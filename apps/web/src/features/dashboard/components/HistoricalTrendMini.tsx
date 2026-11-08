@@ -14,7 +14,11 @@ function asRows(value: unknown): Array<Record<string, unknown>> {
     : []
 }
 
-function buildTrend(sector: AnalyticsSector, data: SectorAnalytics | null): { points: TrendPoint[]; unit: string } {
+function buildTrend(
+  sector: AnalyticsSector,
+  data: SectorAnalytics | null,
+  language: 'id' | 'en',
+): { points: TrendPoint[]; unit: string } {
   if (!data) return { points: [], unit: '' }
 
   if (sector === 'udara') {
@@ -33,7 +37,7 @@ function buildTrend(sector: AnalyticsSector, data: SectorAnalytics | null): { po
           ? [{ label: String(row.periode ?? '—'), value: row.populasi_terlayani_pct }]
           : [],
       ),
-      unit: '% populasi',
+      unit: language === 'id' ? '% populasi' : '% population',
     }
   }
 
@@ -42,7 +46,7 @@ function buildTrend(sector: AnalyticsSector, data: SectorAnalytics | null): { po
       points: Object.entries(data.by_periode)
         .flatMap(([label, value]) => typeof value === 'number' ? [{ label, value }] : [])
         .sort((a, b) => a.label.localeCompare(b.label)),
-      unit: 'lokasi',
+      unit: language === 'id' ? 'entri' : 'records',
     }
   }
 
@@ -53,9 +57,9 @@ export function HistoricalTrendMini({ sector, accent = '#22c55e' }: { sector: An
   const { language } = useTranslation()
   const { status, data } = useSectorAnalytics(sector)
   const copy = language === 'id'
-    ? { title: 'Tren historis DKI', unavailable: 'Seri historis belum tersedia' }
-    : { title: 'DKI historical trend', unavailable: 'Historical series unavailable' }
-  const { points, unit } = buildTrend(sector, data)
+    ? { title: 'Tren historis DKI', unavailable: 'Seri historis belum tersedia', stable: 'Stabil' }
+    : { title: 'DKI historical trend', unavailable: 'Historical series unavailable', stable: 'Stable' }
+  const { points, unit } = buildTrend(sector, data, language)
 
   if (status === 'loading') return <Skeleton className="h-[54px] w-full rounded-lg" />
   if (status !== 'success' || points.length < 2) {
@@ -83,7 +87,7 @@ export function HistoricalTrendMini({ sector, accent = '#22c55e' }: { sector: An
       <div className="mb-1 flex items-center justify-between gap-2 text-[10px]">
         <span className="font-bold text-foreground">{copy.title}</span>
         <span className="font-semibold text-muted">
-          {delta > 0 ? '+' : ''}{formatter.format(delta)} {unit}
+          {delta === 0 ? copy.stable : `${delta > 0 ? '+' : ''}${formatter.format(delta)} ${unit}`}
         </span>
       </div>
       <svg viewBox={`0 0 ${width} ${height}`} className="h-8 w-full overflow-visible" role="img">

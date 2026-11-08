@@ -15,7 +15,8 @@ import { useTranslation } from '../../i18n/useTranslation'
 import { Skeleton } from './Skeleton'
 import { TargetIcon, SatelliteIcon } from './Icons'
 import jakartaBoundary from '../../data/jakarta-boundary.json'
-import jakartaSubdistricts from '../../data/jakarta-subdistricts-boundary.json'
+import jakartaCityBoundaries from '../../data/jakarta-subdistricts-boundary.json'
+import { validateJakartaBoundaryData } from '../../data/jakarta-boundary-validation'
 import transitNetwork from '../../data/transit-network.json'
 import { CITY_AGGREGATES } from '../../data/city-aggregates'
 import { TRANSJAKARTA_CORRIDORS } from '../../data/transit-corridors'
@@ -36,6 +37,9 @@ type StyleSpecification = Exclude<NonNullable<Parameters<MapLibreMap['setStyle']
 type FilterSpecification = NonNullable<Parameters<MapLibreMap['setFilter']>[1]>
 type GeoJSONData = Parameters<GeoJSONSource['setData']>[0]
 type ExpressionSpecification = Parameters<MapLibreMap['setPaintProperty']>[2]
+
+const CITY_BOUNDARY_SOURCE_ID = 'jakarta-city-boundary'
+const CITY_BOUNDARY_VALIDATION = validateJakartaBoundaryData(jakartaCityBoundaries)
 
 export type MapMode = 'light' | 'dark' | 'satellite'
 
@@ -189,8 +193,8 @@ interface MarkerEntry {
 // Helper untuk menambahkan garis batas tebal (bold boundary) DKI Jakarta
 function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
   try {
-    const boundaryColor = mode === 'dark' ? '#22c55e' : (mode === 'satellite' ? '#4ade80' : '#16a34a')
-    const glowColor = mode === 'dark' ? '#143120' : '#dcfce7'
+    const boundaryColor = mode === 'dark' ? '#a5d6a7' : (mode === 'satellite' ? '#66bb6a' : '#1b5e20')
+    const glowColor = mode === 'dark' ? '#2b5748' : '#e8f5e9'
 
     // 1. Source Batas Provinsi DKI Jakarta
     if (!map.getSource('jakarta-province-boundary')) {
@@ -260,20 +264,27 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
       })
     }
 
+    // Dataset ini tervalidasi pada level kota/kabupaten (NAME_2), bukan
+    // kecamatan (NAME_3). Jangan aktifkan selector kecamatan dari layer ini.
+    if (!CITY_BOUNDARY_VALIDATION.isValidCityBoundary) {
+      console.error('[jakarta city boundary invalid]', CITY_BOUNDARY_VALIDATION.issues)
+      return
+    }
+
     // 4. Garis Batas Antar-Wilayah Kota Administrasi (Dashed lembut di dalam Jakarta)
-    if (!map.getSource('jakarta-subdistricts-boundary')) {
-      map.addSource('jakarta-subdistricts-boundary', {
+    if (!map.getSource(CITY_BOUNDARY_SOURCE_ID)) {
+      map.addSource(CITY_BOUNDARY_SOURCE_ID, {
         type: 'geojson',
-        data: jakartaSubdistricts as unknown as GeoJSONData,
+        data: jakartaCityBoundaries as unknown as GeoJSONData,
       })
     }
 
     // Layer Dimming untuk area di luar kota aktif saat Layer 2 (Per-Kota)
-    if (!map.getLayer('jakarta-subdistricts-dim-fill')) {
+    if (!map.getLayer('jakarta-city-dim-fill')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-dim-fill',
+        id: 'jakarta-city-dim-fill',
         type: 'fill',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'fill-color': mode === 'dark' ? '#000000' : '#0f172a',
@@ -283,11 +294,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
     }
 
     // Layer Highlight Fill untuk kota yang terpilih saat Layer 2
-    if (!map.getLayer('jakarta-subdistricts-focus-fill')) {
+    if (!map.getLayer('jakarta-city-focus-fill')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-focus-fill',
+        id: 'jakarta-city-focus-fill',
         type: 'fill',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'fill-color': boundaryColor,
@@ -297,11 +308,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
     }
 
     // Interactive pointer surface for city polygons in Layer 1
-    if (!map.getLayer('jakarta-subdistricts-interactive')) {
+    if (!map.getLayer('jakarta-city-interactive')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-interactive',
+        id: 'jakarta-city-interactive',
         type: 'fill',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         paint: {
           'fill-color': '#000000',
           'fill-opacity': 0.001,
@@ -309,11 +320,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
       })
     }
 
-    if (!map.getLayer('jakarta-subdistricts-line')) {
+    if (!map.getLayer('jakarta-city-line')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-line',
+        id: 'jakarta-city-line',
         type: 'line',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         paint: {
           'line-color': boundaryColor,
           'line-width': 1.2,
@@ -328,11 +339,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
     }
 
     // Garis Batas Fokus Kota Terpilih (Stroke BOLD & Glow)
-    if (!map.getLayer('jakarta-subdistricts-focus-glow')) {
+    if (!map.getLayer('jakarta-city-focus-glow')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-focus-glow',
+        id: 'jakarta-city-focus-glow',
         type: 'line',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'line-color': glowColor,
@@ -347,11 +358,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
       })
     }
 
-    if (!map.getLayer('jakarta-subdistricts-focus-line')) {
+    if (!map.getLayer('jakarta-city-focus-line')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-focus-line',
+        id: 'jakarta-city-focus-line',
         type: 'line',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'line-color': boundaryColor,
@@ -687,7 +698,7 @@ export function InteractiveMap({
     })
 
     // Interaktivitas klik & hover pada poligon wilayah kota administrasi di Layer 1
-    const handleSubdistrictClick = (e: {
+    const handleCityBoundaryClick = (e: {
       features?: Array<{
         properties?: Record<string, unknown>
       }>
@@ -702,19 +713,19 @@ export function InteractiveMap({
       }
     }
 
-    const handleSubdistrictEnter = () => {
+    const handleCityBoundaryEnter = () => {
       if (!selectedWilayahRef.current || selectedWilayahRef.current === 'ALL') {
         map.getCanvas().style.cursor = 'pointer'
       }
     }
 
-    const handleSubdistrictLeave = () => {
+    const handleCityBoundaryLeave = () => {
       map.getCanvas().style.cursor = ''
     }
 
-    map.on('click', 'jakarta-subdistricts-interactive', handleSubdistrictClick)
-    map.on('mouseenter', 'jakarta-subdistricts-interactive', handleSubdistrictEnter)
-    map.on('mouseleave', 'jakarta-subdistricts-interactive', handleSubdistrictLeave)
+    map.on('click', 'jakarta-city-interactive', handleCityBoundaryClick)
+    map.on('mouseenter', 'jakarta-city-interactive', handleCityBoundaryEnter)
+    map.on('mouseleave', 'jakarta-city-interactive', handleCityBoundaryLeave)
 
     // Interaktivitas hover pada stasiun transit
     const stationPopup = new Popup({
@@ -862,9 +873,9 @@ export function InteractiveMap({
       clearTimeout(timer)
       resizeObserver.disconnect()
       stationPopup.remove()
-      map.off('click', 'jakarta-subdistricts-interactive', handleSubdistrictClick)
-      map.off('mouseenter', 'jakarta-subdistricts-interactive', handleSubdistrictEnter)
-      map.off('mouseleave', 'jakarta-subdistricts-interactive', handleSubdistrictLeave)
+      map.off('click', 'jakarta-city-interactive', handleCityBoundaryClick)
+      map.off('mouseenter', 'jakarta-city-interactive', handleCityBoundaryEnter)
+      map.off('mouseleave', 'jakarta-city-interactive', handleCityBoundaryLeave)
       map.off('mouseenter', 'transit-stations-circle', handleStationEnter)
       map.off('mouseleave', 'transit-stations-circle', handleStationLeave)
       map.off('click', 'transit-stations-circle', handleStationClick)
@@ -888,9 +899,11 @@ export function InteractiveMap({
   // Fly to focus coordinate if updated
   useEffect(() => {
     if (!mapRef.current || !focusCoords) return
-    mapRef.current.flyTo({
+    const map = mapRef.current
+    const targetZoom = focusZoom ?? Math.max(map.getZoom(), 15)
+    map.flyTo({
       center: focusCoords,
-      zoom: focusZoom ?? 15,
+      zoom: targetZoom,
       speed: 1.4,
       curve: 1.2,
       essential: true,
@@ -1540,27 +1553,27 @@ export function InteractiveMap({
     }
 
     // 4. Highlight Batas Kota Terpilih & Dimming Wilayah Luar
-    if (map.getLayer('jakarta-subdistricts-dim-fill')) {
+    if (map.getLayer('jakarta-city-dim-fill')) {
       map.setFilter(
-        'jakarta-subdistricts-dim-fill',
+        'jakarta-city-dim-fill',
         isLayer2 && activeCity ? ['!=', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-    if (map.getLayer('jakarta-subdistricts-focus-fill')) {
+    if (map.getLayer('jakarta-city-focus-fill')) {
       map.setFilter(
-        'jakarta-subdistricts-focus-fill',
+        'jakarta-city-focus-fill',
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-    if (map.getLayer('jakarta-subdistricts-focus-glow')) {
+    if (map.getLayer('jakarta-city-focus-glow')) {
       map.setFilter(
-        'jakarta-subdistricts-focus-glow',
+        'jakarta-city-focus-glow',
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-    if (map.getLayer('jakarta-subdistricts-focus-line')) {
+    if (map.getLayer('jakarta-city-focus-line')) {
       map.setFilter(
-        'jakarta-subdistricts-focus-line',
+        'jakarta-city-focus-line',
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
@@ -1695,7 +1708,7 @@ export function InteractiveMap({
           onClick={() => switchMode(mapMode === 'satellite' ? themeMapMode : 'satellite')}
           className={`flex h-8 w-8 items-center justify-center rounded-xl border shadow-md transition-colors cursor-pointer ${
             mapMode === 'satellite'
-              ? 'border-primary/70 bg-primary text-white hover:bg-primary-hover'
+              ? 'border-primary/70 bg-primary text-on-primary hover:bg-primary-hover'
               : 'border-border bg-surface text-muted hover:bg-surface-muted hover:text-foreground'
           }`}
           title={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}

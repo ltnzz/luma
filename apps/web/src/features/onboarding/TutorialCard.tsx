@@ -208,6 +208,11 @@ export function TutorialCard({
 
   const progress = totalSteps > 0 ? (stepNumber / totalSteps) * 100 : 100
   const isHero = variant === 'hero'
+  // No Back on the Welcome screen (isFirst): it only appears from step 2
+  // onward, in both first-visit and replay sessions. The last step keeps it
+  // alongside the Finish button.
+  const showBack = !isFirst
+  const hasLeftActions = showBack || Boolean(onSkip)
 
   return (
     <section
@@ -317,28 +322,37 @@ export function TutorialCard({
       )}
 
       {/* Actions */}
-      <div className={isHero ? 'flex items-center justify-between gap-3' : 'mt-1 flex items-center justify-between gap-3'}>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={onBack}
-            disabled={isFirst}
-            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:text-foreground disabled:cursor-not-allowed disabled:opacity-35"
-            aria-label={t('tour.back')}
-          >
-            {t('tour.back')}
-          </button>
-          {onSkip && (
-            <button
-              type="button"
-              onClick={onSkip}
-              className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:text-foreground"
-              aria-label={t('tour.skip')}
-            >
-              {t('tour.skip')}
-            </button>
-          )}
-        </div>
+      <div
+        className={
+          isHero
+            ? `flex items-center gap-3 ${hasLeftActions ? 'justify-between' : 'justify-center'}`
+            : 'mt-1 flex items-center justify-between gap-3'
+        }
+      >
+        {hasLeftActions && (
+          <div className="flex items-center gap-1">
+            {showBack && (
+              <button
+                type="button"
+                onClick={onBack}
+                className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:text-foreground"
+                aria-label={t('tour.back')}
+              >
+                {t('tour.back')}
+              </button>
+            )}
+            {onSkip && (
+              <button
+                type="button"
+                onClick={onSkip}
+                className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:text-foreground"
+                aria-label={t('tour.skip')}
+              >
+                {t('tour.skip')}
+              </button>
+            )}
+          </div>
+        )}
         <button
           ref={actionRef}
           type="button"

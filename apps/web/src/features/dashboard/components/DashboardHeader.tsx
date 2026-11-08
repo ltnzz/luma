@@ -4,13 +4,13 @@ import ThemeToggle from '../../../components/ThemeToggle'
 import { MapPinIcon, ChevronDownIcon, HelpCircleIcon } from '../../../components/ui/Icons'
 
 const WILAYAH_ITEMS = [
-  { key: 'ALL', label: 'Seluruh DKI Jakarta', logoSrc: '/region-logos/dki-jakarta.png', districts: 6 },
-  { key: 'JAKARTA PUSAT', label: 'Jakarta Pusat', logoSrc: '/region-logos/jakarta-pusat.png', districts: 8 },
-  { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan', logoSrc: '/region-logos/jakarta-selatan.png', districts: 10 },
-  { key: 'JAKARTA BARAT', label: 'Jakarta Barat', logoSrc: '/region-logos/jakarta-barat.png', districts: 8 },
-  { key: 'JAKARTA UTARA', label: 'Jakarta Utara', logoSrc: '/region-logos/jakarta-utara.png', districts: 6 },
-  { key: 'JAKARTA TIMUR', label: 'Jakarta Timur', logoSrc: '/region-logos/jakarta-timur.png', districts: 10 },
-  { key: 'KEP. SERIBU', label: 'Kep. Seribu', logoSrc: '/region-logos/kepulauan-seribu.png', districts: 2 },
+  { key: 'ALL', label: 'Seluruh DKI Jakarta', labelEn: 'All DKI Jakarta', logoSrc: '/region-logos/dki-jakarta.png', districts: 6 },
+  { key: 'JAKARTA PUSAT', label: 'Jakarta Pusat', labelEn: 'Central Jakarta', logoSrc: '/region-logos/jakarta-pusat.png', districts: 8 },
+  { key: 'JAKARTA SELATAN', label: 'Jakarta Selatan', labelEn: 'South Jakarta', logoSrc: '/region-logos/jakarta-selatan.png', districts: 10 },
+  { key: 'JAKARTA BARAT', label: 'Jakarta Barat', labelEn: 'West Jakarta', logoSrc: '/region-logos/jakarta-barat.png', districts: 8 },
+  { key: 'JAKARTA UTARA', label: 'Jakarta Utara', labelEn: 'North Jakarta', logoSrc: '/region-logos/jakarta-utara.png', districts: 6 },
+  { key: 'JAKARTA TIMUR', label: 'Jakarta Timur', labelEn: 'East Jakarta', logoSrc: '/region-logos/jakarta-timur.png', districts: 10 },
+  { key: 'KEP. SERIBU', label: 'Kep. Seribu', labelEn: 'Thousand Islands', logoSrc: '/region-logos/kepulauan-seribu.png', districts: 2 },
 ] as const
 
 interface DashboardHeaderProps {
@@ -64,13 +64,13 @@ export function DashboardHeader({
 
   const timeString = useMemo(() => {
     return (
-      currentTime.toLocaleTimeString('id-ID', {
+      currentTime.toLocaleTimeString(language === 'id' ? 'id-ID' : 'en-US', {
         hour: '2-digit',
         minute: '2-digit',
         second: '2-digit',
       }) + ' WIB'
     )
-  }, [currentTime])
+  }, [currentTime, language])
 
   const dateString = useMemo(() => {
     return currentTime.toLocaleDateString(language === 'id' ? 'id-ID' : 'en-US', {
@@ -86,9 +86,10 @@ export function DashboardHeader({
     return found ?? WILAYAH_ITEMS[0]
   }, [activeWilayah])
 
-  const currentWilayahLabel = currentWilayah.key === 'ALL'
-    ? t('dashboard.region.ALL')
-    : currentWilayah.label
+  const getRegionLabel = (item: (typeof WILAYAH_ITEMS)[number]) =>
+    language === 'en' ? item.labelEn : item.label
+
+  const currentWilayahLabel = getRegionLabel(currentWilayah)
 
   const getRegionMeta = (item: (typeof WILAYAH_ITEMS)[number]) => {
     if (item.key === 'ALL') {
@@ -108,7 +109,7 @@ export function DashboardHeader({
         <img
           src="/luma-logo.png"
           alt="Luma"
-          className="h-auto w-[72px] object-contain transition-[filter] duration-200 sm:w-[112px] dark:brightness-[2.15] dark:contrast-[1.08] dark:saturate-[1.25] dark:drop-shadow-[0_0_5px_rgba(255,255,255,0.20)] dark:hover:drop-shadow-[0_0_7px_rgba(255,255,255,0.27)]"
+          className="luma-brand-logo h-auto w-[72px] object-contain transition-[filter] duration-200 sm:w-[112px]"
         />
       </a>
 
@@ -153,7 +154,7 @@ export function DashboardHeader({
               <div
                 role="listbox"
                 aria-label={t('mapFirst.header.selectRegion')}
-                className="fixed inset-x-2 top-[3.75rem] z-[80] overflow-hidden rounded-2xl luma-map-card luma-region-dropdown p-1.5 animate-in fade-in slide-in-from-top-1 duration-150 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[288px]"
+                className="fixed inset-x-2 top-[3.75rem] z-[80] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain rounded-2xl luma-map-card luma-region-dropdown p-1.5 animate-in fade-in slide-in-from-top-1 duration-150 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[288px]"
               >
                 <div className="mb-1 flex items-center justify-between border-b border-border/50 px-2.5 py-2">
                   <div>
@@ -168,7 +169,7 @@ export function DashboardHeader({
                 <div className="grid gap-0.5">
                   {WILAYAH_ITEMS.map((item) => {
                     const isSelected = activeWilayah === item.key
-                    const label = item.key === 'ALL' ? t('dashboard.region.ALL') : item.label
+                    const label = getRegionLabel(item)
                     return (
                       <button
                         key={item.key}
@@ -202,7 +203,7 @@ export function DashboardHeader({
                           <span className="mt-0.5 block truncate text-[10.5px] font-medium text-muted">{getRegionMeta(item)}</span>
                         </span>
                         <span className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold transition ${
-                          isSelected ? 'bg-primary text-white' : 'text-transparent'
+                          isSelected ? 'bg-primary text-on-primary' : 'text-transparent'
                         }`} aria-hidden="true">
                           ✓
                         </span>
