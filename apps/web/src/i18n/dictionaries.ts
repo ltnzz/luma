@@ -208,6 +208,34 @@ const id = {
   'connection.recovered.title': 'Koneksi kembali normal',
   'connection.recovered.message': 'Data Luma sedang diperbarui.',
   'connection.retry': 'Coba Lagi',
+  'tour.cardAria': 'Tur pengenalan Luma',
+  'tour.stepLabel': 'Langkah',
+  'tour.progressAria': 'Kemajuan tur',
+  'tour.back': 'Kembali',
+  'tour.next': 'Lanjut',
+  'tour.finish': 'Selesai',
+  'tour.restartTitle': 'Ulang tur pengenalan',
+  'tour.step1.title': 'Selamat datang di Luma',
+  'tour.step1.body':
+    'Luma adalah platform pemetaan & analitik perkotaan DKI Jakarta. Ikuti tur singkat ini untuk mengenal peta interaktif, fasilitas publik, data lingkungan, dan sumber data resmi.',
+  'tour.step2.title': 'Peta Interaktif',
+  'tour.step2.body':
+    'Eksplorasi peta dengan drag, tombol +/−, dan reset di sini. Saat zoom rendah, pin yang berdekatan membentuk cluster — klik cluster untuk memperbesar. Tombol citra satelit berada tepat di bawah.',
+  'tour.step3.title': 'Pilih Wilayah',
+  'tour.step3.body':
+    'Gunakan pemilih wilayah untuk fokus pada satu kota administrasi — peta dan semua data akan menyesuaikan. Di sebelahnya tersedia pengalih Bahasa (ID/EN) dan tema terang/gelap.',
+  'tour.step4.title': 'Kategori Fasilitas Publik',
+  'tour.step4.body':
+    'Dock ini memfilter data peta: Faskes, Ruang Hijau, Sekolah, Transum, dan Air Bersih. Klik satu kategori untuk mengaktifkan filter; panel sub-filter muncul di kiri layar.',
+  'tour.step5.title': 'Detail Fasilitas',
+  'tour.step5.body':
+    'Klik pin fasilitas di peta untuk membuka panel detailnya di sisi kanan: nama, alamat, kategori, dan data rinci fasilitas tersebut.',
+  'tour.step6.title': 'Informasi Lingkungan',
+  'tour.step6.body':
+    'Panel kiri menampilkan kualitas udara (ISPU) secara real-time beserta panduan kesehatan warga. Setiap indikator selalu mencantumkan sumber resminya agar transparan.',
+  'tour.step7.title': 'Sumber Data & Navigasi',
+  'tour.step7.body':
+    'Terakhir: kartu "Sumber Data Resmi" membuka halaman katalog data lengkap untuk eksplorasi lebih dalam. Ingin melihat tur ini lagi? Buka tombol Bantuan (?) di navbar kapan pun.',
 } as const
 
 export type TranslationKey = keyof typeof id
@@ -420,6 +448,34 @@ const en: Record<TranslationKey, string> = {
   'connection.recovered.title': 'Connection restored',
   'connection.recovered.message': 'Luma data is being refreshed.',
   'connection.retry': 'Retry',
+  'tour.cardAria': 'Luma guided tour',
+  'tour.stepLabel': 'Step',
+  'tour.progressAria': 'Tour progress',
+  'tour.back': 'Back',
+  'tour.next': 'Next',
+  'tour.finish': 'Finish',
+  'tour.restartTitle': 'Replay the guided tour',
+  'tour.step1.title': 'Welcome to Luma',
+  'tour.step1.body':
+    'Luma is the urban mapping & analytics platform for DKI Jakarta. Follow this short tour to get to know the interactive map, public facilities, environmental data, and official data sources.',
+  'tour.step2.title': 'Interactive Map',
+  'tour.step2.body':
+    'Explore the map with drag, the +/− and reset controls here. At low zoom levels, nearby markers merge into clusters — click a cluster to zoom in. The satellite toggle sits right below.',
+  'tour.step3.title': 'Choose a Region',
+  'tour.step3.body':
+    'Use the region selector to focus on one administrative city — the map and all data follow your choice. Right next to it you will find the language (ID/EN) and light/dark theme toggles.',
+  'tour.step4.title': 'Public Facility Categories',
+  'tour.step4.body':
+    'This dock filters the map data: healthcare, green space, schools, transit, and clean water. Click one category to activate the filter; a sub-filter panel appears on the left.',
+  'tour.step5.title': 'Facility Details',
+  'tour.step5.body':
+    'Click a facility marker on the map to open its detail panel on the right: name, address, category, and more detailed facility data.',
+  'tour.step6.title': 'Environmental Information',
+  'tour.step6.body':
+    'The left panel shows real-time air quality (AQI) with health guidance for residents. Every indicator always lists its official data source for transparency.',
+  'tour.step7.title': 'Data Sources & Navigation',
+  'tour.step7.body':
+    'Last: the "Official Data Sources" card opens the full data catalog page for deeper exploration. Want to see this tour again? Use the Help (?) button in the navbar anytime.',
 }
 
 export const DEFAULT_LANGUAGE: Language = 'id'

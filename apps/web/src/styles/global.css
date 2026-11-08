@@ -207,6 +207,47 @@ select:focus-visible {
   animation: luma-modal-content-out 140ms ease-in both;
 }
 
+/* Guided tour (onboarding) overlay animations. */
+@keyframes luma-tour-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes luma-tour-ring-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.luma-tour-backdrop {
+  animation: luma-tour-fade-in 220ms ease-out both;
+}
+
+.luma-tour-ring {
+  animation: luma-tour-ring-in 220ms ease-out both;
+}
+
+.luma-tour-card {
+  animation: luma-tour-fade-in 180ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-tour-backdrop,
+  .luma-tour-ring,
+  .luma-tour-card {
+    animation-duration: 1ms !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .luma-modal-overlay,
   .luma-modal-container,

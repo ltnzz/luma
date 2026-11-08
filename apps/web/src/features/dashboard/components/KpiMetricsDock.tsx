@@ -41,6 +41,7 @@ export function KpiMetricsDock({
     <div
       className="pointer-events-auto flex w-[calc(100vw-1rem)] items-center justify-start gap-0.5 overflow-x-auto rounded-xl luma-map-card luma-glass-hover pl-3.5 pr-2.5 py-1.5 select-none scrollbar-none snap-x snap-mandatory animate-in fade-in slide-in-from-bottom-3 duration-300 sm:w-max sm:max-w-[96vw] sm:justify-between sm:gap-1 sm:overflow-visible"
       aria-label={t('mapFirst.dock.aria')}
+      data-tour="facility-dock"
     >
       {/* 1. Air Bersih */}
       <button

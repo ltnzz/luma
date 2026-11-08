@@ -1619,6 +1619,7 @@ export function InteractiveMap({
     <div
       style={height !== '100%' ? { height } : undefined}
       className={`relative w-full h-full overflow-hidden ${className}`}
+      data-tour="map-canvas"
     >
       {/* Kontainer Peta */}
       <div
@@ -1651,7 +1652,7 @@ export function InteractiveMap({
       )}
 
       {/* Floating Control Stack di Kanan Bawah: Zoom (+/-/Reset) dan di bawahnya Mode 3-Icon Switcher */}
-      <div className="pointer-events-auto absolute bottom-4 right-4 z-10 flex flex-col items-end gap-2">
+      <div data-tour="map-controls" className="pointer-events-auto absolute bottom-4 right-4 z-10 flex flex-col items-end gap-2">
         {/* Kontrol Navigasi (Zoom In, Zoom Out, Reset Pandangan) */}
         <div className="flex flex-col rounded-xl border border-border bg-surface shadow-md overflow-hidden">
           <button

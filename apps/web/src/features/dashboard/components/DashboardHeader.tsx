@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from '../../../i18n/useTranslation'
 import ThemeToggle from '../../../components/ThemeToggle'
-import { MapPinIcon, ChevronDownIcon } from '../../../components/ui/Icons'
+import { MapPinIcon, ChevronDownIcon, HelpCircleIcon } from '../../../components/ui/Icons'
 
 const WILAYAH_ITEMS = [
   { key: 'ALL', label: 'Seluruh DKI Jakarta', logoSrc: '/region-logos/dki-jakarta.png', districts: 6 },
@@ -16,16 +16,18 @@ const WILAYAH_ITEMS = [
 interface DashboardHeaderProps {
   activeWilayah?: string
   onSelectWilayah?: (wilayah: string) => void
+  onRestartTutorial?: () => void
 }
 
 /**
  * Unified Modern Navbar (Persis Sesuai Mockup Pen Node 2U1UA):
  * - Kiri: Brand Luma + Region Selector Dropdown (Pill)
- * - Kanan: Live Date & Time Realtime + Switch Bahasa [ID | EN] + Theme Toggle
+ * - Kanan: Live Date & Time Realtime + Switch Bahasa [ID | EN] + Theme Toggle + Help (Tour)
  */
 export function DashboardHeader({
   activeWilayah = 'ALL',
   onSelectWilayah,
+  onRestartTutorial,
 }: DashboardHeaderProps) {
   const { language, setLanguage, t } = useTranslation()
   const [isRegionOpen, setIsRegionOpen] = useState(false)
@@ -124,6 +126,7 @@ export function DashboardHeader({
                   : 'border-border/80 bg-surface hover:border-primary/35 hover:bg-surface-muted/55 shadow-2xs'
               }`}
               aria-haspopup="listbox"
+              data-tour="region-selector"
               aria-expanded={isRegionOpen}
               aria-label={`${t('mapFirst.header.selectRegion')}. ${t('mapFirst.header.current')} ${currentWilayahLabel}`}
             >
@@ -247,6 +250,21 @@ export function DashboardHeader({
 
         {/* Theme Mode Button */}
         <ThemeToggle />
+
+        {/* Help Button: restarts the guided tour */}
+        {onRestartTutorial && (
+          <button
+            type="button"
+            onClick={onRestartTutorial}
+            className="inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs"
+            title={t('tour.restartTitle')}
+            aria-label={t('tour.restartTitle')}
+            data-tooltip={t('tour.restartTitle')}
+            data-tooltip-side="bottom"
+          >
+            <HelpCircleIcon size={16} className="text-foreground" />
+          </button>
+        )}
       </div>
     </header>
   )

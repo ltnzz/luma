@@ -2,12 +2,16 @@ import { useState, useEffect } from 'react'
 import { FullScreenMapDashboard } from './features/dashboard/components/FullScreenMapDashboard'
 import { DashboardHeader } from './features/dashboard/components/DashboardHeader'
 import { DataSourcesComingSoonPage } from './features/dashboard/components/DataSourcesComingSoonPage'
+import { OnboardingOverlay } from './features/onboarding/OnboardingOverlay'
+import { useOnboarding } from './features/onboarding/useOnboarding'
+import { TOUR_STEPS } from './features/onboarding/tour-steps'
 
 export default function App() {
   const [activeWilayah, setActiveWilayah] = useState<string>('ALL')
   const [currentView, setCurrentView] = useState<'dashboard' | 'sumber-data'>(() => {
     return window.location.hash === '#sumber-data' ? 'sumber-data' : 'dashboard'
   })
+  const onboarding = useOnboarding(TOUR_STEPS.length)
 
   // Sinkronisasi navigasi dengan browser hash
   useEffect(() => {
@@ -44,6 +48,7 @@ export default function App() {
               }
             : undefined
         }
+        onRestartTutorial={onboarding.restart}
       />
 
       {/* 2. Main Full-Screen Map Viewport atau Halaman Sumber Data (Coming Soon) */}
@@ -58,6 +63,9 @@ export default function App() {
           <DataSourcesComingSoonPage onBack={handleBackToDashboard} />
         )}
       </main>
+
+      {/* 3. Mandatory first-visit guided tour (spotlight layer above all UI) */}
+      {onboarding.isActive ? <OnboardingOverlay controller={onboarding} steps={TOUR_STEPS} /> : null}
     </div>
   )
 }

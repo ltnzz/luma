@@ -53,7 +53,7 @@ export function AirQualityCard({
   const hasData = status === 'success' && airAqi !== null
 
   return (
-    <div className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2.5 rounded-xl luma-map-card luma-glass-hover p-3.5 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-64">
+    <div data-tour="air-quality" className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2.5 rounded-xl luma-map-card luma-glass-hover p-3.5 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-64">
       {/* 1. Header Card */}
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2.5">
         <div className="flex min-w-0 items-center gap-1.5">
