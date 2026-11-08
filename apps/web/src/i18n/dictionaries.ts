@@ -243,7 +243,7 @@ const id = {
     'Panel kiri menampilkan kualitas udara (ISPU) secara real-time beserta panduan kesehatan warga. Setiap indikator selalu mencantumkan sumber resminya agar transparan.',
   'tour.step7.title': 'Selamat Bereksplorasi!',
   'tour.step7.body':
-    'Luma siap membantu kamu memahami informasi perkotaan. Temukan sumber data di setiap informasi, lalu jelajahi detailnya melalui tombol Detail. Kamu bisa membuka panduan ini kembali kapan saja melalui menu Bantuan',
+    ' kembali kapan saja melalui menu Bantuan',
 } as const
 
 export type TranslationKey = keyof typeof id
@@ -473,7 +473,7 @@ const en: Record<TranslationKey, string> = {
     'Explore the map with drag, the +/− and reset controls here. At low zoom levels, nearby markers merge into clusters — click a cluster to zoom in. The satellite toggle sits right below.',
   'tour.step3.title': 'Choose a Region',
   'tour.step3.body':
-    'Use the region selector to focus on one administrative city — the map and all data follow your choice. Right next to it you will find the language (ID/EN) and light/dark theme toggles.',
+    'Use the region selector to focus on one administrative city, the map and all data follow your choice.',
   'tour.stepLanguage.title': 'Choose Your Language',
   'tour.stepLanguage.body':
     'You can switch the Luma interface between Indonesian and English using this control.',
@@ -489,9 +489,9 @@ const en: Record<TranslationKey, string> = {
   'tour.step6.title': 'Environmental Information',
   'tour.step6.body':
     'The left panel shows real-time air quality (AQI) with health guidance for residents. Every indicator always lists its official data source for transparency.',
-  'tour.step7.title': 'Data Sources & Navigation',
+  'tour.step7.title': 'Start Exploring!',
   'tour.step7.body':
-    'Last: the "Official Data Sources" card opens the full data catalog page for deeper exploration. Want to see this tour again? Use the Help (?) button in the navbar anytime.',
+    'Luma helps you understand urban information. Explore the sources behind each piece of information and discover more through the Detail button. You can revisit this guide anytime from the Help menu.',
 }
 
 export const DEFAULT_LANGUAGE: Language = 'id'
