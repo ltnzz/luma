@@ -177,12 +177,26 @@ interface InteractiveMapProps {
   onSelectCorridor?: (corridorId: string | null) => void
   showWaterNetwork?: boolean
   activeCategory?: string | null
+  regionCardsLoading?: boolean
+  onReady?: () => void
+  onMapError?: () => void
 }
 
 interface MarkerEntry {
   marker: Marker
   innerEl: HTMLDivElement
   popup: Popup
+}
+
+function setFacilityMarkerSelected(entry: MarkerEntry, selected: boolean) {
+  const markerElement = entry.marker.getElement()
+  entry.innerEl.classList.toggle('luma-marker-selected', selected)
+  // Marker tetap berada di layer peta; panel detail harus selalu berada di atasnya.
+  markerElement.classList.remove('z-50')
+  markerElement.style.zIndex = selected ? '12' : ''
+  markerElement.setAttribute('aria-current', selected ? 'true' : 'false')
+  entry.innerEl.style.width = selected ? '34px' : '30px'
+  entry.innerEl.style.height = selected ? '34px' : '30px'
 }
 
 // Helper untuk menambahkan garis batas tebal (bold boundary) DKI Jakarta
@@ -616,6 +630,9 @@ export function InteractiveMap({
   focusedCorridorId,
   onSelectCorridor,
   activeCategory = null,
+  regionCardsLoading = false,
+  onReady,
+  onMapError,
 }: InteractiveMapProps) {
   const { theme } = useTheme()
   const { t, language } = useTranslation()
@@ -631,15 +648,21 @@ export function InteractiveMap({
   const provinsiMarkerRef = useRef<Marker | null>(null)
   const lastMarkerModeRef = useRef<'provinsi' | 'kota' | null>(null)
   const lastActiveCategoryRef = useRef<string | null>(null)
+  const lastMarkerLanguageRef = useRef(language)
+  const lastRegionCardsLoadingRef = useRef<boolean | null>(null)
   const syncCityMarkersRef = useRef<() => void>(() => {})
   const [mapMode, setMapMode] = useState<MapMode>(themeMapMode)
   const modeRef = useRef<MapMode>(themeMapMode)
   const [isLoaded, setIsLoaded] = useState(false)
+  const mapHasLoadedRef = useRef(false)
 
   const selectedWilayahRef = useRef(selectedWilayah)
   const onSelectWilayahRef = useRef(onSelectWilayah)
   const onSelectCorridorRef = useRef(onSelectCorridor)
+  const onReadyRef = useRef(onReady)
+  const onMapErrorRef = useRef(onMapError)
   const facilitiesRef = useRef(facilities)
+  const languageRef = useRef(language)
 
   useEffect(() => {
     selectedWilayahRef.current = selectedWilayah
@@ -654,17 +677,24 @@ export function InteractiveMap({
   }, [onSelectCorridor])
 
   useEffect(() => {
+    onReadyRef.current = onReady
+  }, [onReady])
+
+  useEffect(() => {
+    onMapErrorRef.current = onMapError
+  }, [onMapError])
+
+  useEffect(() => {
     facilitiesRef.current = facilities
   }, [facilities])
 
   useEffect(() => {
-    modeRef.current = mapMode
-  }, [mapMode])
-
-  const languageRef = useRef(language)
-  useEffect(() => {
     languageRef.current = language
   }, [language])
+
+  useEffect(() => {
+    modeRef.current = mapMode
+  }, [mapMode])
 
   // Sinkronisasi data halte terdeduplikasi setiap kali facilities diperbarui
   useEffect(() => {
@@ -680,6 +710,8 @@ export function InteractiveMap({
     if (!mapContainerRef.current) return
 
     let isDisposed = false
+    let hasReportedReady = false
+    mapHasLoadedRef.current = false
 
     const map = new MapLibreMap({
       container: mapContainerRef.current,
@@ -696,6 +728,7 @@ export function InteractiveMap({
     // Task Slicing: pecah penambahan layer menjadi tugas bertahap di bawah 50ms (Zero TBT)
     const handleLoaded = () => {
       if (isDisposed) return
+      mapHasLoadedRef.current = true
       setIsLoaded(true)
       map.resize()
 
@@ -704,6 +737,11 @@ export function InteractiveMap({
         if (isDisposed) return
         applyJakartaBoundary(map, modeRef.current)
         syncCityMarkersRef.current()
+
+        if (!hasReportedReady) {
+          hasReportedReady = true
+          onReadyRef.current?.()
+        }
 
         // Frame 2: Layer infrastruktur (transit & air) di frame berikutnya
         requestAnimationFrame(() => {
@@ -879,9 +917,11 @@ export function InteractiveMap({
 
     map.once('load', handleLoaded)
     map.once('idle', handleLoaded)
-    map.on('error', (e) => {
+    const handleMapError = (e: unknown) => {
       console.error('[MapLibre error]', e)
-    })
+      if (!mapHasLoadedRef.current) onMapErrorRef.current?.()
+    }
+    map.on('error', handleMapError)
 
     // Pastikan resize awal dieksekusi setelah render DOM
     requestAnimationFrame(() => {
@@ -920,6 +960,7 @@ export function InteractiveMap({
       map.off('mouseenter', 'transit-routes-line', handleRouteEnter)
       map.off('mouseleave', 'transit-routes-line', handleRouteLeave)
       map.off('click', 'transit-routes-line', handleRouteClick)
+      map.off('error', handleMapError)
       Object.values(markers).forEach(({ marker, popup }) => {
         popup.remove()
         marker.remove()
@@ -931,6 +972,7 @@ export function InteractiveMap({
       cityMarkersRef.current = {}
       map.remove()
       mapRef.current = null
+      mapHasLoadedRef.current = false
     }
   }, [initialCenter, initialZoom, minZoom, maxZoom, maxBounds])
 
@@ -942,6 +984,7 @@ export function InteractiveMap({
     map.flyTo({
       center: focusCoords,
       zoom: targetZoom,
+      offset: window.innerWidth < 640 ? [60, -90] : [0, 0],
       speed: 1.4,
       curve: 1.2,
       essential: true,
@@ -957,7 +1000,10 @@ export function InteractiveMap({
 
     // Jika di Layer 2 (ada kota spesifik dipilih), lebur / hapus semua marker kota & provinsi
     const isStandaloneMode = Boolean(onFacilitySelect && !onSelectWilayah)
-    const isLayer1Active = !isStandaloneMode && (!selectedWilayah || selectedWilayah === 'ALL')
+    const isLayer1Active =
+      !isStandaloneMode &&
+      (!selectedWilayah || selectedWilayah === 'ALL') &&
+      !activeCategory
 
     if (!isLayer1Active) {
       Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
@@ -988,13 +1034,15 @@ export function InteractiveMap({
         lastMarkerModeRef.current === 'provinsi' &&
         provinsiMarkerRef.current &&
         provinsiMarkerRef.current.getElement()?.isConnected &&
-        lastActiveCategoryRef.current === activeCategory
+        lastActiveCategoryRef.current === activeCategory &&
+        lastMarkerLanguageRef.current === language
       ) {
         return
       }
 
       lastMarkerModeRef.current = 'provinsi'
       lastActiveCategoryRef.current = activeCategory
+      lastMarkerLanguageRef.current = language
 
       if (provinsiMarkerRef.current) {
         provinsiMarkerRef.current.remove()
@@ -1002,7 +1050,7 @@ export function InteractiveMap({
       }
 
       // Hitung metrik dinamis se-DKI sesuai kategori yang aktif di dock bawah
-      let badgeText = `1.740 ${t('mapFirst.map.facilities')}`
+      let badgeText = `${language === 'id' ? '1.740' : '1,740'} ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
       let cardBorder = 'border-primary/50 group-hover:border-primary'
       let dotColor = 'bg-primary'
@@ -1038,6 +1086,8 @@ export function InteractiveMap({
 
       const aqiInfo = getAqiLevel(173) // Rata-rata indeks kualitas udara DKI Jakarta
       const airQualityUnit = t('mapFirst.air.unit')
+      const [badgeValue, ...badgeLabelParts] = badgeText.split(' ')
+      const badgeLabel = badgeLabelParts.join(' ')
       const aqiDot = `<span class="h-2 w-2 shrink-0 rounded-full ring-2 ring-white/70 dark:ring-black/30" style="background-color:${aqiInfo.color}" title="${t('mapFirst.air.title')}: 173 ${airQualityUnit}" aria-label="${t('mapFirst.air.title')}: 173 ${airQualityUnit}"></span>`
 
       const wrapperEl = document.createElement('div')
@@ -1045,7 +1095,7 @@ export function InteractiveMap({
       wrapperEl.style.transformOrigin = 'center bottom'
 
       const cardEl = document.createElement('div')
-      cardEl.className = `luma-region-card min-w-[150px] px-3 py-2 luma-map-card border ${cardBorder} rounded-xl transition-all`
+      cardEl.className = `luma-region-card min-w-[150px] px-3 py-2 luma-map-card luma-glass-hover border ${cardBorder} rounded-xl transition-all`
 
       cardEl.innerHTML = `
         <div class="flex items-center justify-between gap-2">
@@ -1055,7 +1105,9 @@ export function InteractiveMap({
           </div>
           ${aqiDot}
         </div>
-        <span class="mt-1.5 inline-flex max-w-full px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">${badgeText}</span>
+        <span class="luma-region-summary mt-1.5 inline-flex max-w-full px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">
+          <span>${badgeValue}</span><span class="luma-region-summary-label">&nbsp;${badgeLabel}</span>
+        </span>
       `
       wrapperEl.setAttribute('data-scope', 'DKI')
       wrapperEl.setAttribute('role', 'button')
@@ -1104,9 +1156,16 @@ export function InteractiveMap({
       Object.keys(cityMarkersRef.current).length === CITY_AGGREGATES.length &&
       Object.values(cityMarkersRef.current).every((m) => m.getElement()?.isConnected)
 
-    if (allMarkersHealthy && lastActiveCategoryRef.current === activeCategory) return
+    if (
+      allMarkersHealthy &&
+      lastActiveCategoryRef.current === activeCategory &&
+      lastMarkerLanguageRef.current === language &&
+      lastRegionCardsLoadingRef.current === regionCardsLoading
+    ) return
     lastMarkerModeRef.current = 'kota'
     lastActiveCategoryRef.current = activeCategory
+    lastMarkerLanguageRef.current = language
+    lastRegionCardsLoadingRef.current = regionCardsLoading
 
     // Bersihkan instance lama jika kategori berubah atau ada marker rusak
     Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
@@ -1165,7 +1224,7 @@ export function InteractiveMap({
 
       // Card dalam tempat styling, hover effect, dan konten
       const cardEl = document.createElement('div')
-      cardEl.className = `luma-region-card flex items-center justify-center gap-2 px-2.5 py-1.5 min-w-[120px] bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+      cardEl.className = `luma-region-card luma-map-card luma-glass-hover flex min-w-[120px] items-center justify-center gap-2 px-2.5 py-1.5 border ${cardBorder} rounded-xl transition-all`
 
       const airQualityUnit = t('mapFirst.air.unit')
       const aqiBadge = station
@@ -1174,18 +1233,36 @@ export function InteractiveMap({
           </span>`
         : ''
       const displayCityName = language === 'en' ? (CITY_NAME_EN[city.code] ?? city.name) : city.name
+      const loadingLabel = language === 'id' ? 'Memuat data…' : 'Loading data…'
 
-      cardEl.innerHTML = `
-        <div class="flex items-center gap-1.5 whitespace-nowrap">
-          <span class="luma-map-label-text text-xs font-bold text-foreground tracking-tight">${displayCityName}</span>
-          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">${badgeText}</span>
-          ${aqiBadge}
-        </div>
-      `
+      cardEl.setAttribute('aria-busy', String(regionCardsLoading))
+      cardEl.innerHTML = regionCardsLoading
+        ? `
+          <div class="flex w-[132px] flex-col gap-1.5">
+            <span class="luma-map-label-text truncate text-xs font-bold tracking-tight text-foreground">${displayCityName}</span>
+            <div class="flex items-center gap-1.5 text-[9.5px] font-semibold text-muted">
+              <span class="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-primary" aria-hidden="true"></span>
+              <span>${loadingLabel}</span>
+            </div>
+            <span class="luma-loading-track" aria-hidden="true">
+              <span class="luma-loading-progress"></span>
+            </span>
+          </div>
+        `
+        : `
+          <div class="flex items-center gap-1.5 whitespace-nowrap">
+            <span class="luma-map-label-text text-xs font-bold tracking-tight text-foreground">${displayCityName}</span>
+            <span class="rounded-md px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass}">${badgeText}</span>
+            ${aqiBadge}
+          </div>
+        `
       wrapperEl.setAttribute('data-city-code', city.code)
       wrapperEl.setAttribute('role', 'button')
       wrapperEl.setAttribute('tabindex', '0')
-      wrapperEl.setAttribute('aria-label', `${displayCityName}, ${badgeText}`)
+      wrapperEl.setAttribute(
+        'aria-label',
+        regionCardsLoading ? `${displayCityName}, ${t('mapFirst.loading.facilities')}` : `${displayCityName}, ${badgeText}`,
+      )
 
       const notchEl = document.createElement('div')
       notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b ${cardBorder}`
@@ -1213,7 +1290,7 @@ export function InteractiveMap({
 
       cityMarkersRef.current[city.code] = marker
     })
-  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities, t, language])
+  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities, t, language, regionCardsLoading])
 
   useEffect(() => {
     syncCityMarkersRef.current = syncCityMarkers
@@ -1241,7 +1318,8 @@ export function InteractiveMap({
   }, [syncCityMarkers, mapMode])
 
   // =========================================================================
-  // LAYER 2: Marker Fasilitas Individual & Clustered (Hanya aktif saat kota dipilih)
+  // LAYER 2: Marker Fasilitas Individual & Clustered. Pada lingkup provinsi,
+  // marker ikut tampil saat filter fasilitas aktif dan menggantikan marker kota.
   // =========================================================================
   useEffect(() => {
     if (!mapRef.current || !isLoaded) return
@@ -1256,12 +1334,19 @@ export function InteractiveMap({
     }
 
     const isStandaloneMode = Boolean(onFacilitySelect && !onSelectWilayah)
-    if (!isStandaloneMode && (!selectedWilayah || selectedWilayah === 'ALL')) {
+    const isProvinceScope = !selectedWilayah || selectedWilayah === 'ALL'
+    const showsFacilityMarkersAtProvince =
+      isProvinceScope &&
+      Boolean(activeCategory) &&
+      activeCategory !== 'transum' &&
+      activeCategory !== 'air'
+
+    if (!isStandaloneMode && isProvinceScope && !showsFacilityMarkersAtProvince) {
       clearOldMarkers()
       return
     }
 
-    const activeFacilities = isStandaloneMode
+    const activeFacilities = isStandaloneMode || showsFacilityMarkersAtProvince
       ? facilities
       : facilities.filter((f) => !f.wilayah || f.wilayah === selectedWilayah)
 
@@ -1393,7 +1478,9 @@ export function InteractiveMap({
             .setLngLat([group.lng, group.lat])
             .addTo(map)
 
-          markersMapRef.current[f.id] = { marker, innerEl, popup }
+          const markerEntry = { marker, innerEl, popup }
+          markersMapRef.current[f.id] = markerEntry
+          setFacilityMarkerSelected(markerEntry, selectedFacilityId === f.id)
         }
       })
     }
@@ -1407,7 +1494,7 @@ export function InteractiveMap({
       map.off('zoomend', renderMarkers)
       clearOldMarkers()
     }
-  }, [facilities, selectedWilayah, isLoaded, onSelectFacility, onFacilitySelect, onOpenDetail, onSelectWilayah, t, language])
+  }, [facilities, selectedWilayah, selectedFacilityId, isLoaded, onSelectFacility, onFacilitySelect, onOpenDetail, onSelectWilayah, activeCategory, t, language])
 
   // =========================================================================
   // DYNAMIC TRANSIT, BOUNDARY HIGHLIGHT & DIMMING FILTER
@@ -1619,17 +1706,8 @@ export function InteractiveMap({
 
   // Update status visual seleksi tanpa merecreate marker di DOM
   useEffect(() => {
-    Object.entries(markersMapRef.current).forEach(([facilityId, { innerEl }]) => {
-      const isSelected = selectedFacilityId === facilityId
-      if (isSelected) {
-        innerEl.style.width = '34px'
-        innerEl.style.height = '34px'
-        innerEl.classList.add('ring-4', 'ring-primary', 'ring-offset-2', 'scale-115')
-      } else {
-        innerEl.style.width = '30px'
-        innerEl.style.height = '30px'
-        innerEl.classList.remove('ring-4', 'ring-primary', 'ring-offset-2', 'scale-115')
-      }
+    Object.entries(markersMapRef.current).forEach(([facilityId, entry]) => {
+      setFacilityMarkerSelected(entry, selectedFacilityId === facilityId)
     })
   }, [selectedFacilityId])
 
@@ -1708,12 +1786,24 @@ export function InteractiveMap({
             <Skeleton className="h-9 w-44 rounded-2xl bg-surface border border-border/80 shadow-xs" />
             <Skeleton className="h-9 w-28 rounded-2xl bg-surface border border-border/80 shadow-xs" />
           </div>
-          <div className="self-center flex flex-col items-center gap-2.5">
+          <div
+            className="self-center flex flex-col items-center gap-3"
+            role="status"
+            aria-live="polite"
+            aria-label={t('mapFirst.loading.map')}
+          >
             <div className="relative flex h-10 w-10 items-center justify-center">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/25" />
               <span className="relative inline-flex h-4 w-4 rounded-full bg-primary/70" />
             </div>
-            <Skeleton className="h-4 w-36 rounded-full bg-surface border border-border/70 shadow-xs" />
+            <div className="flex w-44 flex-col items-center gap-2">
+              <span className="text-[11px] font-semibold tracking-wide text-foreground/80">
+                {t('mapFirst.loading.map')}
+              </span>
+              <span className="luma-loading-track" aria-hidden="true">
+                <span className="luma-loading-progress" />
+              </span>
+            </div>
           </div>
           <div className="flex justify-between items-end">
             <Skeleton className="h-9 w-32 rounded-xl bg-surface border border-border/80 shadow-xs" />
@@ -1726,15 +1816,17 @@ export function InteractiveMap({
       )}
 
       {/* Floating Control Stack di Kanan Bawah: Zoom (+/-/Reset) dan di bawahnya Mode 3-Icon Switcher */}
-      <div data-tour="map-controls" className="pointer-events-auto absolute bottom-4 right-4 z-10 flex flex-col items-end gap-2">
+      <div data-tour="map-controls" className="pointer-events-auto absolute right-3 top-[34%] bottom-auto z-10 flex flex-col items-end gap-2 sm:right-4 sm:top-auto sm:bottom-4">
         {/* Kontrol Navigasi (Zoom In, Zoom Out, Reset Pandangan) */}
-        <div className="flex flex-col rounded-xl border border-border bg-surface shadow-md overflow-hidden">
+        <div className="flex flex-col rounded-xl border border-border bg-surface shadow-md">
           <button
             type="button"
             onClick={() => mapRef.current?.zoomIn()}
-            className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-t-[0.7rem] border-b border-border text-base font-bold text-foreground transition-colors hover:bg-surface-muted cursor-pointer"
             title={t('mapFirst.map.zoomIn')}
             aria-label={t('mapFirst.map.zoomIn')}
+            data-tooltip={t('mapFirst.map.zoomIn')}
+            data-tooltip-align="end"
           >
             +
           </button>
@@ -1744,15 +1836,19 @@ export function InteractiveMap({
             className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
             title={t('mapFirst.map.zoomOut')}
             aria-label={t('mapFirst.map.zoomOut')}
+            data-tooltip={t('mapFirst.map.zoomOut')}
+            data-tooltip-align="end"
           >
             −
           </button>
           <button
             type="button"
             onClick={handleResetView}
-            className="flex h-8 w-8 items-center justify-center text-primary hover:bg-surface-muted transition-colors cursor-pointer"
+            className="flex h-8 w-8 items-center justify-center rounded-b-[0.7rem] text-primary transition-colors hover:bg-surface-muted cursor-pointer"
             title={t('mapFirst.map.reset')}
             aria-label={t('mapFirst.map.reset')}
+            data-tooltip={t('mapFirst.map.reset')}
+            data-tooltip-align="end"
           >
             <TargetIcon size={15} />
           </button>
@@ -1769,6 +1865,8 @@ export function InteractiveMap({
           }`}
           title={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
           aria-label={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
+          data-tooltip={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
+          data-tooltip-align="end"
         >
           <SatelliteIcon size={14} className="shrink-0" aria-hidden="true" />
         </button>

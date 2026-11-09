@@ -21,7 +21,7 @@ export function CompactDataSourceCard({ onNavigateToDataSources }: CompactDataSo
       type="button"
       onClick={onNavigateToDataSources}
       data-tour="data-sources"
-      className="group pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] items-center justify-between gap-2 rounded-xl luma-map-card luma-glass-hover luma-no-lift px-3.5 py-2.5 select-none text-left cursor-pointer animate-in fade-in slide-in-from-left-2 sm:w-64"
+      className="group pointer-events-auto flex w-[min(72vw,270px)] items-center justify-between gap-2 rounded-xl luma-map-card luma-glass-hover luma-no-lift px-3 py-2 select-none text-left cursor-pointer animate-in fade-in slide-in-from-left-2 sm:w-[280px] sm:px-3.5 sm:py-2.5"
       aria-label={t('mapFirst.data.open')}
     >
       <div className="flex items-center gap-2 min-w-0">

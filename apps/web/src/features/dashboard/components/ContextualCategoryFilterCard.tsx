@@ -136,7 +136,7 @@ export function ContextualCategoryFilterCard({
 
   return (
     <div
-      className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] flex-col gap-2 rounded-xl luma-map-card luma-glass-hover p-3 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-64"
+      className="pointer-events-auto flex w-full max-w-[360px] flex-col gap-2 rounded-xl luma-map-card luma-glass-hover p-2.5 select-none animate-in fade-in slide-in-from-left-2 duration-200 sm:w-[280px] sm:p-3"
     >
       {/* 1. Header: Ikon Kategori, Judul, Scope Badge, dan Tombol Close */}
       <div className="flex items-center justify-between border-b border-border/50 pb-1.5">
@@ -159,6 +159,7 @@ export function ContextualCategoryFilterCard({
           title={copy.close}
           aria-label={copy.close}
           data-tooltip={copy.close}
+          data-tooltip-align="end"
         >
           <CloseIcon size={11} />
         </button>

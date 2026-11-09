@@ -18,13 +18,12 @@ interface KpiMetricsDockProps {
 /**
  * KpiMetricsDock — Dock Ringkasan Metrik Makro Utama & Kontroler Filter Kategori
  * Didesain proporsional, ringkas, dan responsif:
- * - 5 kategori lengkap (Air Bersih, Faskes, Ruang Hijau, Sekolah, Transum) selalu terlihat utuh
+ * - Setiap kategori tampil sebagai kartu mandiri dalam baris yang dapat digeser
  * - Status aktif jelas melalui highlight tema warna tanpa indikator dekoratif berulang
  * - Dimensi seimbang dan tidak bertabrakan dengan legenda di kolom kiri
  */
 export function KpiMetricsDock({
   waterCoverage = 68,
-  waterCoverageLabel = 'Akses',
   isWaterActive = true,
   faskesCount,
   rthCount,
@@ -34,12 +33,16 @@ export function KpiMetricsDock({
   onFilterCategory,
 }: KpiMetricsDockProps) {
   const { language, t } = useTranslation()
+  const mobileLabels = language === 'id'
+    ? { water: 'Air', health: 'Kesehatan', green: 'RTH', school: 'Sekolah', transit: 'Transit' }
+    : { water: 'Water', health: 'Health', green: 'Green', school: 'Schools', transit: 'Transit' }
   const formatCount = (value: number | null) =>
     value === null ? '—' : value.toLocaleString(language === 'id' ? 'id-ID' : 'en-US')
+  const itemClassName = 'luma-map-card luma-glass-hover luma-kpi-pill snap-start flex h-12 w-[88px] min-w-[88px] shrink-0 cursor-pointer items-center justify-start gap-1.5 rounded-xl border border-border/45 px-2 py-1.5 text-left whitespace-nowrap transition-[transform,border-color,background-color] duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:w-[118px] sm:min-w-[118px] sm:gap-2 sm:px-2.5'
 
   return (
     <div
-      className="pointer-events-auto flex w-[calc(100vw-1rem)] touch-pan-x scroll-px-3 items-center justify-start gap-0.5 overflow-x-auto overscroll-x-contain rounded-xl luma-map-card luma-glass-hover pl-3.5 pr-2.5 py-1.5 select-none scrollbar-none snap-x snap-mandatory animate-in fade-in slide-in-from-bottom-3 duration-300 sm:w-max sm:max-w-[96vw] sm:justify-between sm:gap-1 sm:overflow-visible"
+      className="pointer-events-auto flex w-full max-w-[360px] touch-pan-x snap-x snap-mandatory items-center justify-start gap-2 overflow-x-auto overscroll-x-contain px-0.5 py-1 select-none scrollbar-none animate-in fade-in slide-in-from-bottom-3 duration-300 sm:w-max sm:max-w-[96vw] sm:gap-2.5 sm:overflow-visible"
       aria-label={t('mapFirst.dock.aria')}
       data-tour="facility-dock"
     >
@@ -47,21 +50,21 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('air')}
-        className={`luma-glass-item ml-0.5 snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-2 shrink-0 text-left rounded-lg px-2.5 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ml-0.5 ${
           activeCategory === 'air'
-            ? 'bg-sky-500/[0.08] border-transparent'
-            : 'border-transparent hover:bg-surface-muted/45'
-        } ${isWaterActive ? 'opacity-100' : 'opacity-60'}`}
-        title={t('mapFirst.dock.water')}
-        data-tooltip={t('mapFirst.dock.water')}
+            ? 'border-sky-400/55 bg-sky-500/[0.12]'
+            : 'hover:border-sky-400/30 hover:bg-sky-500/[0.06]'
+        }`}
+        data-water-active={isWaterActive}
+        aria-label={t('mapFirst.dock.water')}
         aria-pressed={activeCategory === 'air'}
       >
         <CategoryIconBadge category="water" active={activeCategory === 'air'} />
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.water')}</span>
-          <span className="flex items-baseline gap-1 text-sm font-bold leading-tight text-foreground">
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.water}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.water')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
             <span>{waterCoverage}%</span>
-            <span className="text-[9.5px] font-medium text-muted">{waterCoverageLabel === 'Akses' ? t('mapFirst.dock.access') : waterCoverageLabel}</span>
           </span>
         </div>
       </button>
@@ -70,20 +73,20 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('kesehatan')}
-        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'kesehatan'
-            ? 'bg-rose-500/[0.08] border-transparent'
-            : 'border-transparent hover:bg-surface-muted/45'
+            ? 'border-rose-400/55 bg-rose-500/[0.12]'
+            : 'hover:border-rose-400/30 hover:bg-rose-500/[0.06]'
         }`}
-        title={t('mapFirst.dock.health')}
-        data-tooltip={t('mapFirst.dock.health')}
+        aria-label={t('mapFirst.dock.health')}
         aria-pressed={activeCategory === 'kesehatan'}
       >
         <CategoryIconBadge category="health" active={activeCategory === 'kesehatan'} />
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.health')}</span>
-          <span className="text-sm font-bold leading-tight text-foreground">
-            {formatCount(faskesCount)} <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.healthUnit')}</span>
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.health}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.health')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{formatCount(faskesCount)}</span>
           </span>
         </div>
       </button>
@@ -92,20 +95,20 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('rth')}
-        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'rth'
-            ? 'bg-emerald-500/[0.08] border-transparent'
-            : 'border-transparent hover:bg-surface-muted/45'
+            ? 'border-emerald-400/55 bg-emerald-500/[0.12]'
+            : 'hover:border-emerald-400/30 hover:bg-emerald-500/[0.06]'
         }`}
-        title={t('mapFirst.dock.green')}
-        data-tooltip={t('mapFirst.dock.green')}
+        aria-label={t('mapFirst.dock.green')}
         aria-pressed={activeCategory === 'rth'}
       >
         <CategoryIconBadge category="green" active={activeCategory === 'rth'} />
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.green')}</span>
-          <span className="text-sm font-bold leading-tight text-foreground">
-            {formatCount(rthCount)} <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.greenUnit')}</span>
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.green}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.green')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{formatCount(rthCount)}</span>
           </span>
         </div>
       </button>
@@ -114,21 +117,20 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('sekolah')}
-        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'sekolah'
-            ? 'bg-blue-500/[0.08] border-transparent'
-            : 'border-transparent hover:bg-surface-muted/45'
+            ? 'border-blue-400/55 bg-blue-500/[0.12]'
+            : 'hover:border-blue-400/30 hover:bg-blue-500/[0.06]'
         }`}
-        title={t('mapFirst.dock.school')}
-        data-tooltip={t('mapFirst.dock.school')}
+        aria-label={t('mapFirst.dock.school')}
         aria-pressed={activeCategory === 'sekolah'}
       >
         <CategoryIconBadge category="school" active={activeCategory === 'sekolah'} />
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.school')}</span>
-          <span className="text-sm font-bold leading-tight text-foreground">
-            {formatCount(schoolCount)}{' '}
-            <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.schoolUnit')}</span>
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.school}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.school')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{formatCount(schoolCount)}</span>
           </span>
         </div>
       </button>
@@ -137,21 +139,20 @@ export function KpiMetricsDock({
       <button
         type="button"
         onClick={() => onFilterCategory?.('transum')}
-        className={`luma-glass-item snap-start flex min-w-[124px] sm:min-w-[128px] items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-lg px-2.5 py-1 cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'transum'
-            ? 'bg-purple-500/[0.08] border-transparent'
-            : 'border-transparent hover:bg-surface-muted/45'
+            ? 'border-purple-400/55 bg-purple-500/[0.12]'
+            : 'hover:border-purple-400/30 hover:bg-purple-500/[0.06]'
         }`}
-        title={t('mapFirst.dock.transit')}
-        data-tooltip={t('mapFirst.dock.transit')}
+        aria-label={t('mapFirst.dock.transit')}
         aria-pressed={activeCategory === 'transum'}
       >
         <CategoryIconBadge category="transit" active={activeCategory === 'transum'} />
-        <div className="flex flex-col whitespace-nowrap">
-          <span className="text-[10.5px] font-semibold leading-tight text-muted">{t('mapFirst.dock.transit')}</span>
-          <span className="text-sm font-bold leading-tight text-foreground">
-            {transitCorridorCount}{' '}
-            <span className="text-[9.5px] font-medium text-muted">{t('mapFirst.dock.transitUnit')}</span>
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.transit}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.transit')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{transitCorridorCount}</span>
           </span>
         </div>
       </button>
