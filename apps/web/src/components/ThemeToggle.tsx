@@ -53,17 +53,19 @@ export default function ThemeToggle({ showLabel = false, className = '', dataTou
     <button
       type="button"
       onClick={() => setTheme(resolvedDark ? 'light' : 'dark')}
-      className={`inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border/80 bg-surface text-foreground transition-colors hover:bg-surface-muted shadow-2xs ${className}`}
+      className={`inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border/80 bg-surface text-foreground shadow-2xs transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:-translate-y-px hover:bg-surface-muted hover:shadow-sm active:translate-y-0 active:scale-95 ${className}`}
       aria-label={resolvedDark ? t('theme.light') : t('theme.dark')}
       data-tooltip={resolvedDark ? t('theme.light') : t('theme.dark')}
       data-tooltip-side="bottom"
       data-tour={dataTour}
     >
-      {resolvedDark ? (
-        <SunIcon className="h-4 w-4 text-foreground" />
-      ) : (
-        <MoonIcon className="h-4 w-4 text-foreground" />
-      )}
+      <span key={resolvedDark ? 'light' : 'dark'} className="luma-switch-pop inline-flex">
+        {resolvedDark ? (
+          <SunIcon className="h-4 w-4 text-foreground" />
+        ) : (
+          <MoonIcon className="h-4 w-4 text-foreground" />
+        )}
+      </span>
       {showLabel ? (
         <span className="text-xs font-medium ml-1.5">{resolvedDark ? t('theme.light') : t('theme.dark')}</span>
       ) : null}

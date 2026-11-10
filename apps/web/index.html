@@ -2,6 +2,29 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      ;(() => {
+        try {
+          const savedTheme = localStorage.getItem('luma-theme')
+          const resolvedTheme =
+            savedTheme === 'dark' || savedTheme === 'light'
+              ? savedTheme
+              : matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light'
+          document.documentElement.dataset.theme = resolvedTheme
+          document.documentElement.style.colorScheme = resolvedTheme
+
+          const savedLanguage = localStorage.getItem('luma-language')
+          if (savedLanguage === 'id' || savedLanguage === 'en') {
+            document.documentElement.lang = savedLanguage
+          }
+        } catch {
+          document.documentElement.dataset.theme = 'light'
+          document.documentElement.style.colorScheme = 'light'
+        }
+      })()
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />

@@ -101,7 +101,7 @@ export function DashboardHeader({
   }
 
   return (
-    <header className="relative z-[60] flex h-14 shrink-0 items-center justify-between gap-1.5 border-b border-border bg-surface px-2 sm:gap-2 sm:px-6 shadow-2xs select-none">
+    <header className="relative z-[60] flex h-12 shrink-0 items-center justify-between gap-1.5 border-b border-border bg-surface px-2 shadow-2xs select-none sm:h-14 sm:gap-2 sm:px-6">
       {/* 1. Kiri: Brand Logo & Title */}
       <a
         href="/"
@@ -119,19 +119,19 @@ export function DashboardHeader({
           height={37}
           fetchPriority="high"
           decoding="async"
-          className="luma-brand-logo h-auto w-[72px] object-contain transition-[filter] duration-200 sm:w-[112px]"
+          className="luma-brand-logo h-auto w-[76px] object-contain transition-[filter] duration-200 sm:w-[112px]"
         />
       </a>
 
       {/* 2. Kanan: Region Selector + Live Date & Time + Language Switcher + Theme Toggle */}
-      <div className="flex min-w-0 items-center gap-1 sm:gap-2.5">
+      <div className="flex shrink-0 items-center gap-1 sm:gap-2.5">
         {/* Region Selector Dropdown */}
         {onSelectWilayah && (
-          <div className="relative w-[112px] sm:w-[176px]" ref={dropdownRef}>
+          <div className="relative w-[108px] shrink-0 min-[380px]:w-[116px] sm:w-[176px]" ref={dropdownRef}>
             <button
               type="button"
               onClick={() => setIsRegionOpen((prev) => !prev)}
-              className={`group flex h-9 w-full items-center justify-between rounded-xl border px-1.5 pr-2 text-left transition-all cursor-pointer ${
+              className={`group flex h-8 w-full items-center justify-between rounded-lg border px-1 pr-1.5 text-left transition-all cursor-pointer sm:h-9 sm:rounded-xl sm:px-1.5 sm:pr-2 ${
                 isRegionOpen
                   ? 'border-primary/45 bg-primary/[0.06] shadow-[0_0_0_3px_rgba(34,197,94,0.08)]'
                   : 'border-border/80 bg-surface hover:border-primary/35 hover:bg-surface-muted/55 shadow-2xs'
@@ -141,8 +141,8 @@ export function DashboardHeader({
               aria-expanded={isRegionOpen}
               aria-label={`${t('mapFirst.header.selectRegion')}. ${t('mapFirst.header.current')} ${currentWilayahLabel}`}
             >
-              <div className="flex min-w-0 items-center gap-2">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/90 p-0.5 shadow-2xs ring-1 ring-inset ring-border/70 dark:bg-white/85">
+              <div className="flex min-w-0 items-center gap-1 sm:gap-2">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-white/90 p-0.5 shadow-2xs ring-1 ring-inset ring-border/70 dark:bg-white/85 sm:h-7 sm:w-7 sm:rounded-lg">
                   <img
                     src={currentWilayah.logoSrc}
                     alt=""
@@ -150,7 +150,7 @@ export function DashboardHeader({
                     className="h-full w-full object-contain"
                   />
                 </span>
-                <span className="min-w-0 truncate text-[11px] font-semibold leading-tight text-foreground sm:text-xs">
+                <span className="min-w-0 truncate text-[10px] font-semibold leading-tight text-foreground sm:text-xs">
                   {currentWilayahLabel}
                 </span>
               </div>
@@ -164,7 +164,7 @@ export function DashboardHeader({
               <div
                 role="listbox"
                 aria-label={t('mapFirst.header.selectRegion')}
-                className="fixed inset-x-2 top-[3.75rem] z-[80] max-h-[calc(100dvh-4.5rem)] overflow-y-auto overscroll-contain rounded-2xl luma-map-card luma-region-dropdown p-1.5 animate-in fade-in slide-in-from-top-1 duration-150 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[288px]"
+                className="fixed inset-x-2 top-[3.25rem] z-[80] max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain rounded-2xl luma-map-card luma-region-dropdown p-1.5 animate-in fade-in slide-in-from-top-1 duration-150 sm:absolute sm:left-auto sm:right-0 sm:top-[calc(100%+0.5rem)] sm:w-[288px] sm:max-h-[calc(100dvh-4.5rem)]"
               >
                 <div className="mb-1 flex items-center justify-between border-b border-border/50 px-2.5 py-2">
                   <div>
@@ -238,15 +238,21 @@ export function DashboardHeader({
           data-tour="language-switcher"
           role="group"
           aria-label={t('common.language')}
-          className="flex h-9 items-center rounded-xl border border-border/80 bg-surface-muted p-0.5 text-xs font-semibold shadow-2xs"
+          className="relative isolate grid h-9 grid-cols-2 items-center rounded-xl border border-border/80 bg-surface-muted p-0.5 text-xs font-semibold shadow-2xs"
         >
+          <span
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-y-0.5 left-0.5 z-0 w-[calc(50%_-_2px)] rounded-lg bg-surface shadow-2xs transition-transform duration-200 ease-out motion-reduce:transition-none ${
+              language === 'en' ? 'translate-x-full' : 'translate-x-0'
+            }`}
+          />
           <button
             type="button"
             onClick={() => setLanguage('id')}
-            className={`flex h-full items-center justify-center rounded-lg px-2 text-[10.5px] sm:text-[11px] transition-colors cursor-pointer ${
-              language === 'id' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
+            className={`relative z-10 flex h-full cursor-pointer items-center justify-center rounded-lg px-2 text-[10.5px] transition-[color,transform] duration-200 active:scale-95 sm:text-[11px] ${
+              language === 'id' ? 'text-foreground' : 'text-muted hover:text-foreground'
             }`}
-            title="Bahasa Indonesia"
+            aria-label="Bahasa Indonesia"
             aria-pressed={language === 'id'}
           >
             ID
@@ -254,10 +260,10 @@ export function DashboardHeader({
           <button
             type="button"
             onClick={() => setLanguage('en')}
-            className={`flex h-full items-center justify-center rounded-lg px-2 text-[10.5px] sm:text-[11px] transition-colors cursor-pointer ${
-              language === 'en' ? 'bg-surface text-foreground shadow-2xs' : 'text-muted hover:text-foreground'
+            className={`relative z-10 flex h-full cursor-pointer items-center justify-center rounded-lg px-2 text-[10.5px] transition-[color,transform] duration-200 active:scale-95 sm:text-[11px] ${
+              language === 'en' ? 'text-foreground' : 'text-muted hover:text-foreground'
             }`}
-            title="English"
+            aria-label="English"
             aria-pressed={language === 'en'}
           >
             EN

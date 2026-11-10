@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react'
 import { ThemeContext, type ThemeMode } from './theme-context'
 
 const STORAGE_KEY = 'luma-theme'
@@ -19,9 +19,11 @@ function getInitialTheme(): ThemeMode {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<ThemeMode>(getInitialTheme)
+  const hasAppliedInitialTheme = useRef(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    let transitionTimer: number | undefined
 
     const applyTheme = () => {
       const resolvedTheme =
@@ -31,7 +33,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
             : 'light'
           : theme
 
-      document.documentElement.dataset.theme = resolvedTheme
+      const root = document.documentElement
+      if (hasAppliedInitialTheme.current) {
+        root.classList.add('luma-theme-transition')
+        window.clearTimeout(transitionTimer)
+        transitionTimer = window.setTimeout(() => {
+          root.classList.remove('luma-theme-transition')
+        }, 280)
+      }
+
+      root.dataset.theme = resolvedTheme
+      root.style.colorScheme = resolvedTheme
+      hasAppliedInitialTheme.current = true
     }
 
     applyTheme()
@@ -41,6 +54,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }
 
     return () => {
+      window.clearTimeout(transitionTimer)
       mediaQuery.removeEventListener('change', applyTheme)
     }
   }, [theme])

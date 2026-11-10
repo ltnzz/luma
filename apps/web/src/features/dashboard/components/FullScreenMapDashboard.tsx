@@ -5,6 +5,7 @@ import { AirQualityCard } from './AirQualityCard'
 import { StaticMapLegend } from './StaticMapLegend'
 import { KpiMetricsDock, type KpiCategory } from './KpiMetricsDock'
 import { CompactDataSourceCard } from './CompactDataSourceCard'
+import { MobileMapBottomSheet, type MobileMapTab } from './MobileMapBottomSheet'
 
 const FacilityDetailModal = lazy(() =>
   import('./FacilityDetailModal').then((m) => ({ default: m.FacilityDetailModal }))
@@ -79,6 +80,15 @@ export function FullScreenMapDashboard({
   // 1. Primary Filter Category State (Dikendalikan oleh KpiMetricsDock di Bawah)
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<KpiCategory | null>(null)
   const [isLegendOpen, setIsLegendOpen] = useState(false)
+  const [mobileMapTab, setMobileMapTab] = useState<MobileMapTab>('explore')
+  const [mobileOverlayHeight, setMobileOverlayHeight] = useState(0)
+  const [isMapReady, setIsMapReady] = useState(false)
+  const [mapError, setMapError] = useState(false)
+
+  const handleMapReady = useCallback(() => {
+    setIsMapReady(true)
+    setMapError(false)
+  }, [])
 
   // 2. Sub-filter States
   const [faskesSubFilter, setFaskesSubFilter] = useState<FaskesSubFilter>('all')
@@ -162,6 +172,14 @@ export function FullScreenMapDashboard({
     )
   }, [cityAggregate])
 
+  const provinceFacilityCategory = isAll
+    ? activeCategoryFilter === 'kesehatan'
+      ? 'kesehatan'
+      : activeCategoryFilter === 'rth'
+        ? 'fasum'
+        : undefined
+    : undefined
+
   const {
     facilities,
     status: facilitiesStatus,
@@ -169,6 +187,8 @@ export function FullScreenMapDashboard({
     refetch: refetchFacilities,
   } = useFacilities({
     wilayah: activeWilayah === 'ALL' ? undefined : activeWilayah,
+    category: provinceFacilityCategory,
+    limit: 250,
   })
 
   const activeCitySummary = useMemo(() => {
@@ -247,7 +267,7 @@ export function FullScreenMapDashboard({
     status: schoolsStatus,
     error: schoolsError,
     refetch: refetchSchools,
-  } = useSchoolsData(activeWilayah, activeSchoolBreakdown)
+  } = useSchoolsData(activeWilayah, activeSchoolBreakdown, activeCategoryFilter === 'sekolah')
 
   const synchronizedDockCounts = useMemo(() => {
     if (isAll) {
@@ -330,8 +350,9 @@ export function FullScreenMapDashboard({
 
   // Filter Fasilitas Dinamis Berdasarkan activeCategoryFilter & Sub-filter
   const combinedFacilities = useMemo(() => {
-    // Di level ALL, peta tidak merender marker individual fasilitas/sekolah
-    if (isAll) {
+    // Level provinsi hanya mengambil marker ketika satu kategori dipilih.
+    // Tampilan awal tetap memakai ringkasan kota agar tidak terlalu padat.
+    if (isAll && !activeCategoryFilter) {
       return []
     }
 
@@ -441,17 +462,27 @@ export function FullScreenMapDashboard({
   const isTransitVisible = activeCategoryFilter === null || activeCategoryFilter === 'transum'
   const isWaterVisible = showWaterNetwork && (activeCategoryFilter === null || activeCategoryFilter === 'air')
   const usesFacilityMarkers = activeCategoryFilter !== 'transum' && activeCategoryFilter !== 'air'
-  const markerDataIsLoading = !isAll && usesFacilityMarkers && (activeCategoryFilter === 'sekolah'
+  const markerDataIsLoading = usesFacilityMarkers && (activeCategoryFilter === 'sekolah'
     ? schoolsStatus === 'loading'
     : facilitiesStatus === 'loading')
-  const markerDataError = !isAll && usesFacilityMarkers
+  const markerScopeUsesData = !isAll || Boolean(activeCategoryFilter)
+  const markerDataError = markerScopeUsesData && usesFacilityMarkers
     ? (activeCategoryFilter === 'sekolah' ? schoolsError : facilitiesError)
     : null
   const markerDataHasError = markerDataError !== null
   const markerDataIsEmpty =
-    !isAll && usesFacilityMarkers && !markerDataIsLoading && !markerDataHasError && combinedFacilities.length === 0
+    markerScopeUsesData && usesFacilityMarkers && !markerDataIsLoading && !markerDataHasError && combinedFacilities.length === 0
   const refetchMarkerData = activeCategoryFilter === 'sekolah' ? refetchSchools : refetchFacilities
-  const hasExpandedLeftPanel = isLegendOpen || activeCategoryFilter !== null
+  const mobileAirStatus = language === 'id'
+    ? realtimeAirQuality?.category ?? 'Belum tersedia'
+    : ({
+        Baik: 'Good',
+        Sedang: 'Moderate',
+        'Tidak Sehat (Sensitif)': 'Sensitive',
+        'Tidak Sehat': 'Unhealthy',
+        'Sangat Tidak Sehat': 'Very unhealthy',
+        Berbahaya: 'Hazardous',
+      }[realtimeAirQuality?.category ?? ''] ?? 'Unavailable')
 
   // Progressive map mount: tunda inisialisasi context WebGL MapLibre
   // agar main-thread browser dapat menyelesaikan initial layout dan render frame pertama (FCP/LCP)
@@ -507,44 +538,42 @@ export function FullScreenMapDashboard({
             showWaterNetwork={isWaterVisible}
             showTransit={isTransitVisible}
             activeTransitModes={activeTransitModes}
+            activeCategory={activeCategoryFilter}
             selectedWilayah={activeWilayah}
             onSelectWilayah={handleSelectWilayah}
             focusedCorridorId={focusedCorridorId}
             onSelectCorridor={setFocusedCorridorId}
+            onMapError={() => setMapError(true)}
+            onReady={handleMapReady}
+            mobileControlsBottomOffset={mobileOverlayHeight + 12}
           />
         </Suspense>
       ) : (
         mapFallback
       )}
 
+      {mapError && !isMapReady ? (
+        <div className="pointer-events-auto absolute inset-0 z-40 flex items-center justify-center bg-surface-muted/82 p-4 backdrop-blur-sm" role="alert">
+          <div className="luma-map-card w-full max-w-sm rounded-2xl p-5 text-center">
+            <p className="text-sm font-bold text-foreground">{t('mapFirst.map.errorTitle')}</p>
+            <p className="mt-1 text-xs text-muted">{t('mapFirst.map.errorDescription')}</p>
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="mt-4 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-on-primary transition hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+            >
+              {t('common.retry')}
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {/* Feedback data peta: loading, error, dan hasil kosong. */}
       <div
-        className="luma-map-feedback pointer-events-none absolute inset-x-3 top-1/2 z-40 mx-auto max-w-sm -translate-y-1/2"
+        className="luma-map-feedback pointer-events-none absolute inset-x-3 top-1/2 z-40 mx-auto max-w-[280px] -translate-y-1/2 sm:max-w-sm"
         aria-live="polite"
       >
-        {markerDataIsLoading ? (
-          <div
-            role="status"
-            aria-label={t('mapFirst.loading.facilities')}
-            className="pointer-events-auto rounded-2xl luma-map-card p-4"
-          >
-            <div className="flex items-center gap-3">
-              <Skeleton variant="circle" className="h-10 w-10 shrink-0" />
-              <div className="flex flex-1 flex-col gap-2">
-                <Skeleton className="h-3.5 w-36" />
-                <Skeleton className="h-2.5 w-full" />
-              </div>
-            </div>
-            <div className="mt-3 grid grid-cols-3 gap-2">
-              <Skeleton className="h-8 rounded-lg" />
-              <Skeleton className="h-8 rounded-lg" />
-              <Skeleton className="h-8 rounded-lg" />
-            </div>
-            <span className="sr-only">{t('mapFirst.loading.markers')}</span>
-          </div>
-        ) : null}
-
-        {markerDataIsEmpty ? (
+        {markerDataIsEmpty && isMapReady ? (
           <EmptyState
             title={t('mapFirst.empty.title')}
             description={t('mapFirst.empty.description')}
@@ -556,9 +585,11 @@ export function FullScreenMapDashboard({
 
       {/* 3. Panel Kolom Kiri: Sumber Data Resmi, Kualitas Udara, dan Contextual Filter / Legenda */}
       {!isTransitMode && (
-        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[calc(100dvh-6.5rem)] flex-col items-start gap-2 overflow-y-auto overscroll-contain pb-2 pt-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:max-h-[calc(100dvh-6.5rem)] sm:pb-1 sm:pr-1 sm:pt-0 sm:pointer-events-auto sm:scrollbar-none">
-          <div className={hasExpandedLeftPanel ? 'hidden sm:contents' : 'contents'}>
+        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[calc(100dvh-8.75rem)] flex-col items-center gap-2 overflow-y-auto overscroll-contain pb-3 pt-2 scrollbar-thin sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:items-start sm:max-h-[calc(100dvh-9rem)] sm:pb-2 sm:pr-1 sm:pt-0">
+          <div className="hidden sm:contents">
             <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
+          </div>
+          <div className="hidden sm:contents">
             <AirQualityCard
               airAqi={realtimeAirQuality?.aqi ?? null}
               isAirLive={isAirLive}
@@ -568,11 +599,29 @@ export function FullScreenMapDashboard({
             />
           </div>
 
+          {!selectedFacility ? (
+            <div className="pointer-events-auto w-full max-w-[360px] sm:hidden">
+              <KpiMetricsDock
+                waterCoverage={68}
+                waterCoverageLabel={t('mapFirst.dock.access')}
+                isWaterActive={showWaterNetwork}
+                faskesCount={facilitiesStatus === 'loading' || facilitiesStatus === 'error' ? null : synchronizedDockCounts.faskes}
+                rthCount={facilitiesStatus === 'loading' || facilitiesStatus === 'error' ? null : synchronizedDockCounts.rth}
+                schoolCount={schoolsStatus === 'loading' || schoolsStatus === 'error' ? null : synchronizedDockCounts.school}
+                transitCorridorCount={corridorCount}
+                activeCategory={activeCategoryFilter}
+                onFilterCategory={handleDockCategoryClick}
+              />
+            </div>
+          ) : null}
+
           {/* Legenda tetap tersedia sebagai dropdown compact. */}
-          <StaticMapLegend isOpen={isLegendOpen} onOpenChange={setIsLegendOpen} />
+          <div className="hidden sm:block">
+            <StaticMapLegend isOpen={isLegendOpen} onOpenChange={setIsLegendOpen} />
+          </div>
 
           {/* Hanya satu panel panjang yang dibuka agar kolom kiri tidak bertabrakan. */}
-          {activeCategoryFilter && !isLegendOpen ? (
+          {!selectedFacility && activeCategoryFilter && !isLegendOpen ? (
             <ContextualCategoryFilterCard
               category={activeCategoryFilter}
               scopeLabel={scopeLabel}
@@ -600,11 +649,11 @@ export function FullScreenMapDashboard({
               onRetry={refetchMarkerData}
               onClose={() => setActiveCategoryFilter(null)}
             />
-          ) : activeCategoryFilter ? (
+          ) : !selectedFacility && activeCategoryFilter ? (
             <button
               type="button"
               onClick={() => setIsLegendOpen(false)}
-              className="pointer-events-auto flex w-[calc(100vw-1rem)] max-w-[330px] items-center justify-between rounded-xl luma-map-card px-3.5 py-2.5 text-left transition hover:border-primary/40 sm:w-64"
+              className="pointer-events-auto flex w-full max-w-[360px] items-center justify-between rounded-xl luma-map-card luma-glass-hover luma-no-lift px-3 py-2.5 text-left transition sm:w-[280px] sm:px-3.5"
             >
               <span className="min-w-0 truncate text-[11px] font-semibold text-foreground">
                 {language === 'id' ? `Filter ${activeCategoryLabel} aktif` : `${activeCategoryLabel} filter active`}
@@ -619,7 +668,7 @@ export function FullScreenMapDashboard({
 
       {/* 4. Bottom Center — Horizontal KPI Metrics Overview Dock & Filter Controller (Selalu Tampil) */}
       {!isTransitMode && (
-        <div className="pointer-events-none absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 sm:left-[calc(50%+2.5rem)] z-20 animate-in fade-in slide-in-from-bottom-3 duration-300 max-w-[calc(100vw-1.5rem)]">
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 hidden max-w-[calc(100vw-1.5rem)] -translate-x-1/2 animate-in fade-in slide-in-from-bottom-3 duration-300 sm:block">
           <KpiMetricsDock
             waterCoverage={68}
             waterCoverageLabel={t('mapFirst.dock.access')}
@@ -680,6 +729,21 @@ export function FullScreenMapDashboard({
         </div>
       )}
 
+      {!isTransitMode && !selectedFacility ? (
+        <MobileMapBottomSheet
+          key={activeWilayah}
+          activeTab={mobileMapTab}
+          onTabChange={setMobileMapTab}
+          scopeLabel={scopeLabel}
+          airAqi={realtimeAirQuality?.aqi ?? null}
+          airStatus={mobileAirStatus}
+          isAirLive={isAirLive}
+          canExpandRegion={activeWilayah !== 'ALL'}
+          onNavigateToDataSources={onNavigateToDataSources}
+          onHeightChange={setMobileOverlayHeight}
+        />
+      ) : null}
+
       {/* Modal Detail Fasilitas Glass (Muncul langsung di Kanan saat marker diklik) */}
       {selectedFacility && !isTransitMode && (
         <Suspense fallback={null}>
@@ -689,6 +753,7 @@ export function FullScreenMapDashboard({
             isOpen={Boolean(selectedFacility)}
             onClose={() => setSelectedFacility(null)}
             variant="side-glass"
+            onMobileHeightChange={setMobileOverlayHeight}
           />
         </Suspense>
       )}

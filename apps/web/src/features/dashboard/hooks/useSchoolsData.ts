@@ -21,9 +21,11 @@ const EMPTY_SCHOOLS: SchoolFacility[] = []
 export function useSchoolsData(
   activeWilayah = 'ALL',
   breakdown?: SchoolLevelBreakdown,
+  loadProvinceData = false,
 ) {
   const isAll = !activeWilayah || activeWilayah === 'ALL'
-  const cachedSchools = !isAll ? schoolsCache.get(activeWilayah) : undefined
+  const isDisabled = isAll && !loadProvinceData
+  const cachedSchools = !isDisabled ? schoolsCache.get(activeWilayah) : undefined
   const [schools, setSchools] = useState<SchoolFacility[]>(() => cachedSchools ?? [])
   const [loadedWilayah, setLoadedWilayah] = useState<string | null>(() =>
     cachedSchools ? activeWilayah : null,
@@ -35,7 +37,7 @@ export function useSchoolsData(
   const [reloadToken, setReloadToken] = useState(0)
 
   useEffect(() => {
-    if (isAll) return
+    if (isDisabled) return
 
     const cached = schoolsCache.get(activeWilayah)
     if (cached) return
@@ -63,23 +65,23 @@ export function useSchoolsData(
         setError(new ApiError('network', 'Gagal memuat dataset sekolah'))
       })
     return () => controller.abort()
-  }, [activeWilayah, isAll, reloadToken])
+  }, [activeWilayah, isDisabled, reloadToken])
 
   const refetch = useCallback(() => {
-    if (isAll) return
+    if (isDisabled) return
     schoolsCache.delete(activeWilayah)
     setStatus('loading')
     setError(null)
     setReloadToken((token) => token + 1)
-  }, [activeWilayah, isAll])
+  }, [activeWilayah, isDisabled])
 
-  const cachedForWilayah = !isAll ? schoolsCache.get(activeWilayah) : undefined
+  const cachedForWilayah = !isDisabled ? schoolsCache.get(activeWilayah) : undefined
   const resolvedSchools = useMemo(() => {
-    if (isAll) return EMPTY_SCHOOLS
+    if (isDisabled) return EMPTY_SCHOOLS
     return cachedForWilayah ?? (loadedWilayah === activeWilayah ? schools : EMPTY_SCHOOLS)
-  }, [isAll, cachedForWilayah, loadedWilayah, activeWilayah, schools])
+  }, [isDisabled, cachedForWilayah, loadedWilayah, activeWilayah, schools])
 
-  const resolvedStatus = isAll
+  const resolvedStatus = isDisabled
     ? ('success' as const)
     : cachedForWilayah
       ? cachedForWilayah.length > 0
@@ -89,7 +91,7 @@ export function useSchoolsData(
         ? status
         : ('loading' as const)
 
-  const resolvedError = isAll || cachedForWilayah ? null : (loadedWilayah === activeWilayah ? error : null)
+  const resolvedError = isDisabled || cachedForWilayah ? null : (loadedWilayah === activeWilayah ? error : null)
 
   // Default: SEMUA FALSE (hidden by default, exactly per user request)
   const [levelFilters, setLevelFilters] = useState<SchoolLevelsFilter>({
@@ -139,13 +141,13 @@ export function useSchoolsData(
 
   // Seluruh sekolah di wilayah aktif (lengkap untuk disaring oleh subfilter jenjang)
   const schoolsInWilayah = useMemo(() => {
-    if (isAll) return EMPTY_SCHOOLS
+    if (isDisabled) return EMPTY_SCHOOLS
     return resolvedSchools
-  }, [isAll, resolvedSchools])
+  }, [isDisabled, resolvedSchools])
 
   // Sekolah yang aktif berdasarkan toggle filter & wilayah
   const activeSchools = useMemo(() => {
-    if (isAll) return EMPTY_SCHOOLS
+    if (isDisabled) return EMPTY_SCHOOLS
     const isAnyActive = levelFilters.sma || levelFilters.smp || levelFilters.sd
     if (!isAnyActive) return []
 
@@ -155,7 +157,7 @@ export function useSchoolsData(
       if (s.level === 'SD' && !levelFilters.sd) return false
       return true
     })
-  }, [isAll, levelFilters, resolvedSchools])
+  }, [isDisabled, levelFilters, resolvedSchools])
 
   return {
     levelFilters,
