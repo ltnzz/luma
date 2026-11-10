@@ -209,7 +209,6 @@ export function TutorialCard({
     [rect, cardSize, placement, viewport, variant],
   )
 
-  const progress = totalSteps > 0 ? (stepNumber / totalSteps) * 100 : 100
   const isHero = variant === 'hero'
   // No Back on the Welcome screen (isFirst): it only appears from step 2
   // onward, in both first-visit and replay sessions. The last step keeps it
@@ -306,20 +305,36 @@ export function TutorialCard({
                 {t('tour.stepLabel')} {stepNumber}/{totalSteps}
               </span>
             )}
+            {/* Segmented progress: one segment per tour step (filled =
+                reached, glowing = active, muted = upcoming). The container
+                keeps role="progressbar" so screen readers still read the
+                current step out of totalSteps. */}
             <div
-              className="h-1 w-full overflow-hidden rounded-full bg-border"
+              className="flex w-full items-center gap-1"
               role="progressbar"
               aria-label={t('tour.progressAria')}
               aria-valuemin={0}
               aria-valuemax={totalSteps}
               aria-valuenow={isLast ? totalSteps : stepNumber}
             >
-              <div
-                className={`h-full rounded-full bg-primary transition-[width] duration-300 ease-out motion-reduce:transition-none ${
-                  isLast ? 'shadow-[0_0_8px_rgba(34,197,94,0.5)]' : ''
-                }`}
-                style={{ width: isLast ? '100%' : `${progress}%` }}
-              />
+              {Array.from({ length: totalSteps }, (_, index) => {
+                const segment = index + 1
+                const isCompleted = isLast || segment < stepNumber
+                const isActive = !isLast && segment === stepNumber
+                return (
+                  <span
+                    key={segment}
+                    aria-hidden="true"
+                    className={`h-1 flex-1 rounded-full transition-[background-color,box-shadow] duration-300 ease-out motion-reduce:transition-none ${
+                      isActive
+                        ? 'bg-accent shadow-[0_0_8px_rgba(102,187,106,0.55)]'
+                        : isCompleted
+                          ? 'bg-primary'
+                          : 'bg-border'
+                    }`}
+                  />
+                )
+              })}
             </div>
           </div>
 
@@ -344,12 +359,12 @@ export function TutorialCard({
         }
       >
         {hasLeftActions && (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-2">
             {showBack && (
               <button
                 type="button"
                 onClick={onBack}
-                className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:text-foreground"
+                className="whitespace-nowrap rounded-xl border border-border bg-surface-muted/50 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-primary/40 hover:bg-surface-muted hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-border disabled:hover:bg-surface-muted/50 disabled:hover:text-muted motion-reduce:transition-none motion-reduce:active:scale-100"
                 aria-label={t('tour.back')}
               >
                 {t('tour.back')}
@@ -359,7 +374,7 @@ export function TutorialCard({
               <button
                 type="button"
                 onClick={onSkip}
-                className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-muted transition-colors hover:text-foreground"
+                className="whitespace-nowrap rounded-xl border border-border bg-surface-muted/50 px-4 py-2 text-xs font-semibold text-muted transition-all hover:border-primary/40 hover:bg-surface-muted hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/60 active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-border disabled:hover:bg-surface-muted/50 disabled:hover:text-muted motion-reduce:transition-none motion-reduce:active:scale-100"
                 aria-label={t('tour.skip')}
               >
                 {t('tour.skip')}
@@ -372,9 +387,9 @@ export function TutorialCard({
           type="button"
           disabled={isExiting}
           onClick={isLast ? onFinish : onNext}
-          className={`rounded-xl bg-primary px-4 py-2 text-xs font-bold text-on-primary shadow-[0_6px_18px_-4px_rgba(16,163,74,0.4)] transition-all hover:bg-primary-hover ${
+          className={`rounded-xl bg-primary px-4 py-2 text-xs font-bold whitespace-nowrap text-on-primary shadow-[0_6px_18px_-4px_rgba(16,163,74,0.4)] transition-all hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary/60 ${
             isExiting ? 'opacity-70 cursor-not-allowed scale-95' : 'active:scale-95'
-          } ${isLast ? 'shadow-[0_6px_20px_-4px_rgba(16,163,74,0.55)]' : ''}`}
+          } ${isLast ? 'shadow-[0_6px_20px_-4px_rgba(16,163,74,0.55)]' : ''} motion-reduce:transition-none motion-reduce:active:scale-100`}
           aria-label={isLast ? t('tour.finish') : isHero ? t('tour.welcome.cta') : t('tour.next')}
         >
           {isLast
