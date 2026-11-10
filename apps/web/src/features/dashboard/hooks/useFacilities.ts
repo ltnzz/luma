@@ -13,7 +13,7 @@ import type { QueryStatus } from '../types'
 import type { FacilityItem, FacilitiesFilterParams } from '../types/facility.types'
 
 interface FacilitiesState {
-  wilayah?: string
+  cacheKey: string
   status: QueryStatus
   items: Facility[]
   pagination: FacilitiesResult['pagination'] | null
@@ -54,19 +54,31 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
   const page = params.page ?? 1
   const search = params.search
 
-  const [state, setState] = useState<FacilitiesState>({
-    wilayah,
-    status: 'loading',
-    items: [],
-    pagination: null,
+  // Tanpa wilayah tetap boleh mengambil data ketika kategori dipilih. Ini
+  // dipakai peta provinsi untuk menampilkan marker kategori secara on-demand,
+  // tanpa mengunduh seluruh fasilitas pada pemuatan awal.
+  const isAllWilayah = !wilayah || wilayah === 'ALL'
+  const isDisabled = isAllWilayah && !category
+  const cacheKey = buildFacilitiesCacheKey({ wilayah, category, search, page, limit })
+  const cachedForParams = !isDisabled ? facilitiesSessionCache.get(cacheKey) : undefined
+
+  const [state, setState] = useState<FacilitiesState>(() => ({
+    cacheKey,
+    status: isDisabled
+      ? 'success'
+      : cachedForParams
+        ? cachedForParams.items.length > 0
+          ? 'success'
+          : 'empty'
+        : 'loading',
+    items: cachedForParams ? cachedForParams.items : [],
+    pagination: cachedForParams ? cachedForParams.pagination : null,
     error: null,
-  })
+  }))
   const [reloadToken, setReloadToken] = useState(0)
 
   useEffect(() => {
-    // Key dibangun dari primitives (bukan objek params yang baru tiap render)
-    // agar effect deps tetap stabil dan lint exhaustive-deps bersih.
-    const cacheKey = buildFacilitiesCacheKey({ wilayah, category, search, page, limit })
+    if (isDisabled) return
 
     // Cache hit: tidak melakukan fetch ulang — hasil cache-derived sudah
     // di-merge langsung dari render body (lihat bawah), tanpa effect setState.
@@ -82,7 +94,7 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
           facilitiesSessionCache.set(cacheKey, { items: result.items, pagination: result.pagination })
         }
         setState({
-          wilayah,
+          cacheKey,
           status: result.items.length > 0 ? 'success' : 'empty',
           items: result.items,
           pagination: result.pagination,
@@ -92,7 +104,7 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
       .catch((error: unknown) => {
         if (controller.signal.aborted || isAbortError(error)) return
         setState({
-          wilayah,
+          cacheKey,
           status: 'error',
           items: [],
           pagination: null,
@@ -101,35 +113,35 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
       })
 
     return () => controller.abort()
-  }, [wilayah, category, limit, page, search, reloadToken])
+  }, [isDisabled, cacheKey, wilayah, category, limit, page, search, reloadToken])
 
   const refetch = useCallback(() => {
+    if (isDisabled) return
     // Manual refetch selalu bypass cache param aktif (cancellation penting).
-    facilitiesSessionCache.delete(buildFacilitiesCacheKey({ wilayah, category, search, page, limit }))
+    facilitiesSessionCache.delete(cacheKey)
     setState((previous) => ({ ...previous, status: 'loading', error: null }))
     setReloadToken((token) => token + 1)
-  }, [wilayah, category, limit, page, search])
+  }, [isDisabled, cacheKey])
   useApiRetry(refetch)
 
-  const isMatching = state.wilayah === wilayah
+  const isMatching = state.cacheKey === cacheKey
   // Cache-derived (dibaca saat render): hasil sesi untuk param ini menimpa
   // state network tanpa setState di effect. Data tidak hilang antar view.
-  const cachedForParams = facilitiesSessionCache.get(
-    buildFacilitiesCacheKey({ wilayah, category, search, page, limit }),
-  )
   const networkStatus = isMatching ? state.status : ('loading' as const)
   const networkItems = isMatching ? state.items : []
   const networkError = isMatching ? state.error : null
   const networkPagination = isMatching ? state.pagination : null
 
-  const status = cachedForParams
-    ? cachedForParams.items.length > 0
-      ? ('success' as const)
-      : ('empty' as const)
-    : networkStatus
-  const items = cachedForParams ? cachedForParams.items : networkItems
-  const error = cachedForParams ? null : networkError
-  const pagination = cachedForParams ? cachedForParams.pagination : networkPagination
+  const status = isDisabled
+    ? ('success' as const)
+    : cachedForParams
+      ? cachedForParams.items.length > 0
+        ? ('success' as const)
+        : ('empty' as const)
+      : networkStatus
+  const items = isDisabled ? [] : (cachedForParams ? cachedForParams.items : networkItems)
+  const error = isDisabled || cachedForParams ? null : networkError
+  const pagination = isDisabled ? null : (cachedForParams ? cachedForParams.pagination : networkPagination)
 
   return {
     items,

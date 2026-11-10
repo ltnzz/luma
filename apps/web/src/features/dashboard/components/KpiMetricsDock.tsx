@@ -1,4 +1,5 @@
-import { DropletIcon, HospitalIcon, TreeIcon, SchoolIcon, BusIcon } from '../../../components/ui/Icons'
+import { CategoryIconBadge } from '../../../components/ui/CategoryIconBadge'
+import { useTranslation } from '../../../i18n/useTranslation'
 
 export type KpiCategory = 'air' | 'kesehatan' | 'rth' | 'sekolah' | 'transum'
 
@@ -6,9 +7,9 @@ interface KpiMetricsDockProps {
   waterCoverage?: number
   waterCoverageLabel?: string
   isWaterActive?: boolean
-  faskesCount: number
-  rthCount: number
-  schoolCount: number
+  faskesCount: number | null
+  rthCount: number | null
+  schoolCount: number | null
   transitCorridorCount?: number
   activeCategory?: KpiCategory | null
   onFilterCategory?: (category: KpiCategory) => void
@@ -17,13 +18,12 @@ interface KpiMetricsDockProps {
 /**
  * KpiMetricsDock — Dock Ringkasan Metrik Makro Utama & Kontroler Filter Kategori
  * Didesain proporsional, ringkas, dan responsif:
- * - 5 kategori lengkap (Air Bersih, Faskes, Ruang Hijau, Sekolah, Transum) selalu terlihat utuh
- * - Status aktif jelas dengan highlight tema warna dan titik indikator
+ * - Setiap kategori tampil sebagai kartu mandiri dalam baris yang dapat digeser
+ * - Status aktif jelas melalui highlight tema warna tanpa indikator dekoratif berulang
  * - Dimensi seimbang dan tidak bertabrakan dengan legenda di kolom kiri
  */
 export function KpiMetricsDock({
   waterCoverage = 68,
-  waterCoverageLabel = 'Akses',
   isWaterActive = true,
   faskesCount,
   rthCount,
@@ -32,171 +32,127 @@ export function KpiMetricsDock({
   activeCategory = null,
   onFilterCategory,
 }: KpiMetricsDockProps) {
+  const { language, t } = useTranslation()
+  const mobileLabels = language === 'id'
+    ? { water: 'Air', health: 'Kesehatan', green: 'RTH', school: 'Sekolah', transit: 'Transit' }
+    : { water: 'Water', health: 'Health', green: 'Green', school: 'Schools', transit: 'Transit' }
+  const formatCount = (value: number | null) =>
+    value === null ? '—' : value.toLocaleString(language === 'id' ? 'id-ID' : 'en-US')
+  const itemClassName = 'luma-map-card luma-glass-hover luma-kpi-pill snap-start flex h-12 w-[88px] min-w-[88px] shrink-0 cursor-pointer items-center justify-start gap-1.5 rounded-xl border border-border/45 px-2 py-1.5 text-left whitespace-nowrap transition-[transform,border-color,background-color] duration-200 hover:-translate-y-0.5 active:translate-y-0 sm:w-[118px] sm:min-w-[118px] sm:gap-2 sm:px-2.5'
+
   return (
-    <div className="pointer-events-auto flex items-center justify-between gap-1 sm:gap-1.5 rounded-2xl luma-glass pl-1.5 pr-2.5 sm:pl-2 sm:pr-3.5 py-1 sm:py-1.5 transition-all select-none w-max max-w-[96vw] overflow-x-auto scrollbar-none animate-in fade-in slide-in-from-bottom-3 duration-300">
+    <div
+      className="pointer-events-auto flex w-full max-w-[360px] touch-pan-x snap-x snap-mandatory items-center justify-start gap-2 overflow-x-auto overscroll-x-contain px-0.5 py-1 select-none scrollbar-none animate-in fade-in slide-in-from-bottom-3 duration-300 sm:w-max sm:max-w-[96vw] sm:gap-2.5 sm:overflow-visible"
+      aria-label={t('mapFirst.dock.aria')}
+      data-tour="facility-dock"
+    >
       {/* 1. Air Bersih */}
       <button
         type="button"
         onClick={() => onFilterCategory?.('air')}
-        className={`flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-xl px-2 py-1 transition-all cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ml-0.5 ${
           activeCategory === 'air'
-            ? 'bg-sky-500/15 border-sky-500/50 ring-1 ring-sky-500/30 shadow-xs -translate-y-0.5'
-            : 'border-transparent hover:bg-surface-muted/60'
-        } ${isWaterActive ? 'opacity-100' : 'opacity-60'}`}
-        title="Klik untuk filter & fokus jaringan pipa PAM JAYA"
+            ? 'border-sky-400/55 bg-sky-500/[0.12]'
+            : 'hover:border-sky-400/30 hover:bg-sky-500/[0.06]'
+        }`}
+        data-water-active={isWaterActive}
+        aria-label={t('mapFirst.dock.water')}
+        aria-pressed={activeCategory === 'air'}
       >
-        <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-sky-500/15 text-sky-600 shadow-2xs shrink-0">
-          <DropletIcon size={13} />
-        </span>
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">Air Bersih</span>
-            {activeCategory === 'air' ? (
-              <span className="flex items-center gap-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-sky-500 animate-pulse" />
-                <span className="text-[8px] font-bold text-sky-600">Aktif</span>
-              </span>
-            ) : (
-              <span
-                className={`flex h-1.5 w-1.5 rounded-full ${
-                  isWaterActive ? 'bg-sky-500' : 'bg-muted'
-                }`}
-              />
-            )}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {waterCoverage}%{' '}
-            <span className="text-[8.5px] font-medium text-muted">({waterCoverageLabel})</span>
+        <CategoryIconBadge category="water" active={activeCategory === 'air'} />
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.water}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.water')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{waterCoverage}%</span>
           </span>
         </div>
       </button>
-
-      <span className="h-5 w-px bg-border/60 shrink-0" />
 
       {/* 2. Faskes */}
       <button
         type="button"
         onClick={() => onFilterCategory?.('kesehatan')}
-        className={`flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-xl px-2 py-1 transition-all cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'kesehatan'
-            ? 'bg-rose-500/15 border-rose-500/50 ring-1 ring-rose-500/30 shadow-xs -translate-y-0.5'
-            : 'border-transparent hover:bg-surface-muted/60'
+            ? 'border-rose-400/55 bg-rose-500/[0.12]'
+            : 'hover:border-rose-400/30 hover:bg-rose-500/[0.06]'
         }`}
-        title="Klik untuk filter & fokus Fasilitas Kesehatan"
+        aria-label={t('mapFirst.dock.health')}
+        aria-pressed={activeCategory === 'kesehatan'}
       >
-        <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-rose-500/15 text-rose-600 shadow-2xs shrink-0">
-          <HospitalIcon size={13} />
-        </span>
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">Faskes</span>
-            {activeCategory === 'kesehatan' && (
-              <span className="flex items-center gap-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
-                <span className="text-[8px] font-bold text-rose-600">Aktif</span>
-              </span>
-            )}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {faskesCount} <span className="text-[8.5px] font-medium text-muted">RS/Pusk</span>
+        <CategoryIconBadge category="health" active={activeCategory === 'kesehatan'} />
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.health}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.health')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{formatCount(faskesCount)}</span>
           </span>
         </div>
       </button>
-
-      <span className="h-5 w-px bg-border/60 shrink-0" />
 
       {/* 3. Ruang Hijau */}
       <button
         type="button"
         onClick={() => onFilterCategory?.('rth')}
-        className={`flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-xl px-2 py-1 transition-all cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'rth'
-            ? 'bg-emerald-500/15 border-emerald-500/50 ring-1 ring-emerald-500/30 shadow-xs -translate-y-0.5'
-            : 'border-transparent hover:bg-surface-muted/60'
+            ? 'border-emerald-400/55 bg-emerald-500/[0.12]'
+            : 'hover:border-emerald-400/30 hover:bg-emerald-500/[0.06]'
         }`}
-        title="Klik untuk filter & fokus Ruang Terbuka Hijau"
+        aria-label={t('mapFirst.dock.green')}
+        aria-pressed={activeCategory === 'rth'}
       >
-        <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600 shadow-2xs shrink-0">
-          <TreeIcon size={13} />
-        </span>
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">Ruang Hijau</span>
-            {activeCategory === 'rth' && (
-              <span className="flex items-center gap-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[8px] font-bold text-emerald-600">Aktif</span>
-              </span>
-            )}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {rthCount} <span className="text-[8.5px] font-medium text-muted">Taman</span>
+        <CategoryIconBadge category="green" active={activeCategory === 'rth'} />
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.green}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.green')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{formatCount(rthCount)}</span>
           </span>
         </div>
       </button>
-
-      <span className="h-5 w-px bg-border/60 shrink-0" />
 
       {/* 4. Sekolah */}
       <button
         type="button"
         onClick={() => onFilterCategory?.('sekolah')}
-        className={`flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-xl px-2 py-1 transition-all cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'sekolah'
-            ? 'bg-blue-500/15 border-blue-500/50 ring-1 ring-blue-500/30 shadow-xs -translate-y-0.5'
-            : 'border-transparent hover:bg-surface-muted/60'
+            ? 'border-blue-400/55 bg-blue-500/[0.12]'
+            : 'hover:border-blue-400/30 hover:bg-blue-500/[0.06]'
         }`}
-        title="Klik untuk filter & fokus Sekolah Negeri"
+        aria-label={t('mapFirst.dock.school')}
+        aria-pressed={activeCategory === 'sekolah'}
       >
-        <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-blue-500/15 text-blue-600 shadow-2xs shrink-0">
-          <SchoolIcon size={13} />
-        </span>
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">Sekolah</span>
-            {activeCategory === 'sekolah' && (
-              <span className="flex items-center gap-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-                <span className="text-[8px] font-bold text-blue-600">Aktif</span>
-              </span>
-            )}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {schoolCount.toLocaleString('id-ID')}{' '}
-            <span className="text-[8.5px] font-medium text-muted">Unit</span>
+        <CategoryIconBadge category="school" active={activeCategory === 'sekolah'} />
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.school}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.school')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{formatCount(schoolCount)}</span>
           </span>
         </div>
       </button>
-
-      <span className="h-5 w-px bg-border/60 shrink-0" />
 
       {/* 5. Transum (Diberikan Padding Kanan Ekstra agar Tidak Tertutup Lengkungan Sudut) */}
       <button
         type="button"
         onClick={() => onFilterCategory?.('transum')}
-        className={`flex items-center gap-1.5 sm:gap-2 shrink-0 text-left rounded-xl pl-2 pr-3 sm:pr-4 py-1 transition-all cursor-pointer border whitespace-nowrap ${
+        className={`${itemClassName} ${
           activeCategory === 'transum'
-            ? 'bg-purple-500/15 border-purple-500/50 ring-1 ring-purple-500/30 shadow-xs -translate-y-0.5'
-            : 'border-transparent hover:bg-surface-muted/60'
+            ? 'border-purple-400/55 bg-purple-500/[0.12]'
+            : 'hover:border-purple-400/30 hover:bg-purple-500/[0.06]'
         }`}
-        title="Klik untuk filter & fokus Jaringan Koridor Transjakarta"
+        aria-label={t('mapFirst.dock.transit')}
+        aria-pressed={activeCategory === 'transum'}
       >
-        <span className="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-lg bg-purple-500/15 text-purple-600 shadow-2xs shrink-0">
-          <BusIcon size={13} />
-        </span>
-        <div className="flex flex-col whitespace-nowrap">
-          <div className="flex items-center gap-1">
-            <span className="text-[9.5px] font-semibold text-muted leading-tight">Transum</span>
-            {activeCategory === 'transum' && (
-              <span className="flex items-center gap-0.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-purple-500 animate-pulse" />
-                <span className="text-[8px] font-bold text-purple-600">Aktif</span>
-              </span>
-            )}
-          </div>
-          <span className="text-xs sm:text-[13px] font-bold text-foreground leading-tight">
-            {transitCorridorCount}{' '}
-            <span className="text-[8.5px] font-medium text-muted">Koridor</span>
+        <CategoryIconBadge category="transit" active={activeCategory === 'transum'} />
+        <div className="flex min-w-0 flex-col items-start whitespace-nowrap">
+          <span className="max-w-full truncate text-[8.5px] font-semibold leading-tight text-muted sm:hidden">{mobileLabels.transit}</span>
+          <span className="hidden max-w-full truncate text-[10.5px] font-semibold leading-tight text-muted sm:block">{t('mapFirst.dock.transit')}</span>
+          <span className="flex items-baseline text-xs font-bold leading-tight text-foreground sm:text-sm">
+            <span>{transitCorridorCount}</span>
           </span>
         </div>
       </button>

@@ -57,7 +57,7 @@ type RawIndicator = Record<string, unknown>
 function pickString(raw: RawIndicator, ...keys: string[]): string | null {
   for (const key of keys) {
     const value = raw[key]
-    if (typeof value === 'string' && value.trim() !== '') return value
+    if (typeof value === 'string' && value.trim() !== '') return value.trim()
   }
   return null
 }
@@ -118,7 +118,9 @@ async function fetchIndicators(
   const lookup: Record<string, RegionalIndicator> = {}
   for (const [code, raw] of Object.entries(data)) {
     if (!raw || typeof raw !== 'object') continue
-    lookup[code] = normalizeIndicator(code, raw as RawIndicator, inferredSource)
+    const normalizedCode = code.trim().toUpperCase()
+    if (!normalizedCode) continue
+    lookup[normalizedCode] = normalizeIndicator(normalizedCode, raw as RawIndicator, inferredSource)
   }
   return { lookup, source: inferredSource }
 }
@@ -272,6 +274,8 @@ export interface Facility {
   budget: Record<string, string>
   metrics: Record<string, unknown>
   documents: FacilityDocument[]
+  updatedAt: string | null
+  level?: 'SD' | 'SMP' | 'SMA'
 }
 
 export interface FacilitiesParams {
@@ -293,10 +297,81 @@ export interface FacilitiesResult {
   source: string | null
 }
 
+export interface SchoolLevelBreakdown {
+  total: number
+  sd: number
+  smp: number
+  sma: number
+}
+
+export interface FaskesSummaryBreakdown {
+  total: number
+  rsud: number
+  puskesmas: number
+}
+
+export interface RthSummaryBreakdown {
+  total: number
+  taman: number
+  hutan: number
+}
+
+export interface FacilityCategoryTotals {
+  kesehatan: number
+  rth: number
+  sekolah: number
+  transum: number
+  air: number
+  fasum?: number
+  schoolBreakdown?: SchoolLevelBreakdown
+  faskesBreakdown?: FaskesSummaryBreakdown
+  rthBreakdown?: RthSummaryBreakdown
+}
+
+export interface WilayahSummary {
+  kesehatan: number
+  rth: number
+  sekolah: number
+  fasum?: number
+  schoolBreakdown?: SchoolLevelBreakdown
+  faskesBreakdown?: FaskesSummaryBreakdown
+  rthBreakdown?: RthSummaryBreakdown
+}
+
+export interface FacilitiesSummary {
+  totals: FacilityCategoryTotals
+  byWilayah: Record<string, WilayahSummary>
+}
+
+let summaryCache: Promise<FacilitiesSummary> | null = null
+
+/**
+ * GET /api/v1/facilities/summary
+ * Ringkasan agregasi makro fasilitas dan sekolah per wilayah.
+ * Dicache per sesi untuk menghindari over-fetching.
+ */
+export function getFacilitiesSummary(signal?: AbortSignal): Promise<FacilitiesSummary> {
+  if (!summaryCache) {
+    summaryCache = requestEnvelope<FacilitiesSummary>('/api/v1/facilities/summary', { signal })
+      .then((envelope) => {
+        const body = envelope.data
+        if (!body || typeof body !== 'object' || !body.totals) {
+          throw new ApiError('empty', 'Facilities summary response is incomplete')
+        }
+        return body
+      })
+      .catch((error: unknown) => {
+        summaryCache = null
+        throw error
+      })
+  }
+  return summaryCache
+}
+
 type RawFacility = Record<string, unknown>
 
 function asString(value: unknown): string | null {
-  return typeof value === 'string' && value.trim() ? value : null
+  return typeof value === 'string' && value.trim() ? value.trim() : null
 }
 
 function asNumber(value: unknown): number | null {
@@ -358,16 +433,32 @@ function normalizeFacility(raw: RawFacility): Facility | null {
   const lat = asNumber(raw.lat)
   const lng = asNumber(raw.lng)
 
-  if (!id || !name || !category || !wilayah || lat === null || lng === null) return null
+  if (
+    !id ||
+    !name ||
+    !category ||
+    !wilayah ||
+    lat === null ||
+    lng === null ||
+    lat < -90 ||
+    lat > 90 ||
+    lng < -180 ||
+    lng > 180
+  ) return null
+
+  const rawLevel = asString(raw.level)?.toUpperCase()
+  const level = rawLevel === 'SD' || rawLevel === 'SMP' || rawLevel === 'SMA'
+    ? rawLevel
+    : undefined
 
   return {
     id,
     slug: asString(raw.slug),
     name,
-    category,
+    category: category.toLowerCase(),
     subCategory: asString(raw.subCategory ?? raw.sub_category),
-    wilayah,
-    kecamatan: asString(raw.kecamatan),
+    wilayah: wilayah.toUpperCase(),
+    kecamatan: asString(raw.kecamatan)?.toUpperCase() ?? null,
     address: asString(raw.address),
     lat,
     lng,
@@ -378,6 +469,8 @@ function normalizeFacility(raw: RawFacility): Facility | null {
         ? (raw.metrics as Record<string, unknown>)
         : {},
     documents: normalizeDocuments(raw),
+    updatedAt: asString(raw.updatedAt ?? raw.updated_at),
+    level,
   }
 }
 
@@ -410,6 +503,35 @@ export async function getFacilities(
     },
     source: envelope.source ?? null,
   }
+}
+
+/**
+ * Mengambil seluruh sekolah untuk satu wilayah melalui endpoint fasilitas.
+ * Backend tetap memakai pagination agar response tidak membebani request lain.
+ */
+export async function getSchoolFacilities(
+  wilayah = 'ALL',
+  signal?: AbortSignal,
+): Promise<Facility[]> {
+  const limit = 250
+  const normalizedWilayah = !wilayah || wilayah === 'ALL' ? undefined : wilayah.trim()
+  const params: FacilitiesParams = {
+    wilayah: normalizedWilayah,
+    category: 'pendidikan',
+    page: 1,
+    limit,
+  }
+  const firstPage = await getFacilities(params, signal)
+  const remainingPages = Array.from(
+    { length: Math.max(0, firstPage.pagination.totalPages - 1) },
+    (_, index) => index + 2,
+  )
+  if (remainingPages.length === 0) return firstPage.items
+
+  const additionalPages = await Promise.all(
+    remainingPages.map((page) => getFacilities({ ...params, page }, signal)),
+  )
+  return [firstPage, ...additionalPages].flatMap((result) => result.items)
 }
 
 export async function getFacility(id: string, signal?: AbortSignal): Promise<Facility> {
@@ -445,4 +567,5 @@ export async function getSectorAnalytics(
 /** Reset module-level caches (error recovery / tests). */
 export function clearApiCaches(): void {
   overviewCache = null
+  summaryCache = null
 }

@@ -1,23 +1,22 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback, type CSSProperties } from 'react'
 import {
   Map as MapLibreMap,
   Marker,
   Popup,
   setWorkerUrl,
-  type StyleSpecification,
-  type GeoJSONSourceSpecification,
   type GeoJSONSource,
-  type FilterSpecification,
-  type ExpressionSpecification,
   type MapLayerMouseEvent,
 } from 'maplibre-gl'
 import maplibreglWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?url'
 import type { Facility } from '../../lib/api'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { useTheme } from '../../context/useTheme'
+import { useTranslation } from '../../i18n/useTranslation'
 import { Skeleton } from './Skeleton'
-import { TargetIcon, SunIcon, MoonIcon, SatelliteIcon } from './Icons'
+import { TargetIcon, SatelliteIcon } from './Icons'
 import jakartaBoundary from '../../data/jakarta-boundary.json'
-import jakartaSubdistricts from '../../data/jakarta-subdistricts-boundary.json'
+import jakartaCityBoundaries from '../../data/jakarta-subdistricts-boundary.json'
+import { validateJakartaBoundaryData } from '../../data/jakarta-boundary-validation'
 import transitNetwork from '../../data/transit-network.json'
 import { CITY_AGGREGATES } from '../../data/city-aggregates'
 import { TRANSJAKARTA_CORRIDORS } from '../../data/transit-corridors'
@@ -25,112 +24,132 @@ import { buildDeduplicatedStations } from '../../data/transit-stations-deduped'
 import { clusterNearbyItems } from '../../features/dashboard/utils/proximityClustering'
 import { SPKU_STATIONS, getAqiLevel } from '../../features/dashboard/utils/airQualityLevels'
 import { WATER_NETWORK, WATER_FACILITIES } from '../../data/water-network'
+import {
+  buildFacilityPopupHtml,
+  createFacilityMarkerElement,
+  getCategoryColor,
+} from './map-marker'
 
 // Konfigurasi Worker MapLibre GL untuk lingkungan Vite (mencegah error Worker 404)
 setWorkerUrl(maplibreglWorkerUrl)
 
-type GeoJSONData = GeoJSONSourceSpecification['data']
+type StyleSpecification = Exclude<NonNullable<Parameters<MapLibreMap['setStyle']>[0]>, string>
+type FilterSpecification = NonNullable<Parameters<MapLibreMap['setFilter']>[1]>
+type GeoJSONData = Parameters<GeoJSONSource['setData']>[0]
+type ExpressionSpecification = Parameters<MapLibreMap['setPaintProperty']>[2]
+
+const CITY_BOUNDARY_SOURCE_ID = 'jakarta-city-boundary'
+const CITY_BOUNDARY_VALIDATION = validateJakartaBoundaryData(jakartaCityBoundaries)
 
 export type MapMode = 'light' | 'dark' | 'satellite'
 
-// Clean Minimalist Light Gray Canvas (Esri World Light Gray Base + Reference Halus)
-const LIGHT_CANVAS_STYLE: StyleSpecification = {
-  version: 8,
-  sources: {
-    'esri-light-base': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
-    },
-    'esri-light-ref': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-    },
-  },
-  layers: [
-    {
-      id: 'esri-light-base-layer',
-      type: 'raster',
-      source: 'esri-light-base',
-      minzoom: 0,
-      maxzoom: 18,
-    },
-    {
-      id: 'esri-light-ref-layer',
-      type: 'raster',
-      source: 'esri-light-ref',
-      minzoom: 0,
-      maxzoom: 18,
-    },
-  ],
+const CITY_NAME_EN: Record<string, string> = {
+  'JAKARTA PUSAT': 'Central Jakarta',
+  'JAKARTA SELATAN': 'South Jakarta',
+  'JAKARTA BARAT': 'West Jakarta',
+  'JAKARTA UTARA': 'North Jakarta',
+  'JAKARTA TIMUR': 'East Jakarta',
+  'KEP. SERIBU': 'Thousand Islands',
 }
 
-// Clean Minimalist Dark Gray Canvas (Esri World Dark Gray Base + Reference Halus)
-const DARK_CANVAS_STYLE: StyleSpecification = {
-  version: 8,
-  sources: {
-    'esri-dark-base': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
-    },
-    'esri-dark-ref': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-    },
-  },
-  layers: [
-    {
-      id: 'esri-dark-base-layer',
-      type: 'raster',
-      source: 'esri-dark-base',
-      minzoom: 0,
-      maxzoom: 18,
-    },
-    {
-      id: 'esri-dark-ref-layer',
-      type: 'raster',
-      source: 'esri-dark-ref',
-      minzoom: 0,
-      maxzoom: 18,
-    },
-  ],
-}
+// Style Kanvas Terpadu (Light, Dark, dan Satelit dalam 1 Style Specification)
+// Menghilangkan kebutuhan memanggil map.setStyle() saat pergantian tema,
+// sehingga WebGL layers dan GeoJSON tidak terhapus dan kanvas tidak berkedip.
+function createBaseStyle(initialMode: MapMode): StyleSpecification {
+  const isLight = initialMode === 'light'
+  const isDark = initialMode === 'dark'
+  const isSat = initialMode === 'satellite'
 
-// Citra Satelit Beresolusi Tinggi (Esri World Imagery)
-const SATELLITE_STYLE: StyleSpecification = {
-  version: 8,
-  sources: {
-    'esri-satellite': {
-      type: 'raster',
-      tiles: [
-        'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-      ],
-      tileSize: 256,
-      attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+  return {
+    version: 8,
+    sources: {
+      'esri-light-base': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+        attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+      },
+      'esri-light-ref': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+      },
+      'esri-dark-base': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+        attribution: '&copy; Esri, HERE, Garmin, &copy; OpenStreetMap contributors',
+      },
+      'esri-dark-ref': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 16,
+      },
+      'esri-satellite': {
+        type: 'raster',
+        tiles: [
+          'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        ],
+        tileSize: 256,
+        maxzoom: 19,
+        attribution: '&copy; Esri, Maxar, Earthstar Geographics',
+      },
     },
-  },
-  layers: [
-    {
-      id: 'esri-satellite-layer',
-      type: 'raster',
-      source: 'esri-satellite',
-      minzoom: 0,
-      maxzoom: 19,
-    },
-  ],
+    layers: [
+      {
+        id: 'esri-light-base-layer',
+        type: 'raster',
+        source: 'esri-light-base',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isLight ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-light-ref-layer',
+        type: 'raster',
+        source: 'esri-light-ref',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isLight ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-dark-base-layer',
+        type: 'raster',
+        source: 'esri-dark-base',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isDark ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-dark-ref-layer',
+        type: 'raster',
+        source: 'esri-dark-ref',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isDark ? 'visible' : 'none' },
+      },
+      {
+        id: 'esri-satellite-layer',
+        type: 'raster',
+        source: 'esri-satellite',
+        minzoom: 0,
+        maxzoom: 24,
+        layout: { visibility: isSat ? 'visible' : 'none' },
+      },
+    ],
+  }
 }
 
 const JAKARTA_CENTER: [number, number] = [106.8272, -6.185]
@@ -158,6 +177,10 @@ interface InteractiveMapProps {
   onSelectCorridor?: (corridorId: string | null) => void
   showWaterNetwork?: boolean
   activeCategory?: string | null
+  regionCardsLoading?: boolean
+  mobileControlsBottomOffset?: number
+  onReady?: () => void
+  onMapError?: () => void
 }
 
 interface MarkerEntry {
@@ -166,11 +189,49 @@ interface MarkerEntry {
   popup: Popup
 }
 
+function setFacilityMarkerSelected(entry: MarkerEntry, selected: boolean) {
+  const markerElement = entry.marker.getElement()
+  entry.innerEl.classList.toggle('luma-marker-selected', selected)
+  // Marker tetap berada di layer peta; panel detail harus selalu berada di atasnya.
+  markerElement.classList.remove('z-50')
+  markerElement.style.zIndex = selected ? '12' : ''
+  markerElement.setAttribute('aria-current', selected ? 'true' : 'false')
+  entry.innerEl.style.width = selected ? '34px' : '30px'
+  entry.innerEl.style.height = selected ? '34px' : '30px'
+}
+
 // Helper untuk menambahkan garis batas tebal (bold boundary) DKI Jakarta
 function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
   try {
-    const boundaryColor = mode === 'dark' ? '#22c55e' : (mode === 'satellite' ? '#4ade80' : '#16a34a')
-    const glowColor = mode === 'dark' ? '#143120' : '#dcfce7'
+    const boundaryColor = mode === 'dark' ? '#a5d6a7' : (mode === 'satellite' ? '#66bb6a' : '#1b5e20')
+    const glowColor = mode === 'dark' ? '#2b5748' : '#e8f5e9'
+
+    // Update warna dinamis pada layer batas yang sudah terpasang saat mode berubah
+    if (map.getLayer('jakarta-province-fill')) {
+      map.setPaintProperty('jakarta-province-fill', 'fill-color', boundaryColor)
+      map.setPaintProperty('jakarta-province-fill', 'fill-opacity', mode === 'satellite' ? 0.04 : 0.035)
+    }
+    if (map.getLayer('jakarta-province-glow')) {
+      map.setPaintProperty('jakarta-province-glow', 'line-color', glowColor)
+    }
+    if (map.getLayer('jakarta-province-line')) {
+      map.setPaintProperty('jakarta-province-line', 'line-color', boundaryColor)
+    }
+    if (map.getLayer('jakarta-city-dim-fill')) {
+      map.setPaintProperty('jakarta-city-dim-fill', 'fill-color', mode === 'dark' ? '#000000' : '#0f172a')
+    }
+    if (map.getLayer('jakarta-city-focus-fill')) {
+      map.setPaintProperty('jakarta-city-focus-fill', 'fill-color', boundaryColor)
+    }
+    if (map.getLayer('jakarta-city-line')) {
+      map.setPaintProperty('jakarta-city-line', 'line-color', boundaryColor)
+    }
+    if (map.getLayer('jakarta-city-focus-glow')) {
+      map.setPaintProperty('jakarta-city-focus-glow', 'line-color', glowColor)
+    }
+    if (map.getLayer('jakarta-city-focus-line')) {
+      map.setPaintProperty('jakarta-city-focus-line', 'line-color', boundaryColor)
+    }
 
     // 1. Source Batas Provinsi DKI Jakarta
     if (!map.getSource('jakarta-province-boundary')) {
@@ -240,20 +301,27 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
       })
     }
 
+    // Dataset ini tervalidasi pada level kota/kabupaten (NAME_2), bukan
+    // kecamatan (NAME_3). Jangan aktifkan selector kecamatan dari layer ini.
+    if (!CITY_BOUNDARY_VALIDATION.isValidCityBoundary) {
+      console.error('[jakarta city boundary invalid]', CITY_BOUNDARY_VALIDATION.issues)
+      return
+    }
+
     // 4. Garis Batas Antar-Wilayah Kota Administrasi (Dashed lembut di dalam Jakarta)
-    if (!map.getSource('jakarta-subdistricts-boundary')) {
-      map.addSource('jakarta-subdistricts-boundary', {
+    if (!map.getSource(CITY_BOUNDARY_SOURCE_ID)) {
+      map.addSource(CITY_BOUNDARY_SOURCE_ID, {
         type: 'geojson',
-        data: jakartaSubdistricts as unknown as GeoJSONData,
+        data: jakartaCityBoundaries as unknown as GeoJSONData,
       })
     }
 
     // Layer Dimming untuk area di luar kota aktif saat Layer 2 (Per-Kota)
-    if (!map.getLayer('jakarta-subdistricts-dim-fill')) {
+    if (!map.getLayer('jakarta-city-dim-fill')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-dim-fill',
+        id: 'jakarta-city-dim-fill',
         type: 'fill',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'fill-color': mode === 'dark' ? '#000000' : '#0f172a',
@@ -263,11 +331,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
     }
 
     // Layer Highlight Fill untuk kota yang terpilih saat Layer 2
-    if (!map.getLayer('jakarta-subdistricts-focus-fill')) {
+    if (!map.getLayer('jakarta-city-focus-fill')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-focus-fill',
+        id: 'jakarta-city-focus-fill',
         type: 'fill',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'fill-color': boundaryColor,
@@ -277,11 +345,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
     }
 
     // Interactive pointer surface for city polygons in Layer 1
-    if (!map.getLayer('jakarta-subdistricts-interactive')) {
+    if (!map.getLayer('jakarta-city-interactive')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-interactive',
+        id: 'jakarta-city-interactive',
         type: 'fill',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         paint: {
           'fill-color': '#000000',
           'fill-opacity': 0.001,
@@ -289,11 +357,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
       })
     }
 
-    if (!map.getLayer('jakarta-subdistricts-line')) {
+    if (!map.getLayer('jakarta-city-line')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-line',
+        id: 'jakarta-city-line',
         type: 'line',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         paint: {
           'line-color': boundaryColor,
           'line-width': 1.2,
@@ -308,11 +376,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
     }
 
     // Garis Batas Fokus Kota Terpilih (Stroke BOLD & Glow)
-    if (!map.getLayer('jakarta-subdistricts-focus-glow')) {
+    if (!map.getLayer('jakarta-city-focus-glow')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-focus-glow',
+        id: 'jakarta-city-focus-glow',
         type: 'line',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'line-color': glowColor,
@@ -327,11 +395,11 @@ function applyJakartaBoundary(map: MapLibreMap, mode: MapMode) {
       })
     }
 
-    if (!map.getLayer('jakarta-subdistricts-focus-line')) {
+    if (!map.getLayer('jakarta-city-focus-line')) {
       map.addLayer({
-        id: 'jakarta-subdistricts-focus-line',
+        id: 'jakarta-city-focus-line',
         type: 'line',
-        source: 'jakarta-subdistricts-boundary',
+        source: CITY_BOUNDARY_SOURCE_ID,
         filter: ['==', 'NAME_2', ''],
         paint: {
           'line-color': boundaryColor,
@@ -540,24 +608,6 @@ function applyTransitLayers(map: MapLibreMap, initialFacilities: Facility[] = []
   }
 }
 
-const CATEGORY_COLORS: Record<string, string> = {
-  fasum: '#16a34a', // green
-  transum: '#2563eb', // blue
-  kesehatan: '#dc2626', // red
-  pendidikan: '#7e22ce', // purple
-  lingkungan: '#06b6d4', // cyan
-}
-
-const CATEGORY_SVGS: Record<string, string> = {
-  fasum: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 3-7h-2l3-6-4 1-3-4-3 4-4-1 3 6h-2l3 7"/><path d="M12 19v3"/></svg>',
-  transum: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="12" x="3" y="6" rx="2"/><path d="M4 11V7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v4"/><circle cx="7" cy="18" r="1"/><circle cx="17" cy="18" r="1"/></svg>',
-  kesehatan: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v12"/><path d="M6 12h12"/></svg>',
-  pendidikan: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 8-4 8 4"/><path d="m18 10 4 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8l4-2"/><circle cx="12" cy="10" r="2"/></svg>',
-  lingkungan: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></svg>',
-}
-
-const DEFAULT_PIN_SVG = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/><circle cx="12" cy="10" r="3"/></svg>'
-
 export function InteractiveMap({
   initialCenter = JAKARTA_CENTER,
   initialZoom = 10.8,
@@ -581,7 +631,18 @@ export function InteractiveMap({
   focusedCorridorId,
   onSelectCorridor,
   activeCategory = null,
+  regionCardsLoading = false,
+  mobileControlsBottomOffset = 148,
+  onReady,
+  onMapError,
 }: InteractiveMapProps) {
+  const { theme } = useTheme()
+  const { t, language } = useTranslation()
+  const themeMapMode: Exclude<MapMode, 'satellite'> =
+    theme === 'dark' ||
+    (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ? 'dark'
+      : 'light'
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<MapLibreMap | null>(null)
   const markersMapRef = useRef<Record<string, MarkerEntry>>({})
@@ -589,15 +650,21 @@ export function InteractiveMap({
   const provinsiMarkerRef = useRef<Marker | null>(null)
   const lastMarkerModeRef = useRef<'provinsi' | 'kota' | null>(null)
   const lastActiveCategoryRef = useRef<string | null>(null)
+  const lastMarkerLanguageRef = useRef(language)
+  const lastRegionCardsLoadingRef = useRef<boolean | null>(null)
   const syncCityMarkersRef = useRef<() => void>(() => {})
-  const [mapMode, setMapMode] = useState<MapMode>('light')
-  const modeRef = useRef<MapMode>('light')
+  const [mapMode, setMapMode] = useState<MapMode>(themeMapMode)
+  const modeRef = useRef<MapMode>(themeMapMode)
   const [isLoaded, setIsLoaded] = useState(false)
+  const mapHasLoadedRef = useRef(false)
 
   const selectedWilayahRef = useRef(selectedWilayah)
   const onSelectWilayahRef = useRef(onSelectWilayah)
   const onSelectCorridorRef = useRef(onSelectCorridor)
+  const onReadyRef = useRef(onReady)
+  const onMapErrorRef = useRef(onMapError)
   const facilitiesRef = useRef(facilities)
+  const languageRef = useRef(language)
 
   useEffect(() => {
     selectedWilayahRef.current = selectedWilayah
@@ -612,8 +679,20 @@ export function InteractiveMap({
   }, [onSelectCorridor])
 
   useEffect(() => {
+    onReadyRef.current = onReady
+  }, [onReady])
+
+  useEffect(() => {
+    onMapErrorRef.current = onMapError
+  }, [onMapError])
+
+  useEffect(() => {
     facilitiesRef.current = facilities
   }, [facilities])
+
+  useEffect(() => {
+    languageRef.current = language
+  }, [language])
 
   useEffect(() => {
     modeRef.current = mapMode
@@ -633,10 +712,12 @@ export function InteractiveMap({
     if (!mapContainerRef.current) return
 
     let isDisposed = false
+    let hasReportedReady = false
+    mapHasLoadedRef.current = false
 
     const map = new MapLibreMap({
       container: mapContainerRef.current,
-      style: LIGHT_CANVAS_STYLE,
+      style: createBaseStyle(modeRef.current),
       center: initialCenter,
       zoom: initialZoom,
       minZoom,
@@ -646,24 +727,46 @@ export function InteractiveMap({
     })
 
     // Mark as loaded when map triggers 'load' or 'idle'
+    // Task Slicing: pecah penambahan layer menjadi tugas bertahap di bawah 50ms (Zero TBT)
     const handleLoaded = () => {
-      if (!isDisposed) {
-        setIsLoaded(true)
-        map.resize()
+      if (isDisposed) return
+      mapHasLoadedRef.current = true
+      setIsLoaded(true)
+      map.resize()
+
+      // Frame 1: Batas wilayah dan marker kota
+      requestAnimationFrame(() => {
+        if (isDisposed) return
         applyJakartaBoundary(map, modeRef.current)
-        applyTransitLayers(map, facilitiesRef.current)
-        applyWaterLayers(map)
         syncCityMarkersRef.current()
-      }
+
+        if (!hasReportedReady) {
+          hasReportedReady = true
+          onReadyRef.current?.()
+        }
+
+        // Frame 2: Layer infrastruktur (transit & air) di frame berikutnya
+        requestAnimationFrame(() => {
+          if (isDisposed) return
+          applyTransitLayers(map, facilitiesRef.current)
+          applyWaterLayers(map)
+        })
+      })
     }
 
     map.on('style.load', () => {
-      if (!isDisposed) {
+      if (isDisposed) return
+      requestAnimationFrame(() => {
+        if (isDisposed) return
         applyJakartaBoundary(map, modeRef.current)
-        applyTransitLayers(map, facilitiesRef.current)
-        applyWaterLayers(map)
         syncCityMarkersRef.current()
-      }
+
+        requestAnimationFrame(() => {
+          if (isDisposed) return
+          applyTransitLayers(map, facilitiesRef.current)
+          applyWaterLayers(map)
+        })
+      })
     })
 
     map.on('idle', () => {
@@ -673,7 +776,7 @@ export function InteractiveMap({
     })
 
     // Interaktivitas klik & hover pada poligon wilayah kota administrasi di Layer 1
-    const handleSubdistrictClick = (e: {
+    const handleCityBoundaryClick = (e: {
       features?: Array<{
         properties?: Record<string, unknown>
       }>
@@ -688,25 +791,26 @@ export function InteractiveMap({
       }
     }
 
-    const handleSubdistrictEnter = () => {
+    const handleCityBoundaryEnter = () => {
       if (!selectedWilayahRef.current || selectedWilayahRef.current === 'ALL') {
         map.getCanvas().style.cursor = 'pointer'
       }
     }
 
-    const handleSubdistrictLeave = () => {
+    const handleCityBoundaryLeave = () => {
       map.getCanvas().style.cursor = ''
     }
 
-    map.on('click', 'jakarta-subdistricts-interactive', handleSubdistrictClick)
-    map.on('mouseenter', 'jakarta-subdistricts-interactive', handleSubdistrictEnter)
-    map.on('mouseleave', 'jakarta-subdistricts-interactive', handleSubdistrictLeave)
+    map.on('click', 'jakarta-city-interactive', handleCityBoundaryClick)
+    map.on('mouseenter', 'jakarta-city-interactive', handleCityBoundaryEnter)
+    map.on('mouseleave', 'jakarta-city-interactive', handleCityBoundaryLeave)
 
     // Interaktivitas hover pada stasiun transit
     const stationPopup = new Popup({
       closeButton: false,
       closeOnClick: false,
-      offset: 12,
+      offset: 16,
+      className: 'luma-facility-popup',
     })
 
     const handleStationEnter = (e: {
@@ -741,46 +845,33 @@ export function InteractiveMap({
       }
 
       const html = `
-        <div style="padding: 10px 12px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 190px; max-width: 270px; color: #1c2620;">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 3px;">
-            <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: ${color}; letter-spacing: 0.05em;">
-              ${line}
-            </span>
+        <article class="luma-popup-card w-[220px] overflow-hidden rounded-xl text-foreground sm:w-[260px]">
+          <div class="p-3.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="flex min-w-0 items-center gap-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.08em]" style="color:${color}">
+                <span class="h-1.5 w-1.5 shrink-0 rounded-full" style="background:${color}"></span>
+                ${line}
+              </span>
             ${
               isHub
-                ? '<span style="font-size: 9px; font-weight: 700; background: #dbeafe; color: #1e40af; padding: 1px 5px; border-radius: 4px;">TRANSFER HALTE</span>'
+                ? '<span class="shrink-0 text-[9px] font-semibold text-blue-600">Transfer</span>'
                 : ''
             }
+            </div>
+            <h4 class="m-0 mt-1.5 text-[13px] font-bold leading-snug text-foreground">${name}</h4>
+            ${allKoridors && allKoridors !== line ? `<p class="m-0 mt-1 text-[10px] font-semibold text-blue-600">${allKoridors}</p>` : ''}
+            ${lokasi ? `<p class="m-0 mt-1 text-[10.5px] leading-relaxed text-muted">${lokasi}</p>` : ''}
+            ${
+              tipeAkses || tahun
+                ? `<dl class="m-0 mt-2.5 flex flex-col gap-1 border-t border-border/70 pt-2.5 text-[10.5px]">
+                    ${tipeAkses ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">${languageRef.current === 'id' ? 'Akses' : 'Access'}</dt><dd class="m-0 text-right font-medium text-foreground">${tipeAkses}</dd></div>` : ''}
+                    ${tahun ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">Tahun</dt><dd class="m-0 text-right font-medium text-foreground">${tahun}</dd></div>` : ''}
+                  </dl>`
+                : ''
+            }
+            ${interchangeList.length > 0 ? `<p class="m-0 mt-2 text-[10px] font-semibold text-primary">Terhubung: ${interchangeList.join(' • ')}</p>` : ''}
           </div>
-          <h4 style="margin: 2px 0 4px 0; font-size: 13px; font-weight: 700; line-height: 1.3;">
-            ${name}
-          </h4>
-          ${
-            allKoridors && allKoridors !== line
-              ? `<div style="margin: 0 0 4px 0; font-size: 10px; font-weight: 600; color: #2563eb;">🚌 ${allKoridors}</div>`
-              : ''
-          }
-          ${
-            lokasi
-              ? `<p style="margin: 0 0 4px 0; font-size: 11px; color: #64748b; line-height: 1.3;">📍 ${lokasi}</p>`
-              : ''
-          }
-          ${
-            tipeAkses
-              ? `<div style="margin-top: 6px; padding-top: 5px; border-top: 1px solid #e2e8f0; font-size: 10px; color: #334155;">
-                   <div><span style="font-weight: 600; color: #0f172a;">Akses:</span> ${tipeAkses}</div>
-                   ${tahun ? `<div style="margin-top: 2px;"><span style="font-weight: 600; color: #0f172a;">Tahun:</span> ${tahun}</div>` : ''}
-                 </div>`
-              : ''
-          }
-          ${
-            interchangeList.length > 0
-              ? `<div style="margin-top: 4px; font-size: 10px; color: #16a34a; font-weight: 600;">
-                   ${interchangeList.join(' • ')}
-                 </div>`
-              : ''
-          }
-        </div>
+        </article>
       `
       stationPopup.setLngLat(coords).setHTML(html).addTo(map)
     }
@@ -828,9 +919,11 @@ export function InteractiveMap({
 
     map.once('load', handleLoaded)
     map.once('idle', handleLoaded)
-    map.on('error', (e) => {
+    const handleMapError = (e: unknown) => {
       console.error('[MapLibre error]', e)
-    })
+      if (!mapHasLoadedRef.current) onMapErrorRef.current?.()
+    }
+    map.on('error', handleMapError)
 
     // Pastikan resize awal dieksekusi setelah render DOM
     requestAnimationFrame(() => {
@@ -860,15 +953,16 @@ export function InteractiveMap({
       clearTimeout(timer)
       resizeObserver.disconnect()
       stationPopup.remove()
-      map.off('click', 'jakarta-subdistricts-interactive', handleSubdistrictClick)
-      map.off('mouseenter', 'jakarta-subdistricts-interactive', handleSubdistrictEnter)
-      map.off('mouseleave', 'jakarta-subdistricts-interactive', handleSubdistrictLeave)
+      map.off('click', 'jakarta-city-interactive', handleCityBoundaryClick)
+      map.off('mouseenter', 'jakarta-city-interactive', handleCityBoundaryEnter)
+      map.off('mouseleave', 'jakarta-city-interactive', handleCityBoundaryLeave)
       map.off('mouseenter', 'transit-stations-circle', handleStationEnter)
       map.off('mouseleave', 'transit-stations-circle', handleStationLeave)
       map.off('click', 'transit-stations-circle', handleStationClick)
       map.off('mouseenter', 'transit-routes-line', handleRouteEnter)
       map.off('mouseleave', 'transit-routes-line', handleRouteLeave)
       map.off('click', 'transit-routes-line', handleRouteClick)
+      map.off('error', handleMapError)
       Object.values(markers).forEach(({ marker, popup }) => {
         popup.remove()
         marker.remove()
@@ -880,15 +974,19 @@ export function InteractiveMap({
       cityMarkersRef.current = {}
       map.remove()
       mapRef.current = null
+      mapHasLoadedRef.current = false
     }
   }, [initialCenter, initialZoom, minZoom, maxZoom, maxBounds])
 
   // Fly to focus coordinate if updated
   useEffect(() => {
     if (!mapRef.current || !focusCoords) return
-    mapRef.current.flyTo({
+    const map = mapRef.current
+    const targetZoom = focusZoom ?? Math.max(map.getZoom(), 15)
+    map.flyTo({
       center: focusCoords,
-      zoom: focusZoom ?? 15,
+      zoom: targetZoom,
+      offset: window.innerWidth < 640 ? [60, -90] : [0, 0],
       speed: 1.4,
       curve: 1.2,
       essential: true,
@@ -904,7 +1002,10 @@ export function InteractiveMap({
 
     // Jika di Layer 2 (ada kota spesifik dipilih), lebur / hapus semua marker kota & provinsi
     const isStandaloneMode = Boolean(onFacilitySelect && !onSelectWilayah)
-    const isLayer1Active = !isStandaloneMode && (!selectedWilayah || selectedWilayah === 'ALL')
+    const isLayer1Active =
+      !isStandaloneMode &&
+      (!selectedWilayah || selectedWilayah === 'ALL') &&
+      !activeCategory
 
     if (!isLayer1Active) {
       Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
@@ -935,13 +1036,15 @@ export function InteractiveMap({
         lastMarkerModeRef.current === 'provinsi' &&
         provinsiMarkerRef.current &&
         provinsiMarkerRef.current.getElement()?.isConnected &&
-        lastActiveCategoryRef.current === activeCategory
+        lastActiveCategoryRef.current === activeCategory &&
+        lastMarkerLanguageRef.current === language
       ) {
         return
       }
 
       lastMarkerModeRef.current = 'provinsi'
       lastActiveCategoryRef.current = activeCategory
+      lastMarkerLanguageRef.current = language
 
       if (provinsiMarkerRef.current) {
         provinsiMarkerRef.current.remove()
@@ -949,70 +1052,73 @@ export function InteractiveMap({
       }
 
       // Hitung metrik dinamis se-DKI sesuai kategori yang aktif di dock bawah
-      let badgeText = '1.740 Fasilitas'
+      let badgeText = `${language === 'id' ? '1.740' : '1,740'} ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
       let cardBorder = 'border-primary/50 group-hover:border-primary'
-      let dotColor = 'bg-primary'
+      let iconColor = 'text-primary'
 
       if (activeCategory === 'kesehatan') {
         const totalFaskes = facilities.filter((f) => f.category === 'kesehatan').length
-        badgeText = `${totalFaskes > 0 ? totalFaskes : 47} Faskes`
+        badgeText = `${totalFaskes > 0 ? totalFaskes : 47} ${t('mapFirst.dock.health')}`
         badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
         cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
-        dotColor = 'bg-rose-500'
+        iconColor = 'text-rose-500'
       } else if (activeCategory === 'rth') {
         const totalRth = facilities.filter((f) => f.category === 'fasum').length
-        badgeText = `${totalRth > 0 ? totalRth : 24} RTH`
+        badgeText = `${totalRth > 0 ? totalRth : 24} ${t('mapFirst.dock.green')}`
         badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
         cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
-        dotColor = 'bg-emerald-500'
+        iconColor = 'text-emerald-500'
       } else if (activeCategory === 'sekolah') {
-        badgeText = '1.503 Sekolah'
+        badgeText = `1.503 ${t('mapFirst.dock.school')}`
         badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
         cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
-        dotColor = 'bg-blue-500'
+        iconColor = 'text-blue-500'
       } else if (activeCategory === 'transum') {
-        badgeText = '13 Koridor BRT'
+        badgeText = `13 ${t('mapFirst.dock.transitUnit')} BRT`
         badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
         cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
-        dotColor = 'bg-purple-500'
+        iconColor = 'text-purple-500'
       } else if (activeCategory === 'air') {
-        badgeText = '68% Air Bersih'
+        badgeText = `68% ${t('mapFirst.dock.water')}`
         badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
         cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
-        dotColor = 'bg-sky-500'
+        iconColor = 'text-sky-500'
       }
 
-      const aqiInfo = getAqiLevel(173) // Rata-rata AQI DKI Jakarta
-      const aqiBadge = `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo.color}18; color: ${aqiInfo.color}; border: 1px solid ${aqiInfo.color}40;" title="Kualitas Udara SPKU DKI: 173 AQI (${aqiInfo.category})">
-        <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo.color}"></span>
-        173 AQI
-      </span>`
+      const [badgeValue, ...badgeLabelParts] = badgeText.split(' ')
+      const badgeLabel = badgeLabelParts.join(' ')
 
       const wrapperEl = document.createElement('div')
-      wrapperEl.className = 'group relative flex flex-col items-center cursor-pointer select-none z-10'
+      wrapperEl.className = 'luma-region-marker group relative flex flex-col items-center cursor-pointer select-none z-10'
       wrapperEl.style.transformOrigin = 'center bottom'
 
       const cardEl = document.createElement('div')
-      cardEl.className = `flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+      cardEl.className = `luma-region-card min-w-[150px] px-3 py-2 luma-map-card luma-glass-hover border ${cardBorder} rounded-xl transition-all`
 
       cardEl.innerHTML = `
-        <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full ${dotColor} opacity-60"></span>
-          <span class="relative inline-flex h-1.5 w-1.5 rounded-full ${dotColor}"></span>
+        <div class="flex items-center gap-2">
+          <div class="flex min-w-0 items-center gap-2">
+            <span class="inline-flex size-4 shrink-0 items-center justify-center rounded-md bg-surface-muted/70 ${iconColor}" title="${language === 'id' ? 'Wilayah DKI Jakarta' : 'DKI Jakarta region'}" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+            </span>
+            <span class="luma-map-label-text truncate text-[11px] font-bold text-foreground tracking-tight">DKI Jakarta</span>
+          </div>
         </div>
-        <div class="flex items-center gap-1.5 whitespace-nowrap">
-          <span class="text-xs font-bold text-foreground tracking-tight">DKI Jakarta</span>
-          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">
-            ${badgeText}
-          </span>
-          ${aqiBadge}
-        </div>
+        <span class="luma-region-summary ml-6 mt-1.5 inline-flex max-w-[calc(100%_-_1.5rem)] px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">
+          <span>${badgeValue}</span><span class="luma-region-summary-label">&nbsp;${badgeLabel}</span>
+        </span>
       `
       wrapperEl.setAttribute('data-scope', 'DKI')
+      wrapperEl.setAttribute('role', 'button')
+      wrapperEl.setAttribute('tabindex', '0')
+      wrapperEl.setAttribute('aria-label', `DKI Jakarta, ${badgeText}`)
 
       const notchEl = document.createElement('div')
-      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b${cardBorder}`
+      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b ${cardBorder}`
 
       wrapperEl.appendChild(cardEl)
       wrapperEl.appendChild(notchEl)
@@ -1027,6 +1133,9 @@ export function InteractiveMap({
       wrapperEl.addEventListener('mousedown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('pointerdown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('click', handleProvinceClick)
+      wrapperEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleProvinceClick(e as unknown as MouseEvent)
+      })
 
       const marker = new Marker({ element: wrapperEl, anchor: 'bottom' })
         .setLngLat([106.8272, -6.185])
@@ -1050,9 +1159,16 @@ export function InteractiveMap({
       Object.keys(cityMarkersRef.current).length === CITY_AGGREGATES.length &&
       Object.values(cityMarkersRef.current).every((m) => m.getElement()?.isConnected)
 
-    if (allMarkersHealthy && lastActiveCategoryRef.current === activeCategory) return
+    if (
+      allMarkersHealthy &&
+      lastActiveCategoryRef.current === activeCategory &&
+      lastMarkerLanguageRef.current === language &&
+      lastRegionCardsLoadingRef.current === regionCardsLoading
+    ) return
     lastMarkerModeRef.current = 'kota'
     lastActiveCategoryRef.current = activeCategory
+    lastMarkerLanguageRef.current = language
+    lastRegionCardsLoadingRef.current = regionCardsLoading
 
     // Bersihkan instance lama jika kategori berubah atau ada marker rusak
     Object.values(cityMarkersRef.current).forEach((marker) => marker.remove())
@@ -1071,78 +1187,88 @@ export function InteractiveMap({
       const station = SPKU_STATIONS.find((s) => s.code === city.code)
       const aqiInfo = station ? getAqiLevel(station.aqi) : null
 
-      let badgeText = `${city.counts.facilities} Fasilitas`
+      let badgeText = `${city.counts.facilities} ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
       let cardBorder = 'border-primary/50 group-hover:border-primary'
-      let dotColor = 'bg-primary'
 
       if (activeCategory === 'kesehatan') {
         const cityFaskes = facilities.filter((f) => f.wilayah === city.code && f.category === 'kesehatan').length
         const count = cityFaskes > 0 ? cityFaskes : (defaultCounts[city.code]?.faskes ?? 8)
-        badgeText = `${count} Faskes`
+        badgeText = `${count} ${t('mapFirst.dock.health')}`
         badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
         cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
-        dotColor = 'bg-rose-500'
       } else if (activeCategory === 'rth') {
         const cityRth = facilities.filter((f) => f.wilayah === city.code && f.category === 'fasum').length
         const count = cityRth > 0 ? cityRth : (defaultCounts[city.code]?.rth ?? 6)
-        badgeText = `${count} RTH`
+        badgeText = `${count} ${t('mapFirst.dock.green')}`
         badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
         cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
-        dotColor = 'bg-emerald-500'
       } else if (activeCategory === 'sekolah') {
         const count = defaultCounts[city.code]?.sekolah ?? 200
-        badgeText = `${count} Sekolah`
+        badgeText = `${count} ${t('mapFirst.dock.school')}`
         badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
         cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
-        dotColor = 'bg-blue-500'
       } else if (activeCategory === 'transum') {
         const count = city.corridors.length
-        badgeText = `${count} Koridor BRT`
+        badgeText = `${count} ${t('mapFirst.dock.transitUnit')} BRT`
         badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
         cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
-        dotColor = 'bg-purple-500'
       } else if (activeCategory === 'air') {
         const pct = defaultCounts[city.code]?.air ?? 68
-        badgeText = `${pct}% Air Bersih`
+        badgeText = `${pct}% ${t('mapFirst.dock.water')}`
         badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
         cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
-        dotColor = 'bg-sky-500'
       }
 
       // Wrapper luar khusus untuk positioning MapLibre (TIDAK BOLEH ada CSS transition-transform atau scale)
       const wrapperEl = document.createElement('div')
-      wrapperEl.className = 'group relative flex flex-col items-center cursor-pointer select-none z-10'
+      wrapperEl.className = 'luma-region-marker group relative flex flex-col items-center cursor-pointer select-none z-10'
       wrapperEl.style.transformOrigin = 'center bottom'
 
       // Card dalam tempat styling, hover effect, dan konten
       const cardEl = document.createElement('div')
-      cardEl.className = `flex items-center gap-2 px-2.5 py-1.5 bg-white/75 dark:bg-zinc-900/75 backdrop-blur-xl border ${cardBorder} rounded-xl shadow-[0_8px_24px_rgba(0,0,0,0.15),inset_0_1px_0_0_rgba(255,255,255,0.4)] transition-all`
+      cardEl.className = `luma-region-card luma-map-card luma-glass-hover flex min-w-[120px] items-center justify-center gap-2 px-2.5 py-1.5 border ${cardBorder} rounded-xl transition-all`
 
+      const airQualityUnit = t('mapFirst.air.unit')
       const aqiBadge = station
-        ? `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 text-[10px] font-bold rounded-md" style="background-color: ${aqiInfo?.color}18; color: ${aqiInfo?.color}; border: 1px solid ${aqiInfo?.color}40;" title="Kualitas Udara SPKU: ${station.aqi} AQI (${station.category})">
-            <span class="h-1.5 w-1.5 rounded-full" style="background-color: ${aqiInfo?.color}"></span>
-            ${station.aqi} AQI
+        ? `<span class="inline-flex items-center px-1.5 py-0.5 text-[10px] font-extrabold rounded-md" style="background-color:${aqiInfo?.color}2b;color:${aqiInfo?.color};border:1px solid ${aqiInfo?.color}70;box-shadow:0 0 10px ${aqiInfo?.color}28" title="${t('mapFirst.air.title')}: ${station.aqi} ${airQualityUnit}">
+            ${station.aqi} ${airQualityUnit}
           </span>`
         : ''
+      const displayCityName = language === 'en' ? (CITY_NAME_EN[city.code] ?? city.name) : city.name
+      const loadingLabel = language === 'id' ? 'Memuat data…' : 'Loading data…'
 
-      cardEl.innerHTML = `
-        <div class="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
-          <span class="absolute inline-flex h-full w-full animate-ping rounded-full ${dotColor} opacity-60"></span>
-          <span class="relative inline-flex h-1.5 w-1.5 rounded-full ${dotColor}"></span>
-        </div>
-        <div class="flex items-center gap-1.5 whitespace-nowrap">
-          <span class="text-xs font-bold text-foreground tracking-tight">${city.name}</span>
-          <span class="px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass} rounded-md">
-            ${badgeText}
-          </span>
-          ${aqiBadge}
-        </div>
-      `
+      cardEl.setAttribute('aria-busy', String(regionCardsLoading))
+      cardEl.innerHTML = regionCardsLoading
+        ? `
+          <div class="flex w-[132px] flex-col gap-1.5">
+            <span class="luma-map-label-text truncate text-xs font-bold tracking-tight text-foreground">${displayCityName}</span>
+            <div class="flex items-center gap-1.5 text-[9.5px] font-semibold text-muted">
+              <span class="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full bg-primary" aria-hidden="true"></span>
+              <span>${loadingLabel}</span>
+            </div>
+            <span class="luma-loading-track" aria-hidden="true">
+              <span class="luma-loading-progress"></span>
+            </span>
+          </div>
+        `
+        : `
+          <div class="flex items-center gap-1.5 whitespace-nowrap">
+            <span class="luma-map-label-text text-xs font-bold tracking-tight text-foreground">${displayCityName}</span>
+            <span class="rounded-md px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass}">${badgeText}</span>
+            ${aqiBadge}
+          </div>
+        `
       wrapperEl.setAttribute('data-city-code', city.code)
+      wrapperEl.setAttribute('role', 'button')
+      wrapperEl.setAttribute('tabindex', '0')
+      wrapperEl.setAttribute(
+        'aria-label',
+        regionCardsLoading ? `${displayCityName}, ${t('mapFirst.loading.facilities')}` : `${displayCityName}, ${badgeText}`,
+      )
 
       const notchEl = document.createElement('div')
-      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b${cardBorder}`
+      notchEl.className = `w-2 h-2 -mt-1 rotate-45 luma-glass border-r border-b ${cardBorder}`
 
       wrapperEl.appendChild(cardEl)
       wrapperEl.appendChild(notchEl)
@@ -1157,6 +1283,9 @@ export function InteractiveMap({
       wrapperEl.addEventListener('mousedown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('pointerdown', (e) => e.stopPropagation())
       wrapperEl.addEventListener('click', handleCityClick)
+      wrapperEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') handleCityClick(e as unknown as MouseEvent)
+      })
 
       const marker = new Marker({ element: wrapperEl, anchor: 'bottom' })
         .setLngLat(city.center)
@@ -1164,7 +1293,7 @@ export function InteractiveMap({
 
       cityMarkersRef.current[city.code] = marker
     })
-  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities])
+  }, [isLoaded, selectedWilayah, onFacilitySelect, onSelectWilayah, activeCategory, facilities, t, language, regionCardsLoading])
 
   useEffect(() => {
     syncCityMarkersRef.current = syncCityMarkers
@@ -1192,7 +1321,8 @@ export function InteractiveMap({
   }, [syncCityMarkers, mapMode])
 
   // =========================================================================
-  // LAYER 2: Marker Fasilitas Individual & Clustered (Hanya aktif saat kota dipilih)
+  // LAYER 2: Marker Fasilitas Individual & Clustered. Pada lingkup provinsi,
+  // marker ikut tampil saat filter fasilitas aktif dan menggantikan marker kota.
   // =========================================================================
   useEffect(() => {
     if (!mapRef.current || !isLoaded) return
@@ -1207,12 +1337,19 @@ export function InteractiveMap({
     }
 
     const isStandaloneMode = Boolean(onFacilitySelect && !onSelectWilayah)
-    if (!isStandaloneMode && (!selectedWilayah || selectedWilayah === 'ALL')) {
+    const isProvinceScope = !selectedWilayah || selectedWilayah === 'ALL'
+    const showsFacilityMarkersAtProvince =
+      isProvinceScope &&
+      Boolean(activeCategory) &&
+      activeCategory !== 'transum' &&
+      activeCategory !== 'air'
+
+    if (!isStandaloneMode && isProvinceScope && !showsFacilityMarkersAtProvince) {
       clearOldMarkers()
       return
     }
 
-    const activeFacilities = isStandaloneMode
+    const activeFacilities = isStandaloneMode || showsFacilityMarkersAtProvince
       ? facilities
       : facilities.filter((f) => !f.wilayah || f.wilayah === selectedWilayah)
 
@@ -1225,16 +1362,17 @@ export function InteractiveMap({
         if (group.isCluster) {
           // Render Cluster Badge untuk titik-titik yang berdekatan
           const wrapperEl = document.createElement('div')
-          wrapperEl.className = 'relative flex items-center justify-center cursor-pointer select-none group'
+          wrapperEl.className =
+            'luma-facility-marker relative flex items-center justify-center cursor-pointer select-none group'
           wrapperEl.style.width = '36px'
           wrapperEl.style.height = '36px'
 
           const sampleCategory = group.items[0]?.category || 'fasum'
-          const clusterColor = CATEGORY_COLORS[sampleCategory] || '#16a34a'
+          const clusterColor = getCategoryColor(sampleCategory)
 
           const innerEl = document.createElement('div')
           innerEl.className =
-            'flex items-center justify-center rounded-full text-white font-extrabold text-xs shadow-lg transition-transform hover:scale-125 border-2 border-surface'
+            'flex items-center justify-center rounded-full text-white font-extrabold text-xs shadow-[0_8px_18px_rgba(0,0,0,0.24)] transition-transform hover:scale-110 border-2 border-surface ring-2 ring-black/10'
           innerEl.style.backgroundColor = clusterColor
           innerEl.style.width = '30px'
           innerEl.style.height = '30px'
@@ -1250,28 +1388,32 @@ export function InteractiveMap({
             .join('')
           const moreCount =
             group.count > 4
-              ? `<li style="color:#64748b;font-style:italic;">+${group.count - 4} fasilitas lainnya</li>`
+              ? `<li style="color:#64748b;font-style:italic;">+${group.count - 4} ${language === 'id' ? 'fasilitas lainnya' : 'more facilities'}</li>`
               : ''
 
           const popupHtml = `
-            <div style="padding: 10px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 190px; max-width: 250px; color: #1c2620;">
-              <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: #16a34a; letter-spacing: 0.05em;">
-                Kelompok Fasilitas
-              </span>
-              <h4 style="margin: 4px 0 6px 0; font-size: 13px; font-weight: 700; line-height: 1.3;">
-                ${group.count} Fasilitas di Area Ini
-              </h4>
-              <ul style="margin: 0; padding-left: 14px; font-size: 11px; color: #475569; line-height: 1.4;">
-                ${previewList}
-                ${moreCount}
-              </ul>
-              <p style="margin: 8px 0 0 0; font-size: 10px; font-weight: 600; color: #16a34a;">
-                Klik untuk memperbesar (zoom in)
-              </p>
-            </div>
+            <article class="luma-popup-card w-[220px] overflow-hidden rounded-xl text-foreground sm:w-[250px]">
+              <div class="p-3.5">
+                <div class="flex items-center gap-1.5 text-[9.5px] font-bold uppercase tracking-[0.08em]" style="color:${clusterColor}">
+                  <span class="h-1.5 w-1.5 rounded-full" style="background:${clusterColor}"></span>
+                  ${language === 'id' ? 'Kelompok fasilitas' : 'Facility cluster'}
+                </div>
+                <h4 class="m-0 mt-1.5 text-[13px] font-bold leading-snug text-foreground">${group.count} ${language === 'id' ? 'fasilitas di area ini' : 'facilities in this area'}</h4>
+                <ul class="m-0 mt-2 space-y-0.5 border-t border-border/70 pt-2 pl-4 text-[10.5px] leading-relaxed text-muted">
+                  ${previewList}
+                  ${moreCount}
+                </ul>
+                <p class="m-0 mt-2 text-[9.5px] font-semibold text-primary">${t('mapFirst.map.clusterHint')}</p>
+              </div>
+            </article>
           `
 
-          const popup = new Popup({ offset: 20, closeButton: false, closeOnClick: false }).setHTML(popupHtml)
+          const popup = new Popup({
+            offset: 22,
+            closeButton: false,
+            closeOnClick: false,
+            className: 'luma-facility-popup',
+          }).setHTML(popupHtml)
 
           wrapperEl.addEventListener('mouseenter', () => {
             popup.setLngLat([group.lng, group.lat]).addTo(map)
@@ -1302,44 +1444,19 @@ export function InteractiveMap({
         } else {
           // Render Single Facility Pin
           const f = group.items[0]
-          const color = CATEGORY_COLORS[f.category] ?? '#16a34a'
-          const iconSvg = CATEGORY_SVGS[f.category] ?? DEFAULT_PIN_SVG
+          const { wrapperEl, innerEl } = createFacilityMarkerElement(f.category)
+          const popupHtml = buildFacilityPopupHtml(f, {
+            categoryLabel: f.subCategory || f.category,
+            budget: t('mapFirst.map.funding'),
+            airQuality: t('mapFirst.map.airQuality'),
+          })
 
-          const wrapperEl = document.createElement('div')
-          wrapperEl.className = 'relative flex items-center justify-center cursor-pointer select-none'
-          wrapperEl.style.width = '36px'
-          wrapperEl.style.height = '36px'
-
-          const innerEl = document.createElement('div')
-          innerEl.className =
-            'flex items-center justify-center rounded-full shadow-md transition-all duration-200 hover:scale-125'
-          innerEl.style.backgroundColor = color
-          innerEl.style.width = '28px'
-          innerEl.style.height = '28px'
-          innerEl.style.border = '2px solid white'
-          innerEl.innerHTML = iconSvg
-          wrapperEl.appendChild(innerEl)
-
-          const popupHtml = `
-            <div style="padding: 10px; font-family: 'Plus Jakarta Sans', sans-serif; min-width: 180px; max-width: 240px; color: #1c2620;">
-              <span style="font-size: 10px; font-weight: 700; text-transform: uppercase; color: ${color}; letter-spacing: 0.05em;">
-                ${f.subCategory || f.category}
-              </span>
-              <h4 style="margin: 4px 0 2px 0; font-size: 13px; font-weight: 700; line-height: 1.3;">
-                ${f.name}
-              </h4>
-              <p style="margin: 0; font-size: 11px; color: #5d6962; line-height: 1.4;">
-                ${f.address || f.wilayah}
-              </p>
-              <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 11px; font-weight: 600; color: #16a34a;">
-                  ${f.budget && 'total' in f.budget ? (f.budget as Record<string, string>)['total'] : 'Fasilitas Publik'}
-                </span>
-              </div>
-            </div>
-          `
-
-          const popup = new Popup({ offset: 20, closeButton: false, closeOnClick: false }).setHTML(popupHtml)
+          const popup = new Popup({
+            offset: 22,
+            closeButton: false,
+            closeOnClick: false,
+            className: 'luma-facility-popup',
+          }).setHTML(popupHtml)
 
           wrapperEl.addEventListener('mouseenter', () => {
             popup.setLngLat([group.lng, group.lat]).addTo(map)
@@ -1364,7 +1481,9 @@ export function InteractiveMap({
             .setLngLat([group.lng, group.lat])
             .addTo(map)
 
-          markersMapRef.current[f.id] = { marker, innerEl, popup }
+          const markerEntry = { marker, innerEl, popup }
+          markersMapRef.current[f.id] = markerEntry
+          setFacilityMarkerSelected(markerEntry, selectedFacilityId === f.id)
         }
       })
     }
@@ -1378,7 +1497,7 @@ export function InteractiveMap({
       map.off('zoomend', renderMarkers)
       clearOldMarkers()
     }
-  }, [facilities, selectedWilayah, isLoaded, onSelectFacility, onFacilitySelect, onOpenDetail, onSelectWilayah])
+  }, [facilities, selectedWilayah, selectedFacilityId, isLoaded, onSelectFacility, onFacilitySelect, onOpenDetail, onSelectWilayah, activeCategory, t, language])
 
   // =========================================================================
   // DYNAMIC TRANSIT, BOUNDARY HIGHLIGHT & DIMMING FILTER
@@ -1562,27 +1681,27 @@ export function InteractiveMap({
     }
 
     // 4. Highlight Batas Kota Terpilih & Dimming Wilayah Luar
-    if (map.getLayer('jakarta-subdistricts-dim-fill')) {
+    if (map.getLayer('jakarta-city-dim-fill')) {
       map.setFilter(
-        'jakarta-subdistricts-dim-fill',
+        'jakarta-city-dim-fill',
         isLayer2 && activeCity ? ['!=', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-    if (map.getLayer('jakarta-subdistricts-focus-fill')) {
+    if (map.getLayer('jakarta-city-focus-fill')) {
       map.setFilter(
-        'jakarta-subdistricts-focus-fill',
+        'jakarta-city-focus-fill',
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-    if (map.getLayer('jakarta-subdistricts-focus-glow')) {
+    if (map.getLayer('jakarta-city-focus-glow')) {
       map.setFilter(
-        'jakarta-subdistricts-focus-glow',
+        'jakarta-city-focus-glow',
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
-    if (map.getLayer('jakarta-subdistricts-focus-line')) {
+    if (map.getLayer('jakarta-city-focus-line')) {
       map.setFilter(
-        'jakarta-subdistricts-focus-line',
+        'jakarta-city-focus-line',
         isLayer2 && activeCity ? ['==', 'NAME_2', activeCity.subdistrictName] : ['==', 'NAME_2', '']
       )
     }
@@ -1590,36 +1709,53 @@ export function InteractiveMap({
 
   // Update status visual seleksi tanpa merecreate marker di DOM
   useEffect(() => {
-    Object.entries(markersMapRef.current).forEach(([facilityId, { innerEl }]) => {
-      const isSelected = selectedFacilityId === facilityId
-      if (isSelected) {
-        innerEl.style.width = '34px'
-        innerEl.style.height = '34px'
-        innerEl.classList.add('ring-4', 'ring-primary', 'ring-offset-2', 'scale-115')
-      } else {
-        innerEl.style.width = '28px'
-        innerEl.style.height = '28px'
-        innerEl.classList.remove('ring-4', 'ring-primary', 'ring-offset-2', 'scale-115')
-      }
+    Object.entries(markersMapRef.current).forEach(([facilityId, entry]) => {
+      setFacilityMarkerSelected(entry, selectedFacilityId === facilityId)
     })
   }, [selectedFacilityId])
 
-  // Ganti Style (Light Canvas vs Dark Canvas vs Satelit)
+  // Ganti Mode Kanvas (Light Canvas vs Dark Canvas vs Satelit) tanpa reload map.setStyle()
+  // Menghindari penghancuran layer kustom dan kedipan canvas kosong
   const switchMode = useCallback(
     (mode: MapMode) => {
       if (!mapRef.current || mode === mapMode) return
       setMapMode(mode)
+      modeRef.current = mode
 
-      if (mode === 'dark') {
-        mapRef.current.setStyle(DARK_CANVAS_STYLE)
-      } else if (mode === 'satellite') {
-        mapRef.current.setStyle(SATELLITE_STYLE)
-      } else {
-        mapRef.current.setStyle(LIGHT_CANVAS_STYLE)
+      const map = mapRef.current
+      const isLight = mode === 'light'
+      const isDark = mode === 'dark'
+      const isSat = mode === 'satellite'
+
+      if (map.getLayer('esri-light-base-layer')) {
+        map.setLayoutProperty('esri-light-base-layer', 'visibility', isLight ? 'visible' : 'none')
       }
+      if (map.getLayer('esri-light-ref-layer')) {
+        map.setLayoutProperty('esri-light-ref-layer', 'visibility', isLight ? 'visible' : 'none')
+      }
+      if (map.getLayer('esri-dark-base-layer')) {
+        map.setLayoutProperty('esri-dark-base-layer', 'visibility', isDark ? 'visible' : 'none')
+      }
+      if (map.getLayer('esri-dark-ref-layer')) {
+        map.setLayoutProperty('esri-dark-ref-layer', 'visibility', isDark ? 'visible' : 'none')
+      }
+      if (map.getLayer('esri-satellite-layer')) {
+        map.setLayoutProperty('esri-satellite-layer', 'visibility', isSat ? 'visible' : 'none')
+      }
+
+      applyJakartaBoundary(map, mode)
+      syncCityMarkersRef.current()
     },
     [mapMode]
   )
+
+  // Tema kanvas mengikuti kontrol tema global di header. Mode satelit tetap
+  // dipertahankan sampai user menonaktifkannya melalui satu tombol peta.
+  useEffect(() => {
+    if (mapMode !== 'satellite' && mapMode !== themeMapMode) {
+      switchMode(themeMapMode)
+    }
+  }, [mapMode, switchMode, themeMapMode])
 
   const handleResetView = useCallback(() => {
     if (!mapRef.current) return
@@ -1638,6 +1774,7 @@ export function InteractiveMap({
     <div
       style={height !== '100%' ? { height } : undefined}
       className={`relative w-full h-full overflow-hidden ${className}`}
+      data-tour="map-canvas"
     >
       {/* Kontainer Peta */}
       <div
@@ -1652,12 +1789,24 @@ export function InteractiveMap({
             <Skeleton className="h-9 w-44 rounded-2xl bg-surface border border-border/80 shadow-xs" />
             <Skeleton className="h-9 w-28 rounded-2xl bg-surface border border-border/80 shadow-xs" />
           </div>
-          <div className="self-center flex flex-col items-center gap-2.5">
+          <div
+            className="self-center flex flex-col items-center gap-3"
+            role="status"
+            aria-live="polite"
+            aria-label={t('mapFirst.loading.map')}
+          >
             <div className="relative flex h-10 w-10 items-center justify-center">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/25" />
               <span className="relative inline-flex h-4 w-4 rounded-full bg-primary/70" />
             </div>
-            <Skeleton className="h-4 w-36 rounded-full bg-surface border border-border/70 shadow-xs" />
+            <div className="flex w-44 flex-col items-center gap-2">
+              <span className="text-[11px] font-semibold tracking-wide text-foreground/80">
+                {t('mapFirst.loading.map')}
+              </span>
+              <span className="luma-loading-track" aria-hidden="true">
+                <span className="luma-loading-progress" />
+              </span>
+            </div>
           </div>
           <div className="flex justify-between items-end">
             <Skeleton className="h-9 w-32 rounded-xl bg-surface border border-border/80 shadow-xs" />
@@ -1670,15 +1819,21 @@ export function InteractiveMap({
       )}
 
       {/* Floating Control Stack di Kanan Bawah: Zoom (+/-/Reset) dan di bawahnya Mode 3-Icon Switcher */}
-      <div className="pointer-events-auto absolute bottom-4 right-4 z-10 flex flex-col items-end gap-2">
+      <div
+        data-tour="map-controls"
+        style={{ '--mobile-map-controls-bottom': `calc(${mobileControlsBottomOffset}px + env(safe-area-inset-bottom, 0px))` } as CSSProperties}
+        className="pointer-events-auto absolute right-3 bottom-[var(--mobile-map-controls-bottom)] z-10 flex flex-col items-end gap-2 transition-[bottom] duration-200 sm:right-4 sm:bottom-4"
+      >
         {/* Kontrol Navigasi (Zoom In, Zoom Out, Reset Pandangan) */}
-        <div className="flex flex-col rounded-xl border border-border bg-surface shadow-md overflow-hidden">
+        <div className="flex flex-col rounded-xl border border-border bg-surface shadow-md">
           <button
             type="button"
             onClick={() => mapRef.current?.zoomIn()}
-            className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
-            title="Perbesar (Zoom In)"
-            aria-label="Perbesar"
+            className="flex h-8 w-8 items-center justify-center rounded-t-[0.7rem] border-b border-border text-base font-bold text-foreground transition-colors hover:bg-surface-muted cursor-pointer"
+            title={t('mapFirst.map.zoomIn')}
+            aria-label={t('mapFirst.map.zoomIn')}
+            data-tooltip={t('mapFirst.map.zoomIn')}
+            data-tooltip-align="end"
           >
             +
           </button>
@@ -1686,64 +1841,42 @@ export function InteractiveMap({
             type="button"
             onClick={() => mapRef.current?.zoomOut()}
             className="flex h-8 w-8 items-center justify-center text-foreground hover:bg-surface-muted transition-colors border-b border-border text-base font-bold cursor-pointer"
-            title="Perkecil (Zoom Out)"
-            aria-label="Perkecil"
+            title={t('mapFirst.map.zoomOut')}
+            aria-label={t('mapFirst.map.zoomOut')}
+            data-tooltip={t('mapFirst.map.zoomOut')}
+            data-tooltip-align="end"
           >
             −
           </button>
           <button
             type="button"
             onClick={handleResetView}
-            className="flex h-8 w-8 items-center justify-center text-primary hover:bg-surface-muted transition-colors cursor-pointer"
-            title="Reset ke pandangan seluruh Jakarta"
-            aria-label="Reset Pandangan"
+            className="flex h-8 w-8 items-center justify-center rounded-b-[0.7rem] text-primary transition-colors hover:bg-surface-muted cursor-pointer"
+            title={t('mapFirst.map.reset')}
+            aria-label={t('mapFirst.map.reset')}
+            data-tooltip={t('mapFirst.map.reset')}
+            data-tooltip-align="end"
           >
             <TargetIcon size={15} />
           </button>
         </div>
 
-        {/* 3-Icon Mode Switcher (Matahari / Bulan / Satelit) */}
-        <div className="flex items-center rounded-xl border border-border bg-surface p-0.5 shadow-md">
-          <button
-            type="button"
-            onClick={() => switchMode('light')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
-              mapMode === 'light'
-                ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-            title="Kanvas Terang (Light Gray Canvas)"
-            aria-label="Kanvas Terang"
-          >
-            <SunIcon size={14} />
-          </button>
-          <button
-            type="button"
-            onClick={() => switchMode('dark')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
-              mapMode === 'dark'
-                ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-            title="Kanvas Gelap (Dark Gray Canvas)"
-            aria-label="Kanvas Gelap"
-          >
-            <MoonIcon size={14} />
-          </button>
-          <button
-            type="button"
-            onClick={() => switchMode('satellite')}
-            className={`flex h-7 w-7 items-center justify-center rounded-lg transition-colors cursor-pointer ${
-              mapMode === 'satellite'
-                ? 'bg-primary text-on-primary shadow-xs'
-                : 'text-muted hover:text-foreground'
-            }`}
-            title="Citra Satelit (Satellite Imagery)"
-            aria-label="Citra Satelit"
-          >
-            <SatelliteIcon size={14} />
-          </button>
-        </div>
+        {/* Satu kontrol tambahan untuk beralih antara kanvas tema dan citra satelit. */}
+        <button
+          type="button"
+          onClick={() => switchMode(mapMode === 'satellite' ? themeMapMode : 'satellite')}
+          className={`flex h-8 w-8 items-center justify-center rounded-xl border shadow-md transition-colors cursor-pointer ${
+            mapMode === 'satellite'
+              ? 'border-primary/70 bg-primary text-on-primary hover:bg-primary-hover'
+              : 'border-border bg-surface text-muted hover:bg-surface-muted hover:text-foreground'
+          }`}
+          title={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
+          aria-label={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
+          data-tooltip={mapMode === 'satellite' ? t('mapFirst.map.canvas') : t('mapFirst.map.satellite')}
+          data-tooltip-align="end"
+        >
+          <SatelliteIcon size={14} className="shrink-0" aria-hidden="true" />
+        </button>
       </div>
     </div>
   )

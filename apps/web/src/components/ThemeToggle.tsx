@@ -26,12 +26,14 @@ function SunIcon({ className }: { className?: string }) {
 interface ThemeToggleProps {
   showLabel?: boolean
   className?: string
+  /** Optional data-tour marker for the onboarding spotlight. */
+  dataTour?: string
 }
 
 /**
  * Compact icon-only ThemeToggle with optional text label support.
  */
-export default function ThemeToggle({ showLabel = false, className = '' }: ThemeToggleProps) {
+export default function ThemeToggle({ showLabel = false, className = '', dataTour }: ThemeToggleProps) {
   const { t } = useTranslation()
   const { theme, setTheme } = useTheme()
   const [systemPrefersDark, setSystemPrefersDark] = useState(
@@ -51,15 +53,19 @@ export default function ThemeToggle({ showLabel = false, className = '' }: Theme
     <button
       type="button"
       onClick={() => setTheme(resolvedDark ? 'light' : 'dark')}
-      className={`inline-flex cursor-pointer items-center justify-center rounded-xl border border-border bg-surface p-2 text-foreground transition-colors hover:bg-surface-muted shadow-2xs ${className}`}
-      title={resolvedDark ? t('theme.light') : t('theme.dark')}
+      className={`inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border/80 bg-surface text-foreground shadow-2xs transition-[background-color,border-color,color,transform,box-shadow] duration-200 hover:-translate-y-px hover:bg-surface-muted hover:shadow-sm active:translate-y-0 active:scale-95 ${className}`}
       aria-label={resolvedDark ? t('theme.light') : t('theme.dark')}
+      data-tooltip={resolvedDark ? t('theme.light') : t('theme.dark')}
+      data-tooltip-side="bottom"
+      data-tour={dataTour}
     >
-      {resolvedDark ? (
-        <SunIcon className="h-4 w-4 text-foreground" />
-      ) : (
-        <MoonIcon className="h-4 w-4 text-foreground" />
-      )}
+      <span key={resolvedDark ? 'light' : 'dark'} className="luma-switch-pop inline-flex">
+        {resolvedDark ? (
+          <SunIcon className="h-4 w-4 text-foreground" />
+        ) : (
+          <MoonIcon className="h-4 w-4 text-foreground" />
+        )}
+      </span>
       {showLabel ? (
         <span className="text-xs font-medium ml-1.5">{resolvedDark ? t('theme.light') : t('theme.dark')}</span>
       ) : null}

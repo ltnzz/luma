@@ -11,7 +11,7 @@ export function Skeleton({ className, variant = 'bar' }: SkeletonProps) {
     <div
       aria-hidden="true"
       className={cn(
-        'animate-pulse bg-surface-muted',
+        'luma-skeleton bg-surface-muted',
         variant === 'circle' ? 'rounded-full' : 'rounded-md',
         className,
       )}

@@ -2,10 +2,33 @@
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
+    <script>
+      ;(() => {
+        try {
+          const savedTheme = localStorage.getItem('luma-theme')
+          const resolvedTheme =
+            savedTheme === 'dark' || savedTheme === 'light'
+              ? savedTheme
+              : matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light'
+          document.documentElement.dataset.theme = resolvedTheme
+          document.documentElement.style.colorScheme = resolvedTheme
+
+          const savedLanguage = localStorage.getItem('luma-language')
+          if (savedLanguage === 'id' || savedLanguage === 'en') {
+            document.documentElement.lang = savedLanguage
+          }
+        } catch {
+          document.documentElement.dataset.theme = 'light'
+          document.documentElement.style.colorScheme = 'light'
+        }
+      })()
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Luma — Peta Fasilitas Publik & Indikator Keberlanjutan DKI Jakarta</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>Luma</title>
 
     <!-- SEO & Metadata Dasar -->
     <meta name="google-site-verification" content="google020a7cc561641b44" />
@@ -29,6 +52,7 @@
       })()
     </script>
     <link rel="canonical" href="https://lumaurban.my.id/" />
+    <link rel="preload" as="image" href="/luma-logo.png" type="image/png" fetchpriority="high" />
 
     <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
     <meta property="og:type" content="website" />
@@ -67,9 +91,22 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+    />
+    <link
       href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

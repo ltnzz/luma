@@ -41,7 +41,9 @@ function sourceLabel(source: RegionalIndicator['source'], t: TranslateFunction):
 export function WilayahPopover({ code, indicator, generatedAt, language, onReset }: WilayahPopoverProps) {
   const { t } = useTranslation()
   const { data: realtimeAirQuality } = useRealtimeAirQuality(code)
-  const aqiDisplay = realtimeAirQuality?.aqi != null ? `${realtimeAirQuality.aqi} AQI` : '—'
+  const aqiDisplay = realtimeAirQuality?.aqi != null
+    ? `${realtimeAirQuality.aqi} ${t('mapFirst.air.unit')}`
+    : '—'
   const meta = findWilayahMeta(code)
   const regionName = meta?.name ?? indicator?.label ?? code
 

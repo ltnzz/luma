@@ -17,6 +17,12 @@ export interface WaterPipelineFeature {
   }
 }
 
+export const WATER_DATA_META = {
+  source: 'PAM JAYA / Perum Jasa Tirta II',
+  period: null,
+  updatedAt: null,
+} as const
+
 export interface WaterFacilityFeature {
   type: 'Feature'
   id: string

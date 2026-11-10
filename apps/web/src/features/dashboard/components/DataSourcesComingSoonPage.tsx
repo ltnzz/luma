@@ -1,178 +1,124 @@
+import { CategoryIconBadge, type CategoryIconKind } from '../../../components/ui/CategoryIconBadge'
+import { getDataCatalogList, type CatalogCategory } from '../../../data/data-catalog'
+import { useTranslation } from '../../../i18n/useTranslation'
+
 interface DataSourcesComingSoonPageProps {
   onBack: () => void
 }
 
-const UPCOMING_FEATURES = [
-  {
-    title: 'Portal Satu Data DKI',
-    authority: 'Diskominfotik DKI Jakarta',
-    status: 'Sinkronisasi API',
-    description:
-      'Integrasi langsung API data terbuka fasilitas publik, demografi kependudukan, dan anggaran APBD.',
-    tag: 'REST API',
-  },
-  {
-    title: 'Dapodik Kemendikbudristek',
-    authority: 'Kemendikbud & Disdik DKI',
-    status: 'Validasi Skema',
-    description:
-      'Katalog lengkap 1.503 satuan pendidikan negeri (SD, SMP, SMA, SMK, SLB) terakreditasi.',
-    tag: 'Open Data',
-  },
-  {
-    title: 'Sensor SPKU Kualitas Udara',
-    authority: 'Dinas Lingkungan Hidup DKI',
-    status: 'Telemetry Live',
-    description:
-      'Data deret waktu ISPU & PM2.5 real-time dari 6 stasiun pemantau otomatis kualitas udara.',
-    tag: 'IoT Telemetry',
-  },
-  {
-    title: 'Jaringan Pipa & Distribusi PAM JAYA',
-    authority: 'Perumda PAM JAYA',
-    status: 'GIS Layer V2',
-    description:
-      'Peta geospasial jaringan pipa transmisi dan tingkat cakupan akses air minum perpipaan.',
-    tag: 'GIS Vector',
-  },
-  {
-    title: 'Faskes Primer & Rujukan',
-    authority: 'Dinas Kesehatan DKI Jakarta',
-    status: 'Data Sanitasi',
-    description:
-      'Database 51 RSUD dan Puskesmas Kecamatan beserta indikator ketersediaan tempat tidur.',
-    tag: 'Healthcare',
-  },
-  {
-    title: 'Ruang Terbuka Hijau & Taman',
-    authority: 'Distamhut DKI Jakarta',
-    status: 'Pemetaan Poligon',
-    description:
-      'Inventarisasi 418 taman kota dan hutan kota beserta luas tutupan vegetasi hijau.',
-    tag: 'Urban Green',
-  },
-]
+const ICON_BY_CATEGORY: Record<CatalogCategory, CategoryIconKind> = {
+  airQuality: 'air',
+  kesehatan: 'health',
+  rth: 'green',
+  sekolah: 'school',
+  transum: 'transit',
+  air: 'water',
+}
 
-/**
- * DataSourcesComingSoonPage — Halaman Eksplorasi Sumber Data Resmi (Coming Soon)
- * Dibuka saat pengguna menekan tombol direct pada komponen Sumber Data Resmi di dashboard.
- */
 export function DataSourcesComingSoonPage({ onBack }: DataSourcesComingSoonPageProps) {
+  const { language } = useTranslation()
+  const dataCatalog = getDataCatalogList(language)
+  const copy = language === 'id'
+    ? {
+        back: 'Kembali ke Peta', eyebrow: 'Provenansi data aktif',
+        title: 'Katalog & Transparansi Sumber Data',
+        description: 'Setiap layer menjelaskan sumber, cakupan, satuan, periode, serta metode pengolahan yang digunakan Luma.',
+        datasets: 'dataset terdokumentasi', coverage: 'Cakupan', unit: 'Satuan',
+        period: 'Periode', updated: 'Diperbarui', method: 'Metode pengolahan', unavailable: 'Belum tersedia',
+        open: 'Buka sumber resmi', live: 'Live', active: 'Aktif', curated: 'Terkurasi',
+        noteTitle: 'Catatan penggunaan data',
+        note: 'Data terkurasi digunakan untuk eksplorasi dan transparansi publik. Layer yang belum memiliki seri resmi lengkap diberi keterangan secara eksplisit dan tidak ditampilkan sebagai data real-time.',
+      }
+    : {
+        back: 'Back to Map', eyebrow: 'Active data provenance',
+        title: 'Data Source & Transparency Catalog',
+        description: 'Every layer documents the source, coverage, unit, period, and processing method used by Luma.',
+        datasets: 'documented datasets', coverage: 'Coverage', unit: 'Unit',
+        period: 'Period', updated: 'Updated', method: 'Processing method', unavailable: 'Not available',
+        open: 'Open official source', live: 'Live', active: 'Active', curated: 'Curated',
+        noteTitle: 'Data usage note',
+        note: 'Curated data supports public exploration and transparency. Layers without a complete official series are explicitly identified and are not presented as real-time data.',
+      }
+
   return (
-    <div className="relative h-full w-full overflow-y-auto bg-surface-muted/40 p-4 sm:p-8 select-none">
-      <div className="mx-auto max-w-4xl flex flex-col gap-6 sm:gap-8 pb-12">
-        {/* Top Navigation Bar: Back to Map */}
-        <div className="flex items-center justify-between">
+    <div className="relative h-full w-full overflow-y-auto bg-surface-muted/40 p-4 select-none sm:p-8">
+      <div className="mx-auto flex max-w-5xl flex-col gap-6 pb-12">
+        <div className="flex items-center justify-between gap-4">
           <button
             type="button"
             onClick={onBack}
-            className="group inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-3.5 py-2 text-xs font-bold text-foreground shadow-xs hover:border-primary/50 hover:bg-surface-muted transition-all cursor-pointer"
+            className="group inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-3.5 py-2 text-xs font-bold text-foreground shadow-xs transition-all hover:border-primary/50 hover:bg-surface-muted"
           >
-            <span
-              className="transition-transform duration-150 group-hover:-translate-x-1 font-bold"
-              aria-hidden="true"
-            >
-              &larr;
-            </span>
-            <span>Kembali ke Peta Dashboard</span>
+            <span className="font-bold transition-transform group-hover:-translate-x-1" aria-hidden="true">←</span>
+            <span>{copy.back}</span>
           </button>
-
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 text-[11px] font-bold text-emerald-600">
-            <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            Integrasi Data Pipeline
+          <span className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-300">
+            {dataCatalog.length} {copy.datasets}
           </span>
         </div>
 
-        {/* Hero Section */}
-        <div className="flex flex-col gap-3 rounded-3xl border border-border/80 bg-surface/95 p-6 sm:p-8 shadow-xl backdrop-blur-md">
-          <div className="inline-flex items-center gap-2 self-start rounded-full bg-primary/10 px-3 py-1 text-xs font-bold text-primary border border-primary/20">
-            <span>🚀 Fitur Dalam Pengembangan</span>
-          </div>
+        <header className="luma-map-card rounded-3xl p-6 sm:p-8">
+          <p className="text-xs font-bold uppercase tracking-wider text-primary">{copy.eyebrow}</p>
+          <h1 className="mt-2 text-2xl font-black tracking-tight text-foreground sm:text-3xl">{copy.title}</h1>
+          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">{copy.description}</p>
+        </header>
 
-          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight leading-tight">
-            Katalog & Provenansi Sumber Data Resmi
-          </h1>
-
-          <p className="text-xs sm:text-sm text-muted leading-relaxed max-w-2xl">
-            Halaman ini sedang dipersiapkan untuk menyediakan transparansi penuh terhadap sumber data
-            pemerintah, kamus data (*data dictionary*), dokumentasi API terbuka, serta log
-            pembaruan otomatis pipeline ETL dari seluruh dinas terkait di lingkungan Pemerintah Provinsi
-            DKI Jakarta.
-          </p>
-
-          <div className="mt-2 flex items-center gap-3 pt-4 border-t border-border/60 text-xs text-muted">
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-              6 Lembaga Resmi Terkoneksi
-            </span>
-            <span>&bull;</span>
-            <span>Status: Staging Pipeline</span>
-          </div>
-        </div>
-
-        {/* Feature Preview Grid */}
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-muted">
-              Daftar Dataset Yang Sedang Diintegrasikan
-            </h2>
-            <span className="text-[11px] text-muted">6 Dataset Utama</span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {UPCOMING_FEATURES.map((item) => (
-              <div
-                key={item.title}
-                className="flex flex-col justify-between gap-3 rounded-2xl border border-border/70 bg-surface/90 p-4 shadow-sm hover:border-primary/40 hover:shadow-md transition-all group"
-              >
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="rounded-md bg-surface-muted px-2 py-0.5 text-[10px] font-bold text-primary border border-border/60">
-                      {item.tag}
-                    </span>
-                    <span className="text-[10px] font-semibold text-muted bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded-full">
-                      {item.status}
-                    </span>
+        <section className="grid grid-cols-1 gap-4 md:grid-cols-2" aria-label={copy.title}>
+          {dataCatalog.map((item) => {
+            const statusLabel = item.status === 'live' ? copy.live : item.status === 'active' ? copy.active : copy.curated
+            return (
+              <article key={item.category} className="luma-map-card luma-glass-hover flex flex-col gap-4 rounded-2xl p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <CategoryIconBadge category={ICON_BY_CATEGORY[item.category]} />
+                    <div className="min-w-0">
+                      <h2 className="text-sm font-bold text-foreground">{item.title}</h2>
+                      <a
+                        href={item.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-0.5 block truncate text-[11px] font-semibold text-primary hover:underline"
+                      >
+                        {item.source} ↗
+                      </a>
+                    </div>
                   </div>
-
-                  <h3 className="text-sm font-bold text-foreground group-hover:text-primary transition-colors leading-snug">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-[11px] text-muted leading-relaxed">
-                    {item.description}
-                  </p>
+                  <span className="shrink-0 rounded-full border border-primary/20 bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
+                    {statusLabel}
+                  </span>
                 </div>
 
-                <div className="pt-2 border-t border-border/40 text-[10px] font-medium text-muted flex items-center justify-between">
-                  <span>{item.authority}</span>
-                  <span className="font-bold text-primary">Segera Hadir</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                <dl className="grid grid-cols-[88px_1fr] gap-x-3 gap-y-2 border-t border-border/60 pt-3 text-[11px] leading-relaxed">
+                  <dt className="font-medium text-muted">{copy.coverage}</dt>
+                  <dd className="font-semibold text-foreground">{item.coverage}</dd>
+                  <dt className="font-medium text-muted">{copy.unit}</dt>
+                  <dd className="font-semibold text-foreground">{item.unit}</dd>
+                  <dt className="font-medium text-muted">{copy.period}</dt>
+                  <dd className="font-semibold text-foreground">{item.period ?? `— ${copy.unavailable}`}</dd>
+                  <dt className="font-medium text-muted">{copy.updated}</dt>
+                  <dd className="font-semibold text-foreground">{item.updatedAt ?? `— ${copy.unavailable}`}</dd>
+                  <dt className="font-medium text-muted">{copy.method}</dt>
+                  <dd className="font-medium text-foreground">{item.method}</dd>
+                </dl>
 
-        {/* Bottom Callout */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-primary/20 bg-primary/5 p-4 sm:p-5">
-          <div className="flex flex-col">
-            <span className="text-xs sm:text-sm font-bold text-foreground">
-              Ingin mengeksplorasi peta interaktif terlebih dahulu?
-            </span>
-            <span className="text-xs text-muted">
-              Seluruh data fasilitas, transportasi BRT, pipa air, dan indeks kualitas udara telah aktif di peta utama.
-            </span>
-          </div>
-          <button
-            type="button"
-            onClick={onBack}
-            className="rounded-xl bg-primary hover:bg-primary-hover text-on-primary px-4 py-2 text-xs font-bold transition-all cursor-pointer shadow-sm hover:shadow-md shrink-0 active:scale-95"
-          >
-            Buka Peta Interaktif &rarr;
-          </button>
-        </div>
+                <a
+                  href={item.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-auto inline-flex items-center justify-center rounded-xl border border-border bg-surface/55 px-3 py-2 text-[11px] font-bold text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+                >
+                  {copy.open} ↗
+                </a>
+              </article>
+            )
+          })}
+        </section>
+
+        <aside className="rounded-2xl border border-primary/20 bg-primary/5 p-4">
+          <h2 className="text-sm font-bold text-foreground">{copy.noteTitle}</h2>
+          <p className="mt-1 text-xs leading-relaxed text-muted">{copy.note}</p>
+        </aside>
       </div>
     </div>
   )
 }
-

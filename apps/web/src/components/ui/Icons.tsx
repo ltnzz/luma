@@ -104,17 +104,17 @@ export function HospitalIcon({ size = 16, className = '', ...props }: IconProps)
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="2.2"
       strokeLinecap="round"
       strokeLinejoin="round"
       className={className}
       {...props}
     >
-      <path d="M12 6v4" />
-      <path d="M14 8h-4" />
-      <path d="M18 18v-7a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v7" />
-      <path d="M18 18H2" />
-      <path d="M22 18h-4v-4h4Z" />
+      <path d="M11 3v2" />
+      <path d="M5 3v2" />
+      <path d="M5 4H4a2 2 0 0 0-2 2v2a6 6 0 0 0 12 0V6a2 2 0 0 0-2-2h-1" />
+      <path d="M8 14a6 6 0 0 0 12 0v-2" />
+      <circle cx="20" cy="10" r="2" />
     </svg>
   )
 }
@@ -499,6 +499,48 @@ export function CheckCircleIcon({ size = 16, className = '', ...props }: IconPro
     >
       <circle cx="12" cy="12" r="10" />
       <path d="m9 12 2 2 4-4" />
+    </svg>
+  )
+}
+
+export function HelpCircleIcon({ size = 16, className = '', ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+      <path d="M12 17h.01" />
+    </svg>
+  )
+}
+
+export function AlertCircleIcon({ size = 16, className = '', ...props }: IconProps) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      {...props}
+    >
+      <circle cx="12" cy="12" r="10" />
+      <line x1="12" y1="8" x2="12" y2="12" />
+      <line x1="12" y1="16" x2="12.01" y2="16" />
     </svg>
   )
 }

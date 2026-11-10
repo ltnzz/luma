@@ -40,6 +40,21 @@ function buildFooter(param_sumber: string | null, param_periode: string | null):
   return parts.join(' • ')
 }
 
+function localizedAqiCategory(aqi: number, t: TranslateFunction): string {
+  if (aqi <= 50) return t('mapFirst.air.good')
+  if (aqi <= 100) return t('mapFirst.air.moderate')
+  if (aqi <= 150) return t('mapFirst.air.sensitive')
+  if (aqi <= 200) return t('mapFirst.air.unhealthy')
+  if (aqi <= 300) return t('mapFirst.air.veryUnhealthy')
+  return t('mapFirst.air.hazardous')
+}
+
+function realtimeAqiSub(data: RealtimeAirQuality | null | undefined, t: TranslateFunction): string {
+  if (!data) return t('mapFirst.air.unavailable')
+  const pm25 = data.pm25 === null ? '' : ` • PM2.5: ${data.pm25} µg/m³`
+  return `${localizedAqiCategory(data.aqi, t)}${pm25}`
+}
+
 /**
  * Builds the six KPI cards for screen 1.
  *
@@ -80,9 +95,7 @@ export function buildKpis({
       title: t('dashboard.kpi.kualitasUdara'),
       getValue: () => [
         realtimeAirQuality?.aqi != null ? `${realtimeAirQuality.aqi} AQI` : '—',
-        realtimeAirQuality?.category != null
-          ? `${realtimeAirQuality.category} • PM2.5: ${realtimeAirQuality.pm25} µg/m³`
-          : 'Data real-time belum tersedia',
+        realtimeAqiSub(realtimeAirQuality, t),
       ],
     },
     {
@@ -166,7 +179,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   ALL: {
     total: 1620,
     kualitasAir: { value: '11 Titik Pantau', sub: 'Pintu Air, Waduk & Sungai Ciliwung' },
-    kualitasUdara: { value: '74 ISPU', sub: 'Sedang • 5 SPKU Terkoneksi' },
+    kualitasUdara: { value: '74 AQI', sub: 'Sedang • 5 SPKU Terkoneksi' },
     pendidikan: { value: '1.503 Sekolah', sub: '117 SMAN • 289 SMPN • 1.097 SDN' },
     kesehatan: { value: '51 Faskes', sub: 'RSUD & Puskesmas Rujukan Utama' },
     rth: { value: '34 Ruang Terbuka', sub: 'Taman Publik, Hutan & Konservasi Hijau' },
@@ -175,7 +188,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   'JAKARTA PUSAT': {
     total: 228,
     kualitasAir: { value: '2 Titik Pantau', sub: 'Pintu Air Karet & Ciliwung Istiqlal' },
-    kualitasUdara: { value: '68 ISPU', sub: 'Sedang • SPKU Thamrin / Monas' },
+    kualitasUdara: { value: '68 AQI', sub: 'Sedang • SPKU Thamrin / Monas' },
     pendidikan: { value: '205 Sekolah', sub: '13 SMAN • 36 SMPN • 156 SDN' },
     kesehatan: { value: '9 Faskes', sub: 'RSUD Tarakan, Puskesmas Gambir, Tn Abang...' },
     rth: { value: '7 Ruang Terbuka', sub: 'Taman Suropati, Menteng, GBK, Situ Lembang...' },
@@ -184,7 +197,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   'JAKARTA SELATAN': {
     total: 345,
     kualitasAir: { value: '2 Titik Pantau', sub: 'Pintu Air Manggarai & SPKU Ciliwung' },
-    kualitasUdara: { value: '72 ISPU', sub: 'Sedang • SPKU Jagakarsa' },
+    kualitasUdara: { value: '72 AQI', sub: 'Sedang • SPKU Jagakarsa' },
     pendidikan: { value: '320 Sekolah', sub: '29 SMAN • 66 SMPN • 225 SDN' },
     kesehatan: { value: '12 Faskes', sub: 'RSUD Pasar Minggu, Puskesmas Kebayoran Baru...' },
     rth: { value: '7 Ruang Terbuka', sub: 'Tebet Eco Park, Martha Tiahahu, Spathodea...' },
@@ -193,7 +206,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   'JAKARTA BARAT': {
     total: 404,
     kualitasAir: { value: '3 Titik Pantau', sub: 'Waduk Tomang, Kali Angke, Pompa Kosambi' },
-    kualitasUdara: { value: '76 ISPU', sub: 'Sedang • SPKU Kebon Jeruk' },
+    kualitasUdara: { value: '76 AQI', sub: 'Sedang • SPKU Kebon Jeruk' },
     pendidikan: { value: '385 Sekolah', sub: '17 SMAN • 50 SMPN • 318 SDN' },
     kesehatan: { value: '8 Faskes', sub: 'RSUD Cengkareng, Puskesmas Kebon Jeruk...' },
     rth: { value: '5 Ruang Terbuka', sub: 'Hutan Srengseng, Jalur Tomang, Rawa Buaya...' },
@@ -202,7 +215,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   'JAKARTA UTARA': {
     total: 204,
     kualitasAir: { value: '1 Titik Pantau', sub: 'Rumah Pompa Utama Waduk Pluit' },
-    kualitasUdara: { value: '75 ISPU', sub: 'Sedang • SPKU Cilincing & Kelapa Gading' },
+    kualitasUdara: { value: '75 AQI', sub: 'Sedang • SPKU Cilincing & Kelapa Gading' },
     pendidikan: { value: '186 Sekolah', sub: '17 SMAN • 39 SMPN • 130 SDN' },
     kesehatan: { value: '8 Faskes', sub: 'RSUD Koja, Puskesmas Tj Priok, Penjaringan...' },
     rth: { value: '6 Ruang Terbuka', sub: 'Taman Waduk Pluit, Hutan Penjaringan, Bambu...' },
@@ -211,7 +224,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   'JAKARTA TIMUR': {
     total: 418,
     kualitasAir: { value: '3 Titik Pantau', sub: 'Pintu Air KBT, SPKU Kali Baru, Waduk Setu' },
-    kualitasUdara: { value: '70 ISPU', sub: 'Sedang • SPKU Lubang Buaya' },
+    kualitasUdara: { value: '70 AQI', sub: 'Sedang • SPKU Lubang Buaya' },
     pendidikan: { value: '395 Sekolah', sub: '40 SMAN • 95 SMPN • 260 SDN' },
     kesehatan: { value: '10 Faskes', sub: 'RSUD Pasar Rebo, Puskesmas Duren Sawit...' },
     rth: { value: '6 Ruang Terbuka', sub: 'Waduk Ria Rio, TMII, Cempaka, Waduk Setu...' },
@@ -220,7 +233,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   'KEP. SERIBU': {
     total: 21,
     kualitasAir: { value: '0 Titik Pantau', sub: 'Kawasan Konservasi Perairan Laut Nasional' },
-    kualitasUdara: { value: '45 ISPU', sub: 'Baik • SPKU Maritim Kepulauan' },
+    kualitasUdara: { value: '45 AQI', sub: 'Baik • SPKU Maritim Kepulauan' },
     pendidikan: { value: '12 Sekolah', sub: '1 SMAN • 7 SMPN • 4 SDN' },
     kesehatan: { value: '4 Faskes', sub: 'RSUD Kep. Seribu, Puskesmas P. Tidung, Pari' },
     rth: { value: '3 Ruang Terbuka', sub: 'TN Kep. Seribu, Jembatan Cinta, Pasir Perawan' },
@@ -246,10 +259,7 @@ export function buildSynchronizedMapKpis({
 
   const aqiValue = hasAqiData ? `${realtimeAirQuality!.aqi} AQI` : '—'
 
-  const aqiSub =
-    realtimeAirQuality && realtimeAirQuality.category
-      ? `${realtimeAirQuality.category} • PM2.5: ${realtimeAirQuality.pm25} µg/m³`
-      : 'Data real-time belum tersedia'
+  const aqiSub = realtimeAqiSub(realtimeAirQuality, t)
 
   return [
     {

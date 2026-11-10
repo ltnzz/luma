@@ -1,98 +1,95 @@
-import {
-  HospitalIcon,
-  TreeIcon,
-  SchoolIcon,
-  BusIcon,
-  DropletIcon,
-} from '../../../components/ui/Icons'
+import { CategoryIconBadge } from '../../../components/ui/CategoryIconBadge'
+import { useTranslation } from '../../../i18n/useTranslation'
 
 /**
  * StaticMapLegend — Legenda Simbol Peta Ringkas & Statis
  * Memberikan informasi murni makna simbol/layer tanpa data angka,
  * didesain sangat ramping agar pas di layar tanpa memicu scrollbar.
  */
-export function StaticMapLegend() {
+interface StaticMapLegendProps {
+  isOpen?: boolean
+  onOpenChange?: (isOpen: boolean) => void
+}
+
+export function StaticMapLegend({ isOpen = false, onOpenChange }: StaticMapLegendProps) {
+  const { t } = useTranslation()
+
   return (
-    <div className="pointer-events-auto flex flex-col gap-1.5 rounded-2xl luma-glass p-2.5 sm:p-3 select-none w-60 sm:w-64 animate-in fade-in slide-in-from-left-2 duration-300">
-      {/* Header Legenda */}
-      <div className="flex items-center justify-between border-b border-border/60 pb-1.5">
+    <details
+      open={isOpen}
+      onToggle={(event) => onOpenChange?.(event.currentTarget.open)}
+      className="group pointer-events-auto w-[min(72vw,270px)] overflow-hidden rounded-xl luma-map-card luma-glass-hover select-none animate-in fade-in slide-in-from-left-2 duration-300 sm:w-[280px]"
+    >
+      <summary className="flex cursor-pointer list-none items-center justify-between gap-3 px-3.5 py-3 marker:content-none">
         <div className="flex items-center gap-1.5">
-          <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-          <h4 className="text-[10.5px] font-bold text-foreground uppercase tracking-wider">
-            Legenda Peta
+          <h4 className="text-xs font-bold uppercase tracking-wide text-foreground">
+            {t('dashboard.legend.title')}
           </h4>
         </div>
-        <span className="text-[9.5px] text-muted">Simbol Fasilitas</span>
-      </div>
+        <div className="flex items-center gap-2">
+          <span className="text-[10.5px] font-medium text-muted">{t('mapFirst.legend.symbols')}</span>
+          <svg className="size-3.5 text-muted transition-transform duration-200 group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+      </summary>
 
       {/* Daftar Simbol Murni (Tanpa Data Angka) */}
-      <div className="flex flex-col gap-1 text-[11px]">
+      <div className="mx-3.5 flex flex-col gap-1 border-t border-border/60 pb-3 pt-2 text-xs">
         {/* 1. Fasilitas Kesehatan */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-rose-500/15 text-rose-600">
-            <HospitalIcon size={11} />
+        <div className="luma-glass-row grid min-h-8 grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-3 rounded-lg px-1 py-1">
+          <CategoryIconBadge category="health" size="sm" />
+          <span className="font-medium leading-tight text-foreground">
+            {t('mapFirst.legend.health')}
           </span>
-          <span className="font-medium text-foreground leading-none">
-            Fasilitas Kesehatan
-          </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">RS & Pusk.</span>
+          <span className="break-words text-right text-[10px] font-medium leading-tight text-muted">{t('mapFirst.legend.healthSub')}</span>
         </div>
 
         {/* 2. Ruang Terbuka Hijau */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-500/15 text-emerald-600">
-            <TreeIcon size={11} />
+        <div className="luma-glass-row grid min-h-8 grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-3 rounded-lg px-1 py-1">
+          <CategoryIconBadge category="green" size="sm" />
+          <span className="font-medium leading-tight text-foreground">
+            {t('mapFirst.legend.green')}
           </span>
-          <span className="font-medium text-foreground leading-none">
-            Ruang Terbuka Hijau
-          </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">Taman/Hutan</span>
+          <span className="break-words text-right text-[10px] font-medium leading-tight text-muted">{t('mapFirst.legend.greenSub')}</span>
         </div>
 
         {/* 3. Sekolah Negeri */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-blue-500/15 text-blue-600">
-            <SchoolIcon size={11} />
+        <div className="luma-glass-row grid min-h-8 grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-3 rounded-lg px-1 py-1">
+          <CategoryIconBadge category="school" size="sm" />
+          <span className="font-medium leading-tight text-foreground">
+            {t('mapFirst.legend.school')}
           </span>
-          <span className="font-medium text-foreground leading-none">
-            Sekolah Negeri
-          </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">SMA/SMP/SD</span>
+          <span className="break-words text-right text-[10px] font-medium leading-tight text-muted">{t('mapFirst.legend.schoolSub')}</span>
         </div>
 
         {/* 4. Rute Transum */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-purple-500/15 text-purple-600">
-            <BusIcon size={11} />
+        <div className="luma-glass-row grid min-h-8 grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-3 rounded-lg px-1 py-1">
+          <CategoryIconBadge category="transit" size="sm" />
+          <span className="font-medium leading-tight text-foreground">
+            {t('mapFirst.legend.transit')}
           </span>
-          <span className="font-medium text-foreground leading-none">
-            Halte & Koridor BRT
-          </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">Transjakarta</span>
+          <span className="break-words text-right text-[10px] font-medium leading-tight text-muted">{t('mapFirst.legend.transitSub')}</span>
         </div>
 
         {/* 5. Jaringan Pipa Air Bersih PAM JAYA */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-sky-500/15 text-sky-600">
-            <DropletIcon size={11} />
+        <div className="luma-glass-row grid min-h-8 grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-3 rounded-lg px-1 py-1">
+          <CategoryIconBadge category="water" size="sm" />
+          <span className="font-medium leading-tight text-foreground">
+            {t('mapFirst.legend.water')}
           </span>
-          <span className="font-medium text-foreground leading-none">
-            Jaringan Air Bersih
-          </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">Pipa PAM</span>
+          <span className="break-words text-right text-[10px] font-medium leading-tight text-muted">{t('mapFirst.legend.waterSub')}</span>
         </div>
 
         {/* 6. Batas Wilayah */}
-        <div className="flex items-center gap-2">
-          <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-surface-muted border border-primary/50">
-            <span className="h-0.5 w-2 rounded-full bg-primary" />
+        <div className="luma-glass-row grid min-h-8 grid-cols-[20px_minmax(0,1fr)_76px] items-center gap-3 rounded-lg px-1 py-1">
+          <CategoryIconBadge category="boundary" size="sm" />
+          <span className="font-medium leading-tight text-foreground">
+            {t('mapFirst.legend.boundary')}
           </span>
-          <span className="font-medium text-foreground leading-none">
-            Batas Wilayah DKI
-          </span>
-          <span className="text-[9.5px] text-muted font-normal ml-auto">5 Kota + Kep.S</span>
+          <span className="break-words text-right text-[10px] font-medium leading-tight text-muted">{t('mapFirst.legend.boundarySub')}</span>
         </div>
       </div>
-    </div>
+    </details>
   )
 }

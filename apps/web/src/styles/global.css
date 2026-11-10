@@ -15,6 +15,9 @@
   --color-on-primary: var(--luma-on-primary);
   --color-primary-soft: var(--luma-primary-soft);
   --color-primary-soft-text: var(--luma-primary-soft-text);
+  --color-secondary: var(--luma-secondary);
+  --color-accent: var(--luma-accent);
+  --color-accent-soft: var(--luma-accent-soft);
   --color-danger: var(--luma-danger);
   --color-surface-dark: var(--luma-surface-dark);
   --color-on-surface-dark: var(--luma-on-surface-dark);
@@ -35,12 +38,24 @@
   box-sizing: border-box;
 }
 
-body {
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
   margin: 0;
-  min-width: 320px;
+  padding: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+body {
+  min-width: 0;
   background: var(--luma-background);
   color: var(--luma-text);
-  font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+  font-family: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
   font-size: 1rem;
   line-height: 1.5;
@@ -64,6 +79,85 @@ select:focus-visible {
 ::selection {
   background: var(--luma-primary);
   color: var(--luma-on-primary);
+}
+
+/* Transisi singkat saat token tema berubah. Hanya properti visual yang ikut
+   dianimasikan agar layout dan posisi peta tetap stabil. */
+html.luma-theme-transition *,
+html.luma-theme-transition *::before,
+html.luma-theme-transition *::after {
+  transition-property: background-color, border-color, color, fill, stroke, box-shadow, filter !important;
+  transition-duration: 240ms !important;
+  transition-timing-function: ease-out !important;
+}
+
+html.luma-language-transition #root {
+  animation: luma-language-fade 200ms ease-out both;
+}
+
+.luma-switch-pop {
+  animation: luma-switch-pop 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes luma-language-fade {
+  from { opacity: 0.9; }
+  to { opacity: 1; }
+}
+
+@keyframes luma-switch-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.72) rotate(-10deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.luma-theme-transition *,
+  html.luma-theme-transition *::before,
+  html.luma-theme-transition *::after {
+    transition-duration: 0.01ms !important;
+  }
+
+  html.luma-language-transition #root,
+  .luma-switch-pop {
+    animation: none !important;
+  }
+}
+
+/* Pertahankan warna asli logo pada kedua tema. Di header gelap,
+   keterbacaan dibantu outline/glow netral tanpa recolor. */
+.luma-brand-logo {
+  filter: drop-shadow(0 0 2px rgba(27, 94, 32, 0.12));
+}
+
+[data-theme="dark"] .luma-brand-logo {
+  filter:
+    brightness(1.3)
+    saturate(1.14)
+    contrast(1.06)
+    drop-shadow(1px 0 0 rgba(232, 245, 233, 0.38))
+    drop-shadow(-1px 0 0 rgba(232, 245, 233, 0.38))
+    drop-shadow(0 1px 0 rgba(232, 245, 233, 0.32))
+    drop-shadow(0 -1px 0 rgba(232, 245, 233, 0.32))
+    drop-shadow(0 0 5px rgba(232, 245, 233, 0.34));
+}
+
+@media (hover: hover) {
+  [data-theme="dark"] .luma-brand-logo:hover {
+    filter:
+      brightness(1.38)
+      saturate(1.18)
+      contrast(1.08)
+      drop-shadow(1px 0 0 rgba(232, 245, 233, 0.48))
+      drop-shadow(-1px 0 0 rgba(232, 245, 233, 0.48))
+      drop-shadow(0 1px 0 rgba(232, 245, 233, 0.42))
+      drop-shadow(0 -1px 0 rgba(232, 245, 233, 0.42))
+      drop-shadow(0 0 7px rgba(232, 245, 233, 0.46));
+  }
 }
 
 @keyframes luma-modal-overlay-in {
@@ -117,6 +211,180 @@ select:focus-visible {
   }
 }
 
+@keyframes luma-skeleton-shimmer {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes luma-loading-progress {
+  0% {
+    transform: translateX(-115%);
+  }
+  55% {
+    transform: translateX(85%);
+  }
+  100% {
+    transform: translateX(230%);
+  }
+}
+
+.luma-loading-track {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 0.35rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--luma-primary) 30%, var(--luma-border));
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--luma-surface-muted) 82%, transparent);
+  box-shadow: inset 0 1px 2px rgba(15, 44, 29, 0.08);
+}
+
+.luma-loading-progress {
+  position: absolute;
+  inset-block: 0;
+  left: 0;
+  width: 46%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, var(--luma-primary), var(--luma-primary-hover));
+  box-shadow: 0 0 10px color-mix(in srgb, var(--luma-primary) 55%, transparent);
+  animation: luma-loading-progress 1.35s ease-in-out infinite;
+}
+
+.luma-skeleton {
+  position: relative;
+  overflow: hidden;
+}
+
+.luma-skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  animation: luma-skeleton-shimmer 1.35s ease-in-out infinite;
+}
+
+[data-theme="dark"] .luma-skeleton::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-tooltip] {
+    position: relative;
+  }
+
+  [data-tooltip]::after {
+    content: attr(data-tooltip);
+    pointer-events: none;
+    position: absolute;
+    z-index: 100;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    width: max-content;
+    max-width: min(14rem, calc(100vw - 1rem));
+    transform: translate(-50%, 0.2rem);
+    border: 1px solid color-mix(in srgb, var(--luma-border) 75%, transparent);
+    border-radius: 0.5rem;
+    background: color-mix(in srgb, var(--luma-surface-dark) 94%, transparent);
+    padding: 0.35rem 0.55rem;
+    color: var(--luma-on-surface-dark);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    transition: opacity 140ms ease, transform 140ms ease, visibility 140ms ease;
+  }
+
+  [data-tooltip][data-tooltip-side="bottom"]::after {
+    top: calc(100% + 0.5rem);
+    bottom: auto;
+    transform: translate(-50%, -0.2rem);
+  }
+
+  /* Posisi Kanan: tooltip melayang keluar dari kartu ke arah peta */
+  [data-tooltip][data-tooltip-side="right"]::after {
+    top: 50%;
+    bottom: auto;
+    left: calc(100% + 0.6rem);
+    right: auto;
+    transform: translate(-0.25rem, -50%);
+  }
+
+  [data-tooltip][data-tooltip-align="start"]::after,
+  [data-tooltip][data-tooltip-align="left"]::after {
+    right: auto;
+    left: 0;
+    transform: translate(0, 0.2rem);
+  }
+
+  [data-tooltip][data-tooltip-align="end"]::after,
+  [data-tooltip][data-tooltip-align="right"]::after {
+    right: 0;
+    left: auto;
+    transform: translate(0, 0.2rem);
+  }
+
+  [data-tooltip][data-tooltip-side="bottom"][data-tooltip-align="start"]::after,
+  [data-tooltip][data-tooltip-side="bottom"][data-tooltip-align="left"]::after,
+  [data-tooltip][data-tooltip-side="bottom"][data-tooltip-align="end"]::after,
+  [data-tooltip][data-tooltip-side="bottom"][data-tooltip-align="right"]::after {
+    transform: translate(0, -0.2rem);
+  }
+
+  [data-tooltip]:hover::after,
+  [data-tooltip]:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+  }
+
+  [data-tooltip][data-tooltip-side="right"]:hover::after,
+  [data-tooltip][data-tooltip-side="right"]:focus-visible::after {
+    transform: translate(0, -50%);
+  }
+
+  [data-tooltip][data-tooltip-align="start"]:hover::after,
+  [data-tooltip][data-tooltip-align="start"]:focus-visible::after,
+  [data-tooltip][data-tooltip-align="left"]:hover::after,
+  [data-tooltip][data-tooltip-align="left"]:focus-visible::after,
+  [data-tooltip][data-tooltip-align="end"]:hover::after,
+  [data-tooltip][data-tooltip-align="end"]:focus-visible::after,
+  [data-tooltip][data-tooltip-align="right"]:hover::after,
+  [data-tooltip][data-tooltip-align="right"]:focus-visible::after {
+    transform: translate(0, 0);
+  }
+}
+
+/* Touch devices do not have a reliable hover state. Keep tooltips hidden so a
+   tap performs the primary action immediately and never leaves a tooltip open. */
+@media (hover: none), (pointer: coarse) {
+  [data-tooltip]::after {
+    display: none;
+  }
+}
+
+.luma-portal-tooltip {
+  border: 1px solid color-mix(in srgb, var(--luma-border) 75%, transparent);
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--luma-surface-dark) 94%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: var(--luma-on-surface-dark);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  white-space: nowrap;
+}
+
 .luma-snackbar {
   animation: luma-snackbar-in 220ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -137,14 +405,616 @@ select:focus-visible {
   animation: luma-modal-content-out 140ms ease-in both;
 }
 
+/* Progressive dashboard reveal during the mandatory tour.
+   <body data-tour-step="N"> is published by OnboardingOverlay. Elements are
+   never unmounted (no map state resets); they stay hidden via visibility
+   until their tutorial step introduces them. Unmatched step values keep
+   everything visible, so an unmapped future step can never strand the UI. */
+
+/* Never part of the tour: transient feedback (loading/error/empty) stays
+   hidden until the tour finishes (attribute removed). */
+body[data-tour-step] .luma-map-feedback {
+  visibility: hidden;
+}
+
+/* Legacy legend arrives with the map materials at step 7. */
+body[data-tour-step="1"] [data-dashboard="legend-dropdown"],
+body[data-tour-step="2"] [data-dashboard="legend-dropdown"],
+body[data-tour-step="3"] [data-dashboard="legend-dropdown"],
+body[data-tour-step="4"] [data-dashboard="legend-dropdown"],
+body[data-tour-step="5"] [data-dashboard="legend-dropdown"],
+body[data-tour-step="6"] [data-dashboard="legend-dropdown"] {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Real-time clock widget joins the header row at step 4 (language). */
+body[data-tour-step="1"] [data-dashboard="clock"],
+body[data-tour-step="2"] [data-dashboard="clock"],
+body[data-tour-step="3"] [data-dashboard="clock"] {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Legend and clock fade in like the map markers (layout is unaffected —
+   legend is an absolutely positioned map overlay, clock sits inside a
+   flex header, so visibility/opacity never shift layout). */
+@media (prefers-reduced-motion: no-preference) {
+  [data-dashboard="legend-dropdown"],
+  [data-dashboard="clock"] {
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+}
+
+/* Step 1 (welcome): only the map canvas stays visible, dimmed. */
+body[data-tour-step="1"] [data-tour="map-controls"],
+body[data-tour-step="1"] [data-tour="region-selector"],
+body[data-tour-step="1"] [data-tour="language-switcher"],
+body[data-tour-step="1"] [data-tour="theme-toggle"],
+body[data-tour-step="1"] [data-tour="help-tour"],
+body[data-tour-step="1"] [data-tour="facility-dock"],
+body[data-tour-step="1"] [data-tour="air-quality"],
+body[data-tour-step="1"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 2 (interactive map): + map controls. */
+body[data-tour-step="2"] [data-tour="region-selector"],
+body[data-tour-step="2"] [data-tour="language-switcher"],
+body[data-tour-step="2"] [data-tour="theme-toggle"],
+body[data-tour-step="2"] [data-tour="help-tour"],
+body[data-tour-step="2"] [data-tour="facility-dock"],
+body[data-tour-step="2"] [data-tour="air-quality"],
+body[data-tour-step="2"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 3 (region selector): + header region pill. */
+body[data-tour-step="3"] [data-tour="language-switcher"],
+body[data-tour-step="3"] [data-tour="theme-toggle"],
+body[data-tour-step="3"] [data-tour="help-tour"],
+body[data-tour-step="3"] [data-tour="facility-dock"],
+body[data-tour-step="3"] [data-tour="air-quality"],
+body[data-tour-step="3"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 4 (language): + language switcher. */
+body[data-tour-step="4"] [data-tour="theme-toggle"],
+body[data-tour-step="4"] [data-tour="help-tour"],
+body[data-tour-step="4"] [data-tour="facility-dock"],
+body[data-tour-step="4"] [data-tour="air-quality"],
+body[data-tour-step="4"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 5 (theme): + theme toggle. */
+body[data-tour-step="5"] [data-tour="help-tour"],
+body[data-tour-step="5"] [data-tour="facility-dock"],
+body[data-tour-step="5"] [data-tour="air-quality"],
+body[data-tour-step="5"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 6 (facility dock): + dashboard dock. */
+body[data-tour-step="6"] [data-tour="help-tour"],
+body[data-tour-step="6"] [data-tour="air-quality"],
+body[data-tour-step="6"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 7 (facility details, full map): same visible set as step 6. */
+body[data-tour-step="7"] [data-tour="help-tour"],
+body[data-tour-step="7"] [data-tour="air-quality"],
+body[data-tour-step="7"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 8 (environment): + air quality card. */
+body[data-tour-step="8"] [data-tour="help-tour"],
+body[data-tour-step="8"] [data-tour="data-sources"] {
+  visibility: hidden;
+}
+
+/* Step 9 (data sources): data-sources card and Help are both in view. */
+
+/* Map info reveal (Langkah 7): region name labels + facility-count/ISPU
+   badges + DKI aggregate badge (.luma-region-marker) and facility pins /
+   cluster badges (.luma-facility-marker) are all plain DOM markers, so the
+   reveal is pure CSS on the wrapper elements. MapLibre sources and layers
+   stay untouched — no reload, no refetch, no layout shift (markers are
+   absolutely positioned by MapLibre; opacity/visibility do not affect
+   layout). A wrapper is allowed to fade because the MapLibre contract only
+   forbids transform/scale on it. */
+body[data-tour-step="1"] .luma-region-marker,
+body[data-tour-step="2"] .luma-region-marker,
+body[data-tour-step="3"] .luma-region-marker,
+body[data-tour-step="4"] .luma-region-marker,
+body[data-tour-step="5"] .luma-region-marker,
+body[data-tour-step="6"] .luma-region-marker {
+  visibility: hidden;
+  opacity: 0;
+}
+
+body[data-tour-step="1"] .luma-facility-marker,
+body[data-tour-step="2"] .luma-facility-marker,
+body[data-tour-step="3"] .luma-facility-marker,
+body[data-tour-step="4"] .luma-facility-marker,
+body[data-tour-step="5"] .luma-facility-marker,
+body[data-tour-step="6"] .luma-facility-marker {
+  visibility: hidden;
+  opacity: 0;
+}
+
+/* Hidden markers keep their click/hover listeners inert via visibility
+   (pointer events blocked while hidden, interactions preserved after the
+   reveal). Fade is skipped entirely under reduced motion. */
+@media (prefers-reduced-motion: no-preference) {
+  .luma-region-marker,
+  .luma-facility-marker {
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+  }
+}
+
+body[data-tour-step] .luma-region-marker {
+  pointer-events: none;
+}
+
+/* Non-tour zoom states keep the DKI/city aggregate behaviour as-is; the
+   markers only ever reappear once the step attribute moves to 7+, the
+   matched rules above simply stop applying. */
+
+/* Guided tour (onboarding) overlay animations. */@keyframes luma-tour-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes luma-tour-ring-in {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Hero opening: soft-edged dim that keeps the map readable in the middle. */
+.luma-tour-vignette {
+  background: radial-gradient(
+    ellipse 70% 62% at 50% 42%,
+    rgba(5, 12, 8, 0) 0%,
+    rgba(5, 12, 8, 0.3) 58%,
+    rgba(5, 12, 8, 0.74) 100%
+  );
+}
+
+/* Light-sweep across the map during the hero step ("kota menyala"). */
+@keyframes luma-tour-map-sweep {
+  0% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(160%);
+  }
+}
+
+.luma-tour-vignette::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    100deg,
+    transparent 42%,
+    rgba(34, 197, 94, 0.08) 50%,
+    transparent 58%
+  );
+  animation: luma-tour-map-sweep 3.6s ease-in-out infinite;
+}
+
+/* Hero metro-route divider: dashes march left-to-right. */
+@keyframes luma-tour-route-dash {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.luma-tour-route-dash {
+  animation: luma-tour-route-dash 1.4s linear infinite;
+}
+
+/* Hero pillar chips pop in with a small stagger. */
+@keyframes luma-tour-chip-pop {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.luma-tour-chip {
+  animation: luma-tour-chip-pop 260ms ease-out both;
+}
+
+.luma-tour-backdrop {
+  animation: luma-tour-fade-in 220ms ease-out both;
+}
+
+.luma-tour-ring {
+  animation: luma-tour-ring-in 220ms ease-out both;
+}
+
+.luma-tour-card {
+  animation: luma-tour-fade-in 180ms ease-out both;
+}
+
+/* Per-step content swap inside the persistent tutorial card: lightweight
+   opacity + translate only (no layout animation), masked to ≤180 ms so the
+   card slide to its new position reads as one motion. */
+@keyframes luma-tour-step-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.luma-tour-step-enter {
+  animation: luma-tour-step-enter 180ms ease-out both;
+}
+
+/* Tutorial card graceful slide-down & fade on Selesai */
+@keyframes luma-tour-card-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+}
+
+.luma-tour-card-exit {
+  animation: luma-tour-card-exit 320ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  pointer-events: none !important;
+}
+
+/* Backdrop and vignette dissolve on Selesai */
+@keyframes luma-tour-fade-out {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.luma-tour-backdrop-exit {
+  animation: luma-tour-fade-out 850ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+/* Spotlight ring expanding dissolve on Selesai */
+@keyframes luma-tour-ring-exit {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.18);
+  }
+}
+
+.luma-tour-ring-exit {
+  animation: luma-tour-ring-exit 500ms ease-out forwards !important;
+}
+
+/* Finale: Pulse / ripple wave expanding from the spotlight across the map */
+@keyframes luma-tour-pulse-wave {
+  0% {
+    width: 36px;
+    height: 36px;
+    opacity: 0.95;
+    box-shadow: 0 0 0 2px var(--color-primary), 0 0 24px var(--color-primary);
+  }
+  60% {
+    opacity: 0.45;
+  }
+  100% {
+    width: 1600px;
+    height: 1600px;
+    opacity: 0;
+    box-shadow: 0 0 0 1px var(--color-primary), 0 0 60px var(--color-primary);
+  }
+}
+
+.luma-tour-pulse-wave {
+  animation: luma-tour-pulse-wave 950ms cubic-bezier(0.15, 0.85, 0.35, 1) forwards;
+}
+
+/* Finale: Atmospheric Horizon Green Light Sweep across the entire map */
+@keyframes luma-tour-final-sweep {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(180%);
+    opacity: 0;
+  }
+}
+
+.luma-tour-final-sweep {
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(34, 197, 94, 0.18) 50%,
+    transparent 65%
+  );
+  animation: luma-tour-final-sweep 1000ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* The spotlight ring glides between targets instead of teleporting; the
+   ring is a tiny fixed-position element, so the cost is negligible and the
+   visual parity with the sliding card is what removes the per-step judder. */
+@media (prefers-reduced-motion: no-preference) {
+  .luma-tour-ring {
+    transition: left 200ms ease-out, top 200ms ease-out, width 200ms ease-out, height 200ms ease-out;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .luma-tour-backdrop,
+  .luma-tour-ring,
+  .luma-tour-card,
+  .luma-tour-chip,
+  .luma-tour-step-enter,
+  .luma-tour-route-dash,
+  .luma-tour-vignette::after,
+  .luma-tour-card-exit,
+  .luma-tour-backdrop-exit,
+  .luma-tour-ring-exit,
+  .luma-tour-pulse-wave,
+  .luma-tour-final-sweep {
+    animation-duration: 1ms !important;
+  }
+
+  .luma-tour-ring,
+  .luma-tour-step-enter {
+    transition: none !important;
+  }
+
+  .luma-tour-route-dash,
+  .luma-tour-vignette::after {
+    animation-iteration-count: 1 !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .luma-modal-overlay,
   .luma-modal-container,
-  .luma-snackbar {
+  .luma-snackbar,
+  .luma-skeleton::after,
+  .luma-loading-progress {
     animation-duration: 1ms !important;
   }
 }
-/* Glassmorphism Classes (True Translucent Frost Glass - Clean, Luminous & Refined) */
+/* Layered glass system: the map remains visible while every surface keeps
+   enough contrast for dense civic data. */
+.luma-map-card {
+  background: linear-gradient(145deg, rgba(246, 252, 247, 0.94), rgba(205, 233, 210, 0.82)) !important;
+  backdrop-filter: blur(20px) saturate(142%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(142%) !important;
+  border: 1px solid rgba(30, 100, 59, 0.2) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.92),
+    inset 0 -1px 0 rgba(30, 100, 59, 0.08),
+    0 10px 28px rgba(30, 85, 50, 0.14) !important;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+[data-theme="dark"] .luma-map-card {
+  background: linear-gradient(145deg, rgba(43, 87, 72, 0.82), rgba(39, 51, 56, 0.72)) !important;
+  backdrop-filter: blur(20px) saturate(132%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(132%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.13) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22),
+    0 14px 36px rgba(0, 0, 0, 0.32),
+    0 2px 8px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Panel detail berada di atas citra satelit yang ramai. Tingkatkan kontras
+   teks sekundernya secara lokal tanpa mengubah hierarki seluruh dashboard. */
+.luma-facility-detail {
+  --luma-text-muted: #2b5748;
+}
+
+[data-theme="dark"] .luma-facility-detail {
+  --luma-text-muted: #a5d6a7;
+}
+
+/* Card pada panel kiri berdiri sendiri. Menghapus bayangan luar mencegah
+   shadow antarkartu menyatu menjadi kotak besar di belakang seluruh stack. */
+.luma-map-stack .luma-map-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -1px 0 rgba(30, 74, 47, 0.05) !important;
+}
+
+[data-theme="dark"] .luma-map-stack .luma-map-card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.22) !important;
+}
+
+.luma-region-dropdown {
+  background: linear-gradient(145deg, rgba(232, 245, 233, 0.76), rgba(165, 214, 167, 0.52)) !important;
+  backdrop-filter: blur(18px) saturate(138%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(138%) !important;
+  border-color: rgba(255, 255, 255, 0.62) !important;
+}
+
+[data-theme="dark"] .luma-region-dropdown {
+  background: linear-gradient(145deg, rgba(43, 87, 72, 0.78), rgba(39, 51, 56, 0.64)) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+@media (hover: hover) {
+  .luma-glass-hover:hover {
+    transform: translateY(-2px);
+    background: linear-gradient(145deg, rgba(252, 255, 252, 0.98), rgba(218, 240, 221, 0.9)) !important;
+    border-color: rgba(30, 100, 59, 0.3) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 16px 36px rgba(30, 85, 50, 0.18),
+      0 3px 8px rgba(27, 94, 32, 0.09) !important;
+  }
+
+  .luma-glass-hover.luma-no-lift:hover {
+    transform: none;
+  }
+
+  [data-theme="dark"] .luma-glass-hover:hover {
+    background: linear-gradient(145deg, rgba(97, 135, 100, 0.76), rgba(39, 51, 56, 0.82)) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.15),
+      0 18px 42px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .luma-map-stack .luma-glass-hover:hover {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88) !important;
+  }
+
+  [data-theme="dark"] .luma-map-stack .luma-glass-hover:hover {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14) !important;
+  }
+}
+
+/* KPI kategori berdiri berdampingan. Bayangan pendek mencegah satu kartu
+   terlihat menimpa permukaan kartu di sebelahnya. */
+.luma-kpi-pill {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.62),
+    0 3px 9px rgba(43, 87, 72, 0.1) !important;
+}
+
+/* Marker fasilitas yang detailnya sedang terbuka ditandai halo dan border luar. */
+.luma-marker-selected {
+  position: relative;
+  z-index: 2;
+  transform: translateY(-3px) scale(1.1) !important;
+  box-shadow:
+    0 0 0 3px var(--luma-surface),
+    0 0 0 6px color-mix(in srgb, var(--luma-primary) 78%, white),
+    0 8px 24px color-mix(in srgb, var(--luma-primary) 45%, transparent) !important;
+}
+
+[data-theme="dark"] .luma-kpi-pill {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 3px 9px rgba(0, 0, 0, 0.2) !important;
+}
+
+@media (hover: hover) {
+  .luma-kpi-pill.luma-glass-hover:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.74),
+      0 5px 12px rgba(43, 87, 72, 0.13) !important;
+  }
+
+  [data-theme="dark"] .luma-kpi-pill.luma-glass-hover:hover {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.13),
+      0 5px 12px rgba(0, 0, 0, 0.24) !important;
+  }
+}
+
+.luma-facility-popup .maplibregl-popup-content {
+  overflow: visible;
+  border-radius: 1rem;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.luma-popup-card {
+  background: linear-gradient(145deg, rgba(232, 245, 233, 0.92), rgba(165, 214, 167, 0.7));
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.88), 0 14px 34px rgba(43, 87, 72, 0.2);
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+[data-theme="dark"] .luma-popup-card {
+  background: linear-gradient(145deg, rgba(43, 87, 72, 0.8), rgba(39, 51, 56, 0.76));
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.11), 0 16px 38px rgba(0, 0, 0, 0.4);
+}
+
+@media (hover: hover) {
+  .luma-popup-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.94);
+    box-shadow: inset 0 1px 0 #fff, 0 18px 42px rgba(20, 45, 31, 0.22);
+  }
+
+  [data-theme="dark"] .luma-popup-card:hover {
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 20px 44px rgba(0, 0, 0, 0.48);
+  }
+}
+
+.luma-facility-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+.luma-facility-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+.luma-facility-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: rgba(232, 245, 233, 0.96);
+}
+
+.luma-facility-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+.luma-facility-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+.luma-facility-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: rgba(165, 214, 167, 0.94);
+}
+
+[data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-bottom .maplibregl-popup-tip,
+[data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip,
+[data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip {
+  border-top-color: rgba(39, 51, 56, 0.96);
+}
+
+[data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-top .maplibregl-popup-tip,
+[data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-top-left .maplibregl-popup-tip,
+[data-theme="dark"] .luma-facility-popup.maplibregl-popup-anchor-top-right .maplibregl-popup-tip {
+  border-bottom-color: rgba(43, 87, 72, 0.96);
+}
+
 .luma-glass {
   background: rgba(255, 255, 255, 0.45) !important;
   backdrop-filter: blur(16px) saturate(160%) brightness(1.08) !important;
@@ -162,19 +1032,105 @@ select:focus-visible {
 }
 
 .luma-glass-inner {
-  background: rgba(255, 255, 255, 0.25) !important;
-  backdrop-filter: blur(8px) brightness(1.04) !important;
-  -webkit-backdrop-filter: blur(8px) brightness(1.04) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
-  box-shadow: none !important;
+  background: rgba(255, 255, 255, 0.22) !important;
+  backdrop-filter: blur(12px) saturate(125%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(125%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.46) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.48) !important;
+  transition: transform 160ms ease, background 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
 }
 
 [data-theme="dark"] .luma-glass-inner {
   background: rgba(255, 255, 255, 0.04) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: none !important;
+  backdrop-filter: blur(12px) saturate(120%) !important;
+  -webkit-backdrop-filter: blur(12px) saturate(120%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+}
+
+.luma-glass-item,
+.luma-glass-row {
+  border: 1px solid transparent !important;
+  transition: transform 150ms ease, background 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.luma-region-marker:hover,
+.luma-region-marker:focus-within {
+  z-index: 60 !important;
+}
+
+.luma-map-label-text {
+  text-shadow:
+    0 1px 1px rgba(255, 255, 255, 0.72),
+    0 1px 2px rgba(15, 23, 42, 0.2);
+}
+
+@media (max-width: 639px) {
+  .luma-region-marker[data-scope="DKI"] .luma-region-card {
+    display: flex;
+    min-width: 0 !important;
+    align-items: center;
+    gap: 0.45rem;
+    border-radius: 0.625rem !important;
+    padding: 0.4rem 0.55rem !important;
+  }
+
+  .luma-region-marker[data-scope="DKI"] .luma-map-label-text {
+    font-size: 0.65rem !important;
+  }
+
+  .luma-region-marker[data-scope="DKI"] .luma-region-summary {
+    margin-top: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0 !important;
+    font-size: 0.6rem !important;
+    box-shadow: none !important;
+  }
+
+  .luma-region-marker[data-scope="DKI"] .luma-region-summary-label {
+    display: none;
+  }
+
+  .luma-region-marker[data-scope="DKI"] > div:last-child {
+    height: 0.4rem !important;
+    width: 0.4rem !important;
+  }
+}
+
+[data-theme="dark"] .luma-map-label-text {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.88),
+    0 0 4px rgba(255, 255, 255, 0.12);
+}
+
+@media (hover: hover) {
+  .luma-glass-inner:hover,
+  .luma-glass-item:hover,
+  .luma-glass-row:hover {
+    background: rgba(255, 255, 255, 0.36) !important;
+    border-color: rgba(255, 255, 255, 0.7) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 6px 16px rgba(20, 45, 31, 0.08) !important;
+    transform: translateY(-1px);
+  }
+
+  [data-theme="dark"] .luma-glass-inner:hover,
+  [data-theme="dark"] .luma-glass-item:hover,
+  [data-theme="dark"] .luma-glass-row:hover {
+    background: rgba(255, 255, 255, 0.075) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 8px 20px rgba(0, 0, 0, 0.16) !important;
+  }
+
+  .luma-glass-row:hover {
+    transform: translateX(2px);
+  }
+
+  .luma-region-card:hover {
+    transform: translateY(-2px) scale(1.015);
+    filter: brightness(1.04);
+    box-shadow: 0 14px 32px rgba(14, 54, 31, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.72) !important;
+  }
 }
 
 /* Custom Scrollbar Utilities (Clean Hide & Thin Variants) */

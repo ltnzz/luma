@@ -1,39 +1,68 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { FullScreenMapDashboard } from './features/dashboard/components/FullScreenMapDashboard'
 import { DashboardHeader } from './features/dashboard/components/DashboardHeader'
-import { DataSourcesComingSoonPage } from './features/dashboard/components/DataSourcesComingSoonPage'
+import { useOnboarding } from './features/onboarding/useOnboarding'
+import { TOUR_STEPS } from './features/onboarding/tour-steps'
+
+const OnboardingOverlay = lazy(() =>
+  import('./features/onboarding/OnboardingOverlay').then((m) => ({
+    default: m.OnboardingOverlay,
+  }))
+)
+
+const DataSourcesComingSoonPage = lazy(() =>
+  import('./features/dashboard/components/DataSourcesComingSoonPage').then((m) => ({
+    default: m.DataSourcesComingSoonPage,
+  }))
+)
 
 export default function App() {
   const [activeWilayah, setActiveWilayah] = useState<string>('ALL')
   const [currentView, setCurrentView] = useState<'dashboard' | 'sumber-data'>(() => {
-    return window.location.hash === '#sumber-data' ? 'sumber-data' : 'dashboard'
+    if (typeof window === 'undefined') return 'dashboard'
+    return window.location.pathname.startsWith('/sumber-data') || window.location.hash === '#sumber-data'
+      ? 'sumber-data'
+      : 'dashboard'
   })
+  const onboarding = useOnboarding(TOUR_STEPS.length)
 
-  // Sinkronisasi navigasi dengan browser hash
+  // Sinkronisasi navigasi dengan browser history (clean paths) & bersihkan legacy hash
   useEffect(() => {
-    function handleHashChange() {
-      if (window.location.hash === '#sumber-data') {
+    // Bersihkan legacy hash (#sumber-data atau #) dari URL jika ada
+    if (window.location.hash === '#sumber-data') {
+      window.history.replaceState({}, '', '/sumber-data')
+    } else if (window.location.hash) {
+      window.history.replaceState({}, '', window.location.pathname || '/')
+    }
+
+    function handlePopState() {
+      if (window.location.pathname.startsWith('/sumber-data')) {
         setCurrentView('sumber-data')
       } else {
         setCurrentView('dashboard')
       }
     }
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
   const handleNavigateToDataSources = () => {
-    window.location.hash = 'sumber-data'
+    if (window.location.pathname !== '/sumber-data') {
+      window.history.pushState({}, '', '/sumber-data')
+    }
     setCurrentView('sumber-data')
   }
 
   const handleBackToDashboard = () => {
-    window.location.hash = ''
+    if (window.location.pathname !== '/') {
+      window.history.pushState({}, '', '/')
+    }
     setCurrentView('dashboard')
   }
 
   return (
-    <div className="flex flex-col h-screen h-dvh bg-background text-foreground overflow-hidden select-none">
+    <div className="fixed inset-0 flex flex-col h-full w-full bg-background text-foreground overflow-hidden select-none">
       {/* 1. Single Unified Navbar */}
       <DashboardHeader
         activeWilayah={activeWilayah}
@@ -44,6 +73,8 @@ export default function App() {
               }
             : undefined
         }
+        onRestartTutorial={onboarding.restart}
+        onNavigateToDashboard={handleBackToDashboard}
       />
 
       {/* 2. Main Full-Screen Map Viewport atau Halaman Sumber Data (Coming Soon) */}
@@ -55,9 +86,18 @@ export default function App() {
             onNavigateToDataSources={handleNavigateToDataSources}
           />
         ) : (
-          <DataSourcesComingSoonPage onBack={handleBackToDashboard} />
+          <Suspense fallback={null}>
+            <DataSourcesComingSoonPage onBack={handleBackToDashboard} />
+          </Suspense>
         )}
       </main>
+
+      {/* 3. Mandatory first-visit guided tour (spotlight layer above all UI) */}
+      {onboarding.isActive ? (
+        <Suspense fallback={null}>
+          <OnboardingOverlay controller={onboarding} steps={TOUR_STEPS} />
+        </Suspense>
+      ) : null}
     </div>
   )
 }
