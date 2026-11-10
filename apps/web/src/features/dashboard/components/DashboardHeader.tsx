@@ -17,6 +17,7 @@ interface DashboardHeaderProps {
   activeWilayah?: string
   onSelectWilayah?: (wilayah: string) => void
   onRestartTutorial?: () => void
+  onNavigateToDashboard?: () => void
 }
 
 /**
@@ -28,6 +29,7 @@ export function DashboardHeader({
   activeWilayah = 'ALL',
   onSelectWilayah,
   onRestartTutorial,
+  onNavigateToDashboard,
 }: DashboardHeaderProps) {
   const { language, setLanguage, t } = useTranslation()
   const [isRegionOpen, setIsRegionOpen] = useState(false)
@@ -102,9 +104,13 @@ export function DashboardHeader({
     <header className="relative z-[60] flex h-14 shrink-0 items-center justify-between gap-1.5 border-b border-border bg-surface px-2 sm:gap-2 sm:px-6 shadow-2xs select-none">
       {/* 1. Kiri: Brand Logo & Title */}
       <a
-        href="#"
+        href="/"
+        onClick={(e) => {
+          e.preventDefault()
+          onNavigateToDashboard?.()
+        }}
         aria-label={t('common.brandA11y')}
-        className="flex min-w-0 shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+        className="flex min-w-0 shrink-0 items-center rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary cursor-pointer"
       >
         <img
           src="/luma-logo.png"
