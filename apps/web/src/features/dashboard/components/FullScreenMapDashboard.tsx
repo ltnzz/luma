@@ -616,7 +616,7 @@ export function FullScreenMapDashboard({
           ) : null}
 
           {/* Legenda tetap tersedia sebagai dropdown compact. */}
-          <div className="hidden sm:block">
+          <div data-dashboard="legend-dropdown" className="hidden sm:block">
             <StaticMapLegend isOpen={isLegendOpen} onOpenChange={setIsLegendOpen} />
           </div>
 

@@ -16,6 +16,7 @@ export function StaticMapLegend({ isOpen = false, onOpenChange }: StaticMapLegen
 
   return (
     <details
+      data-dashboard="legend-dropdown"
       open={isOpen}
       onToggle={(event) => onOpenChange?.(event.currentTarget.open)}
       className="group pointer-events-auto w-[min(72vw,270px)] overflow-hidden rounded-xl luma-map-card luma-glass-hover select-none animate-in fade-in slide-in-from-left-2 duration-300 sm:w-[280px]"

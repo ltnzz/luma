@@ -426,6 +426,7 @@ body[data-tour-step="5"] [data-dashboard="legend-dropdown"],
 body[data-tour-step="6"] [data-dashboard="legend-dropdown"] {
   visibility: hidden;
   opacity: 0;
+  pointer-events: none;
 }
 
 /* Real-time clock widget joins the header row at step 4 (language). */
