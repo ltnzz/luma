@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
 import { CategoryIconBadge } from '../../../components/ui/CategoryIconBadge'
 import { getDataCatalogEntry } from '../../../data/data-catalog'
 import { useTranslation } from '../../../i18n/useTranslation'
@@ -16,6 +16,7 @@ interface MobileMapBottomSheetProps {
   isAirLive: boolean
   canExpandRegion: boolean
   onNavigateToDataSources?: () => void
+  onHeightChange?: (height: number) => void
 }
 
 const LEGEND_ITEMS: Array<{
@@ -76,6 +77,7 @@ export function MobileMapBottomSheet({
   isAirLive,
   canExpandRegion,
   onNavigateToDataSources,
+  onHeightChange,
 }: MobileMapBottomSheetProps) {
   const { language, t } = useTranslation()
   const [sheetHeight, setSheetHeight] = useState<number | null>(null)
@@ -90,10 +92,26 @@ export function MobileMapBottomSheet({
   const handleRef = useRef<HTMLDivElement | null>(null)
   const panelContentRef = useRef<HTMLDivElement | null>(null)
   const navRef = useRef<HTMLElement | null>(null)
+  const sheetRef = useRef<HTMLElement | null>(null)
   const resolvedHeight = sheetHeight ?? COLLAPSED_SHEET_HEIGHT
   const isExpanded = canExpandRegion && resolvedHeight > 230
   const canDragSheet = activeTab !== 'explore' || canExpandRegion
   const renderedHeight = canDragSheet ? `${resolvedHeight}px` : 'auto'
+
+  useEffect(() => {
+    const sheet = sheetRef.current
+    if (!sheet || !onHeightChange) return
+
+    const reportHeight = () => onHeightChange(sheet.getBoundingClientRect().height)
+    reportHeight()
+    const observer = new ResizeObserver(reportHeight)
+    observer.observe(sheet)
+
+    return () => {
+      observer.disconnect()
+      onHeightChange(0)
+    }
+  }, [onHeightChange])
   const copy = language === 'id'
     ? {
         local: 'Suasana lokal', explore: 'Jelajahi', legend: 'Legenda Peta', sources: 'Sumber Data',
@@ -185,6 +203,7 @@ export function MobileMapBottomSheet({
 
   return (
     <section
+      ref={sheetRef}
       style={{ '--mobile-map-sheet-height': renderedHeight } as CSSProperties}
       className={`pointer-events-auto absolute inset-x-2 bottom-2 z-30 flex h-[var(--mobile-map-sheet-height)] max-h-[72dvh] flex-col overflow-hidden rounded-2xl luma-map-card sm:hidden ${isDragging ? 'transition-none' : 'transition-[height] duration-250 ease-out'}`}
     >

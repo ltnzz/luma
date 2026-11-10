@@ -27,17 +27,10 @@ interface FacilityDetailModalProps {
   onClose: () => void
   variant?: 'center' | 'side-glass'
   regionalAirQuality?: RealtimeAirQuality | null
+  onMobileHeightChange?: (height: number) => void
 }
 
 type FacilityDetailTab = 'overview' | 'specs' | 'budget'
-
-const CATEGORY_BADGE_COLORS: Record<string, string> = {
-  fasum: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border-emerald-500/40',
-  transum: 'bg-blue-500/15 text-blue-600 dark:text-blue-300 border-blue-500/40',
-  kesehatan: 'bg-rose-500/15 text-rose-600 dark:text-rose-300 border-rose-500/40',
-  pendidikan: 'bg-purple-500/15 text-purple-600 dark:text-purple-300 border-purple-500/40',
-  lingkungan: 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border-cyan-500/40',
-}
 
 function formatMetadataDate(value: string, language: 'id' | 'en'): string {
   const date = new Date(value)
@@ -77,6 +70,7 @@ export function FacilityDetailModal({
   onClose,
   variant = 'center',
   regionalAirQuality,
+  onMobileHeightChange,
 }: FacilityDetailModalProps) {
   const { language, t } = useTranslation()
   const copy = language === 'id'
@@ -215,6 +209,25 @@ export function FacilityDetailModal({
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [variant, modalOpen, onClose])
 
+  useEffect(() => {
+    const sheet = sheetRef.current
+    if (variant !== 'side-glass' || !modalOpen || !sheet || !onMobileHeightChange) return
+
+    const reportHeight = () => {
+      onMobileHeightChange(window.innerWidth < 640 ? sheet.getBoundingClientRect().height : 0)
+    }
+    reportHeight()
+    const observer = new ResizeObserver(reportHeight)
+    observer.observe(sheet)
+    window.addEventListener('resize', reportHeight)
+
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', reportHeight)
+      onMobileHeightChange(0)
+    }
+  }, [variant, modalOpen, onMobileHeightChange])
+
   // Normalisasi spesifikasi fasilitas baik format object Record maupun Array relasional [{ specKey, specValue }]
   const specs = useMemo<Record<string, string>>(() => {
     const raw = displayFacility?.specs
@@ -249,11 +262,6 @@ export function FacilityDetailModal({
     return null
   }
 
-  const categoryBadge =
-    displayFacility?.category
-      ? (CATEGORY_BADGE_COLORS[displayFacility.category.toLowerCase()] ??
-        'bg-primary/10 text-primary border-primary/25')
-      : ''
   const googleMapsUrl = displayFacility ? getGoogleMapsUrl(displayFacility) : null
   const coordinateLabel = displayFacility && Number.isFinite(displayFacility.lat) && Number.isFinite(displayFacility.lng)
     ? `GPS: ${displayFacility.lat.toFixed(4)}, ${displayFacility.lng.toFixed(4)}`
@@ -298,8 +306,6 @@ export function FacilityDetailModal({
     : aqiStatus
   const budget = (displayFacility?.budget ?? {}) as Record<string, string | null | undefined>
   const catalogEntry = catalogForFacility(displayFacility?.category, language)
-  const accreditation = metrics.accreditation ?? metrics.akreditasi ?? specs.Akreditasi ?? specs.Accreditation
-
   const tabs: Array<{ id: FacilityDetailTab; label: string }> = [
     { id: 'overview', label: copy.overviewTab },
     { id: 'specs', label: copy.specsTab },
@@ -427,7 +433,7 @@ export function FacilityDetailModal({
             ) : <p className="rounded-lg border border-dashed border-border p-3 text-center text-[10px] text-muted">{copy.emptyBudget}</p>}
           </section>
 
-          <section>
+          <section className="pb-2 sm:pb-1">
             <h3 className="mb-2 text-[10px] font-bold uppercase tracking-wider text-primary dark:text-emerald-400">{copy.documents}</h3>
             {docs.length > 0 ? (
               <div className="flex flex-col gap-1.5">
@@ -494,17 +500,7 @@ export function FacilityDetailModal({
         {/* Header Glass */}
         <header className="flex shrink-0 items-start justify-between gap-2 border-b border-border/50 bg-transparent px-3 py-2.5 dark:border-white/10 sm:gap-2.5 sm:p-3.5">
           <div className="flex flex-col gap-0.5 min-w-0 pr-1">
-            <div className="flex items-center gap-1.5 flex-wrap">
-              <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider backdrop-blur-sm shadow-sm ${categoryBadge}`}>
-                {displayFacility.subCategory || displayFacility.category}
-              </span>
-              <span className="text-[11px] font-semibold text-muted dark:text-white/75">{displayFacility.wilayah}</span>
-              {accreditation ? (
-                <span className="rounded-full border border-primary/25 bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold text-primary dark:text-emerald-300">
-                  {copy.accreditation} {String(accreditation)}
-                </span>
-              ) : null}
-            </div>
+            <span className="text-[10px] font-bold uppercase tracking-wide text-muted dark:text-white/70 sm:text-[11px]">{displayFacility.wilayah}</span>
             <h2 className="mt-0.5 line-clamp-1 text-[13px] font-bold leading-snug tracking-tight text-foreground dark:text-white sm:line-clamp-2 sm:text-base">
               {displayFacility.name}
             </h2>
@@ -526,9 +522,12 @@ export function FacilityDetailModal({
                 data-tooltip={copy.openMaps}
                 data-tooltip-side="bottom"
                 data-tooltip-align="start"
-                className="mt-1 inline-flex w-fit items-center text-[9.5px] font-bold text-primary transition-[color,opacity] duration-200 hover:opacity-75 hover:underline focus-visible:outline-none focus-visible:underline dark:text-emerald-300 sm:text-[10px]"
+                className="mt-1 inline-flex size-7 items-center justify-center rounded-lg border border-primary/25 bg-primary/10 text-primary transition-[transform,color,background-color] duration-200 hover:scale-105 hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 dark:text-emerald-300"
               >
-                <span className="font-mono">{coordinateLabel}</span>
+                <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                  <circle cx="12" cy="10" r="2.5" />
+                </svg>
               </a>
             ) : null}
           </div>
@@ -584,12 +583,7 @@ export function FacilityDetailModal({
       title={
         displayFacility ? (
           <div className="flex flex-col gap-1.5 pr-2">
-            <div className="flex items-center gap-2">
-              <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider backdrop-blur-sm shadow-sm ${categoryBadge}`}>
-                {displayFacility.subCategory || displayFacility.category}
-              </span>
-              <span className="text-xs font-medium text-white/60">{displayFacility.wilayah}</span>
-            </div>
+            <span className="text-xs font-semibold uppercase tracking-wide text-white/60">{displayFacility.wilayah}</span>
             <span className="text-lg sm:text-xl font-bold text-white tracking-tight leading-snug">
               {displayFacility.name}
             </span>
@@ -621,9 +615,12 @@ export function FacilityDetailModal({
               title={copy.openMapsTitle}
               data-tooltip={copy.openMaps}
               data-tooltip-align="start"
-              className="inline-flex items-center rounded-md font-mono text-[11px] text-white/55 transition-colors hover:text-emerald-300 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
+              className="inline-flex size-8 items-center justify-center rounded-lg border border-emerald-300/25 bg-white/5 text-emerald-300 transition-[transform,background-color] hover:scale-105 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
             >
-              {coordinateLabel}
+              <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
             </a>
           ) : (
             <span className="font-mono text-[11px] text-white/50">{coordinateLabel ?? ''}</span>

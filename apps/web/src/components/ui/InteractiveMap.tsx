@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback, type CSSProperties } from 'react'
 import {
   Map as MapLibreMap,
   Marker,
@@ -178,6 +178,7 @@ interface InteractiveMapProps {
   showWaterNetwork?: boolean
   activeCategory?: string | null
   regionCardsLoading?: boolean
+  mobileControlsBottomOffset?: number
   onReady?: () => void
   onMapError?: () => void
 }
@@ -631,6 +632,7 @@ export function InteractiveMap({
   onSelectCorridor,
   activeCategory = null,
   regionCardsLoading = false,
+  mobileControlsBottomOffset = 148,
   onReady,
   onMapError,
 }: InteractiveMapProps) {
@@ -1816,7 +1818,11 @@ export function InteractiveMap({
       )}
 
       {/* Floating Control Stack di Kanan Bawah: Zoom (+/-/Reset) dan di bawahnya Mode 3-Icon Switcher */}
-      <div data-tour="map-controls" className="pointer-events-auto absolute right-3 top-[34%] bottom-auto z-10 flex flex-col items-end gap-2 sm:right-4 sm:top-auto sm:bottom-4">
+      <div
+        data-tour="map-controls"
+        style={{ '--mobile-map-controls-bottom': `${mobileControlsBottomOffset}px` } as CSSProperties}
+        className="pointer-events-auto absolute right-3 bottom-[var(--mobile-map-controls-bottom)] z-10 flex flex-col items-end gap-2 transition-[bottom] duration-200 sm:right-4 sm:bottom-4"
+      >
         {/* Kontrol Navigasi (Zoom In, Zoom Out, Reset Pandangan) */}
         <div className="flex flex-col rounded-xl border border-border bg-surface shadow-md">
           <button

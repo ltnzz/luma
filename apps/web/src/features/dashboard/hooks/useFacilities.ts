@@ -54,13 +54,17 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
   const page = params.page ?? 1
   const search = params.search
 
+  // Tanpa wilayah tetap boleh mengambil data ketika kategori dipilih. Ini
+  // dipakai peta provinsi untuk menampilkan marker kategori secara on-demand,
+  // tanpa mengunduh seluruh fasilitas pada pemuatan awal.
   const isAllWilayah = !wilayah || wilayah === 'ALL'
+  const isDisabled = isAllWilayah && !category
   const cacheKey = buildFacilitiesCacheKey({ wilayah, category, search, page, limit })
-  const cachedForParams = !isAllWilayah ? facilitiesSessionCache.get(cacheKey) : undefined
+  const cachedForParams = !isDisabled ? facilitiesSessionCache.get(cacheKey) : undefined
 
   const [state, setState] = useState<FacilitiesState>(() => ({
     cacheKey,
-    status: isAllWilayah
+    status: isDisabled
       ? 'success'
       : cachedForParams
         ? cachedForParams.items.length > 0
@@ -74,7 +78,7 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
   const [reloadToken, setReloadToken] = useState(0)
 
   useEffect(() => {
-    if (isAllWilayah) return
+    if (isDisabled) return
 
     // Cache hit: tidak melakukan fetch ulang — hasil cache-derived sudah
     // di-merge langsung dari render body (lihat bawah), tanpa effect setState.
@@ -109,15 +113,15 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
       })
 
     return () => controller.abort()
-  }, [isAllWilayah, cacheKey, wilayah, category, limit, page, search, reloadToken])
+  }, [isDisabled, cacheKey, wilayah, category, limit, page, search, reloadToken])
 
   const refetch = useCallback(() => {
-    if (isAllWilayah) return
+    if (isDisabled) return
     // Manual refetch selalu bypass cache param aktif (cancellation penting).
     facilitiesSessionCache.delete(cacheKey)
     setState((previous) => ({ ...previous, status: 'loading', error: null }))
     setReloadToken((token) => token + 1)
-  }, [isAllWilayah, cacheKey])
+  }, [isDisabled, cacheKey])
   useApiRetry(refetch)
 
   const isMatching = state.cacheKey === cacheKey
@@ -128,16 +132,16 @@ export function useFacilities(paramsOrWilayah?: string | FacilitiesFilterParams)
   const networkError = isMatching ? state.error : null
   const networkPagination = isMatching ? state.pagination : null
 
-  const status = isAllWilayah
+  const status = isDisabled
     ? ('success' as const)
     : cachedForParams
       ? cachedForParams.items.length > 0
         ? ('success' as const)
         : ('empty' as const)
       : networkStatus
-  const items = isAllWilayah ? [] : (cachedForParams ? cachedForParams.items : networkItems)
-  const error = isAllWilayah || cachedForParams ? null : networkError
-  const pagination = isAllWilayah ? null : (cachedForParams ? cachedForParams.pagination : networkPagination)
+  const items = isDisabled ? [] : (cachedForParams ? cachedForParams.items : networkItems)
+  const error = isDisabled || cachedForParams ? null : networkError
+  const pagination = isDisabled ? null : (cachedForParams ? cachedForParams.pagination : networkPagination)
 
   return {
     items,

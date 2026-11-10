@@ -81,6 +81,7 @@ export function FullScreenMapDashboard({
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<KpiCategory | null>(null)
   const [isLegendOpen, setIsLegendOpen] = useState(false)
   const [mobileMapTab, setMobileMapTab] = useState<MobileMapTab>('explore')
+  const [mobileOverlayHeight, setMobileOverlayHeight] = useState(0)
   const [isMapReady, setIsMapReady] = useState(false)
   const [mapError, setMapError] = useState(false)
 
@@ -171,6 +172,14 @@ export function FullScreenMapDashboard({
     )
   }, [cityAggregate])
 
+  const provinceFacilityCategory = isAll
+    ? activeCategoryFilter === 'kesehatan'
+      ? 'kesehatan'
+      : activeCategoryFilter === 'rth'
+        ? 'fasum'
+        : undefined
+    : undefined
+
   const {
     facilities,
     status: facilitiesStatus,
@@ -178,6 +187,8 @@ export function FullScreenMapDashboard({
     refetch: refetchFacilities,
   } = useFacilities({
     wilayah: activeWilayah === 'ALL' ? undefined : activeWilayah,
+    category: provinceFacilityCategory,
+    limit: 250,
   })
 
   const activeCitySummary = useMemo(() => {
@@ -256,7 +267,7 @@ export function FullScreenMapDashboard({
     status: schoolsStatus,
     error: schoolsError,
     refetch: refetchSchools,
-  } = useSchoolsData(activeWilayah, activeSchoolBreakdown)
+  } = useSchoolsData(activeWilayah, activeSchoolBreakdown, activeCategoryFilter === 'sekolah')
 
   const synchronizedDockCounts = useMemo(() => {
     if (isAll) {
@@ -339,8 +350,9 @@ export function FullScreenMapDashboard({
 
   // Filter Fasilitas Dinamis Berdasarkan activeCategoryFilter & Sub-filter
   const combinedFacilities = useMemo(() => {
-    // Di level ALL, peta tidak merender marker individual fasilitas/sekolah
-    if (isAll) {
+    // Level provinsi hanya mengambil marker ketika satu kategori dipilih.
+    // Tampilan awal tetap memakai ringkasan kota agar tidak terlalu padat.
+    if (isAll && !activeCategoryFilter) {
       return []
     }
 
@@ -450,15 +462,16 @@ export function FullScreenMapDashboard({
   const isTransitVisible = activeCategoryFilter === null || activeCategoryFilter === 'transum'
   const isWaterVisible = showWaterNetwork && (activeCategoryFilter === null || activeCategoryFilter === 'air')
   const usesFacilityMarkers = activeCategoryFilter !== 'transum' && activeCategoryFilter !== 'air'
-  const markerDataIsLoading = !isAll && usesFacilityMarkers && (activeCategoryFilter === 'sekolah'
+  const markerDataIsLoading = usesFacilityMarkers && (activeCategoryFilter === 'sekolah'
     ? schoolsStatus === 'loading'
     : facilitiesStatus === 'loading')
-  const markerDataError = !isAll && usesFacilityMarkers
+  const markerScopeUsesData = !isAll || Boolean(activeCategoryFilter)
+  const markerDataError = markerScopeUsesData && usesFacilityMarkers
     ? (activeCategoryFilter === 'sekolah' ? schoolsError : facilitiesError)
     : null
   const markerDataHasError = markerDataError !== null
   const markerDataIsEmpty =
-    !isAll && usesFacilityMarkers && !markerDataIsLoading && !markerDataHasError && combinedFacilities.length === 0
+    markerScopeUsesData && usesFacilityMarkers && !markerDataIsLoading && !markerDataHasError && combinedFacilities.length === 0
   const refetchMarkerData = activeCategoryFilter === 'sekolah' ? refetchSchools : refetchFacilities
   const mobileAirStatus = language === 'id'
     ? realtimeAirQuality?.category ?? 'Belum tersedia'
@@ -532,6 +545,7 @@ export function FullScreenMapDashboard({
             onSelectCorridor={setFocusedCorridorId}
             onMapError={() => setMapError(true)}
             onReady={handleMapReady}
+            mobileControlsBottomOffset={mobileOverlayHeight + 12}
           />
         </Suspense>
       ) : (
@@ -726,6 +740,7 @@ export function FullScreenMapDashboard({
           isAirLive={isAirLive}
           canExpandRegion={activeWilayah !== 'ALL'}
           onNavigateToDataSources={onNavigateToDataSources}
+          onHeightChange={setMobileOverlayHeight}
         />
       ) : null}
 
@@ -738,6 +753,7 @@ export function FullScreenMapDashboard({
             isOpen={Boolean(selectedFacility)}
             onClose={() => setSelectedFacility(null)}
             variant="side-glass"
+            onMobileHeightChange={setMobileOverlayHeight}
           />
         </Suspense>
       )}
