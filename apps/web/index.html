@@ -28,8 +28,66 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Luma — Platform peta cerdas, indikator keberlanjutan, dan pemantauan fasilitas publik DKI Jakarta." />
+    <title>Luma</title>
+
+    <!-- SEO & Metadata Dasar -->
+    <meta name="google-site-verification" content="google020a7cc561641b44" />
+    <meta
+      name="description"
+      content="Platform peta interaktif fasilitas publik DKI Jakarta: pantau sebaran faskes, sekolah, ruang hijau, rute transportasi umum, dan indeks kualitas udara (AQI) real-time."
+    />
+    <meta
+      name="keywords"
+      content="Luma, Peta Jakarta, Fasilitas Publik DKI Jakarta, Kualitas Udara Jakarta, Faskes Jakarta, RTH Jakarta, Transjakarta, Data Jakarta, GIS Jakarta"
+    />
+    <meta name="author" content="Luma" />
+    <meta name="robots" content="index, follow" />
+    <script>
+      ;(() => {
+        const host = window.location.hostname
+        if (host && host !== 'lumaurban.my.id' && host !== 'www.lumaurban.my.id') {
+          const meta = document.querySelector('meta[name="robots"]')
+          if (meta) meta.setAttribute('content', 'noindex, nofollow')
+        }
+      })()
+    </script>
+    <link rel="canonical" href="https://lumaurban.my.id/" />
     <link rel="preload" as="image" href="/luma-logo.png" type="image/png" fetchpriority="high" />
+
+    <!-- Open Graph (WhatsApp, Facebook, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://lumaurban.my.id/" />
+    <meta property="og:locale" content="id_ID" />
+    <meta property="og:title" content="Luma — Peta Fasilitas Publik & Indikator Keberlanjutan DKI Jakarta" />
+    <meta
+      property="og:description"
+      content="Platform peta interaktif fasilitas publik DKI Jakarta: pantau sebaran faskes, sekolah, ruang hijau, rute transportasi umum, dan kualitas udara (AQI) real-time."
+    />
+    <meta property="og:image" content="https://lumaurban.my.id/luma-logo.png" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Luma — Peta Fasilitas Publik DKI Jakarta" />
+    <meta
+      name="twitter:description"
+      content="Platform peta interaktif fasilitas publik & indikator keberlanjutan DKI Jakarta."
+    />
+    <meta name="twitter:image" content="https://lumaurban.my.id/luma-logo.png" />
+
+    <!-- Structured Data (JSON-LD) untuk Google Search Rich Snippet -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Luma",
+        "url": "https://lumaurban.my.id",
+        "description": "Platform peta interaktif pemantauan fasilitas publik, kualitas udara real-time, dan indikator keberlanjutan DKI Jakarta.",
+        "applicationCategory": "PublicServicesApplication",
+        "operatingSystem": "All",
+        "inLanguage": "id"
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -49,7 +107,6 @@
         rel="stylesheet"
       />
     </noscript>
-    <title>Luma — Dashboard DKI Jakarta</title>
   </head>
   <body>
     <div id="root"></div>
