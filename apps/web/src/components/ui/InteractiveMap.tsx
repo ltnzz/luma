@@ -1055,42 +1055,39 @@ export function InteractiveMap({
       let badgeText = `${language === 'id' ? '1.740' : '1,740'} ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
       let cardBorder = 'border-primary/50 group-hover:border-primary'
-      let dotColor = 'bg-primary'
+      let iconColor = 'text-primary'
 
       if (activeCategory === 'kesehatan') {
         const totalFaskes = facilities.filter((f) => f.category === 'kesehatan').length
         badgeText = `${totalFaskes > 0 ? totalFaskes : 47} ${t('mapFirst.dock.health')}`
         badgeClass = 'bg-rose-500/15 text-rose-600 border border-rose-500/30'
         cardBorder = 'border-rose-500/50 group-hover:border-rose-500'
-        dotColor = 'bg-rose-500'
+        iconColor = 'text-rose-500'
       } else if (activeCategory === 'rth') {
         const totalRth = facilities.filter((f) => f.category === 'fasum').length
         badgeText = `${totalRth > 0 ? totalRth : 24} ${t('mapFirst.dock.green')}`
         badgeClass = 'bg-emerald-500/15 text-emerald-600 border border-emerald-500/30'
         cardBorder = 'border-emerald-500/50 group-hover:border-emerald-500'
-        dotColor = 'bg-emerald-500'
+        iconColor = 'text-emerald-500'
       } else if (activeCategory === 'sekolah') {
         badgeText = `1.503 ${t('mapFirst.dock.school')}`
         badgeClass = 'bg-blue-500/15 text-blue-600 border border-blue-500/30'
         cardBorder = 'border-blue-500/50 group-hover:border-blue-500'
-        dotColor = 'bg-blue-500'
+        iconColor = 'text-blue-500'
       } else if (activeCategory === 'transum') {
         badgeText = `13 ${t('mapFirst.dock.transitUnit')} BRT`
         badgeClass = 'bg-purple-500/15 text-purple-600 border border-purple-500/30'
         cardBorder = 'border-purple-500/50 group-hover:border-purple-500'
-        dotColor = 'bg-purple-500'
+        iconColor = 'text-purple-500'
       } else if (activeCategory === 'air') {
         badgeText = `68% ${t('mapFirst.dock.water')}`
         badgeClass = 'bg-sky-500/15 text-sky-600 border border-sky-500/30'
         cardBorder = 'border-sky-500/50 group-hover:border-sky-500'
-        dotColor = 'bg-sky-500'
+        iconColor = 'text-sky-500'
       }
 
-      const aqiInfo = getAqiLevel(173) // Rata-rata indeks kualitas udara DKI Jakarta
-      const airQualityUnit = t('mapFirst.air.unit')
       const [badgeValue, ...badgeLabelParts] = badgeText.split(' ')
       const badgeLabel = badgeLabelParts.join(' ')
-      const aqiDot = `<span class="h-2 w-2 shrink-0 rounded-full ring-2 ring-white/70 dark:ring-black/30" style="background-color:${aqiInfo.color}" title="${t('mapFirst.air.title')}: 173 ${airQualityUnit}" aria-label="${t('mapFirst.air.title')}: 173 ${airQualityUnit}"></span>`
 
       const wrapperEl = document.createElement('div')
       wrapperEl.className = 'luma-region-marker group relative flex flex-col items-center cursor-pointer select-none z-10'
@@ -1100,14 +1097,18 @@ export function InteractiveMap({
       cardEl.className = `luma-region-card min-w-[150px] px-3 py-2 luma-map-card luma-glass-hover border ${cardBorder} rounded-xl transition-all`
 
       cardEl.innerHTML = `
-        <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
           <div class="flex min-w-0 items-center gap-2">
-            <span class="h-2 w-2 shrink-0 rounded-full ${dotColor} shadow-[0_0_0_3px_rgba(34,197,94,0.12)]"></span>
+            <span class="inline-flex size-4 shrink-0 items-center justify-center rounded-md bg-surface-muted/70 ${iconColor}" title="${language === 'id' ? 'Wilayah DKI Jakarta' : 'DKI Jakarta region'}" aria-hidden="true">
+              <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+                <circle cx="12" cy="10" r="2.5" />
+              </svg>
+            </span>
             <span class="luma-map-label-text truncate text-[11px] font-bold text-foreground tracking-tight">DKI Jakarta</span>
           </div>
-          ${aqiDot}
         </div>
-        <span class="luma-region-summary mt-1.5 inline-flex max-w-full px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">
+        <span class="luma-region-summary ml-6 mt-1.5 inline-flex max-w-[calc(100%_-_1.5rem)] px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">
           <span>${badgeValue}</span><span class="luma-region-summary-label">&nbsp;${badgeLabel}</span>
         </span>
       `

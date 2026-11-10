@@ -340,7 +340,7 @@ export function FacilityDetailModal({
   )
 
   const renderDetailContent = () => (
-    <div id={`facility-tab-${activeTab}`} role="tabpanel" className="flex flex-col gap-2.5 py-0.5">
+    <div id={`facility-tab-${activeTab}`} role="tabpanel" className="flex flex-col gap-2.5 pt-0.5 pb-4">
       {activeTab === 'overview' ? (
         <>
           {hasEnvironmentData ? (
@@ -505,31 +505,32 @@ export function FacilityDetailModal({
               {displayFacility.name}
             </h2>
             {displayFacility.address && (
-              <p className="mt-0.5 flex min-w-0 items-start gap-1 text-[10px] font-medium leading-snug text-muted dark:text-white/75 sm:text-[11px] sm:leading-relaxed">
-                <svg className="size-3 shrink-0 text-primary dark:text-emerald-400 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                  <circle cx="12" cy="10" r="3" />
-                </svg>
+              <p className="mt-0.5 flex min-w-0 items-start justify-between gap-1.5 text-[10px] font-medium leading-snug text-muted dark:text-white/75 sm:text-[11px] sm:leading-relaxed">
                 <span className="min-w-0 line-clamp-1 break-words sm:line-clamp-none">{displayFacility.address}</span>
+                {googleMapsUrl && coordinateLabel ? (
+                  <a
+                    href={googleMapsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${copy.openMaps}: ${coordinateLabel}`}
+                    data-tooltip={copy.openMaps}
+                    data-tooltip-side="bottom"
+                    data-tooltip-align="end"
+                    className="mt-0.5 inline-flex shrink-0 text-primary transition-[transform,color] duration-200 hover:scale-110 hover:text-primary-hover focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 dark:text-emerald-400"
+                  >
+                    <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </a>
+                ) : (
+                  <svg className="mt-0.5 size-3.5 shrink-0 text-primary dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                    <circle cx="12" cy="10" r="3" />
+                  </svg>
+                )}
               </p>
             )}
-            {googleMapsUrl && coordinateLabel ? (
-              <a
-                href={googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${copy.openMaps}: ${coordinateLabel}`}
-                data-tooltip={copy.openMaps}
-                data-tooltip-side="bottom"
-                data-tooltip-align="start"
-                className="mt-1 inline-flex size-7 items-center justify-center rounded-lg border border-primary/25 bg-primary/10 text-primary transition-[transform,color,background-color] duration-200 hover:scale-105 hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 dark:text-emerald-300"
-              >
-                <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                  <circle cx="12" cy="10" r="2.5" />
-                </svg>
-              </a>
-            ) : null}
           </div>
 
           <button
@@ -548,7 +549,7 @@ export function FacilityDetailModal({
 
         {/* Scrollable Body */}
         <div ref={sheetBodyRef} className="flex min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-2.5 text-foreground scrollbar-thin dark:text-white sm:p-3.5">
-          <div ref={sheetBodyContentRef} className="flex w-full flex-col gap-2 pb-2 sm:gap-3 sm:pb-3">
+          <div ref={sheetBodyContentRef} className="flex w-full flex-col gap-2 pb-5 sm:gap-3 sm:pb-5">
             {detail.status === 'loading' && !displayFacility ? (
               <div className="space-y-2.5" aria-label={copy.loading}>
                 <Skeleton className="h-12 w-full rounded-xl" />
@@ -594,38 +595,28 @@ export function FacilityDetailModal({
       }
       description={
         displayFacility?.address ? (
-          <span className="flex items-center gap-1.5 text-xs text-white/70">
-            <svg className="size-3.5 shrink-0 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-              <circle cx="12" cy="10" r="3" />
-            </svg>
-            <span>{displayFacility.address}</span>
+          <span className="flex items-center justify-between gap-1.5 text-xs text-white/70">
+            <span className="min-w-0">{displayFacility.address}</span>
+            {googleMapsUrl && coordinateLabel ? (
+              <a
+                href={googleMapsUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${copy.openMaps}: ${coordinateLabel}`}
+                data-tooltip={copy.openMaps}
+                data-tooltip-align="end"
+                className="shrink-0 text-emerald-400 transition-transform hover:scale-110 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
+              >
+                <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </a>
+            ) : null}
           </span>
         ) : (
           detail.status === 'loading' ? copy.loadingDescription : undefined
         )
-      }
-      footer={
-        <div className="flex w-full items-center text-xs text-white/60">
-          {googleMapsUrl && coordinateLabel ? (
-            <a
-              href={googleMapsUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={copy.openMapsTitle}
-              data-tooltip={copy.openMaps}
-              data-tooltip-align="start"
-              className="inline-flex size-8 items-center justify-center rounded-lg border border-emerald-300/25 bg-white/5 text-emerald-300 transition-[transform,background-color] hover:scale-105 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
-            >
-              <svg className="size-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
-            </a>
-          ) : (
-            <span className="font-mono text-[11px] text-white/50">{coordinateLabel ?? ''}</span>
-          )}
-        </div>
       }
     >
       {detail.status === 'loading' && !displayFacility ? (
