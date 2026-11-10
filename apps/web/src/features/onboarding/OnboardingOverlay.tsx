@@ -4,6 +4,8 @@ import { useTranslation } from '../../i18n/useTranslation'
 import { SpotlightOverlay } from './SpotlightOverlay'
 import { TutorialCard } from './TutorialCard'
 import { useTourTarget } from './useTourTarget'
+import { OnboardingFacilityPreview } from './components/OnboardingFacilityPreview'
+import { OnboardingEnvironmentalPreview } from './components/OnboardingEnvironmentalPreview'
 import type { OnboardingController, TourRect, TourStep } from './types'
 
 /** A target that covers (almost) the whole viewport gets a full dim + centered card. */
@@ -69,6 +71,18 @@ interface OnboardingOverlayProps {
 export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps) {
   const { t } = useTranslation()
   const [isExiting, setIsExiting] = useState(false)
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 640 : false,
+  )
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   const stepCount = steps.length
 
   const stepIndex = Math.min(
@@ -77,6 +91,17 @@ export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps)
   )
   const step = steps[stepIndex]
   const isHeroStep = stepIndex === 0
+
+  const preview = useMemo(() => {
+    if (!isMobile || !step) return null
+    if (step.id === 'details') {
+      return <OnboardingFacilityPreview />
+    }
+    if (step.id === 'environment') {
+      return <OnboardingEnvironmentalPreview />
+    }
+    return null
+  }, [isMobile, step])
 
   const rawRect = useTourTarget(step?.selector ?? null, controller.isActive)
   const rect = useMemo(
@@ -162,6 +187,7 @@ export function OnboardingOverlay({ controller, steps }: OnboardingOverlayProps)
         isLast={stepIndex === stepCount - 1}
         isExiting={isExiting}
         variant={isHeroStep ? 'hero' : 'default'}
+        preview={preview}
         onBack={controller.back}
         onNext={controller.next}
         onFinish={handleFinish}

@@ -69,7 +69,7 @@ const id = {
   'dashboard.info.sumberLabel': 'Sumber data',
   'dashboard.info.updatedLabel': 'Diperbarui',
   'dashboard.indicators.selectedHeading': 'Indikator wilayah terpilih',
-'map.legend.title': 'Legenda',
+  'map.legend.title': 'Legenda',
   'map.category.fasum': 'RTH / Taman',
   'map.category.transum': 'Transportasi',
   'map.category.kesehatan': 'Kesehatan',
@@ -106,7 +106,7 @@ const id = {
   'map.filter.lingkungan': 'Lingkungan',
   'map.filter.scrollLeft': 'Geser kategori ke kiri',
   'map.filter.scrollRight': 'Geser kategori ke kanan',
-'dashboard.legend.title': 'Legenda Peta',
+  'dashboard.legend.title': 'Legenda Peta',
   'dashboard.legend.faskes': 'Fasilitas Kesehatan',
   'dashboard.legend.faskesSub': 'RSUD & Puskesmas Kecamatan',
   'dashboard.legend.rth': 'Ruang Terbuka Hijau',
@@ -246,7 +246,7 @@ const id = {
     'Panel kiri menampilkan kualitas udara (ISPU) secara real-time beserta panduan kesehatan warga. Setiap indikator selalu mencantumkan sumber resminya agar transparan.',
   'tour.step7.title': 'Selamat Bereksplorasi!',
   'tour.step7.body':
-    ' kembali kapan saja melalui menu Bantuan',
+    ' Luma membantu kamu memahami informasi perkotaan. Telusuri sumber data di balik setiap informasi dan temukan detail lebih lanjut melalui tombol Detail. Kamu bisa membuka kembali panduan ini kapan saja melalui menu Bantuan.',
 } as const
 
 export type TranslationKey = keyof typeof id
@@ -320,7 +320,7 @@ const en: Record<TranslationKey, string> = {
   'dashboard.info.sumberLabel': 'Data source',
   'dashboard.info.updatedLabel': 'Updated',
   'dashboard.indicators.selectedHeading': 'Selected region indicators',
-'map.legend.title': 'Legend',
+  'map.legend.title': 'Legend',
   'map.category.fasum': 'Green space',
   'map.category.transum': 'Public transport',
   'map.category.kesehatan': 'Healthcare',
@@ -357,7 +357,7 @@ const en: Record<TranslationKey, string> = {
   'map.filter.lingkungan': 'Environment',
   'map.filter.scrollLeft': 'Scroll categories left',
   'map.filter.scrollRight': 'Scroll categories right',
-'dashboard.legend.title': 'Map Legend',
+  'dashboard.legend.title': 'Map Legend',
   'dashboard.legend.faskes': 'Healthcare Facilities',
   'dashboard.legend.faskesSub': 'District & General Hospitals',
   'dashboard.legend.rth': 'Green Open Spaces',
