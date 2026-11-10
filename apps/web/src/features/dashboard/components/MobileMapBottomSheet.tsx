@@ -116,12 +116,12 @@ export function MobileMapBottomSheet({
   }, [onHeightChange])
   const copy = language === 'id'
     ? {
-        local: 'Suasana lokal', regionSummary: 'Ringkasan wilayah', explore: 'Jelajahi', legend: 'Legenda Peta', sources: 'Sumber Data',
+        regionSummary: 'Ringkasan wilayah', explore: 'Jelajahi', legend: 'Legenda Peta', sources: 'Sumber Data',
         detail: 'Detail', transparency: 'Transparansi data', source: 'Sumber', period: 'Periode', unit: 'Satuan',
         sourceTitle: 'Sumber Data Resmi', sourceBody: 'Lihat sumber, cakupan, periode, dan metode pengolahan data Luma.',
       }
     : {
-        local: 'Local conditions', regionSummary: 'Area overview', explore: 'Explore', legend: 'Map Legend', sources: 'Data Sources',
+        regionSummary: 'Area overview', explore: 'Explore', legend: 'Map Legend', sources: 'Data Sources',
         detail: 'Details', transparency: 'Data transparency', source: 'Source', period: 'Period', unit: 'Unit',
         sourceTitle: 'Official Data Sources', sourceBody: 'Review the sources, coverage, periods, and processing methods used by Luma.',
       }
@@ -247,9 +247,11 @@ export function MobileMapBottomSheet({
         <div className="shrink-0 px-3 pb-2.5">
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2.5">
             <div className="min-w-0">
-              <p className="text-[9.5px] font-semibold uppercase tracking-wider text-muted">
-                {isExpanded ? copy.regionSummary : copy.local}
-              </p>
+              {isExpanded ? (
+                <p className="text-[9.5px] font-semibold uppercase tracking-wider text-muted">
+                  {copy.regionSummary}
+                </p>
+              ) : null}
               <h3 className="truncate text-sm font-bold text-foreground">{scopeLabel}</h3>
             </div>
             {airSummary}
