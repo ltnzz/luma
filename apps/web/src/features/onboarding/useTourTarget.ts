@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { TourRect } from './types'
 
@@ -8,6 +8,25 @@ const SETTLE_FRAMES = 18
 function areRectsEqual(a: TourRect | null, b: TourRect | null): boolean {
   if (a === null || b === null) return a === b
   return a.left === b.left && a.top === b.top && a.width === b.width && a.height === b.height
+}
+
+/**
+ * Responsive layouts may mount the same tour target twice (the facility
+ * category dock exists as a mobile copy inside the left stack and a desktop
+ * copy at the bottom center). Resolve the first *visible* match instead of
+ * the DOM-first one, so the spotlight never silently follows a
+ * `display: none` duplicate.
+ */
+function resolveVisibleTarget(selector: string): HTMLElement | null {
+  const candidates = Array.from(document.querySelectorAll<HTMLElement>(selector))
+  for (const element of candidates) {
+    const style = window.getComputedStyle(element)
+    if (style.display === 'none' || style.visibility === 'hidden') continue
+    const box = element.getBoundingClientRect()
+    if (box.width <= 0 && box.height <= 0) continue
+    return element
+  }
+  return null
 }
 
 /**
@@ -22,27 +41,19 @@ function areRectsEqual(a: TourRect | null, b: TourRect | null): boolean {
  */
 export function useTourTarget(selector: string | null, active: boolean): TourRect | null {
   const [rect, setRect] = useState<TourRect | null>(null)
+  const observedRef = useRef<HTMLElement | null>(null)
 
   const measure = useCallback(() => {
     if (!selector) {
       setRect((prev) => (prev === null ? prev : null))
       return null
     }
-    const element = document.querySelector(selector)
-    if (!(element instanceof HTMLElement)) {
-      setRect((prev) => (prev === null ? prev : null))
-      return null
-    }
-    const style = window.getComputedStyle(element)
-    if (style.display === 'none' || style.visibility === 'hidden') {
+    const element = resolveVisibleTarget(selector)
+    if (!element) {
       setRect((prev) => (prev === null ? prev : null))
       return null
     }
     const box = element.getBoundingClientRect()
-    if (box.width <= 0 && box.height <= 0) {
-      setRect((prev) => (prev === null ? prev : null))
-      return null
-    }
     const next: TourRect = {
       left: box.left,
       top: box.top,
@@ -60,8 +71,14 @@ export function useTourTarget(selector: string | null, active: boolean): TourRec
     let settleFrames = 0
     let observer: ResizeObserver | null = null
 
+    // Track the element that currently owns the ResizeObserver: crossing a
+    // breakpoint swaps the visible duplicate, so the observer must follow.
     const attachObserver = (element: HTMLElement) => {
-      if (observer || typeof ResizeObserver !== 'function') return
+      if (observedRef.current === element) return
+      observer?.disconnect()
+      observer = null
+      observedRef.current = element
+      if (typeof ResizeObserver !== 'function') return
       observer = new ResizeObserver(() => scheduleMeasure())
       observer.observe(element)
     }
@@ -94,6 +111,7 @@ export function useTourTarget(selector: string | null, active: boolean): TourRec
       if (pendingFrame !== 0) cancelAnimationFrame(pendingFrame)
       observer?.disconnect()
       observer = null
+      observedRef.current = null
       window.removeEventListener('resize', handleViewportChange)
       window.removeEventListener('scroll', handleViewportChange, true)
     }
