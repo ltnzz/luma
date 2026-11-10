@@ -206,8 +206,11 @@ export function MobileMapBottomSheet({
   return (
     <section
       ref={sheetRef}
-      style={{ '--mobile-map-sheet-height': renderedHeight } as CSSProperties}
-      className={`pointer-events-auto absolute inset-x-2 bottom-2 z-30 flex h-[var(--mobile-map-sheet-height)] max-h-[72dvh] flex-col overflow-hidden rounded-2xl luma-map-card sm:hidden ${isDragging ? 'transition-none' : 'transition-[height] duration-250 ease-out'}`}
+      style={{
+        '--mobile-map-sheet-height': renderedHeight,
+        bottom: 'calc(0.5rem + env(safe-area-inset-bottom, 0px))',
+      } as CSSProperties}
+      className={`pointer-events-auto absolute inset-x-2 z-30 flex h-[var(--mobile-map-sheet-height)] max-h-[72dvh] flex-col overflow-hidden rounded-2xl luma-map-card sm:hidden ${isDragging ? 'transition-none' : 'transition-[height] duration-250 ease-out'}`}
     >
       {canDragSheet ? (
         <div

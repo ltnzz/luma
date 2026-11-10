@@ -468,7 +468,7 @@ export function FacilityDetailModal({
         ref={sheetRef}
         aria-label={copy.panelAria}
         style={{ '--mobile-sheet-height': mobileSheetHeight ? `${mobileSheetHeight}px` : '30dvh' } as CSSProperties}
-        className={`luma-facility-detail fixed inset-x-2 bottom-2 z-40 flex h-[var(--mobile-sheet-height)] max-h-[72dvh] w-auto flex-col overflow-hidden rounded-[1.5rem] luma-map-card text-foreground dark:text-white animate-in fade-in slide-in-from-bottom-4 duration-250 select-text sm:bottom-auto sm:left-auto sm:right-4 sm:top-18 sm:h-auto sm:w-[310px] sm:max-h-[calc(100dvh-15.5rem)] sm:rounded-2xl sm:slide-in-from-right-4 ${isDraggingSheet ? 'transition-none' : 'transition-[height] ease-out'}`}
+        className={`luma-facility-detail fixed inset-x-2 bottom-[calc(0.5rem+env(safe-area-inset-bottom,0px))] z-40 flex h-[var(--mobile-sheet-height)] max-h-[72dvh] w-auto flex-col overflow-hidden rounded-[1.5rem] luma-map-card text-foreground dark:text-white animate-in fade-in slide-in-from-bottom-4 duration-250 select-text sm:bottom-auto sm:left-auto sm:right-4 sm:top-18 sm:h-auto sm:w-[310px] sm:max-h-[calc(100dvh-15.5rem)] sm:rounded-2xl sm:slide-in-from-right-4 ${isDraggingSheet ? 'transition-none' : 'transition-[height] ease-out'}`}
       >
         <div
           role="separator"

@@ -1821,7 +1821,7 @@ export function InteractiveMap({
       {/* Floating Control Stack di Kanan Bawah: Zoom (+/-/Reset) dan di bawahnya Mode 3-Icon Switcher */}
       <div
         data-tour="map-controls"
-        style={{ '--mobile-map-controls-bottom': `${mobileControlsBottomOffset}px` } as CSSProperties}
+        style={{ '--mobile-map-controls-bottom': `calc(${mobileControlsBottomOffset}px + env(safe-area-inset-bottom, 0px))` } as CSSProperties}
         className="pointer-events-auto absolute right-3 bottom-[var(--mobile-map-controls-bottom)] z-10 flex flex-col items-end gap-2 transition-[bottom] duration-200 sm:right-4 sm:bottom-4"
       >
         {/* Kontrol Navigasi (Zoom In, Zoom Out, Reset Pandangan) */}

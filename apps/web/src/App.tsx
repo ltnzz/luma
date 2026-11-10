@@ -62,7 +62,7 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col h-screen h-dvh bg-background text-foreground overflow-hidden select-none">
+    <div className="fixed inset-0 flex flex-col h-full w-full bg-background text-foreground overflow-hidden select-none">
       {/* 1. Single Unified Navbar */}
       <DashboardHeader
         activeWilayah={activeWilayah}
