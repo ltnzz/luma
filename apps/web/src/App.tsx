@@ -19,30 +19,45 @@ const DataSourcesComingSoonPage = lazy(() =>
 export default function App() {
   const [activeWilayah, setActiveWilayah] = useState<string>('ALL')
   const [currentView, setCurrentView] = useState<'dashboard' | 'sumber-data'>(() => {
-    return window.location.hash === '#sumber-data' ? 'sumber-data' : 'dashboard'
+    if (typeof window === 'undefined') return 'dashboard'
+    return window.location.pathname.startsWith('/sumber-data') || window.location.hash === '#sumber-data'
+      ? 'sumber-data'
+      : 'dashboard'
   })
   const onboarding = useOnboarding(TOUR_STEPS.length)
 
-  // Sinkronisasi navigasi dengan browser hash
+  // Sinkronisasi navigasi dengan browser history (clean paths) & bersihkan legacy hash
   useEffect(() => {
-    function handleHashChange() {
-      if (window.location.hash === '#sumber-data') {
+    // Bersihkan legacy hash (#sumber-data atau #) dari URL jika ada
+    if (window.location.hash === '#sumber-data') {
+      window.history.replaceState({}, '', '/sumber-data')
+    } else if (window.location.hash) {
+      window.history.replaceState({}, '', window.location.pathname || '/')
+    }
+
+    function handlePopState() {
+      if (window.location.pathname.startsWith('/sumber-data')) {
         setCurrentView('sumber-data')
       } else {
         setCurrentView('dashboard')
       }
     }
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
   }, [])
 
   const handleNavigateToDataSources = () => {
-    window.location.hash = 'sumber-data'
+    if (window.location.pathname !== '/sumber-data') {
+      window.history.pushState({}, '', '/sumber-data')
+    }
     setCurrentView('sumber-data')
   }
 
   const handleBackToDashboard = () => {
-    window.location.hash = ''
+    if (window.location.pathname !== '/') {
+      window.history.pushState({}, '', '/')
+    }
     setCurrentView('dashboard')
   }
 
@@ -59,6 +74,7 @@ export default function App() {
             : undefined
         }
         onRestartTutorial={onboarding.restart}
+        onNavigateToDashboard={handleBackToDashboard}
       />
 
       {/* 2. Main Full-Screen Map Viewport atau Halaman Sumber Data (Coming Soon) */}
