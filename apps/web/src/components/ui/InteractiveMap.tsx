@@ -1086,17 +1086,8 @@ export function InteractiveMap({
         iconColor = 'text-sky-500'
       }
 
-      const aqiInfo = getAqiLevel(173) // Rata-rata indeks kualitas udara DKI Jakarta
-      const airQualityUnit = t('mapFirst.air.unit')
       const [badgeValue, ...badgeLabelParts] = badgeText.split(' ')
       const badgeLabel = badgeLabelParts.join(' ')
-      const aqiIcon = `<span class="inline-flex size-4 shrink-0 items-center justify-center rounded-md" style="color:${aqiInfo.color};background-color:${aqiInfo.color}20" title="${t('mapFirst.air.title')}: 173 ${airQualityUnit}" aria-label="${t('mapFirst.air.title')}: 173 ${airQualityUnit}">
-        <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
-          <path d="M4 8h10a3 3 0 1 0-3-3" />
-          <path d="M4 12h14a3 3 0 1 1-3 3" />
-          <path d="M4 16h6" />
-        </svg>
-      </span>`
 
       const wrapperEl = document.createElement('div')
       wrapperEl.className = 'luma-region-marker group relative flex flex-col items-center cursor-pointer select-none z-10'
@@ -1106,7 +1097,7 @@ export function InteractiveMap({
       cardEl.className = `luma-region-card min-w-[150px] px-3 py-2 luma-map-card luma-glass-hover border ${cardBorder} rounded-xl transition-all`
 
       cardEl.innerHTML = `
-        <div class="flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2">
           <div class="flex min-w-0 items-center gap-2">
             <span class="inline-flex size-4 shrink-0 items-center justify-center rounded-md bg-surface-muted/70 ${iconColor}" title="${language === 'id' ? 'Wilayah DKI Jakarta' : 'DKI Jakarta region'}" aria-hidden="true">
               <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1116,9 +1107,8 @@ export function InteractiveMap({
             </span>
             <span class="luma-map-label-text truncate text-[11px] font-bold text-foreground tracking-tight">DKI Jakarta</span>
           </div>
-          ${aqiIcon}
         </div>
-        <span class="luma-region-summary mt-1.5 inline-flex max-w-full px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">
+        <span class="luma-region-summary ml-6 mt-1.5 inline-flex max-w-[calc(100%_-_1.5rem)] px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">
           <span>${badgeValue}</span><span class="luma-region-summary-label">&nbsp;${badgeLabel}</span>
         </span>
       `
