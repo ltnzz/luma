@@ -50,6 +50,7 @@ interface FullScreenMapDashboardProps {
   activeWilayah?: string
   onSelectWilayah?: (wilayah: string) => void
   onNavigateToDataSources?: () => void
+  activeTourStep?: number | null
 }
 
 /**
@@ -62,6 +63,7 @@ export function FullScreenMapDashboard({
   activeWilayah: propActiveWilayah,
   onSelectWilayah: propOnSelectWilayah,
   onNavigateToDataSources,
+  activeTourStep,
 }: FullScreenMapDashboardProps = {}) {
   const { t, language } = useTranslation()
   const [internalWilayah, setInternalWilayah] = useState<string>('ALL')
@@ -80,6 +82,26 @@ export function FullScreenMapDashboard({
   // 1. Primary Filter Category State (Dikendalikan oleh KpiMetricsDock di Bawah)
   const [activeCategoryFilter, setActiveCategoryFilter] = useState<KpiCategory | null>(null)
   const [isLegendOpen, setIsLegendOpen] = useState(false)
+  const [prevTourStep, setPrevTourStep] = useState<number | null | undefined>(activeTourStep)
+
+  // Pola React resmi: sinkronisasi state saat tur aktif:
+  // - Tutup modal fasilitas, panel filter kategori, dan mode rute transit agar fokus spotlight bersih
+  // - Buka legenda otomatis pada langkah 7/9
+  if (activeTourStep !== prevTourStep) {
+    setPrevTourStep(activeTourStep)
+    if (activeTourStep !== null && activeTourStep !== undefined) {
+      if (selectedFacility) setSelectedFacility(null)
+      if (activeCategoryFilter) setActiveCategoryFilter(null)
+      if (isTransitMode) setIsTransitMode(false)
+      if (!isTransitPanelCollapsed) setIsTransitPanelCollapsed(true)
+      if (focusedCorridorId) setFocusedCorridorId(null)
+    }
+    if (activeTourStep !== null && activeTourStep !== undefined && activeTourStep >= 7) {
+      setIsLegendOpen(true)
+    } else {
+      setIsLegendOpen(false)
+    }
+  }
   const [mobileMapTab, setMobileMapTab] = useState<MobileMapTab>('explore')
   const [mobileOverlayHeight, setMobileOverlayHeight] = useState(0)
   const [isMapReady, setIsMapReady] = useState(false)
@@ -585,7 +607,7 @@ export function FullScreenMapDashboard({
 
       {/* 3. Panel Kolom Kiri: Sumber Data Resmi, Kualitas Udara, dan Contextual Filter / Legenda */}
       {!isTransitMode && (
-        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[calc(100dvh-8.75rem)] flex-col items-center gap-2 overflow-y-auto overscroll-contain pb-3 pt-2 scrollbar-thin sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:items-start sm:max-h-[calc(100dvh-9rem)] sm:pb-2 sm:pr-1 sm:pt-0">
+        <aside className="luma-map-stack pointer-events-none absolute left-2 right-2 top-2 z-30 -mt-2 flex max-h-[calc(100dvh-8.75rem)] flex-col items-center gap-2 overflow-y-auto overscroll-contain pb-3 pt-2 scrollbar-none sm:left-4 sm:right-auto sm:top-4 sm:mt-0 sm:items-start sm:max-h-[calc(100dvh-8.5rem)] sm:pb-2 sm:pr-1 sm:pt-0">
           <div className="hidden sm:contents">
             <CompactDataSourceCard onNavigateToDataSources={onNavigateToDataSources} />
           </div>
@@ -621,7 +643,7 @@ export function FullScreenMapDashboard({
           </div>
 
           {/* Hanya satu panel panjang yang dibuka agar kolom kiri tidak bertabrakan. */}
-          {!selectedFacility && activeCategoryFilter && !isLegendOpen ? (
+          {!selectedFacility && activeCategoryFilter && !isLegendOpen && !activeTourStep ? (
             <ContextualCategoryFilterCard
               category={activeCategoryFilter}
               scopeLabel={scopeLabel}
@@ -668,7 +690,7 @@ export function FullScreenMapDashboard({
 
       {/* 4. Bottom Center — Horizontal KPI Metrics Overview Dock & Filter Controller (Selalu Tampil) */}
       {!isTransitMode && (
-        <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 hidden max-w-[calc(100vw-1.5rem)] -translate-x-1/2 animate-in fade-in slide-in-from-bottom-3 duration-300 sm:block">
+        <div className="pointer-events-none absolute bottom-4 left-1/2 z-20 hidden max-w-[calc(100vw-1.5rem)] -translate-x-1/2 animate-in fade-in slide-in-from-bottom-3 duration-300 sm:block lg:left-[calc(50%+4rem)]">
           <KpiMetricsDock
             waterCoverage={68}
             waterCoverageLabel={t('mapFirst.dock.access')}
@@ -708,7 +730,7 @@ export function FullScreenMapDashboard({
       )}
 
       {/* Mode Transum Khusus (jika dibuka dari panel rute) */}
-      {isTransitMode && (
+      {isTransitMode && !activeTourStep && (
         <div className="pointer-events-none absolute top-16 left-3 sm:top-16 sm:left-4 z-20 animate-in fade-in slide-in-from-left-4 duration-300">
           <Suspense fallback={null}>
             <TransitRoutesWidget
@@ -745,7 +767,7 @@ export function FullScreenMapDashboard({
       ) : null}
 
       {/* Modal Detail Fasilitas Glass (Muncul langsung di Kanan saat marker diklik) */}
-      {selectedFacility && !isTransitMode && (
+      {selectedFacility && !isTransitMode && !activeTourStep && (
         <Suspense fallback={null}>
           <FacilityDetailModal
             facility={selectedFacility}

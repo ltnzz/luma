@@ -25,7 +25,7 @@ const sectors: Array<{ value: AnalyticsSector; label: string }> = [
   { value: 'kesehatan', label: 'Kesehatan' },
   { value: 'transum', label: 'Transportasi Umum' },
   { value: 'udara', label: 'Kualitas Udara' },
-  { value: 'air', label: 'Kualitas Air' },
+  { value: 'air', label: 'Jaringan Air Bersih' },
 ]
 
 interface ChartData {

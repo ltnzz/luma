@@ -244,7 +244,7 @@ export function MobileMapBottomSheet({
         <div className="h-5 shrink-0" aria-hidden="true" />
       )}
 
-      <div ref={panelContentRef} className="min-h-0 overflow-y-auto scrollbar-thin">
+      <div ref={panelContentRef} className="min-h-0 overflow-y-auto scrollbar-none">
 
       {activeTab === 'explore' ? (
         <div className="shrink-0 px-3 pb-2.5">
@@ -258,7 +258,7 @@ export function MobileMapBottomSheet({
       ) : null}
 
       {activeTab === 'explore' && isExpanded ? (
-        <div className="mx-3 mb-2 flex-1 space-y-2 overflow-y-auto pr-0.5 scrollbar-thin">
+        <div className="mx-3 mb-2 flex-1 space-y-2 overflow-y-auto pr-0.5 scrollbar-none">
           <section className="rounded-xl border border-border/55 bg-surface/25 p-3">
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -305,7 +305,7 @@ export function MobileMapBottomSheet({
             <h3 className="text-sm font-bold uppercase tracking-wide text-foreground">{copy.legend}</h3>
             {airSummary}
           </div>
-          <div className="max-h-[38dvh] space-y-0.5 overflow-y-auto overscroll-contain pr-0.5 scrollbar-thin">
+          <div className="max-h-[38dvh] space-y-0.5 overflow-y-auto overscroll-contain pr-0.5 scrollbar-none">
             {LEGEND_ITEMS.map((item) => (
               <div key={item.category} className="grid min-h-10 grid-cols-[24px_minmax(0,1fr)] items-center gap-2 rounded-lg px-1.5 py-1.5">
                 <CategoryIconBadge category={item.category} size="sm" />

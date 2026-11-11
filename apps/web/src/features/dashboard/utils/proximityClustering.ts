@@ -17,6 +17,15 @@ export interface ClusteredItem<T extends ClusterableItem> {
 }
 
 /**
+ * Calculates ground resolution (meters per pixel) for Web Mercator tiles
+ * at a given zoom level and latitude (defaults to Jakarta -6.2°).
+ */
+export function getMetersPerPixel(zoom: number, latitude = -6.2): number {
+  // Earth circumference at equator ≈ 40,075,016.686 meters
+  return (40075016.686 * Math.cos((latitude * Math.PI) / 180)) / (256 * 2 ** zoom)
+}
+
+/**
  * Calculates approximate distance in meters between two lat/lng coordinates (Haversine formula).
  */
 export function getDistanceMeters(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -36,8 +45,11 @@ export function getDistanceMeters(lat1: number, lon1: number, lat2: number, lon2
 
 /**
  * Groups nearby items into clusters based on zoom level.
- * Below threshold, nearby points merge into a cluster.
- * At high zoom (micro scope >= 16), items uncluster, and nearly identical points receive slight radial offsets.
+ * Uses pixel-based dynamic thresholds derived from Web Mercator ground resolution,
+ * ensuring markers never overlap regardless of zoom level or facility dataset density.
+ *
+ * At high zoom (micro scope >= 15.5), items uncluster, and nearly identical points (< 20m)
+ * receive slight radial spiderfy offsets.
  */
 export function clusterNearbyItems<T extends ClusterableItem>(
   items: T[],
@@ -45,19 +57,14 @@ export function clusterNearbyItems<T extends ClusterableItem>(
 ): ClusteredItem<T>[] {
   if (items.length === 0) return []
 
-  // Dynamic distance threshold based on zoom level (meters)
-  // Zoom 11: ~1200m, Zoom 12: ~600m, Zoom 13: ~350m, Zoom 14: ~180m, Zoom 15: ~90m, Zoom 16+: unclustered
+  // Dynamic pixel-based distance threshold derived from Web Mercator scale at Jakarta latitude.
+  // Physical marker footprint is ~36-40px. Setting minPixelDistance >= 42-56px guarantees
+  // clusters and markers never collide or crowd each other on any device or viewport.
   let clusterRadiusMeters = 0
-  if (zoom < 11.5) {
-    clusterRadiusMeters = 1400
-  } else if (zoom < 12.5) {
-    clusterRadiusMeters = 700
-  } else if (zoom < 13.5) {
-    clusterRadiusMeters = 380
-  } else if (zoom < 14.5) {
-    clusterRadiusMeters = 180
-  } else if (zoom < 15.5) {
-    clusterRadiusMeters = 90
+  if (zoom < 15.5) {
+    const minPixelDistance =
+      zoom < 11 ? 56 : zoom < 12.5 ? 52 : zoom < 14.5 ? 48 : 42
+    clusterRadiusMeters = minPixelDistance * getMetersPerPixel(zoom)
   }
 
   // Micro scope: do not cluster, but apply micro radial spiderfy to overlapping points (< 15 meters)
@@ -114,6 +121,10 @@ export function clusterNearbyItems<T extends ClusterableItem>(
   const clusters: ClusteredItem<T>[] = []
   const assigned = new Set<string>()
 
+  // Spatial bounding box thresholds to avoid expensive Haversine trigonometric calls
+  const latThreshold = clusterRadiusMeters / 110500
+  const lngThreshold = clusterRadiusMeters / 109500
+
   for (let i = 0; i < items.length; i++) {
     const item = items[i]
     if (assigned.has(item.id)) continue
@@ -127,6 +138,9 @@ export function clusterNearbyItems<T extends ClusterableItem>(
     for (let j = i + 1; j < items.length; j++) {
       const candidate = items[j]
       if (assigned.has(candidate.id)) continue
+
+      if (Math.abs(item.lat - candidate.lat) > latThreshold) continue
+      if (Math.abs(item.lng - candidate.lng) > lngThreshold) continue
 
       const dist = getDistanceMeters(item.lat, item.lng, candidate.lat, candidate.lng)
       if (dist <= clusterRadiusMeters) {

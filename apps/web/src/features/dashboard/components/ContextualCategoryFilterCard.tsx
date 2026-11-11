@@ -71,7 +71,7 @@ export function ContextualCategoryFilterCard({
         close: 'Tutup filter kategori', all: 'Semua', corridor: 'Koridor',
         noRoutes: 'Tidak ada rute BRT di wilayah ini', pipeline: 'Jalur Pipa PAM JAYA',
         show: 'Tampil', hide: 'Sembunyi',
-        waterDescription: 'Menampilkan jaringan pipa air bersih PAM JAYA yang melayani 68% populasi warga DKI Jakarta.',
+        waterDescription: 'Menampilkan visualisasi koridor transmisi pipa air PAM JAYA terkurasi di DKI Jakarta.',
         soloMode: 'Mode Solo Filter Aktif', reset: 'Reset Filter',
         source: 'Sumber', coverage: 'Cakupan', unit: 'Satuan', method: 'Metode', period: 'Periode', updated: 'Diperbarui',
         transparency: 'Transparansi data', openSource: 'Buka sumber resmi', unavailable: 'Belum tersedia',
@@ -86,7 +86,7 @@ export function ContextualCategoryFilterCard({
         close: 'Close category filter', all: 'All', corridor: 'Corridors',
         noRoutes: 'No BRT routes in this region', pipeline: 'PAM JAYA Pipeline',
         show: 'Visible', hide: 'Hidden',
-        waterDescription: 'Shows the PAM JAYA clean-water network serving 68% of DKI Jakarta residents.',
+        waterDescription: 'Shows curated visualization of PAM JAYA water transmission corridors in DKI Jakarta.',
         soloMode: 'Solo Filter Active', reset: 'Reset Filter',
         source: 'Source', coverage: 'Coverage', unit: 'Unit', method: 'Method', period: 'Period', updated: 'Updated',
         transparency: 'Data transparency', openSource: 'Open official source', unavailable: 'Not available',
@@ -342,7 +342,7 @@ export function ContextualCategoryFilterCard({
               {!selectedCorridorId && <span className="h-1.5 w-1.5 rounded-full bg-white" />}
             </button>
 
-            <div className="max-h-24 sm:max-h-28 overflow-y-auto scrollbar-thin flex flex-col gap-0.5 pr-0.5">
+            <div className="max-h-24 sm:max-h-28 overflow-y-auto scrollbar-none flex flex-col gap-0.5 pr-0.5">
               {corridors.length === 0 ? (
                 <div className="p-2 text-center text-[10px] text-muted">
                   {copy.noRoutes}

@@ -277,7 +277,10 @@ export function DashboardHeader({
         {onRestartTutorial && (
           <button
             type="button"
-            onClick={onRestartTutorial}
+            onClick={() => {
+              setIsRegionOpen(false)
+              onRestartTutorial()
+            }}
             data-tour="help-tour"
             className="inline-flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-border/80 bg-surface text-foreground transition-colors hover:bg-surface-muted shadow-2xs"
             aria-label={t('tour.restartTitle')}

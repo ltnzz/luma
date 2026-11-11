@@ -58,7 +58,7 @@ export function AirQualityCard({
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2.5">
         <div className="flex min-w-0 items-center gap-1.5">
           <CategoryIconBadge category="air" size="sm" />
-          <span className="min-w-0 text-[11px] font-bold leading-tight text-foreground sm:text-xs">
+          <span className="min-w-0 truncate whitespace-nowrap text-[11px] font-bold leading-tight text-foreground sm:text-xs">
             {t('mapFirst.air.title')}
           </span>
         </div>
@@ -70,7 +70,7 @@ export function AirQualityCard({
             data-tooltip-side="bottom"
             data-tooltip-align="right"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             {t('mapFirst.air.live')}
           </span>
         )}

@@ -1137,12 +1137,28 @@ body[data-tour-step] .luma-region-marker {
 
 /* Custom Scrollbar Utilities (Clean Hide & Thin Variants) */
 .scrollbar-none,
-.no-scrollbar {
+.no-scrollbar,
+.luma-map-stack,
+.luma-map-stack *,
+.luma-glass-modal,
+.luma-glass-modal *,
+[role="dialog"],
+[role="dialog"] *,
+.luma-popup-card,
+.luma-popup-card * {
   -ms-overflow-style: none !important;
   scrollbar-width: none !important;
 }
 .scrollbar-none::-webkit-scrollbar,
-.no-scrollbar::-webkit-scrollbar {
+.no-scrollbar::-webkit-scrollbar,
+.luma-map-stack::-webkit-scrollbar,
+.luma-map-stack *::-webkit-scrollbar,
+.luma-glass-modal::-webkit-scrollbar,
+.luma-glass-modal *::-webkit-scrollbar,
+[role="dialog"]::-webkit-scrollbar,
+[role="dialog"] *::-webkit-scrollbar,
+.luma-popup-card::-webkit-scrollbar,
+.luma-popup-card *::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
   height: 0 !important;

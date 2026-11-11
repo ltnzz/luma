@@ -61,6 +61,13 @@ export default function App() {
     setCurrentView('dashboard')
   }
 
+  const handleRestartTutorial = () => {
+    if (currentView !== 'dashboard') {
+      handleBackToDashboard()
+    }
+    onboarding.restart()
+  }
+
   return (
     <div className="fixed inset-0 flex flex-col h-full w-full bg-background text-foreground overflow-hidden select-none">
       {/* 1. Single Unified Navbar */}
@@ -73,7 +80,7 @@ export default function App() {
               }
             : undefined
         }
-        onRestartTutorial={onboarding.restart}
+        onRestartTutorial={handleRestartTutorial}
         onNavigateToDashboard={handleBackToDashboard}
       />
 
@@ -84,6 +91,7 @@ export default function App() {
             activeWilayah={activeWilayah}
             onSelectWilayah={setActiveWilayah}
             onNavigateToDataSources={handleNavigateToDataSources}
+            activeTourStep={onboarding.isActive ? onboarding.currentStep + 1 : null}
           />
         ) : (
           <Suspense fallback={null}>
