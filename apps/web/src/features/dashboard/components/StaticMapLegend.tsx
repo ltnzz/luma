@@ -36,59 +36,83 @@ export function StaticMapLegend({ isOpen = false, onOpenChange }: StaticMapLegen
       </summary>
 
       {/* Daftar Simbol Murni (Tanpa Data Angka) */}
-      <div className="mx-3 flex flex-col gap-0.5 border-t border-border/60 pb-2 pt-1.5 text-xs">
+      <div className="mx-2.5 flex flex-col gap-0.5 border-t border-border/60 pb-2 pt-1.5 text-xs">
         {/* 1. Fasilitas Kesehatan */}
-        <div className="luma-glass-row grid min-h-7 grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-1.5 py-0.5">
-          <CategoryIconBadge category="health" size="sm" />
-          <span className="font-medium leading-tight text-foreground text-[11px]">
-            {t('mapFirst.legend.health')}
+        <div className="luma-glass-row flex min-h-7 items-center justify-between gap-1.5 rounded-lg px-2 py-1">
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+            <CategoryIconBadge category="health" size="sm" />
+            <span className="text-[11px] font-medium leading-tight text-foreground whitespace-nowrap">
+              {t('mapFirst.legend.health')}
+            </span>
+          </div>
+          <span className="min-w-0 truncate text-right text-[9.5px] font-medium leading-tight text-muted" title={t('mapFirst.legend.healthSub')}>
+            {t('mapFirst.legend.healthSub')}
           </span>
-          <span className="break-words text-right text-[9.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.healthSub')}</span>
         </div>
 
         {/* 2. Ruang Terbuka Hijau */}
-        <div className="luma-glass-row grid min-h-7 grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-1.5 py-0.5">
-          <CategoryIconBadge category="green" size="sm" />
-          <span className="font-medium leading-tight text-foreground text-[11px]">
-            {t('mapFirst.legend.green')}
+        <div className="luma-glass-row flex min-h-7 items-center justify-between gap-1.5 rounded-lg px-2 py-1">
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+            <CategoryIconBadge category="green" size="sm" />
+            <span className="text-[11px] font-medium leading-tight text-foreground whitespace-nowrap">
+              {t('mapFirst.legend.green')}
+            </span>
+          </div>
+          <span className="min-w-0 truncate text-right text-[9.5px] font-medium leading-tight text-muted" title={t('mapFirst.legend.greenSub')}>
+            {t('mapFirst.legend.greenSub')}
           </span>
-          <span className="break-words text-right text-[9.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.greenSub')}</span>
         </div>
 
         {/* 3. Sekolah Negeri */}
-        <div className="luma-glass-row grid min-h-7 grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-1.5 py-0.5">
-          <CategoryIconBadge category="school" size="sm" />
-          <span className="font-medium leading-tight text-foreground text-[11px]">
-            {t('mapFirst.legend.school')}
+        <div className="luma-glass-row flex min-h-7 items-center justify-between gap-1.5 rounded-lg px-2 py-1">
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+            <CategoryIconBadge category="school" size="sm" />
+            <span className="text-[11px] font-medium leading-tight text-foreground whitespace-nowrap">
+              {t('mapFirst.legend.school')}
+            </span>
+          </div>
+          <span className="min-w-0 truncate text-right text-[9.5px] font-medium leading-tight text-muted" title={t('mapFirst.legend.schoolSub')}>
+            {t('mapFirst.legend.schoolSub')}
           </span>
-          <span className="break-words text-right text-[9.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.schoolSub')}</span>
         </div>
 
         {/* 4. Rute Transum */}
-        <div className="luma-glass-row grid min-h-7 grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-1.5 py-0.5">
-          <CategoryIconBadge category="transit" size="sm" />
-          <span className="font-medium leading-tight text-foreground text-[11px]">
-            {t('mapFirst.legend.transit')}
+        <div className="luma-glass-row flex min-h-7 items-center justify-between gap-1.5 rounded-lg px-2 py-1">
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+            <CategoryIconBadge category="transit" size="sm" />
+            <span className="text-[11px] font-medium leading-tight text-foreground whitespace-nowrap">
+              {t('mapFirst.legend.transit')}
+            </span>
+          </div>
+          <span className="min-w-0 truncate text-right text-[9.5px] font-medium leading-tight text-muted" title={t('mapFirst.legend.transitSub')}>
+            {t('mapFirst.legend.transitSub')}
           </span>
-          <span className="break-words text-right text-[9.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.transitSub')}</span>
         </div>
 
         {/* 5. Jaringan Pipa Air Bersih PAM JAYA */}
-        <div className="luma-glass-row grid min-h-7 grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-1.5 py-0.5">
-          <CategoryIconBadge category="water" size="sm" />
-          <span className="font-medium leading-tight text-foreground text-[11px]">
-            {t('mapFirst.legend.water')}
+        <div className="luma-glass-row flex min-h-7 items-center justify-between gap-1.5 rounded-lg px-2 py-1">
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+            <CategoryIconBadge category="water" size="sm" />
+            <span className="text-[11px] font-medium leading-tight text-foreground whitespace-nowrap">
+              {t('mapFirst.legend.water')}
+            </span>
+          </div>
+          <span className="min-w-0 truncate text-right text-[9.5px] font-medium leading-tight text-muted" title={t('mapFirst.legend.waterSub')}>
+            {t('mapFirst.legend.waterSub')}
           </span>
-          <span className="break-words text-right text-[9.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.waterSub')}</span>
         </div>
 
         {/* 6. Batas Wilayah */}
-        <div className="luma-glass-row grid min-h-7 grid-cols-[18px_minmax(0,1fr)_auto] items-center gap-2 rounded-lg px-1.5 py-0.5">
-          <CategoryIconBadge category="boundary" size="sm" />
-          <span className="font-medium leading-tight text-foreground text-[11px]">
-            {t('mapFirst.legend.boundary')}
+        <div className="luma-glass-row flex min-h-7 items-center justify-between gap-1.5 rounded-lg px-2 py-1">
+          <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+            <CategoryIconBadge category="boundary" size="sm" />
+            <span className="text-[11px] font-medium leading-tight text-foreground whitespace-nowrap">
+              {t('mapFirst.legend.boundary')}
+            </span>
+          </div>
+          <span className="min-w-0 truncate text-right text-[9.5px] font-medium leading-tight text-muted" title={t('mapFirst.legend.boundarySub')}>
+            {t('mapFirst.legend.boundarySub')}
           </span>
-          <span className="break-words text-right text-[9.5px] font-medium leading-tight text-muted">{t('mapFirst.legend.boundarySub')}</span>
         </div>
       </div>
     </details>

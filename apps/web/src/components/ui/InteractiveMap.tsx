@@ -1103,21 +1103,19 @@ export function InteractiveMap({
       wrapperEl.style.transformOrigin = 'center bottom'
 
       const cardEl = document.createElement('div')
-      cardEl.className = `luma-region-card min-w-[150px] px-3 py-2 luma-map-card luma-glass-hover border ${cardBorder} rounded-xl transition-all`
+      cardEl.className = `luma-region-card luma-map-card luma-glass-hover flex items-center justify-center gap-2 px-2.5 py-1.5 border ${cardBorder} rounded-xl transition-all whitespace-nowrap`
 
       cardEl.innerHTML = `
-        <div class="flex items-center gap-2">
-          <div class="flex min-w-0 items-center gap-2">
-            <span class="inline-flex size-4 shrink-0 items-center justify-center rounded-md bg-surface-muted/70 ${iconColor}" title="${language === 'id' ? 'Wilayah DKI Jakarta' : 'DKI Jakarta region'}" aria-hidden="true">
-              <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
-                <circle cx="12" cy="10" r="2.5" />
-              </svg>
-            </span>
-            <span class="luma-map-label-text truncate text-[11px] font-bold text-foreground tracking-tight">DKI Jakarta</span>
-          </div>
+        <div class="flex items-center gap-1.5">
+          <span class="inline-flex size-4 shrink-0 items-center justify-center rounded-md bg-surface-muted/70 ${iconColor}" title="${language === 'id' ? 'Wilayah DKI Jakarta' : 'DKI Jakarta region'}" aria-hidden="true">
+            <svg viewBox="0 0 24 24" class="size-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0Z" />
+              <circle cx="12" cy="10" r="2.5" />
+            </svg>
+          </span>
+          <span class="luma-map-label-text text-xs font-bold text-foreground tracking-tight">DKI Jakarta</span>
         </div>
-        <span class="luma-region-summary ml-6 mt-1.5 inline-flex max-w-[calc(100%_-_1.5rem)] px-2 py-0.5 text-[9.5px] font-bold ${badgeClass} rounded-md">
+        <span class="luma-region-summary inline-flex items-center rounded-md px-1.5 py-0.5 text-[10px] font-extrabold ${badgeClass}">
           <span>${badgeValue}</span><span class="luma-region-summary-label">&nbsp;${badgeLabel}</span>
         </span>
       `

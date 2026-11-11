@@ -31,7 +31,7 @@ export const DATA_CATALOG: Record<CatalogCategory, DataCatalogEntry> = {
     coverage: 'Koordinat representatif DKI dan 6 wilayah administrasi',
     unit: 'US AQI; PM2.5 dan PM10 (µg/m³)',
     method: 'Sampel model pada koordinat wilayah, cache 15 menit; bukan pembacaan langsung sensor SPKU.',
-    period: 'Real-time',
+    period: 'Pembaruan Berkala',
     updatedAt: 'Otomatis setiap 15 menit',
     status: 'live',
     trendSector: 'udara',
@@ -111,7 +111,7 @@ const DATA_CATALOG_EN_COPY: Record<
     coverage: 'Representative coordinates for DKI Jakarta and its six administrative regions',
     unit: 'US AQI; PM2.5 and PM10 (µg/m³)',
     method: 'Model samples at regional coordinates, cached for 15 minutes; not direct SPKU sensor readings.',
-    period: 'Real-time',
+    period: 'Periodic update',
     updatedAt: 'Automatically every 15 minutes',
   },
   kesehatan: {

@@ -25,7 +25,7 @@ export function DataSourcesComingSoonPage({ onBack }: DataSourcesComingSoonPageP
         description: 'Setiap layer menjelaskan sumber, cakupan, satuan, periode, serta metode pengolahan yang digunakan Luma.',
         datasets: 'dataset terdokumentasi', coverage: 'Cakupan', unit: 'Satuan',
         period: 'Periode', updated: 'Diperbarui', method: 'Metode pengolahan', unavailable: 'Belum tersedia',
-        open: 'Buka sumber resmi', live: 'Live', active: 'Aktif', curated: 'Terkurasi',
+        open: 'Buka sumber resmi', live: 'Berkala', active: 'Aktif', curated: 'Terkurasi',
         noteTitle: 'Catatan penggunaan data',
         note: 'Data terkurasi digunakan untuk eksplorasi dan transparansi publik. Layer yang belum memiliki seri resmi lengkap diberi keterangan secara eksplisit dan tidak ditampilkan sebagai data real-time.',
       }
@@ -35,7 +35,7 @@ export function DataSourcesComingSoonPage({ onBack }: DataSourcesComingSoonPageP
         description: 'Every layer documents the source, coverage, unit, period, and processing method used by Luma.',
         datasets: 'documented datasets', coverage: 'Coverage', unit: 'Unit',
         period: 'Period', updated: 'Updated', method: 'Processing method', unavailable: 'Not available',
-        open: 'Open official source', live: 'Live', active: 'Active', curated: 'Curated',
+        open: 'Open official source', live: 'Periodic', active: 'Active', curated: 'Curated',
         noteTitle: 'Data usage note',
         note: 'Curated data supports public exploration and transparency. Layers without a complete official series are explicitly identified and are not presented as real-time data.',
       }
