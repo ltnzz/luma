@@ -78,14 +78,33 @@ export function AirQualityCard({
 
       {/* 2. Nilai AQI & Status Kategori (Sesuai Mockup User) */}
       <div className="flex items-center justify-between gap-2 py-1">
-        <span
-          className="flex h-8 w-8 shrink-0 items-center justify-center text-xl leading-none"
-          role="img"
+        <div
+          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border transition-all duration-300"
+          style={{
+            backgroundColor: hasData ? `${level.color}18` : 'rgba(255,255,255,0.05)',
+            borderColor: hasData ? `${level.color}35` : 'rgba(255,255,255,0.1)',
+          }}
           aria-label={hasData ? categoryLabel : t(status === 'loading' ? 'mapFirst.air.loading' : 'mapFirst.air.unavailable')}
           title={hasData ? categoryLabel : t(status === 'loading' ? 'mapFirst.air.loading' : 'mapFirst.air.unavailable')}
         >
-          {hasData ? level.icon : '🌫️'}
-        </span>
+          {status === 'loading' ? (
+            <svg
+              viewBox="0 0 24 24"
+              className="size-4 animate-spin text-primary"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" strokeOpacity="0.25" />
+              <path d="M12 3a9 9 0 0 1 9 9" strokeLinecap="round" />
+            </svg>
+          ) : (
+            <span className="text-lg leading-none select-none" role="img" aria-hidden="true">
+              {hasData ? level.icon : '—'}
+            </span>
+          )}
+        </div>
         <div className="ml-auto flex min-w-0 items-baseline justify-end gap-1.5 text-right">
           <span className={`text-2xl font-extrabold tracking-tight leading-none ${hasData ? level.textColor : 'text-muted'}`}>
             {hasData ? airAqi : '—'}
