@@ -457,7 +457,9 @@ body[data-tour-step="1"] [data-tour="help-tour"],
 body[data-tour-step="1"] [data-tour="facility-dock"],
 body[data-tour-step="1"] [data-tour="air-quality"],
 body[data-tour-step="1"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 2 (interactive map): + map controls. */
@@ -468,7 +470,9 @@ body[data-tour-step="2"] [data-tour="help-tour"],
 body[data-tour-step="2"] [data-tour="facility-dock"],
 body[data-tour-step="2"] [data-tour="air-quality"],
 body[data-tour-step="2"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 3 (region selector): + header region pill. */
@@ -478,7 +482,9 @@ body[data-tour-step="3"] [data-tour="help-tour"],
 body[data-tour-step="3"] [data-tour="facility-dock"],
 body[data-tour-step="3"] [data-tour="air-quality"],
 body[data-tour-step="3"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 4 (language): + language switcher. */
@@ -487,7 +493,9 @@ body[data-tour-step="4"] [data-tour="help-tour"],
 body[data-tour-step="4"] [data-tour="facility-dock"],
 body[data-tour-step="4"] [data-tour="air-quality"],
 body[data-tour-step="4"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 5 (theme): + theme toggle. */
@@ -495,27 +503,35 @@ body[data-tour-step="5"] [data-tour="help-tour"],
 body[data-tour-step="5"] [data-tour="facility-dock"],
 body[data-tour-step="5"] [data-tour="air-quality"],
 body[data-tour-step="5"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 6 (facility dock): + dashboard dock. */
 body[data-tour-step="6"] [data-tour="help-tour"],
 body[data-tour-step="6"] [data-tour="air-quality"],
 body[data-tour-step="6"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 7 (facility details, full map): same visible set as step 6. */
 body[data-tour-step="7"] [data-tour="help-tour"],
 body[data-tour-step="7"] [data-tour="air-quality"],
 body[data-tour-step="7"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 8 (environment): + air quality card. */
 body[data-tour-step="8"] [data-tour="help-tour"],
 body[data-tour-step="8"] [data-tour="data-sources"] {
-  visibility: hidden;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* Step 9 (data sources): data-sources card and Help are both in view. */
