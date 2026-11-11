@@ -1,7 +1,7 @@
-# Luma — Dashboard Keterbukaan Fasilitas & Infrastruktur Publik DKI Jakarta
+# Luma — Local Urban Mapping & Analytics (DKI Jakarta)
 
 > **Deskripsi Singkat:**  
-> Luma (*Local Urban Mapping and Analytics*) adalah platform dashboard peta interaktif berbasis data terbuka resmi DKI Jakarta untuk memantau sebaran fasilitas publik (Pendidikan, Kesehatan, RTH), infrastruktur kota (Transportasi BRT & Jaringan Pipa Air Bersih PAM JAYA), serta kualitas udara (ISPU/AQI) secara real-time, transparan, dan akuntabel.
+> Luma (*Local Urban Mapping & Analytics*) adalah platform berbasis web untuk mengeksplorasi kondisi wilayah dan persebaran fasilitas publik di DKI Jakarta. Luma mengintegrasikan data terbuka dari enam sektor, mengolahnya berdasarkan wilayah administratif, lalu menyajikannya melalui peta interaktif, bilah indikator wilayah, dan katalog transparansi data.
 
 ---
 
@@ -15,7 +15,8 @@ Platform Luma dikembangkan menggunakan arsitektur **Monorepo** (*npm workspaces*
 - **Styling:** Tailwind CSS v4, Modern Glassmorphism (`.luma-glass`), Theme Tokens
 - **Peta & Geospasial (GIS):** MapLibre GL (Vector & Raster Canvas, GeoJSON)
 - **Visualisasi Data:** ApexCharts & React-ApexCharts
-- **Linter & Code Quality:** ESLint 10, TypeScript-ESLint
+- **Internasionalisasi (i18n):** Multi-bahasa (Bahasa Indonesia & English)
+- **Pengujian:** Vitest, React Testing Library
 
 ### Backend API (`apps/api`)
 - **Runtime & Framework:** Node.js, Express.js, TypeScript
@@ -55,99 +56,122 @@ npm --prefix apps/api run dev
 ```
 Server API backend berjalan pada: `http://localhost:3000`
 
+#### Menjalankan Pengujian Otomatis (*Unit Tests*)
+```bash
+npm --prefix apps/web test
+```
+
 #### Membangun Project untuk Produksi (*Production Build*)
 ```bash
 npm --prefix apps/web run build
 ```
 
-#### Menjalankan Linting
-```bash
-npm --prefix apps/web run lint
-```
+---
+
+## 📌 Kapabilitas & Fitur Saat Ini
+
+Berikut adalah status fitur yang telah diimplementasikan secara riil pada platform Luma:
+
+1. **Dashboard Peta Interaktif Spasial (*Hierarchical GIS Canvas*)**:
+   - **Tingkat Provinsi:** Marker agregat se-DKI Jakarta dengan ringkasan jumlah fasilitas dan aksesibilitas air bersih.
+   - **Tingkat Kota/Kabupaten:** Navigasi 6 wilayah kota/kabupaten administrasi terintegrasi batas wilayah resmi, sampel kualitas udara US AQI per kota, dan filter solo-focus.
+   - **Marker & Klaster Dinamis:** Visualisasi sebaran titik fisik dengan algoritma *proximity clustering* adaptif zoom untuk mencegah penumpukan pin marker.
+
+2. **Integrasi Enam Sektor Fasilitas & Infrastruktur Terbuka**:
+   - **Fasilitas Kesehatan:** 51 RSUD dan Puskesmas Kecamatan berbasis data terbuka Dinas Kesehatan Provinsi DKI Jakarta.
+   - **Ruang Terbuka Hijau (RTH):** Sebaran Taman Kota, Hutan Kota, dan Jalur Hijau berbasis data Dinas Pertamanan dan Hutan Kota DKI Jakarta.
+   - **Pendidikan Negeri:** 1.503 Satuan Pendidikan Negeri (SD, SMP, dan SMA) terintegrasi Dapodik Kemendikbudristek & Disdik DKI Jakarta.
+   - **Transportasi Publik BRT:** 13 koridor utama rute Bus Rapid Transit (BRT) Transjakarta serta ratusan titik halte terintegrasi.
+   - **Jaringan Air Bersih:** Digitasi kurasi koridor pipa transmisi utama PAM JAYA dan instalasi pengolahan air bersih (keterlayanan ~68%).
+   - **Kualitas Udara:** Integrasi berkala model kimia atmosfer Open-Meteo Air Quality API (US AQI, PM2.5, PM10) dengan cache 15 menit.
+
+3. **Integritas Status Informasi Transparan**:
+   - Membedakan penandaan data secara eksplisit antara **Data Resmi Pemerintah**, **Data Hasil Kurasi**, dan **Estimasi Berbasis Model Atmosfer** agar pengguna dapat menilai konteks informasi secara tepat.
+
+4. **Modal Detail Fasilitas Samping (*Side Glass Panel*)**:
+   - Panel informasi fasilitas ramping (*desktop side-glass & mobile bottom-sheet*) menyajikan nama fasilitas, alamat/wilayah, kategori, indikator kualitas udara acuan sekitar, serta status ketersediaan metadata.
+
+5. **Orientasi Pengguna & Aksesibilitas**:
+   - Tur pengenalan mandiri (*onboarding tutorial*) 9 langkah dengan efek *spotlight overlay*.
+   - Dukungan dwi-bahasa (Bahasa Indonesia & English).
+   - Pengalih tema tampilan (Mode Terang & Mode Gelap).
+
+6. **Katalog Transparansi Sumber Data**:
+   - Dokumentasi lengkap setiap sektor data: instansi penerbit, tautan sumber asli, cakupan wilayah, satuan pengukuran, metodologi normalisasi, dan periode pemutakhiran.
 
 ---
 
-## 📌 Progress Saat Ini
-
-Berikut adalah status pencapaian fitur yang telah berhasil diimplementasikan:
-
-1. **Dashboard Peta Interaktif Dua Layer (*Hierarchical GIS Canvas*)**:
-   - **Layer 1 (Makro Provinsi):** Visualisasi sebaran agregat fasilitas per kota administrasi DKI Jakarta (5 Kota Administrasi + Kab. Kepulauan Seribu) terintegrasi skor kualitas udara real-time SPKU.
-   - **Layer 2 (Mikro Wilayah):** Peta sebaran titik fasilitas publik dengan algoritma *proximity clustering* anti-tabrakan pin (*zero collision*) dan kartu pratinjau instan (*quick preview tooltip*).
-
-2. **Integrasi Fasilitas Layanan Publik Resmi**:
-   - **Fasilitas Kesehatan (Faskes Primer):** 51 RSUD dan Puskesmas Kecamatan terakreditasi resmi Dinas Kesehatan DKI Jakarta.
-   - **Ruang Terbuka Hijau (RTH):** 418 Taman dan Hutan Kota dengan klasifikasi sub-kategori.
-   - **Sekolah Negeri Terakreditasi:** 1.503 Satuan Pendidikan Negeri (SD, SMP, SMA, SMK, SLB) terintegrasi data Dapodik Kemendikbudristek.
-
-3. **Infrastruktur & Jaringan Layanan Kota**:
-   - **Jaringan BRT Transjakarta:** Visualisasi 13 koridor utama Transjakarta, deduplikasi halte transit/interchange, serta panel penelusuran rute dan halte.
-   - **Jaringan Pipa Air Bersih PAM JAYA:** Visualisasi jalur pipa distribusi air minum perpipaan, stasiun Instalasi Pengolahan Air (IPA), dan metrik keterlayanan 68% warga.
-
-4. **Monitoring Kualitas Udara (ISPU/AQI) Real-Time**:
-   - Skala kesehatan udara 6 tingkatan (Baik, Sedang, Sensitif, Tidak Sehat, Sangat Tidak Sehat, Berbahaya) terkoneksi sensor SPKU DLH Jakarta.
-   - Meteran visual tersegmentasi (*segmented gauge meter*), badge level kesehatan, dan panduan masker/ventilasi bagi warga.
-
-5. **Side Glass Modal & Transparansi Anggaran**:
-   - Panel detail fasilitas ramping di sebelah kanan dengan efek frosted glassmorphism modern tanpa menutupi kontrol peta atau dock bawah.
-   - Menampilkan transparansi anggaran pembangunan/operasional (APBD/BOS/BOP), legalitas izin (PBG, SLF, SPPL), skor walkability, dan koordinat GPS presisi.
-
-6. **Transparansi & Provenansi Sumber Data**:
-   - Halaman katalog sumber data terverifikasi (Satu Data Jakarta, Kemendikbud, DLH DKI, PAM JAYA, Dinkes, Distamhut).
-   - Metodologi pipeline data terbuka dan log pembaruan berkala.
-
----
-
-## 🗺️ Flow Aplikasi (User Journey)
+## 🗺️ Alur Pengguna (User Flow)
 
 ```text
-User buka web Luma -> Dashboard Peta DKI -> Pilih Wilayah Kota/Kabupaten -> Tinjau Indikator (ISPU Udara, Air, Faskes, RTH, Pendidikan, Transum) -> Filter Kategori Fasilitas -> Eksplorasi Marker/Cluster Peta -> Buka Detail Fasilitas (Anggaran APBD, Legalitas Izin, Mutu Lingkungan) -> Akses Katalog Sumber Data Resmi.
+User buka web Luma -> Dashboard Peta DKI -> Pilih Wilayah Kota/Kabupaten -> Tinjau Indikator Wilayah (Kualitas Udara US AQI, Jaringan Air, Faskes, RTH, Sekolah, Transportasi) -> Filter Kategori Fasilitas -> Eksplorasi Klaster & Marker Peta -> Buka Detail Fasilitas (Nama, Lokasi, Kategori, Kondisi Wilayah, & Metadata) -> Akses Katalog Transparansi Data Resmi.
 ```
 
 ```mermaid
 flowchart TD
     subgraph Alur1["Alur 1: Eksplorasi Kondisi Wilayah"]
         A1(["Mulai"]) --> B1["Buka situs web Luma"]
-        B1 --> C1["Lihat dashboard default DKI Jakarta"]
-        C1 --> D1["Pilih wilayah administratif Kota/Kabupaten"]
-        D1 --> E1{"Data tingkat kecamatan tersedia?"}
-        E1 -- "Ya" --> F1["Pilih kecamatan (opsional)"]
-        E1 -- "Tidak, tetap tingkat kota" --> G1["Lihat indikator dan insight wilayah"]
-        F1 --> G1
-        G1 --> H1["Jelajahi kategori: Air, Udara, Faskes, RTH, Sekolah, Transum"]
-        H1 --> I1["Tinjau nilai indikator, satuan, dan periode data"]
-        I1 --> J1["Akses informasi sumber data resmi"]
-        J1 --> K1{"Jelajahi kategori lain?"}
-        K1 -- "Ya" --> H1
-        K1 -- "Tidak" --> L1(["Selesai"])
+        B1 --> C1["Dashboard DKI Jakarta tampil"]
+        C1 --> D1["Pilih wilayah Kota/Kabupaten"]
+        D1 --> E1["Pilih indikator kategori data"]
+        E1 --> F1["Tinjau nilai: satuan, periode, cakupan, status ketersediaan"]
+        F1 --> G1["Periksa sumber: metode pengolahan & keterbatasan"]
+        G1 --> H1{"Pilih kategori lain?"}
+        H1 -- "Ya (tanpa pilih wilayah ulang)" --> E1
+        H1 -- "Tidak" --> I1(["Selesai"])
     end
 
     subgraph Alur2["Alur 2: Eksplorasi Fasilitas Publik"]
         A2(["Mulai"]) --> B2["Buka peta interaktif"]
-        B2 --> C2["Pilih / filter kategori fasilitas"]
-        C2 --> D2["Jelajahi marker fasilitas & cluster berbentuk lingkaran"]
-        D2 --> E2["Perbesar (zoom) area tertentu"]
-        E2 --> F2["Pilih marker fasilitas individual"]
-        F2 --> G2["Lihat detail fasilitas & informasi transparansi data"]
-        G2 --> H2{"Jelajahi fasilitas lain?"}
-        H2 -- "Ya" --> C2
-        H2 -- "Tidak" --> I2(["Selesai"])
+        B2 --> C2["Pilih kategori fasilitas (Filter)"]
+        C2 --> D2["Jelajahi peta (Zoom & buka klaster)"]
+        D2 --> E2["Pilih marker fasilitas individual"]
+        E2 --> F2["Lihat detail: nama, lokasi, kategori, sumber & periode"]
+        F2 --> G2{"Eksplorasi fasilitas lain?"}
+        G2 -- "Ya (ubah filter / pilih marker lain)" --> C2
+        G2 -- "Tidak" --> H2(["Selesai"])
     end
 ```
 
 ---
 
-## 🏛️ Arsitektur Informasi & Fitur
+## 🏛️ Arsitektur Informasi
 
 ```
 Luma
-├── Dashboard Utama
-│   ├── Indikator dan Insight Wilayah (Kualitas Air, Udara, Pendidikan, Kesehatan, RTH, Transum)
-│   ├── Peta Interaktif (Batas Wilayah Administratif, Marker Fasilitas, Proximity Clustering, Kontrol Peta)
-│   ├── Pemilihan Wilayah (Kota/Kabupaten Administratif & Informasi Tingkat Kecamatan)
-│   └── Detail Fasilitas (Side Glass Modal: Nama, Kategori, Alamat/GPS, Realisasi Anggaran, Izin PBG/SLF)
-└── Transparansi Sumber Data
-    ├── Sumber Dataset Resmi (Satu Data Jakarta, Kemendikbud, DLH, PAM JAYA, Dinkes, Distamhut)
-    ├── Periode Pembaruan Data & Metodologi Pipeline
-    └── Keterbatasan Data & Catatan Akurasi
+├── 1. Dashboard Utama
+│   ├── Pemilihan Wilayah (Provinsi DKI Jakarta & 6 Kota/Kabupaten Administrasi)
+│   ├── Peta Interaktif (Batas Wilayah, Marker Fasilitas, Klaster Dinamis, Koridor BRT & Pipa Air)
+│   ├── Bilah Indikator Wilayah (Kualitas Udara, Jaringan Air, Faskes, RTH, Sekolah, Transportasi)
+│   └── Detail Fasilitas (Modal Kaca: Identitas, Lokasi Presisi, Kondisi Lingkungan Acuan, Status Metadata)
+├── 2. Transparansi Data
+│   ├── Katalog Dataset Resmi (Open-Meteo, Satu Data Jakarta, Dinkes, Distamhut, Dapodik, PAM JAYA, Transjakarta)
+│   ├── Cakupan & Periode Data (Status Ketersediaan, Satuan, Waktu Snapshot)
+│   ├── Metode Pengolahan (Normalisasi, Kurasi, Agregasi Spasial)
+│   └── Keterbatasan Data (Kelengkapan Metadata, Lisensi Terbuka)
+└── 3. Bantuan & Preferensi
+    ├── Tur Pengenalan (Panduan Fitur 9 Langkah Interaktif)
+    ├── Pengaturan Bahasa (Bahasa Indonesia & English)
+    └── Tema Tampilan (Mode Terang & Mode Gelap)
 ```
+
+---
+
+## 📚 Sumber Data & Daftar Pustaka
+
+| Sektor | Sumber / Instansi Penyedia | Tautan Resmi | Status Data |
+|:---|:---|:---|:---|
+| **Kualitas Udara** | Open-Meteo Air Quality API | [open-meteo.com](https://open-meteo.com/en/docs/air-quality-api) | Berbasis Model Atmosfer |
+| **Fasilitas Kesehatan** | Dinas Kesehatan DKI Jakarta (Satu Data Indonesia) | [data.go.id](https://data.go.id/dataset/data-keberadaan-sarana-kesehatan-di-provinsi-dki-jakarta) | Snapshot Resmi Terkurasi |
+| **Ruang Terbuka Hijau** | Distamhut Provinsi DKI Jakarta (Satu Data Jakarta) | [satudata.jakarta.go.id](https://satudata.jakarta.go.id/) | Snapshot Resmi Terkurasi |
+| **Sekolah Negeri** | Dapodik Kemendikbudristek & Dinas Pendidikan DKI | [dapo.kemdikbud.go.id](https://dapo.kemdikbud.go.id/) | Data Pokok Pendidikan |
+| **Transportasi Umum** | PT Transportasi Jakarta (Transjakarta) | [transjakarta.co.id](https://transjakarta.co.id/) | Operasional BRT |
+| **Jaringan Air Bersih** | PAM JAYA / Perum Jasa Tirta II | [pamjaya.co.id](https://www.pamjaya.co.id/) | Digitasi Koridor Terkurasi |
+| **Batas Administrasi** | GADM (Database of Global Administrative Areas) | [gadm.org](https://gadm.org/) | Data Spasial Level 2 |
+| **Peta Dasar (*Tiles*)** | Esri / ArcGIS Online Basemap Services | [server.arcgisonline.com](https://server.arcgisonline.com/) | Layanan Peta Ubin |
+
+---
+
+## 📄 Lisensi
+
+Proyek ini dikembangkan untuk tujuan inovasi keterbukaan data publik DKI Jakarta.
