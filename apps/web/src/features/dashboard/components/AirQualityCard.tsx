@@ -70,7 +70,7 @@ export function AirQualityCard({
             data-tooltip-side="bottom"
             data-tooltip-align="right"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
             {t('mapFirst.air.live')}
           </span>
         )}

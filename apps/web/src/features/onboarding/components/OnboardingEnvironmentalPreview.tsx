@@ -32,7 +32,7 @@ export function OnboardingEnvironmentalPreview() {
           <div className="flex items-center gap-1.5">
             <CategoryIconBadge category="air" size="sm" />
             <span className="text-[11px] font-bold text-foreground">
-              {isEn ? 'Air Quality (AQI)' : 'Kualitas Udara (ISPU)'}
+              {isEn ? 'Air Quality (US AQI)' : 'Kualitas Udara (US AQI)'}
             </span>
           </div>
           <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-[9.5px] font-semibold text-amber-700 dark:text-amber-300">

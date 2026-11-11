@@ -178,7 +178,7 @@ export interface SynchronizedRegionStats {
 export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   ALL: {
     total: 1620,
-    kualitasAir: { value: '11 Titik Pantau', sub: 'Pintu Air, Waduk & Sungai Ciliwung' },
+    kualitasAir: { value: '11 Titik Instalasi', sub: 'Pintu Air, Waduk & Rumah Pompa' },
     kualitasUdara: { value: '74 AQI', sub: 'Sedang • Model Atmosfer DKI' },
     pendidikan: { value: '1.503 Sekolah', sub: '117 SMAN • 289 SMPN • 1.097 SDN' },
     kesehatan: { value: '51 Faskes', sub: 'RSUD & Puskesmas Rujukan Utama' },
@@ -187,7 +187,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   },
   'JAKARTA PUSAT': {
     total: 228,
-    kualitasAir: { value: '2 Titik Pantau', sub: 'Pintu Air Karet & Ciliwung Istiqlal' },
+    kualitasAir: { value: '2 Titik Instalasi', sub: 'Pintu Air Karet & Pompa Ciliwung Istiqlal' },
     kualitasUdara: { value: '68 AQI', sub: 'Sedang • Sampel Gambir / Monas' },
     pendidikan: { value: '205 Sekolah', sub: '13 SMAN • 36 SMPN • 156 SDN' },
     kesehatan: { value: '9 Faskes', sub: 'RSUD Tarakan, Puskesmas Gambir, Tn Abang...' },
@@ -196,7 +196,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   },
   'JAKARTA SELATAN': {
     total: 345,
-    kualitasAir: { value: '2 Titik Pantau', sub: 'Pintu Air Manggarai & Pos Pantau Ciliwung' },
+    kualitasAir: { value: '2 Titik Instalasi', sub: 'Pintu Air Manggarai & Pompa Ciliwung' },
     kualitasUdara: { value: '72 AQI', sub: 'Sedang • Sampel Jagakarsa' },
     pendidikan: { value: '320 Sekolah', sub: '29 SMAN • 66 SMPN • 225 SDN' },
     kesehatan: { value: '12 Faskes', sub: 'RSUD Pasar Minggu, Puskesmas Kebayoran Baru...' },
@@ -205,7 +205,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   },
   'JAKARTA BARAT': {
     total: 404,
-    kualitasAir: { value: '3 Titik Pantau', sub: 'Waduk Tomang, Kali Angke, Pompa Kosambi' },
+    kualitasAir: { value: '3 Titik Instalasi', sub: 'Waduk Tomang, Kali Angke, Pompa Kosambi' },
     kualitasUdara: { value: '76 AQI', sub: 'Sedang • Sampel Kebon Jeruk' },
     pendidikan: { value: '385 Sekolah', sub: '17 SMAN • 50 SMPN • 318 SDN' },
     kesehatan: { value: '8 Faskes', sub: 'RSUD Cengkareng, Puskesmas Kebon Jeruk...' },
@@ -214,7 +214,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   },
   'JAKARTA UTARA': {
     total: 204,
-    kualitasAir: { value: '1 Titik Pantau', sub: 'Rumah Pompa Utama Waduk Pluit' },
+    kualitasAir: { value: '1 Titik Instalasi', sub: 'Rumah Pompa Utama Waduk Pluit' },
     kualitasUdara: { value: '75 AQI', sub: 'Sedang • Sampel Kelapa Gading' },
     pendidikan: { value: '186 Sekolah', sub: '17 SMAN • 39 SMPN • 130 SDN' },
     kesehatan: { value: '8 Faskes', sub: 'RSUD Koja, Puskesmas Tj Priok, Penjaringan...' },
@@ -223,7 +223,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   },
   'JAKARTA TIMUR': {
     total: 418,
-    kualitasAir: { value: '3 Titik Pantau', sub: 'Pintu Air KBT, Pos Pantau Kali Baru, Waduk Setu' },
+    kualitasAir: { value: '3 Titik Instalasi', sub: 'Pintu Air KBT, Pompa Kali Baru, Waduk Setu' },
     kualitasUdara: { value: '70 AQI', sub: 'Sedang • Sampel Lubang Buaya' },
     pendidikan: { value: '395 Sekolah', sub: '40 SMAN • 95 SMPN • 260 SDN' },
     kesehatan: { value: '10 Faskes', sub: 'RSUD Pasar Rebo, Puskesmas Duren Sawit...' },
@@ -232,7 +232,7 @@ export const VERIFIED_MAP_KPIS: Record<string, SynchronizedRegionStats> = {
   },
   'KEP. SERIBU': {
     total: 21,
-    kualitasAir: { value: '0 Titik Pantau', sub: 'Kawasan Konservasi Perairan Laut Nasional' },
+    kualitasAir: { value: '0 Titik Instalasi', sub: 'Kawasan Konservasi Perairan Laut Nasional' },
     kualitasUdara: { value: '45 AQI', sub: 'Baik • Sampel Kep. Seribu' },
     pendidikan: { value: '12 Sekolah', sub: '1 SMAN • 7 SMPN • 4 SDN' },
     kesehatan: { value: '4 Faskes', sub: 'RSUD Kep. Seribu, Puskesmas P. Tidung, Pari' },

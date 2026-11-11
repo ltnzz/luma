@@ -22,7 +22,7 @@ import { CITY_AGGREGATES } from '../../data/city-aggregates'
 import { TRANSJAKARTA_CORRIDORS } from '../../data/transit-corridors'
 import { buildDeduplicatedStations } from '../../data/transit-stations-deduped'
 import { clusterNearbyItems } from '../../features/dashboard/utils/proximityClustering'
-import { SPKU_STATIONS, getAqiLevel } from '../../features/dashboard/utils/airQualityLevels'
+import { AQI_SAMPLE_POINTS, getAqiLevel } from '../../features/dashboard/utils/airQualityLevels'
 import { WATER_NETWORK, WATER_FACILITIES } from '../../data/water-network'
 import {
   buildFacilityPopupHtml,
@@ -1193,8 +1193,8 @@ export function InteractiveMap({
     }
 
     CITY_AGGREGATES.forEach((city) => {
-      const station = SPKU_STATIONS.find((s) => s.code === city.code)
-      const aqiInfo = station ? getAqiLevel(station.aqi) : null
+      const samplePoint = AQI_SAMPLE_POINTS.find((s) => s.code === city.code)
+      const aqiInfo = samplePoint ? getAqiLevel(samplePoint.aqi) : null
 
       let badgeText = `${city.counts.facilities} ${t('mapFirst.map.facilities')}`
       let badgeClass = 'bg-primary/15 text-primary border border-primary/30'
@@ -1238,10 +1238,10 @@ export function InteractiveMap({
       const cardEl = document.createElement('div')
       cardEl.className = `luma-region-card luma-map-card luma-glass-hover flex min-w-[120px] items-center justify-center gap-2 px-2.5 py-1.5 border ${cardBorder} rounded-xl transition-all`
 
-      const airQualityUnit = t('mapFirst.air.unit')
-      const aqiBadge = station
-        ? `<span class="inline-flex items-center px-1.5 py-0.5 text-[10px] font-extrabold rounded-md" style="background-color:${aqiInfo?.color}2b;color:${aqiInfo?.color};border:1px solid ${aqiInfo?.color}70;box-shadow:0 0 10px ${aqiInfo?.color}28" title="${t('mapFirst.air.title')}: ${station.aqi} ${airQualityUnit}">
-            ${station.aqi} ${airQualityUnit}
+      const aqiTooltip = language === 'id' ? `Sampel model US AQI: ${samplePoint?.aqi ?? '—'}` : `US AQI model sample: ${samplePoint?.aqi ?? '—'}`
+      const aqiBadge = samplePoint
+        ? `<span class="inline-flex items-center px-1.5 py-0.5 text-[10px] font-extrabold rounded-md" style="background-color:${aqiInfo?.color}2b;color:${aqiInfo?.color};border:1px solid ${aqiInfo?.color}70;box-shadow:0 0 10px ${aqiInfo?.color}28" title="${aqiTooltip}">
+            ${samplePoint.aqi} AQI
           </span>`
         : ''
       const displayCityName = language === 'en' ? (CITY_NAME_EN[city.code] ?? city.name) : city.name

@@ -109,7 +109,7 @@ export function OnboardingFacilityPreview() {
       {/* Helpful Hint */}
       <p className="text-[9.5px] leading-tight text-muted/90 italic">
         {isEn
-          ? 'Tap any facility pin on the map to view complete real-time details.'
+          ? 'Tap any facility pin on the map to view complete facility details.'
           : 'Ketuk pin fasilitas mana pun di peta untuk membuka detail lengkapnya.'}
       </p>
     </div>

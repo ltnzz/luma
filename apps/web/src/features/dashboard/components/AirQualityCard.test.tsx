@@ -9,15 +9,15 @@ describe('AirQualityCard tooltip', () => {
     window.localStorage.setItem('luma-language', 'id')
   })
 
-  it('mengunci tooltip status real-time ke sisi kanan card', () => {
+  it('mengunci tooltip status pembaruan berkala ke sisi kanan card', () => {
     render(
       <I18nProvider>
         <AirQualityCard airAqi={78} isAirLive status="success" />
       </I18nProvider>,
     )
 
-    const liveBadge = screen.getByText('Real-time', { selector: '[data-tooltip]' })
-    expect(liveBadge).toHaveAttribute('data-tooltip', 'Data kualitas udara diperbarui secara real-time')
+    const liveBadge = screen.getByText((_, element) => element?.tagName.toLowerCase() === 'span' && element.hasAttribute('data-tooltip'))
+    expect(liveBadge).toHaveAttribute('data-tooltip', 'Diperbarui berkala mengikuti model atmosfer, cache 15 menit')
     expect(liveBadge).toHaveAttribute('data-tooltip-align', 'right')
     expect(liveBadge).toHaveAttribute('data-tooltip-side', 'bottom')
   })

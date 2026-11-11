@@ -84,7 +84,7 @@ export function getAqiLevel(aqi: number): AqiLevelConfig {
   return found ?? AQI_LEVELS[AQI_LEVELS.length - 1]
 }
 
-export interface SpkuStation {
+export interface AqiSamplePoint {
   id: string
   code: string
   name: string
@@ -96,11 +96,13 @@ export interface SpkuStation {
   pm10: number
 }
 
-export const SPKU_STATIONS: SpkuStation[] = [
+export type SpkuStation = AqiSamplePoint
+
+export const AQI_SAMPLE_POINTS: AqiSamplePoint[] = [
   {
-    id: 'spku-pusat',
+    id: 'sampel-pusat',
     code: 'JAKARTA PUSAT',
-    name: 'SPKU Thamrin / Monas',
+    name: 'Sampel Model Thamrin / Monas',
     wilayah: 'Jakarta Pusat',
     center: [106.8341, -6.1805],
     aqi: 173,
@@ -109,9 +111,9 @@ export const SPKU_STATIONS: SpkuStation[] = [
     pm10: 95.4,
   },
   {
-    id: 'spku-selatan',
+    id: 'sampel-selatan',
     code: 'JAKARTA SELATAN',
-    name: 'SPKU Jagakarsa',
+    name: 'Sampel Model Jagakarsa',
     wilayah: 'Jakarta Selatan',
     center: [106.8097, -6.2615],
     aqi: 165,
@@ -120,9 +122,9 @@ export const SPKU_STATIONS: SpkuStation[] = [
     pm10: 89.1,
   },
   {
-    id: 'spku-barat',
+    id: 'sampel-barat',
     code: 'JAKARTA BARAT',
-    name: 'SPKU Kebon Jeruk',
+    name: 'Sampel Model Kebon Jeruk',
     wilayah: 'Jakarta Barat',
     center: [106.7589, -6.1683],
     aqi: 170,
@@ -131,9 +133,9 @@ export const SPKU_STATIONS: SpkuStation[] = [
     pm10: 92.0,
   },
   {
-    id: 'spku-utara',
+    id: 'sampel-utara',
     code: 'JAKARTA UTARA',
-    name: 'SPKU Cilincing & Kelapa Gading',
+    name: 'Sampel Model Cilincing & Kelapa Gading',
     wilayah: 'Jakarta Utara',
     center: [106.8926, -6.1214],
     aqi: 156,
@@ -142,9 +144,9 @@ export const SPKU_STATIONS: SpkuStation[] = [
     pm10: 82.3,
   },
   {
-    id: 'spku-timur',
+    id: 'sampel-timur',
     code: 'JAKARTA TIMUR',
-    name: 'SPKU Lubang Buaya',
+    name: 'Sampel Model Lubang Buaya',
     wilayah: 'Jakarta Timur',
     center: [106.9004, -6.225],
     aqi: 168,
@@ -153,9 +155,9 @@ export const SPKU_STATIONS: SpkuStation[] = [
     pm10: 90.5,
   },
   {
-    id: 'spku-seribu',
+    id: 'sampel-seribu',
     code: 'KEP. SERIBU',
-    name: 'SPKU Maritim Kepulauan',
+    name: 'Sampel Model Maritim Kepulauan',
     wilayah: 'Kep. Seribu',
     center: [106.5615, -5.6122],
     aqi: 48,
@@ -164,4 +166,6 @@ export const SPKU_STATIONS: SpkuStation[] = [
     pm10: 22.4,
   },
 ]
+
+export const SPKU_STATIONS = AQI_SAMPLE_POINTS
 
