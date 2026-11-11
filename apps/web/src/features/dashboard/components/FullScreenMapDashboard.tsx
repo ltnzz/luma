@@ -96,9 +96,9 @@ export function FullScreenMapDashboard({
       if (!isTransitPanelCollapsed) setIsTransitPanelCollapsed(true)
       if (focusedCorridorId) setFocusedCorridorId(null)
     }
-    if (activeTourStep === 7 || activeTourStep === 9) {
+    if (activeTourStep !== null && activeTourStep !== undefined && activeTourStep >= 7) {
       setIsLegendOpen(true)
-    } else if (activeTourStep !== null && activeTourStep !== undefined) {
+    } else {
       setIsLegendOpen(false)
     }
   }
