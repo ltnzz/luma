@@ -11,13 +11,13 @@ export interface RealtimeAirQuality {
 }
 
 export const WILAYAH_COORDINATES: Record<string, { lat: number; lng: number; stationName: string }> = {
-  ALL: { lat: -6.2088, lng: 106.8456, stationName: '5 SPKU Terkoneksi' },
-  'JAKARTA PUSAT': { lat: -6.1805, lng: 106.8341, stationName: 'SPKU Thamrin / Monas' },
-  'JAKARTA SELATAN': { lat: -6.2615, lng: 106.8097, stationName: 'SPKU Jagakarsa' },
-  'JAKARTA BARAT': { lat: -6.1683, lng: 106.7589, stationName: 'SPKU Kebon Jeruk' },
-  'JAKARTA UTARA': { lat: -6.1214, lng: 106.8926, stationName: 'SPKU Cilincing & Kelapa Gading' },
-  'JAKARTA TIMUR': { lat: -6.225, lng: 106.9004, stationName: 'SPKU Lubang Buaya' },
-  'KEP. SERIBU': { lat: -5.6122, lng: 106.5615, stationName: 'SPKU Maritim Kepulauan' },
+  ALL: { lat: -6.2088, lng: 106.8456, stationName: 'Model Atmosfer DKI Jakarta' },
+  'JAKARTA PUSAT': { lat: -6.1805, lng: 106.8341, stationName: 'Sampel Model Gambir / Monas' },
+  'JAKARTA SELATAN': { lat: -6.2615, lng: 106.8097, stationName: 'Sampel Model Jagakarsa' },
+  'JAKARTA BARAT': { lat: -6.1683, lng: 106.7589, stationName: 'Sampel Model Kebon Jeruk' },
+  'JAKARTA UTARA': { lat: -6.1214, lng: 106.8926, stationName: 'Sampel Model Kelapa Gading' },
+  'JAKARTA TIMUR': { lat: -6.225, lng: 106.9004, stationName: 'Sampel Model Lubang Buaya' },
+  'KEP. SERIBU': { lat: -5.6122, lng: 106.5615, stationName: 'Sampel Model Kep. Seribu' },
 }
 
 export function getAqiCategory(aqi: number): string {
@@ -44,7 +44,7 @@ async function fetchAirQuality(targetKey: string, signal: AbortSignal): Promise<
   }
 
   const coord = WILAYAH_COORDINATES[targetKey]
-  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${coord.lat}&longitude=${coord.lng}&current=us_aqi,pm2_5,pm10`
+  const url = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${coord.lat}&longitude=${coord.lng}&current=us_aqi,pm2_5,pm10&timezone=Asia%2FJakarta`
 
   const res = await fetch(url, { signal })
   if (!res.ok) throw new Error(`HTTP ${res.status}`)

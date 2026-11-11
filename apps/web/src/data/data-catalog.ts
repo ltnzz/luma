@@ -40,7 +40,7 @@ export const DATA_CATALOG: Record<CatalogCategory, DataCatalogEntry> = {
     category: 'kesehatan',
     title: 'Fasilitas Kesehatan',
     source: 'Satu Data Jakarta / Dinas Kesehatan',
-    sourceUrl: 'https://data.go.id/dataset/dataset/data-keberadaan-sarana-kesehatan-di-provinsi-dki-jakarta',
+    sourceUrl: 'https://data.go.id/dataset/data-keberadaan-sarana-kesehatan-di-provinsi-dki-jakarta',
     coverage: 'DKI Jakarta hingga atribut kecamatan',
     unit: 'Lokasi fasilitas',
     method: 'Normalisasi nama, jenis, wilayah, dan koordinat; duplikasi lokasi disaring saat kurasi.',

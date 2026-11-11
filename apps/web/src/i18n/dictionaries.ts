@@ -151,15 +151,15 @@ const id = {
   'mapFirst.meta.realtime': 'Real-time',
   'mapFirst.legend.symbols': 'Simbol Fasilitas',
   'mapFirst.legend.health': 'Fasilitas Kesehatan',
-  'mapFirst.legend.healthSub': 'RS, Puskesmas, & Klinik Kesehatan',
+  'mapFirst.legend.healthSub': 'RSUD & Puskesmas Kecamatan',
   'mapFirst.legend.green': 'Ruang Terbuka Hijau',
   'mapFirst.legend.greenSub': 'Taman Kota, Hutan Kota, & Jalur Hijau',
   'mapFirst.legend.school': 'Sekolah Negeri',
-  'mapFirst.legend.schoolSub': 'SD, SMP, SMA, & SMK Negeri',
+  'mapFirst.legend.schoolSub': 'SD, SMP, & SMA Negeri',
   'mapFirst.legend.transit': 'Halte & Koridor BRT',
   'mapFirst.legend.transitSub': 'Koridor & Halte Bus Transjakarta',
   'mapFirst.legend.water': 'Jaringan Air Bersih',
-  'mapFirst.legend.waterSub': 'Jaringan Pipa Distribusi Air PAM JAYA',
+  'mapFirst.legend.waterSub': 'Koridor Pipa Transmisi PAM JAYA',
   'mapFirst.legend.boundary': 'Batas Wilayah DKI',
   'mapFirst.legend.boundarySub': 'Batas Administrasi 5 Kota & Kep. Seribu',
   'mapFirst.dock.aria': 'Filter kategori data peta',
@@ -243,10 +243,10 @@ const id = {
     'Klik pin fasilitas di peta untuk membuka panel detailnya di sisi kanan: nama, alamat, kategori, dan data rinci fasilitas tersebut.',
   'tour.step6.title': 'Informasi Lingkungan',
   'tour.step6.body':
-    'Panel kiri menampilkan kualitas udara (ISPU) secara real-time beserta panduan kesehatan warga. Setiap indikator selalu mencantumkan sumber resminya agar transparan.',
+    'Panel kiri menampilkan kualitas udara (AQI) secara real-time beserta panduan kesehatan warga. Setiap indikator selalu mencantumkan sumber resminya agar transparan.',
   'tour.step7.title': 'Selamat Bereksplorasi!',
   'tour.step7.body':
-    ' Luma membantu kamu memahami informasi perkotaan. Telusuri sumber data di balik setiap informasi dan temukan detail lebih lanjut melalui tombol Detail. Kamu bisa membuka kembali panduan ini kapan saja melalui menu Bantuan.',
+    'Luma membantu kamu memahami informasi perkotaan secara transparan. Telusuri sumber di balik setiap data dan temukan lebih banyak melalui tombol detail. Kamu dapat mengulang panduan ini kapan saja melalui tombol Bantuan (?) di kanan atas.',
 } as const
 
 export type TranslationKey = keyof typeof id
@@ -278,7 +278,7 @@ const en: Record<TranslationKey, string> = {
   'dashboard.scope.all': 'DKI Jakarta',
   'dashboard.indicators.heading': 'Regional indicators',
   'dashboard.region.ALL': 'All of DKI Jakarta',
-  'dashboard.kpi.kualitasAir': 'Air quality (water)',
+  'dashboard.kpi.kualitasAir': 'Water quality',
   'dashboard.kpi.kualitasUdara': 'Air quality',
   'dashboard.kpi.pendidikan': 'Education',
   'dashboard.kpi.kesehatan': 'Healthcare',
@@ -402,7 +402,7 @@ const en: Record<TranslationKey, string> = {
   'mapFirst.meta.realtime': 'Real-time',
   'mapFirst.legend.symbols': 'Facility Symbols',
   'mapFirst.legend.health': 'Healthcare Facilities',
-  'mapFirst.legend.healthSub': 'Hospitals, Clinics, & Health Centers',
+  'mapFirst.legend.healthSub': 'Regional Hospitals & District Health Centers',
   'mapFirst.legend.green': 'Green Open Spaces',
   'mapFirst.legend.greenSub': 'City Parks, Urban Forests, & Green Belts',
   'mapFirst.legend.school': 'Public Schools',
@@ -410,7 +410,7 @@ const en: Record<TranslationKey, string> = {
   'mapFirst.legend.transit': 'BRT Stops & Corridors',
   'mapFirst.legend.transitSub': 'Transjakarta BRT Corridors & Stops',
   'mapFirst.legend.water': 'Clean Water Network',
-  'mapFirst.legend.waterSub': 'PAM JAYA Water Distribution Pipelines',
+  'mapFirst.legend.waterSub': 'PAM JAYA Transmission Pipelines',
   'mapFirst.legend.boundary': 'DKI Boundary',
   'mapFirst.legend.boundarySub': '5 Administrative Cities & Thousand Islands',
   'mapFirst.dock.aria': 'Map data category filters',
@@ -497,7 +497,7 @@ const en: Record<TranslationKey, string> = {
     'The left panel shows real-time air quality (AQI) with health guidance for residents. Every indicator always lists its official data source for transparency.',
   'tour.step7.title': 'Start Exploring!',
   'tour.step7.body':
-    'Luma helps you understand urban information. Explore the sources behind each piece of information and discover more through the Detail button. You can revisit this guide anytime from the Help menu.',
+    'Luma helps you understand urban information transparently. Explore the sources behind each piece of information and discover more through the detail buttons. You can revisit this guide anytime via the Help (?) button in the top right.',
 }
 
 export const DEFAULT_LANGUAGE: Language = 'id'

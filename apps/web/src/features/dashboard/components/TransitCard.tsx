@@ -131,7 +131,7 @@ export function TransitCard({
       {isOpen && (
         <div
           ref={dropdownRef}
-          className="pointer-events-auto absolute left-[calc(100%+8px)] top-0 z-50 w-52 sm:w-56 max-h-36 overflow-y-auto rounded-xl border border-border bg-surface/98 p-1.5 shadow-xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150 scrollbar-thin select-none"
+          className="pointer-events-auto absolute left-[calc(100%+8px)] top-0 z-50 w-52 sm:w-56 max-h-36 overflow-y-auto rounded-xl border border-border bg-surface/98 p-1.5 shadow-xl backdrop-blur-md animate-in fade-in zoom-in-95 duration-150 scrollbar-none select-none"
         >
           <div className="flex items-center justify-between px-1.5 py-0.5 border-b border-border/50 mb-0.5">
             <div className="flex items-center gap-1.5">

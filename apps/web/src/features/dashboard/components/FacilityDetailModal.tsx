@@ -76,11 +76,11 @@ export function FacilityDetailModal({
   const copy = language === 'id'
     ? {
         environment: 'Kondisi Lingkungan & Akses', airQuality: 'Kualitas Udara',
-        scale: 'Skala 1.0 – 5.0', transit: 'Akses Transit', budget: 'Transparansi Realisasi Anggaran',
-        totalBudget: 'Total Anggaran Dialokasikan', funding: 'Sumber Pendanaan', year: 'Tahun Anggaran',
-        contractor: 'Pelaksana / Kontraktor', status: 'Status Operasional', specifications: 'Spesifikasi & Fasilitas',
-        documents: 'Dokumen Keterbukaan Publik', publicDocument: 'Dokumen Publik', department: 'Dinas Terkait',
-        download: 'Unduh', downloadTitle: 'Unduh berkas dokumen', detail: 'Detail fasilitas',
+        scale: 'Skala 1.0 – 5.0', transit: 'Akses Transit', budget: 'Informasi Pembiayaan & Operasional',
+        totalBudget: 'Estimasi Alokasi Pembiayaan', funding: 'Sumber Pendanaan', year: 'Tahun Anggaran',
+        contractor: 'Pelaksana / Instansi', status: 'Status Operasional', specifications: 'Spesifikasi & Fasilitas',
+        documents: 'Dokumen & Regulasi Publik', publicDocument: 'Dokumen Publik', department: 'Dinas Terkait',
+        download: 'Unduh', downloadTitle: 'Unduh berkas dokumen', docUnavailable: 'Belum tersedia daring', detail: 'Detail fasilitas',
         panelAria: 'Detail Fasilitas', close: 'Tutup detail fasilitas', loading: 'Memuat detail fasilitas',
         loadingDescription: 'Memuat informasi fasilitas dari server…',
         dataInfo: 'Informasi Data', source: 'Sumber', coverage: 'Cakupan', unit: 'Satuan', method: 'Metode',
@@ -90,18 +90,18 @@ export function FacilityDetailModal({
         facilitiesShort: 'Fasilitas & layanan', documentsShort: 'Dokumen publik',
         regionalAirQuality: 'Kualitas udara wilayah', regionalStation: 'Acuan wilayah',
         openMaps: 'Buka di Google Maps', openMapsTitle: 'Buka lokasi fasilitas di Google Maps',
-        directions: 'Petunjuk Arah', overviewTab: 'Ringkasan', specsTab: 'Fasilitas', budgetTab: 'Anggaran',
+        directions: 'Petunjuk Arah', route: 'Rute', overviewTab: 'Ringkasan', specsTab: 'Fasilitas', budgetTab: 'Anggaran',
         accreditation: 'Akreditasi', emptySpecs: 'Data spesifikasi belum tersedia.',
         emptyBudget: 'Data anggaran belum tersedia.', emptyDocs: 'Dokumen publik belum tersedia.',
         resizeSheet: 'Tarik untuk mengatur tinggi panel detail',
       }
     : {
         environment: 'Environment & Access', airQuality: 'Air Quality',
-        scale: 'Scale 1.0 – 5.0', transit: 'Transit Access', budget: 'Budget Realization Transparency',
-        totalBudget: 'Total Allocated Budget', funding: 'Funding Source', year: 'Budget Year',
-        contractor: 'Implementer / Contractor', status: 'Operational Status', specifications: 'Specifications & Facilities',
-        documents: 'Public Disclosure Documents', publicDocument: 'Public Document', department: 'Relevant Agency',
-        download: 'Download', downloadTitle: 'Download document', detail: 'Facility details',
+        scale: 'Scale 1.0 – 5.0', transit: 'Transit Access', budget: 'Funding & Operational Information',
+        totalBudget: 'Estimated Budget Allocation', funding: 'Funding Source', year: 'Budget Year',
+        contractor: 'Implementer / Agency', status: 'Operational Status', specifications: 'Specifications & Facilities',
+        documents: 'Public Documents & Regulations', publicDocument: 'Public Document', department: 'Relevant Agency',
+        download: 'Download', downloadTitle: 'Download document', docUnavailable: 'Not available online', detail: 'Facility details',
         panelAria: 'Facility Details', close: 'Close facility details', loading: 'Loading facility details',
         loadingDescription: 'Loading facility information from the server…',
         dataInfo: 'Data Information', source: 'Source', coverage: 'Coverage', unit: 'Unit', method: 'Method',
@@ -111,7 +111,7 @@ export function FacilityDetailModal({
         facilitiesShort: 'Facilities & services', documentsShort: 'Public documents',
         regionalAirQuality: 'Regional air quality', regionalStation: 'Regional reference',
         openMaps: 'Open in Google Maps', openMapsTitle: 'Open the facility location in Google Maps',
-        directions: 'Directions', overviewTab: 'Overview', specsTab: 'Facilities', budgetTab: 'Budget',
+        directions: 'Directions', route: 'Route', overviewTab: 'Overview', specsTab: 'Facilities', budgetTab: 'Budget',
         accreditation: 'Accreditation', emptySpecs: 'Specification data is not available yet.',
         emptyBudget: 'Budget data is not available yet.', emptyDocs: 'Public documents are not available yet.',
         resizeSheet: 'Drag to resize the detail panel',
@@ -349,7 +349,7 @@ export function FacilityDetailModal({
               <dl className={`grid w-full gap-1.5 ${environmentGridClass}`}>
                 {displayedAqi !== undefined && displayedAqi !== null ? (
                   <div className="min-w-0 rounded-lg border border-border/55 bg-surface/25 p-2 dark:border-white/10 dark:bg-black/10">
-                    <dt className="text-[9.5px] font-medium text-muted">{hasFacilityAqi ? copy.airQuality : copy.regionalAirQuality}</dt>
+                    <dt className="text-[9.5px] font-medium text-muted">{copy.regionalAirQuality}</dt>
                     <dd className="mt-1 break-words text-xs font-bold leading-tight text-foreground dark:text-white">
                       {String(displayedAqi)} AQI
                       {localizedAqiStatus ? <span className={`ml-1 text-[9px] ${aqiStatusClass}`}>{String(localizedAqiStatus)}</span> : null}
@@ -371,7 +371,7 @@ export function FacilityDetailModal({
                   </div>
                 ) : null}
               </dl>
-              {!hasFacilityAqi && regionalAirQuality ? (
+              {regionalAirQuality ? (
                 <p className="text-[9px] leading-relaxed text-muted">
                   {copy.regionalStation}: {regionalAirQuality.stationName.replace(/^SPKU\s*/i, '')} · {regionalAirQuality.source} · {regionalAirQuality.updatedAt}
                 </p>
@@ -441,11 +441,16 @@ export function FacilityDetailModal({
                   const title = 'title' in doc ? doc.title : copy.publicDocument
                   const dept = 'dept' in doc ? doc.dept : undefined
                   const size = 'size' in doc ? doc.size : undefined
-                  const url = 'url' in doc && doc.url ? String(doc.url) : '#'
+                  const rawUrl = 'url' in doc && doc.url ? String(doc.url) : ('fileUrl' in doc && doc.fileUrl ? String(doc.fileUrl) : '')
+                  const isDownloadable = Boolean(rawUrl && rawUrl !== '#' && !rawUrl.startsWith('javascript:'))
                   return (
                     <div key={idx} className="flex items-center justify-between gap-2 rounded-lg border border-border/55 bg-surface/20 p-2 dark:border-white/10 dark:bg-black/10">
                       <div className="min-w-0"><p className="truncate text-[10.5px] font-semibold text-foreground dark:text-white">{title}</p><p className="text-[9px] text-muted">{dept ?? copy.department}{size ? ` · ${size}` : ''}</p></div>
-                      <a href={url} download={title} target="_blank" rel="noopener noreferrer" className="shrink-0 rounded-md bg-primary/10 px-2 py-1 text-[9.5px] font-bold text-primary hover:bg-primary/20" title={copy.downloadTitle}>{copy.download}</a>
+                      {isDownloadable ? (
+                        <a href={rawUrl} download={title} target="_blank" rel="noopener noreferrer" className="shrink-0 rounded-md bg-primary/10 px-2 py-1 text-[9.5px] font-bold text-primary hover:bg-primary/20" title={copy.downloadTitle}>{copy.download}</a>
+                      ) : (
+                        <span className="shrink-0 rounded-md border border-border/55 bg-surface/40 px-2 py-1 text-[9.5px] font-medium text-muted">{copy.docUnavailable}</span>
+                      )}
                     </div>
                   )
                 })}
@@ -505,31 +510,24 @@ export function FacilityDetailModal({
               {displayFacility.name}
             </h2>
             {displayFacility.address && (
-              <p className="mt-0.5 flex min-w-0 items-start justify-between gap-1.5 text-[10px] font-medium leading-snug text-muted dark:text-white/75 sm:text-[11px] sm:leading-relaxed">
-                <span className="min-w-0 line-clamp-1 break-words sm:line-clamp-none">{displayFacility.address}</span>
-                {googleMapsUrl && coordinateLabel ? (
+              <div className="mt-1 text-[11px] font-medium leading-snug sm:text-xs">
+                {googleMapsUrl ? (
                   <a
                     href={googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    aria-label={`${copy.openMaps}: ${coordinateLabel}`}
+                    aria-label={coordinateLabel ? `${copy.openMaps}: ${coordinateLabel}` : copy.openMaps}
                     data-tooltip={copy.openMaps}
                     data-tooltip-side="bottom"
-                    data-tooltip-align="end"
-                    className="mt-0.5 inline-flex shrink-0 text-primary transition-[transform,color] duration-200 hover:scale-110 hover:text-primary-hover focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/35 dark:text-emerald-400"
+                    data-tooltip-align="start"
+                    className="inline text-primary hover:underline transition-colors focus-visible:outline-none"
                   >
-                    <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                      <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                      <circle cx="12" cy="10" r="3" />
-                    </svg>
+                    {displayFacility.address}&nbsp;↗
                   </a>
                 ) : (
-                  <svg className="mt-0.5 size-3.5 shrink-0 text-primary dark:text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
+                  <span className="text-muted dark:text-white/75">{displayFacility.address}</span>
                 )}
-              </p>
+              </div>
             )}
           </div>
 
@@ -548,7 +546,7 @@ export function FacilityDetailModal({
         {renderTabNavigation()}
 
         {/* Scrollable Body */}
-        <div ref={sheetBodyRef} className="flex min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-2.5 text-foreground scrollbar-thin dark:text-white sm:p-3.5">
+        <div ref={sheetBodyRef} className="flex min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 py-2.5 text-foreground scrollbar-none dark:text-white sm:p-3.5">
           <div ref={sheetBodyContentRef} className="flex w-full flex-col gap-2 pb-5 sm:gap-3 sm:pb-5">
             {detail.status === 'loading' && !displayFacility ? (
               <div className="space-y-2.5" aria-label={copy.loading}>
@@ -595,21 +593,24 @@ export function FacilityDetailModal({
       }
       description={
         displayFacility?.address ? (
-          <span className="flex items-center justify-between gap-1.5 text-xs text-white/70">
-            <span className="min-w-0">{displayFacility.address}</span>
-            {googleMapsUrl && coordinateLabel ? (
+          <span className="flex items-center justify-between gap-2 text-xs text-white/70">
+            <span className="min-w-0 line-clamp-1">{displayFacility.address}</span>
+            {googleMapsUrl ? (
               <a
                 href={googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label={`${copy.openMaps}: ${coordinateLabel}`}
+                aria-label={coordinateLabel ? `${copy.openMaps}: ${coordinateLabel}` : copy.openMaps}
                 data-tooltip={copy.openMaps}
                 data-tooltip-align="end"
-                className="shrink-0 text-emerald-400 transition-transform hover:scale-110 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300/50"
+                className="inline-flex shrink-0 items-center gap-1 rounded-full border border-emerald-400/35 bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-300 transition-all duration-150 hover:bg-emerald-500/25 active:scale-95 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-emerald-300/50"
               >
-                <svg className="size-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                  <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                  <circle cx="12" cy="10" r="3" />
+                <svg className="size-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <polygon points="3 11 22 2 13 21 11 13 3 11" />
+                </svg>
+                <span>{copy.route}</span>
+                <svg className="size-2.5 shrink-0 opacity-70" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d="M7 17 17 7M7 7h10v10" />
                 </svg>
               </a>
             ) : null}

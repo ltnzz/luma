@@ -91,7 +91,7 @@ export function TransitRoutesWidget({
           </span>
           <div>
             <h3 className="text-xs font-bold text-foreground">Rute Transjakarta</h3>
-            <p className="text-[10px] text-muted">13 Koridor BRT • 234 Halte</p>
+            <p className="text-[10px] text-muted">13 Koridor BRT • 203 Halte Terintegrasi</p>
           </div>
         </div>
 

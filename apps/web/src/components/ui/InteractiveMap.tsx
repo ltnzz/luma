@@ -844,6 +844,15 @@ export function InteractiveMap({
         }
       }
 
+      const displayTipeAkses =
+        tipeAkses === 'BRT Official Platform'
+          ? languageRef.current === 'id'
+            ? 'Platform Halte BRT'
+            : 'BRT Official Platform'
+          : tipeAkses
+      const tahunLabel = languageRef.current === 'id' ? 'Tahun' : 'Year'
+      const connectedLabel = languageRef.current === 'id' ? 'Terhubung: ' : 'Connected: '
+
       const html = `
         <article class="luma-popup-card w-[220px] overflow-hidden rounded-xl text-foreground sm:w-[260px]">
           <div class="p-3.5">
@@ -864,12 +873,12 @@ export function InteractiveMap({
             ${
               tipeAkses || tahun
                 ? `<dl class="m-0 mt-2.5 flex flex-col gap-1 border-t border-border/70 pt-2.5 text-[10.5px]">
-                    ${tipeAkses ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">${languageRef.current === 'id' ? 'Akses' : 'Access'}</dt><dd class="m-0 text-right font-medium text-foreground">${tipeAkses}</dd></div>` : ''}
-                    ${tahun ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">Tahun</dt><dd class="m-0 text-right font-medium text-foreground">${tahun}</dd></div>` : ''}
+                    ${displayTipeAkses ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">${languageRef.current === 'id' ? 'Akses' : 'Access'}</dt><dd class="m-0 text-right font-medium text-foreground">${displayTipeAkses}</dd></div>` : ''}
+                    ${tahun ? `<div class="flex justify-between gap-3"><dt class="font-semibold text-muted">${tahunLabel}</dt><dd class="m-0 text-right font-medium text-foreground">${tahun}</dd></div>` : ''}
                   </dl>`
                 : ''
             }
-            ${interchangeList.length > 0 ? `<p class="m-0 mt-2 text-[10px] font-semibold text-primary">Terhubung: ${interchangeList.join(' • ')}</p>` : ''}
+            ${interchangeList.length > 0 ? `<p class="m-0 mt-2 text-[10px] font-semibold text-primary">${connectedLabel}${interchangeList.join(' • ')}</p>` : ''}
           </div>
         </article>
       `
