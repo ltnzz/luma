@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lumaurban.my.id/sitemap.xml
+Sitemap: https://www.lumaurban.my.id/sitemap.xml
